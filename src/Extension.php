@@ -14,7 +14,7 @@ class Extension extends BaseExtension
      */
     public function getName(): string
     {
-        return 'Celtic34fr CRM Core Extension';
+        return 'Celtic34fr Contact Extension';
     }
 
     /**
@@ -27,7 +27,7 @@ class Extension extends BaseExtension
     public function initialize($cli = false): void
     {
         /** ajout de l'espace de nommage pour accès aux templates de l'extension */
-        $this->addTwigNamespace("crm-core", __DIR__."/../templates");
+        $this->addTwigNamespace("contact-core", __DIR__."/../templates");
     }
 
     /**
@@ -47,9 +47,9 @@ class Extension extends BaseExtension
         $filesystem = new Filesystem();
         $projectDir = $this->getContainer()->getParameter('kernel.project_dir');
 
-        /** test existance crm_assets/css */
+        /** test existance contact_assets/css */
         $source = dirname(__DIR__) . '/public';
-        $destination = $projectDir . '/public/crm-assets';
+        $destination = $projectDir . '/public/contact-assets';
         if (!$filesystem->exists($destination)) {
             $filesystem->mkdir($destination);
             $filesystem->chgrp($destination, 'www-data', true);
