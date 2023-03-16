@@ -26,8 +26,9 @@ class Extension extends BaseExtension
      */
     public function initialize($cli = false): void
     {
+        $projectDir = $this->getContainer()->getParameter('kernel.project_dir');
         /** ajout de l'espace de nommage pour accès aux templates de l'extension */
-        $this->addTwigNamespace("contact-core", __DIR__."/../templates");
+        $this->addTwigNamespace("contact-core", $projectDir."/templates");
     }
 
     /**
