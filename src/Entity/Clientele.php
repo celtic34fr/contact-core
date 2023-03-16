@@ -25,10 +25,10 @@ class Clientele
     #[ORM\Column(type: 'text', length: 255, nullable: true)]
     private ?string $type = null;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: CrmCliInfos::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: CliInfos::class)]
     private Collection $cliInfos;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: CrmSuivi::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Suivi::class, orphanRemoval: true)]
     private Collection $events;
 
     #[Pure] public function __construct()
@@ -72,7 +72,7 @@ class Clientele
         return $this->cliInfos;
     }
 
-    public function addCliInfos(CrmCliInfos $cliInfos): self
+    public function addCliInfos(CliInfos $cliInfos): self
     {
         if (!$this->cliInfos->contains($cliInfos)) {
             $this->cliInfos->add($cliInfos);
@@ -81,7 +81,7 @@ class Clientele
         return $this;
     }
 
-    public function removeCliInfos(CrmCliInfos $cliInfos): self
+    public function removeCliInfos(CliInfos $cliInfos): self
     {
         if ($this->cliInfos->removeElement($cliInfos)) {
             // set the owning side to null (unless already changed)
@@ -93,14 +93,14 @@ class Clientele
     }
 
     /**
-     * @return Collection<int, CrmSuivi>
+     * @return Collection<int, Suivi>
      */
     public function getEvents(): Collection
     {
         return $this->events;
     }
 
-    public function addEvent(CrmSuivi $event): self
+    public function addEvent(Suivi $event): self
     {
         if (!$this->events->contains($event)) {
             $this->events->add($event);
@@ -109,7 +109,7 @@ class Clientele
         return $this;
     }
 
-    public function removeEvent(CrmSuivi $event): self
+    public function removeEvent(Suivi $event): self
     {
         if ($this->events->removeElement($event)) {
             // set the owning side to null (unless already changed)
