@@ -1,8 +1,10 @@
-# Celtic34fr Contact Extension
+# Celtic34fr Contact Extension v0.0.1-dev
 
 Author: Gilbert ARMENGAUD
 
 This Bolt extension provide a Contact Form and all the method to start a CRM module.
+This module give the base functionalities and need other module to give all its power. The first one is
+celtic34fr/contact-gestion that give real contact formular et anwser system management.
 
 Installation:
 
