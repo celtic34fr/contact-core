@@ -11,7 +11,7 @@ doctrine:
         type: attribute
         dir: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Entity'
         prefix: 'Celtic34fr\ContactCore'
-        alias: CrmCore
+        alias: ContactCore
 
 services:
   Celtic34fr\ContactCore\AdminMenu:
