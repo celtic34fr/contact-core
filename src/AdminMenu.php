@@ -18,10 +18,10 @@ class AdminMenu implements ExtensionBackendMenuInterface
 
     public function addItems(MenuItem $menu): void
     {
-        if (!$menu->getChild("CRM - Relation client")) {
-            $menu->addChild('CRM - Relation client', [
+        if (!$menu->getChild("Gestion des Contacts")) {
+            $menu->addChild('Gestion des Contacts', [
                 'extras' => [
-                    'name' => 'CRM - Relation client',
+                    'name' => 'Gestion des Contacts',
                     'type' => 'separator',
                     'group' => 'CRM',
                 ]
