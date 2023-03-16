@@ -1,0 +1,1 @@
+Contact Bolt CMS extension - Core functionalities
