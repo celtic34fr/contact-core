@@ -1,0 +1,36 @@
+{# macro OSM_map : affichage simple d'une carte avec OpenStreetMap #}
+{# field        : identifiant de la structure HTML stockant de la carte (balise DIV) #}
+{# dans le tableau args #}
+{# height       : hauteur de la zone d'affichage de la carte mis à 250 ,pixels par défaut #}
+{# lat          : latitude du point principal de centrage de la carte #}
+{# long         : longitude du point principal de centrage de la carte #}
+{# zoom         : valeur du grossissement de la carte au premier affichage, à 5 par défaut #}
+{# zoomMax      : valeur maximale du grossissement de la carte, à 20 par défaut #}
+{# zoomMin      : valeur minimale du grossissement de la carte, à 1 par défaut #}
+{# latM         : latitude du point de marquage de la carte #}
+{# longM        : longitude du point de marquage de la carte #}
+{# LibellM      : libellé à afficher au point de marquage de la carte #}
+{% macro map(field, args={}) %}
+    {% set height = args.height ?? '250px' %}
+    {% set lat = args.lat ?? 0 %}
+    {% set long = args.long ?? 0 %}
+    {% set zoom = args.zoom ?? 5 %}
+    {% set zoomMax = args.zoomMax ?? 20 %}
+    {% set zoomMin = args.zoomMin ?? 1 %}
+    {% set latM = args.lat ?? 0 %}
+    {% set longM = args.long ?? 0 %}
+    {% set libellM = args.libellM ?? '' %}
+
+    <div id="{{ field }}" class="map" style="height:{{ height }}"></div>
+    {% include '@crm-core/includes/_map_js.twig' %}
+    <script type="text/javascript">
+        const map = L.map('{{ field }}').setView([{{ lat }}, {{ long }}], {{ zoom }});
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: {{ zoomMax }},
+            minZoom: {{ zoomMin }},
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map)
+        const marker = L.marker([{{ lat }}, {{ long }}]).addTo(map)
+        marker.bindPopup('{{ libellM|raw }}');
+    </script>
+{% endmacro %}

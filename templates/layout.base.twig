@@ -1,0 +1,37 @@
+{% import "macros/generals.html.twig" as generals %}
+
+<!DOCTYPE html>
+<html lang="{{ locale ?? 'fr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="{{ favicon ?? '' }}" type="image/x-icon">
+    <title>
+        {% block titre %}
+            {% if record|default and record.title %}
+                {{ record.title ~ ' | ' }}
+            {% endif %}
+            {{ config.get('general/sitename') }}
+            {% if record|default == null and config.has('general/payoff') %}
+                {{ ' | ' ~ config.get('general/payoff') }}
+            {% endif %}
+        {% endblock %}
+    </title>
+    {% block stylesheets %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</head>
+
+<body id="body">
+{% block header %}{% endblock %}
+
+{% block body %}{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>
+
+		

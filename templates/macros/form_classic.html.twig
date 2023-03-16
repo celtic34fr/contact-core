@@ -1,0 +1,524 @@
+{# rendu de bouton radio hors formulaire #}
+
+{# macro radioBtn Radio Bouton #}
+{# - name           : nom et identifiant #}
+{# - occur          : occurance du radio bouton pour complément d'identifiant #}
+{# dans le tableau args #}
+{# - olabel         : label ou libellé à afficher à coté #}
+{# - oclass         : classe CSS à appliquer au radio bouton #}
+{# - disabled       : booléen indiquant si le radio bouton est actif (false) ou inactif (true) #}
+{% macro radioBtn(name, occur, args={}) %}
+    {% set ovalue = args.ovalue is defined ? args.ovalue : "" %}
+    {% set olabel = args.olabel is defined ? args.olabel : "" %}
+    {% set oclass = args.oclass is defined ? args.oclass : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% set attributes %}
+        {% if oclass|length %} class="{{ oclass }} {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+    {% if olabel|length %}
+        <label for="{{ name~occur }}">{{ olabel }}
+    {% endif %}
+    <input type="radio" id="{{ name~occur }}" name="{{ name }}" value="{{ ovalue }}"
+            {{ attributes }}/>
+    {% if olabel|length %}
+        </label>
+    {% endif %}
+{% endmacro %}
+
+{# macro checkbox Case à cocher #}
+{# - name           : nom et identifiant #}
+{# - value          : à true ou false pour coché ou non #}
+{# dans le tableau args #}
+{# - label          : label ou libellé à afficher à coté #}
+{# - class          : classe CSS à appliquer au group label et case à cocher #}
+{# - ckclass        : classe CSS à appliquer à la case à cocher #}
+{# - lbclass        : classe CSS à appliquer au label #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la case à cocher #}
+{# - title          : titre affecté à l'objet pour faire office de tooltip #}
+{# - row            : booléen d'activation (false) ou désactivation (true) de la classe row pour le groupe #}
+{% macro checkbox(name, value=false, args={}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set ckclass = args.ckclass is defined ? args.ckclass : "" %}
+    {% set lbclass = args.lbclass is defined ? args.lbclass : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+    {% set title = args.title is defined ? args.title : "" %}
+    {% set label = args.label is defined ? args.label : "" %}
+    {% set row = args.row is defined ? args.row : true %}
+    {% if ckclass|length and lbclass|length and row %}
+        {% set class = class ~ ('col-12' in class ? '' : ' col-12') ~ ' row' %}
+    {% else %}
+        {% if class is empty %}
+            {% set class = 'col-12' %}
+        {% endif %}
+    {% endif %}
+
+    {% set attributes %}
+        {% if ckclass|length %} class="{{ ckclass }}" {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+        {% if title|length %} title="{{ title }}" {% endif %}
+    {% endset %}
+
+    <div class="{{ class }}">
+        {% if label|length %}
+            <label for="{{ name }}" id="{{ name }}_label" {% if lbclass|length %}class="{{ lbclass }}"{% endif %}>
+                {{ label }}
+            </label>
+        {% endif %}
+        <input type="checkbox" name="{{ name }}" id="{{ name }}" {% if value != false %} checked="checked" {% endif %}
+                {{ attributes|raw }}/>
+    </div>
+{% endmacro %}
+
+{# macro hidden Input type Hidden (caché) #}
+{# - name           : nom et identifiant #}
+{# - value          : valeur par défaut du champs caché #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - ref            : identifiant servant de référence pour un autre champ pouvant modifier la valeur par défaut #}
+{% macro hidden(name, value, args={}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set ref = args.ref is defined ? args.ref : "" %}
+    {% set form = args.form is defined ? args.form : '' %}
+
+    {% set attributes = '' %}
+    {% if ref|length %}{% set attributes = attributes ~ 'data-ref="' ~ ref ~ '" ' %}{% endif %}
+    {% if class|length %}{% set attributes = attributes ~ 'class="' ~ class ~ '" ' %}{% endif %}
+    {% if form|length %}{% set attributes = attributes ~ 'form="' ~ form ~ '" ' %}{% endif %}
+
+    <input type="hidden" name="{{ name }}" id="{{ name }}" value="{{ value }}"
+            {{ attributes|raw }}/>
+{% endmacro %}
+
+{# macro submitbtn Bouton de soumission de formulaire #}
+{# - name           : nom et identifiant #}
+{# - label          : label ou libellé à afficher dans le bouton #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - event          : évènement à programmer sur le bouton #}
+{# - codeJS         : code JavaScript à exécuter #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{% macro submitbtn(name, label="", args={}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set event = args.event is defined ? args.event : "" %}
+    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% set attributes %}
+        {% if class|length %} class="{{ class }}" {% endif %}
+        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+            {{ event }}="{{ codeJS }}"
+        {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+    <input id="{{ name }}" name="{{ name }}" type="submit" value="{{ label }}"
+            {{ attributes|raw }}>
+{% endmacro %}
+
+{# macro btn Bouton pouvant avoir un évènement intégré #}
+{# - name           : nom et identifiant #}
+{# - label          : label ou libellé à afficher dans le bouton #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - bclass         : classe CSS à appliquer sur le bouton #}
+{# - event          : évènement à programmer sur le bouton #}
+{# - codeJS         : code JavaScript à exécuter #}
+{# - title          : titre affecté à l'objet pour faire office de tooltip #}
+{# - formnovalidate : indicateur de non validation de formulaire si inclus dans un #}
+{# - type           : type du bouton #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la case à cocher #}
+{% macro btn(name, label="", args={}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set event = args.event is defined ? args.event : "" %}
+    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+    {% set title = args.title is defined ? args.title : "" %}
+    {% set formnovalidate = args.formnovalidate ?? false %}
+    {% set type = args.type ?? 'submit' %}
+    {% set data_url = args.data_url is defined ? args.data_url : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% set attributes %}
+        {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}
+        {% if class|length %} class="{{ class }}" {% endif %}
+        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+            {{ event }}="{{ codeJS }}"
+        {% endif %}
+        {% if title|length %} title="{{ title }}" {% endif %}
+        {% if formnovalidate %} formnovalidate="formnovalidate" {% endif %}
+        {% if data_url|length %} data-url="{{ data_url }}" {% endif %}
+        type="{{ type }}"
+        {% set args_keys = args|keys %}
+        {% for key in args_keys %}
+            {% if key starts with 'data-' %}
+                {{ key }}="{{ args[key] }}"
+            {% endif %}
+        {% endfor %}
+        {% if disabled %} disabled {% endif %}
+    {% endset %}
+
+    <button {{ attributes|raw }}>{{ label|raw }}</button>
+{% endmacro %}
+
+{# macro input Input HTML multifonction #}
+{# - name           : nom et identifiant #}
+{# - label          : label ou libellé à afficher dans le bouton #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - lclass         : classe CSS à appliquer sur le label (bootstrap par défaut à 12) #}
+{# - iclass         : classe CSS à appliquer sur input HTML (bootstrap par défaut à 12) #}
+{# - type           : type d'entrée attendue #}
+{# - value          : valeur par défaut de la zone d'entrée #}
+{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - form           : id formulaire relatif #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de saisie #}
+{% macro input(name, label="", args={}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set lclass = args.lclass is defined ? args.lclass : "col-12" %}
+    {% set iclass = args.iclass is defined ? args.iclass : "col-12" %}
+    {% if 'col-' not in class %}
+        {% set class = class ~ " col-12" %}
+    {% endif %}
+    {% if (lclass|length or iclass|length) and ('row' not in class) %}
+        {% set class = class ~ " row" %}
+    {% endif %}
+
+    {% set type = args.type is defined ? args.type : "text" %}
+    {% set value = args.value is defined ? args.value : "" %}
+    {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
+    {% set form = args.form is defined ? args.form : '' %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% if "[" in name and "]" in name %}
+        {% set id = name|slice(0, strpos(name, '['))
+            ~ "_" ~ name|slice(strpos(name, '[') + 1, strpos(name, ']') - strpos(name, '[')) %}
+    {% else %}
+        {% set id = name %}
+    {% endif %}
+
+    {% set attributes %}
+        {% if type|length %} type="{{ type }}" {% endif %}
+        value="{{ value }}"
+        {% if placeholder|length %} placehoder="{{ placeholder }}" {% endif %}
+        {% if form|length %} form="{{ form }}" {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+    <div class="{{ class is not empty ? class : '' }}">
+        {% if label|length %}
+            <label for="{{ name }}" class="{{ lclass ?: '' }}">
+                {{ label|raw }}
+            </label>
+        {% endif %}
+        <input id="{{ id }}" name="{{ name }}" class="{{ iclass ?: '' }}" {{ attributes|raw }}>
+    </div>
+{% endmacro %}
+
+{# macro dragNDrop Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
+{# - name           : nom et identifiant #}
+{# dans le tableau args #}
+{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# - label_class    : classe CSS à appliquer sur le label #}
+{# - class          : classe CSS à appliquer sur input type:file #}
+{# - multiple       : booléen (via strin) indiquant la possibilité ou non de charger plusieurs fichiers en 1 fois #}
+{# - accept         : extension ou type de fichiers accepté au chargement #}
+{# - url            : URL pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
+{# - maxSize        : poids maximum des fichiers autorisés au chargement #}
+{# - maxWidth       : largeur en points maximale autorisée pour une image à charger #}
+{# - maxHeight      : hauteur en points maximale autorisée pour une image à charger #}
+{# - maxFiles       : nombre maximum de fichiers à charger #}
+{# - removeBtn      : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
+{# - viewBtn        : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
+{# - progressbar    : booléen indiquant la présence ou non d'une barre de progression des chargement de fichiers #}
+{# - gallery        : booléen indiquant la présence ou non d'une zone de visualisation des fichiers chargés #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
+{% macro dragNDrop(name, args={}) %}
+    {% set label = args.label is defined ? args.label : "" %}
+    {% set label_class = args.label_class is defined ? args.label_class : "" %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set multiple = args.multiple is defined ? args.multiple : "" %}
+    {% set accept = args.accept is defined ? args.accept : "*" %}
+    {% set url = args.url is defined ? args.url : "" %}
+    {% set maxSize = args.maxSize is defined ? args.maxSize : "" %}
+    {% set maxWidth = args.maxWidth is defined ? args.maxWidth : "" %}
+    {% set maxHeight = args.maxHeight is defined ? args.maxHeight : "" %}
+    {% set maxFiles = args.maxFiles is defined ? args.maxFiles : "" %}
+    {% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
+
+    {% set removeBtn = args.removeBtn is defined ? args.removeBtn : false %}
+    {% set viewBtn = args.viewBtn is defined ? args.viewBtn : false %}
+    {% set progressbar = args.progressbar is defined ? args.progressbar : false %}
+    {% set gallery = args.gallery is defined ? args.gallery : false %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% set hidden_name = args.hidden_name %}
+
+    {% set attributes %}
+        {% if multiple %} multiple {% endif %}
+        {% if accept is not empty %} accept="{{ accept }}" {% endif %}
+        {% if url is not empty %} data-url="{{ url }}" {% endif %}
+        {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
+        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}"{% endif %}
+        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}"{% endif %}
+        {% if maxFiles > 0 %} data-max-file="{{ maxFiles }}"{% endif %}
+        {% if removeBtn > 0 and not disabled %} data-remove-btn="{{ removeBtn }}" {% endif %}
+        {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
+        {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
+        data-hidden-name="{{ hidden_name }}"
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+    <div id="{{ name }}-drop-area" class="drop-area">
+        <input type="file" id="{{ name }}" name="{{ name }}" class="{{ class }}"
+                {{ attributes|raw }}
+        >
+        <label class="{{ label_class }}" for="{{ name }}">{{ label }}</label>
+        {% if progressbar %}
+            <progress id="{{ name }}progress-bar" class="progress" max=100 value=0></progress>
+        {% endif %}
+        {% if gallery %}
+            <div id="{{ name }}-gallery" class="gallery"></div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{# #}
+{# - idname         : identifiant #}
+{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# dans le tableau args #}
+{# - placeholder    : label ou libellé affiché dans la liste de sélection quand rien n'est choisi #}
+{# - datas          : tableau des valeurs à afficher formé d'item : clé 'value', contenant {'disabled', 'label'} #}
+{# - lclass         : classe CSS à appliquer sur le label (bootstrap par défaut à 12) #}
+{# - sclass         : classe CSS à appliquer sur select HTML (bootstrap par défaut à 12) #}
+{# - multiple       : booléen indiquant si 1 seul choix (false)à ou plusieurs (true), valeur par défaut : 1 choix #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la liste de sélection #}
+{# - selection      : valeur de sélection dans la liste des options correspondant à une valeu de clé (value) #}
+{# - vanillaSelect  : booléen indiquant l'utilisation de vanillaSelectBox (true) ou non (false) pour l'affichage #}
+{% macro select(idname, label='', args={}) %}
+    {% set datas = 'datas' in args|keys ? args.datas : {} %}
+    {% set selection = 'selection' in args|keys ? args.selection : "" %}
+    {% set vanillaSelect = args.vanillaSelect ?? false %}
+    {% set placeholder = args.placeholder ?? "" %}
+    {% if placeholder is empty and datas[0] is defined and datas[0] is not empty %}
+        {% set placeholder =  'placeholder' in datas[0]|keys ? datas[0]['placeholder'] : "" %}
+    {% endif %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+    {% if disabled ==false and datas[0] is defined and datas[0] is not empty %}
+        {% set disabled =  'disabled' in datas[0]|keys ? datas[0]['disabled'] : false %}
+    {% endif %}
+
+    {% set lclass = args.lclass is defined ? args.lclass : "col-12" %}
+    {% set sclass = args.sclass is defined ? args.sclass : "col-12" %}
+    {% set multiple = args.multiple is defined ? args.multiple : false %}
+    {% set name = idname ~ (multiple ? '[]' : '') %}
+    {% set class %}
+        text-black
+        {{ args.class is defined ? args.class : "" }}
+    {% endset %}
+    {% if lclass|length and sclass|length %}
+        {% set class = class ~ " row" ~ (strpos(class, "col-") == -1 ? ' col-12' : '') %}
+    {% endif %}
+
+    {% set sattributes %}
+        {% if sclass|length %} class="select {{ sclass }}"{% endif %}
+        {% if multiple %} multiple="multiple" {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+    {% set lattributes %}
+        {% if lclass|length %} class="{{ lclass }}" {% endif %}
+    {% endset %}
+
+    <div id="{{ idname }}_select" {% if class|length %}class="{{ class }}"{% endif %}>
+        {% if label|length %}
+            <label for="{{ name }}" {{ lattributes }}>{{ label }}</label>
+        {% endif %}
+        <select id="{{ idname }}"
+                name="{{ name }}" {{ sattributes }} {% if placeholder|length %}data-placeholder="{{ placeholder }}"{% endif %}>
+            {% if placeholder|length %}
+                {% set attrPlaceholder %}
+                    disabled="disabled"
+                    {% if selection is empty %}
+                        selected="selected"
+                    {% endif %}
+                {% endset %}
+                {% if vanillaSelect == false %}
+                    <option value="" class="text-secondary" {{ attrPlaceholder }}>{{ placeholder }}</option>
+                {% endif %}
+            {% endif %}
+            {% for idx, data in datas %}
+                {% if idx > 0 %}
+                    <option value="{{ data.value }}" title="{{ data.label|raw }}"
+                            {% if data.disabled is defined and data.disabled %}disabled="disabled"{% endif %}
+                            {% if data.value == selection %}selected="selected"{% endif %}
+                    >
+                        {{ data.label|raw }}
+                    </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
+{# #}
+{# - id             : identifiant #}
+{# - type           : type de champ à afficher #}
+{# dans le tableau args #}
+{# - label          : label ou libellé à afficher #}
+{# - fclas          : classe à appliquer au champ #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
+{% macro inputs(id, type, args) %}
+    {% set label = args.label is defined ? args.label : "" %}
+    {% set fclas = args.fclas is defined ? args.fclas : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% if type == 'input' %}
+        {{ _self.input(id, label, {'class':fclas, 'disabled':disabled}) }}
+    {% endif %}
+{% endmacro %}
+
+{# #}
+{# - group          : identifiant #}
+{# - title          : label ou titre donné au bloc group #}
+{# dans le tableau args #}
+{# - fields         : nom de chaque champ du groupe #}
+{# - labels         : labels ou libellés à afficher devant chaque champ du groupe #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
+{% macro group(group, title="", args={} ) %}
+    {% import _self as fields %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+    {% set fields = args.fields is defined ? args.fields : {} %}
+
+    <div id="{{ group }}" name="{{ group }}" class="{{ class }} row"
+         {% if title is defined and title is not empty %}title="{{ title| raw }}"{% endif %}
+    >
+        {% for field, attrs in fields %}
+            {% set macro = attrs.type %}
+            {% set args = attrs.args %}
+            {% set label = args.label ?? "" %}
+            {% set macro_args = args.params ?? {} %}
+            {% if macro == 'input' %}
+                {{ fields.input(field, label, macro_args) }}
+            {% elseif macro == "select" %}
+                {{ fields.select(field, label, macro_args) }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro datepickerRange(debut, fin, args={}) %}
+    {% import _self as form_forms %}
+    {% set class = args.class ?? "" %}
+    {% set date_min = args.date_min ?? "" %}
+
+    {% set slabel = args.slabel ?? "" %}
+    {% set sclass = args.sclass ?? "" %}
+    {% set sil_class = args.sil_class ?? {} %}
+    {% set slabel_class = (sil_class is defined and sil_class.label is defined) ? sil_class.label : '' %}
+    {% set sinput_class = (sil_class is defined and sil_class.input is defined) ? sil_class.input : '' %}
+    {% if sinput_class is not empty or slabel_class is not empty %}
+        {% set sclass = sclass ~ ' row' %}
+    {% endif %}
+    {% set disabled = args.disabled ?? {} %}
+
+    {% set elabel = args.elabel ?? "" %}
+    {% set eclass = args.eclass ?? "" %}
+    {% set eil_class = args.eil_class ?? {} %}
+    {% set elabel_class = (eil_class is defined and eil_class.label is defined) ? eil_class.label : '' %}
+    {% set einput_class = (eil_class is defined and eil_class.input is defined) ? eil_class.input : '' %}
+
+    {% set sdisabled = false %}
+    {% set edisabled = false %}
+    {% if disabled is not empty %}
+        {% set sdisabled = disabled.sdisabled ?? false %}
+        {% set edisabled = disabled.edisabled ?? false %}
+    {% endif %}
+    {% set sdisabled = sdisabled ? 'disabled="disabled"' : '' %}
+    {% set edisabled = edisabled ? 'disabled="disabled"' : '' %}
+
+    <div id="datepickerRange_{{ debut }}_{{ fin }}" data-start="{{ debut }}" data-end="{{ fin }}"
+         {% if date_min|length %}data-date-min="{{ date_min }}"{% endif %}
+         class="row datepickerRange{% if class|length %} {{ class }}{% endif %}"
+    >
+        <div{% if sclass|length %} class="{{ sclass }}"{% endif %}>
+            <label for="{{ debut }}_dpicker"
+                   {% if slabel_class|length %}class="{{ slabel_class }}"{% endif %}>
+                {{ slabel }}
+            </label>
+            <input type="text" name="start_{{ debut }}" id="{{ debut }}_dpicker"
+                   class="start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }}
+            >
+            {{ form_forms.input( debut, "", {'class': 'hidden_start', 'type': 'hidden'} ) }}
+        </div>
+        <div{% if eclass|length %} class="{{ eclass }}"{% endif %}
+                {% if elabel_class|length %}class="{{ elabel_class }}"{% endif %}>
+            <label for="{{ fin }}_dpicker">
+                {{ elabel }}
+            </label>
+            <input type="text" name="start_{{ fin }}" id="{{ fin }}_dpicker"
+                   class="end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }}
+            >
+            {{ form_forms.input( fin, "", {'class': 'hidden_start', 'type': 'hidden'} ) }}
+        </div>
+    </div>
+
+    {# {% set class = args.class ?? "" %} #}
+    {# {% set date_min = args.date_min ?? "" %} #}
+
+    {# {% set slabel = args.slabel ?? "" %} #}
+    {# {% set sclass = args.sclass ?? "" %} #}
+    {# {% set sil_class = args.sil_class ?? {} %} #}
+    {# {% set slabel_class = (sil_class is defined and sil_class.label is defined) ? sil_class.label : '' %} #}
+    {# {% set sinput_class = (sil_class is defined and sil_class.input is defined) ? sil_class.input : '' %} #}
+    {# {% if sinput_class is not empty or slabel_class is not empty %} #}
+    {# {% set sclass = sclass ~ ' row' %} #}
+    {# {% endif %} #}
+    {# {% set disabled = args.disabled ?? {} %} #}
+
+    {# {% set elabel = args.elabel ?? "" %} #}
+    {# {% set eclass = args.eclass ?? "" %} #}
+    {# {% set eil_class = args.eil_class ?? {} %} #}
+    {# {% set elabel_class = (eil_class is defined and eil_class.label is defined) ? eil_class.label : '' %} #}
+    {# {% set einput_class = (eil_class is defined and eil_class.input is defined) ? eil_class.input : '' %} #}
+    {# {% if einput_class is not empty or elabel_class is not empty %} #}
+    {# {% set eclass = eclass ~ ' row' %} #}
+    {# {% endif %} #}
+    {# {% set sdisabled = false %} #}
+    {# {% set edisabled = false %} #}
+    {# {% if disabled is not empty %} #}
+    {# {% set sdisabled = disabled.sdisabled ?? false %} #}
+    {# {% set edisabled = disabled.edisabled ?? false %} #}
+    {# {% endif %} #}
+    {# {% set sdisabled = sdisabled ? 'disabled="disabled"' : '' %} #}
+    {# {% set edisabled = edisabled ? 'disabled="disabled"' : '' %} #}
+
+    {# {% import _self as form_forms %} #}
+    {# <div id="datepickerRange_{{ debut }}_{{ fin }}" #}
+    {# class="row datepickerRange{% if class|length %} {{ class }}{% endif %}" #}
+    {# {% if date_min|length %}data-date-min="{{ date_min }}"{% endif %} #}
+    {# data-start="{{ debut }}" data-end="{{ fin }}" #}
+    {# > #}
+    {# <div {% if eclass|length %}class="{{ eclass }}"{% endif %}> #}
+    {# <label for="{{ debut }}_dpicker" #}
+    {# {% if slabel_class|length %}class="{{ slabel_class }}"{% endif %}> #}
+    {# {{ slabel }} #}
+    {# </label> #}
+    {# <input type="text" name="start_{{ debut }}" id="{{ debut }}_dpicker" #}
+    {# class="start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }} #}
+    {# > #}
+    {# {{ form_forms.input( debut, {'class': 'hidden_start'} ) }} #}
+    {# </div> #}
+    {# <div {% if sclass|length %}class="{{ sclass }}"{% endif %}> #}
+    {# <label for="{{ fin }}_dpicker" #}
+    {# {% if elabel_class|length %}class="{{ elabel_class }}"{% endif %}> #}
+    {# {{ elabel }} #}
+    {# </label> #}
+    {# <input type="text" name="end_{{ fin }}" id="{{ fin }}_dpicker" #}
+    {# class="end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }} #}
+    {# > #}
+    {# {{ form_forms.input( fin, {'class': 'hidden_end'} ) }} #}
+    {# </div> #}
+    {# </div> #}
+{% endmacro %}

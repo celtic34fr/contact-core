@@ -1,0 +1,24 @@
+{% macro noty_notification(args = {}) %}
+    {% set msgs = args.msgs is defined ? args.msgs : {} %}
+    {% set layout = args.layout is defined ? args.layout : 'topLeft' %}
+    {% set timeout = args.timeout is defined ? args.timeout : 3500 %}
+    {% set theme = args.theme is defined ? args.theme : 'bootstrap-v4' %}
+
+    {% if msgs is not empty %}
+        {% for msg in msgs %}
+        {% set texte =
+            '<div class="col-12 row">' ~
+                '<h3 class="col-12">' ~ msg.title|raw ~ '</h3>' ~
+                '<p class="my-2">' ~ msg.body|raw ~ '</p>' ~
+            '</div>'
+        %}
+        new Noty({
+            text: '{{ texte }}',
+            type: '{{ msg.type }}',
+            layout: '{{ layout }}',
+            timeout: {{ timeout }},
+            theme: '{{ theme }}',
+        }).show();
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

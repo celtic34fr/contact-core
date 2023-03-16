@@ -1,0 +1,12 @@
+
+.btn-bs-warning {
+    color: #000;
+    background-color: #ffc107;
+    border-color: #ffc107
+}
+
+.btn-bs-warning:hover {
+    color: #000;
+    background-color: #ffca2c;
+    border-color: #ffc720
+}

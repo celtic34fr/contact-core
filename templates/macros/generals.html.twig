@@ -1,0 +1,274 @@
+{% macro get_template_part(args, slug, name = null) %}
+    <!--- generals.html.twig/get_template_part -->
+
+    {% set template_name = slug ~ (name is not empty ? "-" ~ name : '') %}
+
+    {% set context = _context %}
+    {% if args is empty %}
+        {% set args = {} %}
+    {% endif %}
+    {% set args = args|merge(context) %}
+
+    {% if template_exist(template_name) %}
+        {% set template_name = template_name~".html.twig" %}
+        {{ include(template_name, args)|raw }}
+    {% endif %}
+{% endmacro %}
+
+{% macro btnRedirect(name, label="", args={}) %}
+    {% set class = args.class is defined ? args.class : "btn btn-default" %}
+    {% set bclass = args.bclass is defined ? args.bclass : "" %}
+    {% set title = args.title is defined ? args.title : "" %}
+    {% set route = args.route is defined ? args.route : "" %}
+    {% set params = args.params is defined ? args.params : {} %}
+    {% set target = args.target is defined ? args.target : '_self' %}
+
+    {% if 'col-' not in class %}
+        {% set class = class ~ " col-12" %}
+    {% endif %}
+
+    {% set attributes %}
+        {% if bclass|length %} class="{{ bclass }}" {% endif %}
+        {% if title|length %} title="{{ title }}" {% endif %}
+    {% endset %}
+
+    {% set href = route|length ? path(route, params) :"#" %}
+    <div {% if class is not empty %}class="{{ class }}"{% endif %}>
+        <button id="{{ name }}" type="button" {{ attributes|raw }} onclick="window.open('{{ href }}', '{{ target }}')">
+            {{ label|raw }}
+        </button>
+    </div>
+{% endmacro %}
+
+{% macro render_menu(menu_array, main_nav) %}
+    {% import _self as self %}
+    {% for route, menu in menu_array %}
+        {% set main_nav = main_nav ~ '<li class="menu-item' %}
+        {% if 'children' in menu|keys %}
+            {% set main_nav = main_nav ~ ' menu-item_has_children' %}
+        {% endif %}
+        {% if route == app.request.get('_route') %}
+            {% set main_nav = main_nav ~ ' current-menu-item' %}
+        {% endif %}
+        {% set main_nav = main_nav ~ '">' %}
+        {% if route == 'logout' %}
+            {% set main_nav = main_nav ~ '<a href="'~fn('wp_logout_url')|raw~'">' %}
+        {% elseif route == 'admin_url' %}
+            {% set main_nav = main_nav ~ '<a href="'~fn('admin_url')|raw~'">' %}
+        {% elseif route is startWith('none') %}
+            {% set main_nav = main_nav ~ '<a href="#">' %}
+        {% elseif route is not empty %}
+            {% set main_nav = main_nav ~ '<a href="'~path(route)~'">' %}
+        {% endif %}
+        {% set main_nav = main_nav ~ (menu.label is defined and menu.label is not empty ? menu.label : "") %}
+        {% if route is not empty %}
+            {% set main_nav = main_nav ~ '</a>' %}
+        {% endif %}
+        {% if 'children' in menu|keys %}
+            {% set main_nav = main_nav ~ '<ul class="children">' %}
+            {% set main_nav %}
+                {{ self.render_menu(menu.children, main_nav) }}
+            {% endset %}
+            {% set main_nav = main_nav ~ '</ul>' %}
+        {% endif %}
+        {% set main_nav = main_nav ~ '</li>' %}
+    {% endfor %}
+    {{ main_nav|raw }}
+{% endmacro %}
+
+{% macro date(field, format) %}
+    {% set dte = field %}
+    {% if field is typeOf('array') %}{% set dte = field.date %}{% endif %}
+    {{ dte|date("d M Y") }}
+{% endmacro %}
+
+{% macro btn(name, label="", args={}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set event = args.event is defined ? args.event : "" %}
+    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+    {% set title = args.title is defined ? args.title : "" %}
+    {% set data_url = args.data_url is defined ? args.data_url : "" %}
+
+    {% set attributes = '' %}
+    {% if class|length %}{% set attributes = attributes ~ 'class="' ~ class ~ '" ' %}{% endif %}
+    {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+        {% set attributes = attributes ~ event ~ '="' ~ codeJS ~'" ' %}
+    {% endif %}
+    {% if title|length %}{% set attributes = attributes ~ 'title="' ~title ~ '" ' %}{% endif %}
+    {% if data_url|length %}{% set attributes = attributes ~ 'data-url="' ~ data_url ~ '" ' %}{% endif %}
+
+    <button id="{{ name }}" {{ attributes|raw }}>{{ label|raw }}</button>
+{% endmacro %}
+
+{% macro toasts_html(args ={}) %}
+    {% set msgs = args.msgs is defined ? args.msgs : {} %}
+
+    {% for msg in msgs %}
+        <div class="toast" {{ stimulus_controller('toast') }} data-bs-autohide="false">
+            <div class="toast-header">
+                <strong class="my-0 me-auto text-{{ msg.type }} h6 fw-bold">{{ msg.title }}</strong>
+                <button class="ms-2 mb-1 btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-light{{ msg.type }}">{{ msg.body }}</div>
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+{% macro datepickersJS( format, args={} ) %}
+    {% set format = format ?? "y-m-d" %}
+    {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
+    {% set language = args.language is defined ? args.language : "en" %}
+    {% set orientation = args.orientation is defined ? args.orientation : 'auto' %}
+    {% set nextArrow = args.nextArrow is defined ? args.nextArrow : "»" %}
+    {% set prevArrow = args.prevArrow is defined ? args.prevArrow : "«" %}
+    {% set weekStart = args.weekStart is defined ? args.weekStart : 0 %}
+    {% set calendarWeeks = args.calendarWeeks is defined ? ( args.calendarWeeks ? 'true' : 'false') : 'false' %}
+    {% set clearBtn = args.clearBtn is defined ? ( args.clearBtn ? 'true' : 'false') : 'false' %}
+    {% set todayBtn = args.todayBtn is defined ? ( args.todayBtn ? 'true' : 'false') : 'false' %}
+    {% set todayBtnMode = args.todayBtnMode is defined ? args.todayBtnMode : 0 %}
+    {% set dateDlimiter = args.dateDlimiter is defined ? args.dateDlimiter : '/' %}
+    {% set daysOfWeekHighlighted = args.daysOfWeekHighlighted is defined ? args.daysOfWeekHighlighted : {} %}
+    {% set pickLevel = args.pickLevel ?? 0 %}
+    {% set startView = args.startView ?? 0 %}
+    <script>
+        function date_to_input_str(date) {
+            return `${date.getYear() + 1900}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate()}`
+        }
+
+        function build_datepicker(datepicker) {
+            let date_min = datepicker.dataset.dateMin ?? '';
+            // if (datepicker.hasOwnProperty('data-dateMin')) {
+            //     date_min = new Date(datepicker.getAttribute('data-dateMin'));
+            // }
+            const date_start = datepicker.dataset.date ?? null;
+            let date = new Datepicker(datepicker, {
+                autohide: {{ autohide }},
+                minDate: date_min,
+                format: "{{ format }}",
+                language: '{{ language }}',
+                nextArrow: '{{ nextArrow }}',
+                prevArrow: '{{ prevArrow }}',
+                weekStart: {{ weekStart }},
+                calendarWeeks: {{ calendarWeeks }},
+                clearBtn: {{ clearBtn }},
+                todayBtn: {{ todayBtn }},
+                todayBtnMode: {{ todayBtnMode }},
+                dateDlimiter: '{{ dateDlimiter }}',
+                daysOfWeekHighlighted: [{{ daysOfWeekHighlighted }}],
+                orientation: '{{ orientation }}',
+                pickLevel: {{ pickLevel }},
+                startView: {{ startView }},
+            });
+            if (date_start) {
+                const date_init = new Date(date_start);
+                date.setDate(date_init);
+            }
+            const hidden = datepicker.parentElement.querySelector("input.hidden");
+            hidden.setAttribute('type', 'hidden');
+
+            datepicker.addEventListener('changeDate', function (e) {
+                const parent = this.parentElement;
+                const inputdate = parent.querySelector("input[type=hidden]");
+                const date = e.detail.date;
+                inputdate.value = date_to_input_str(date);
+                const {detail} = e;
+                inputdate.dispatchEvent(new CustomEvent("changeDate", {detail, bubbles: true, cancelable: true}));
+            });
+        }
+
+        window.datepickers = new Map()
+        document.addEventListener('DOMContentLoaded', function (evt) {
+            for (const datepicker of document.querySelectorAll('.datepicker')) {
+                build_datepicker(datepicker);
+            }
+        });
+    </script>
+{% endmacro %}
+
+{% macro datepickerRangeJS(format, args={}) %}
+    {% import _self as generals %}
+    {{ generals.datepickersJS(format, args) }}
+    {% set format = format ?? "y-m-d" %}
+    {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
+    {% set language = args.language is defined ? args.language : "en" %}
+    {% set orientation = args.orientation is defined ? args.orientation : 'auto' %}
+    {% set nextArrow = args.nextArrow is defined ? args.nextArrow : "»" %}
+    {% set prevArrow = args.prevArrow is defined ? args.prevArrow : "«" %}
+    {% set weekStart = args.weekStart is defined ? args.weekStart : 0 %}
+    {% set calendarWeeks = args.calendarWeeks is defined ? ( args.calendarWeeks ? 'true' : 'false') : 'false' %}
+    {% set clearBtn = args.clearBtn is defined ? ( args.clearBtn ? 'true' : 'false') : 'false' %}
+    {% set todayBtn = args.todayBtn is defined ? ( args.todayBtn ? 'true' : 'false') : 'false' %}
+    {% set todayBtnMode = args.todayBtnMode is defined ? args.todayBtnMode : 0 %}
+    {% set dateDlimiter = args.dateDlimiter is defined ? args.dateDlimiter : '/' %}
+    {% set daysOfWeekHighlighted = args.daysOfWeekHighlighted is defined ? args.daysOfWeekHighlighted : {} %}
+    {% set maxDate = args.maxDate ?? 'null' %}
+    {% set maxNumberOfDates = args.maxNumberOfDates ?? 1 %}
+    {% set disabled = args.disabled ?? false %}
+    {% set pickLevel = args.pickLevel ?? 0 %}
+    {% set startView = args.startView ?? 0 %}
+
+    <script>
+        const $rangepicker = {};
+        document.addEventListener('DOMContentLoaded', function (evt) {
+            for (const elem of document.querySelectorAll('.datepickerRange')) {
+                const date_min = elem.dataset.dateMin ? new Date(elem.dataset.dateMin) : null;
+                const date_max = elem.dataset.dateMax ? new Date(elem.dataset.dateMax) : null;
+                const rangepicker = new DateRangePicker(elem, {
+                    autohide: {{ autohide }},
+                    format: "{{ format }}",
+                    clearBtn: {{ clearBtn }},
+                    todayBtn: {{ todayBtn }},
+                    calendarWeeks: {{ calendarWeeks }},
+                    dateDlimiter: '{{ dateDlimiter }}',
+                    daysOfWeekHighlighted: [{{ daysOfWeekHighlighted }}],
+                    language: '{{ language }}',
+                    minDate: date_min,
+                    maxDate: date_max,
+                    maxNumberOfDates: {{ maxNumberOfDates }},
+                    nextArrow: '{{ nextArrow }}',
+                    prevArrow: '{{ prevArrow }}',
+                    orientation: '{{ orientation }}',
+                    showDaysOfWeek: true,
+                    title: 'date de mise en service',
+                    todayBtnMode: {{ todayBtnMode }},
+                    weekStart: {{ weekStart }},
+                    inputs: [elem.querySelector(".start"), elem.querySelector(".end")],
+                    pickLevel: {{ pickLevel }},
+                    startView: {{ startView }},
+                });
+                let date_start = elem.querySelector(".hidden_start").value ?? null;
+                if (date_start) {
+                    date_start = new Date(date_start);
+                }
+                let date_end = elem.querySelector(".hidden_end").value ?? null;
+                if (date_end) {
+                    date_end = new Date(date_end);
+                }
+
+                rangepicker.setDates(date_start, date_end);
+                elem.querySelectorAll("input:not([type=hidden])").forEach(
+                    (e) => e.addEventListener('changeDate', function (e) {
+                        const parent = this.parentElement;
+                        const inputdate = parent.querySelector("input[type=hidden]");
+                        const date = e.detail.date;
+                        inputdate.value = date_to_input_str(date);
+                        const {detail} = e;
+                        inputdate.dispatchEvent(new CustomEvent("changeDate", {
+                            detail,
+                            bubbles: true,
+                            cancelable: true
+                        }));
+                    })
+                );
+                $rangepicker[elem.id] = rangepicker;
+            }
+
+            {% if disabled != false %}
+                document.querySelectorAll('.datepicker-input').forEach(function (date) {
+                    date.setAttribute("disabled", "disabled");
+                    date.classList.add("disabled");
+                });
+            {% endif %}
+        });
+    </script>
+{% endmacro %}

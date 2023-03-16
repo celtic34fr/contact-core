@@ -1,0 +1,185 @@
+
+{# macro page_navigation pour donner le moyen de parcourir des pages de résultats / données #}
+{# currentPage	: page courante #}
+{# route		: route de la page à modifier (régénérer l’affichage de la liste) #}
+{# pages		: nombre maximum de pages dans la liste #}
+{# prefix       : préfix à mettre au nom de la variable page pour la mettre en phase avec la pagination à faire #}
+{# classes      : classes CSS à ajouter à celle par défaut #}
+{# btn_style    : classe à appliquer pour formaliser l'affichage des boutons de navigation #}
+{% macro page_navigate(args= {}) %}
+    {% import '@crm-core/macros/form_classic.html.twig' as forms %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set currentPage = args.currentPage is defined ? args.currentPage : 1 %}
+    {% set pages = args.pages is defined ? args.pages : 1 %}
+    {% set prefix = args.prefix is defined ? args.prefix : "" %}
+    {% set btn_style = args.btn_style is defined ? args.btn_style : "btn-rounded" %}
+    {% set route = args.route is defined ? args.route : "" %}
+
+    {{ forms.hidden(prefix~"Page", currentPage, {'class': 'paginate page', 'ref': prefix}) }}
+    {{ forms.hidden(prefix~"MaxPage", pages, {'class': 'paginate pages', 'ref': prefix}) }}
+    <div class="form-nav col-12 row {{ class }}">
+        <style>
+            .btn-rounded {
+                border-radius: 12rem;
+            }
+
+            ul li.page-item {
+                display: inline-block;
+            }
+        </style>
+        {% if pages > 1 %}
+            {% set lcase = 100 / (pages + (pages > 7 ? 3 : 2)) - 0.4 %}
+            <ul class="pagination p-0 width100">
+                {% set urlPage = (currentPage > 1) ? path(route, {page: (currentPage - 1)}) : "" %}
+                {% set disabled = (currentPage == 1) %}
+                <li class="page-item{% if disabled %} disabled{% endif %}" style="width: {{ lcase }}%;">
+                    <button class="page-link mx-auto {{ btn_style }}" type="button" onclick="paginate('{{ urlPage }}', '{{ prefix }}', -1);"
+                            {% if disabled %}disabled="disabled"{% endif %}
+                    >
+                        &lt;
+                    </button>
+                </li>
+                {% set itemclass = "page-item"~(currentPage == 1 ? ' active' : "") %}
+                <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                    <button class="page-link mx-auto {{ btn_style }}" type="button" onclick="goPage('{{ urlPage }}', '{{ prefix }}', 1);">
+                        1
+                    </button>
+                </li>
+                {% if pages > 7 %}
+                {% if currentPage == 1 or currentPage > pages - 3 %}
+                    <li class="page-item" style="width: {{ lcase }}%;">
+                        <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                onclick="goPage('{{ urlPage }}', '{{ prefix }}', 2);">
+                            2
+                        </button>
+                    </li>
+                {% elseif currentPage < 4 %}
+                    {% set itemclass = "page-item"~(currentPage == 2 ? ' active' : "") %}
+                    <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                        <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                onclick="goPage('{{ urlPage }}', '{{ prefix }}', 2);">
+                            2
+                        </button>
+                    </li>
+                    {% set itemclass = "page-item"~(currentPage == 3 ? ' active' : "") %}
+                    <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                        <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                onclick="goPage('{{ urlPage }}', '{{ prefix }}', 3);">
+                            3
+                        </button>
+                    </li>
+                    {% if currentPage == 3 %}
+                        {% set itemclass = "page-item" %}
+                        <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                            <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                    onclick="goPage('{{ urlPage }}', '{{ prefix }}', 4);">
+                                4
+                            </button>
+                        </li>
+                    {% endif %}
+                {% elseif currentPage > 3 and currentPage < pages %}
+                    <li class="page-item" style="width: {{ lcase }}%;">
+                        <button class="page-link mx-auto {{ btn_style }}">.</button>
+                    </li>
+                    <li class="page-item" style="width: {{ lcase }}%;">
+                        <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ currentPage - 1 }});">
+                            {{ currentPage - 1 }}
+                        </button>
+                    </li>
+                    <li class="page-item active" style="width: {{ lcase }}%;">
+                        <button class="page-link {{ btn_style }}" type="button"
+                                onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ currentPage }});">
+                            {{ currentPage }}
+                        </button>
+                    </li>
+                    <li class="page-item" style="width: {{ lcase }}%;">
+                        <button class="page-link {{ btn_style }}" type="button"
+                                onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ currentPage + 1 }});">
+                            {{ currentPage + 1 }}
+                        </button>
+                    </li>
+                    <li class="page-item" style="width: {{ lcase }}%;">
+                        <button class="page-link mx-auto {{ btn_style }}">.</button>
+                    </li>
+                {% endif %}
+                    {% if currentPage == pages or currentPage == 1 %}
+                        <li class="page-item" style="width: {{ lcase }}%;">
+                            <button class="page-link mx-auto {{ btn_style }}">.</button>
+                        </li>
+                        <li class="page-item" style="width: {{ lcase }}%;">
+                            <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                    onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ (pages/2)|round }});">
+                                {{ (pages/2)|round }}
+                            </button>
+                        </li>
+                        <li class="page-item" style="width: {{ lcase }}%;">
+                            <button class="page-link mx-auto {{ btn_style }}">.</button>
+                        </li>
+                        {% set itemclass = "page-item"~(currentPage == pages - 1 ? ' active' : "") %}
+                        <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                            <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                    onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ pages - 1 }});">
+                                {{ pages - 1 }}
+                            </button>
+                        </li>
+                    {% elseif currentPage > pages - 3 or currentPage < 4 %}
+                        <li class="page-item" style="width: {{ lcase }}%;">
+                            <a class="page-link mx-auto {{ btn_style }}">.</a>
+                        </li>
+                        {% if currentPage > pages - 3 %}
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                        onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ pages - 3 }});">
+                                    {{ pages - 3 }}
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% if currentPage < 3 or currentPage > pages - 3 %}
+                            {% set itemclass = "page-item"~(currentPage == pages - 2 ? ' active' : "") %}
+                            <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                        onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ pages - 2 }});">
+                                    {{ pages - 2 }}
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% set itemclass = "page-item"~(currentPage == pages - 1 ? ' active' : "") %}
+                        <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                            <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                    onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ pages - 1 }});">
+                                {{ pages - 1 }}
+                            </button>
+                        </li>
+                    {% endif %}
+                {% elseif pages > 2 %}
+                    {% for i in 2..(pages - 1) %}
+                        {% set itemclass = "page-item"~(currentPage == i ? ' active' : "") %}
+                        <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                            <button class="page-link mx-auto {{ btn_style }}" type="button"
+                                    onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ i }});">
+                                {{ i }}
+                            </button>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+                {% set itemclass = "page-item"~(currentPage == pages ? ' active' : "") %}
+                <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                    <button class="page-link mx-auto {{ btn_style }}" type="button"
+                            onclick="goPage('{{ urlPage }}', '{{ prefix }}', {{ pages }});">
+                        {{ pages }}
+                    </button>
+                </li>
+                {% set urlPage = (currentPage < pages) ? path(route, {'page': (currentPage + 1)~prefix}) : "" %}
+                {% set disabled = (currentPage == pages) %}
+                <li class="page-item{% if disabled %} disabled{% endif %}" style="width: {{ lcase }}%;">
+                    <button class="page-link mx-auto {{ btn_style }}" type="button" onclick="paginate('{{ urlPage }}', '{{ prefix }}', 1);"
+                            {% if disabled %}disabled="disabled"{% endif %}
+                    >
+                        &gt;
+                    </button>
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+{% endmacro %}

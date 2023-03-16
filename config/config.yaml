@@ -1,0 +1,23 @@
+# Reference extension configuration file
+
+# Mailer for use MailHog
+mailer:
+  user: ''
+  pwd: ''
+  host: '127.0.0.1'
+  port: '1025'
+  encryption: ''
+
+courriel_reponse: 'no-reply@example.com'
+
+entreprise:
+  designation: ''
+  siren: '123456789'
+  siret: '12345678901234'
+  courriel: 'deveze.services@gmail.com'
+  telephone: '+337 82 35 90 65 / 07 82 35 90 65'
+  adresse:
+    adr: '9, rue des Spahis'
+    cplt: ''
+    cpost: '34500'
+    ville: 'BEZIERS'

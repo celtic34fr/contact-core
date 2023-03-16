@@ -1,0 +1,4 @@
+
+reference_extension:
+  resource: '../../vendor/celtic34fr/contact-core/src/Controller/'
+  type: annotation

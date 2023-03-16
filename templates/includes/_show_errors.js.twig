@@ -1,0 +1,12 @@
+{% if errors is defined and errors is not empty %}
+<script>
+    {% for error in errors %}
+        {{ notyJS.noty_notification({
+            'msgs': errors,
+            'layout': 'bottomRight',
+            'timeout': 3500,
+            'theme': 'bootstrap-v4',
+        }) }}
+    {% endfor %}
+</script>
+{% endif %}
