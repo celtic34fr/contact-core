@@ -28,7 +28,7 @@ class MySQLiCliInfos
     {
         $this->mysqli_construct();
         $this->dbPrefix = $_ENV['DB_PREFIX'] ?? "";
-        $this->dbName = $this->dbPrefix . "crm_cli_infos";
+        $this->dbName = $this->dbPrefix . "cli_infos";
         $this->className = MSICliInfos::class;
         $this->structure = $this->getTableColumns();
     }
