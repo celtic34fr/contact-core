@@ -2,6 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Trait;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -9,18 +10,26 @@ trait DbPaginateTrait
 {
 
     #[ArrayShape(['datas' => "\Doctrine\ORM\Tools\Pagination\Paginator", 'pages' => "int|null", 'page' => "int|mixed"])]
-    private function paginateDoctrine($dql, $currentPageNo = 1, $limit = 10): array
+    private function paginateDoctrine(QueryBuilder $dql, int $currentPageNo = 1, int $limit = 10): array
     {
-        $paginator = new Paginator($dql);
-
-        $paginator->getQuery()
-            ->setFirstResult($limit * ($currentPageNo - 1)) // Offset
-            ->setMaxResults($limit) // Limit
-        ;
+        if ($currentPageNo > 0 && $limit > 0) {
+            $paginator = new Paginator($dql);
+            $paginator->getQuery()
+                ->setFirstResult($limit * ($currentPageNo - 1)) // Offset
+                ->setMaxResults($limit) // Limit
+            ;
+            $datas = $paginator;
+            $pages = ceil($paginator->count()/$limit);
+            $page = $currentPageNo;
+        } else {
+            $datas = $dql->getQuery()->getResult();
+            $pages = 0;
+            $page = 0;
+        }
         return [
-            'datas' => $paginator,
-            'pages' => ceil($paginator->count()/$limit),
-            'page' => $currentPageNo,
+            'datas' => $datas,
+            'pages' => $pages,
+            'page' => $page,
         ];
     }
 
