@@ -18,3 +18,10 @@ services:
     class: Celtic34fr\ContactCore\AdminMenu
     arguments: [ '@Symfony\Component\Routing\Generator\UrlGeneratorInterface' ]
     tags: [ 'bolt.extension_backend_menu' ]
+
+  Celtic34fr\ContactCore\:
+    resource: '../src/*'
+    exclude:
+      - ../src/Entity/
+      - ../src/Extension.php
+      - ../src/AdminMenu.php
