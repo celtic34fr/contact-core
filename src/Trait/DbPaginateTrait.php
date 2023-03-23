@@ -22,7 +22,7 @@ trait DbPaginateTrait
             $pages = ceil($paginator->count()/$limit);
             $page = $currentPageNo;
         } else {
-            $datas = $dql->getQuery()->getResult();
+            $datas = $dql->getResult();
             $pages = 0;
             $page = 0;
         }
