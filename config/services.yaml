@@ -20,8 +20,8 @@ services:
     tags: [ 'bolt.extension_backend_menu' ]
 
   Celtic34fr\ContactCore\:
-    resource: '../src/*'
+    resource: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/*'
     exclude:
-      - ../src/Entity/
-      - ../src/Extension.php
-      - ../src/AdminMenu.php
+      - %kernel.project_dir%/vendor/celtic34fr/contact-core/src/Entity/
+      - %kernel.project_dir%/vendor/celtic34fr/contact-core/src/Extension.php
+      - %kernel.project_dir%/vendor/celtic34fr/contact-core/src/AdminMenu.php
