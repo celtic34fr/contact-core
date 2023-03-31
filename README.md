@@ -18,7 +18,7 @@ In your project, folder config/packages, in doctrine.yaml file, you have to add 
             string_functions:
                 MATCH_AGAINST: Celtic34fr\ContactCore\Extensions\Doctrine\MatchAgainst
 ```
-for integrating fulltext search needed by other CRM Extension as CRM-Contact
+for integrating fulltext search needed by other Contact Extension as contact-gestion
 
 ## Running PHPStan and Easy Codings Standard
 
