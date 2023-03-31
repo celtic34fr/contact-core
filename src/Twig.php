@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Celtic34fr\ContactCore;
 
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
+use Celtic34fr\ContactCore\Service\CourrielsDbInfos;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
@@ -18,9 +19,11 @@ class Twig extends AbstractExtension
     private ExtensionConfig $extensionConfig;
     private RouterInterface $router;
 
-    public function __construct(ExtensionConfig $extensionConfig, RouterInterface $router)
+    public function __construct(ExtensionConfig $extensionConfig, RouterInterface $router,
+                                CourrielsDbInfos $courrielsDbInfos)
     {
         $this->extensionConfig = $extensionConfig;
+        $this->courrielsDbInfos = $courrielsDbInfos;
         $this->router = $router;
     }
 
@@ -56,6 +59,8 @@ class Twig extends AbstractExtension
             new TwigFunction('gettype', [$this, 'twigFunction_gettype']),
             new TwigFunction('isExtensionInstall', [$this, 'twigFunction_isExtensionInstall']),
             new TwigFunction('isRouteDefined', [$this, 'twigFunction_isRouteDefined']),
+
+            new TwigFunction('mailError', [$this, 'twigFunction_mailError'], $safe),
         ];
     }
 
@@ -69,14 +74,14 @@ class Twig extends AbstractExtension
         ];
 
         return [
-            new TwigFilter('force_to_int', fn ($value) => intval($value)),
-            new TwigFilter('html_entity_decode',[$this, 'twigFilter_html_entity_decode']),
-            new TwigFilter('bool',[$this, 'twigFilter_boolRtn']),
+            new TwigFilter('force_to_int', fn($value) => intval($value)),
+            new TwigFilter('html_entity_decode', [$this, 'twigFilter_html_entity_decode']),
+            new TwigFilter('bool', [$this, 'twigFilter_boolRtn']),
             new TwigFilter('xor', [$this, 'twigFilter_xor']),
-            new TwigFilter('parseInt', fn ($value) => intval($value)),
-            new TwigFilter('parseFloat', fn ($value) => floatval($value)),
+            new TwigFilter('parseInt', fn($value) => intval($value)),
+            new TwigFilter('parseFloat', fn($value) => floatval($value)),
             new TwigFilter('json_decode',
-                fn ($value) => json_decode(str_replace('\\', '', $value), true)),
+                fn($value) => json_decode(str_replace('\\', '', $value), true)),
         ];
     }
 
@@ -194,7 +199,7 @@ class Twig extends AbstractExtension
         return $obj->getStaticPropertyValue($var_name);
     }
 
-    public function twigFunction_setStatic($object, $var_name, $var_value) : void
+    public function twigFunction_setStatic($object, $var_name, $var_value): void
     {
         $object::$var_name = $var_value;
     }
@@ -217,7 +222,12 @@ class Twig extends AbstractExtension
     public function twigFunction_isRouteDefined(string $route): bool
     {
         $routes = $this->router->getRouteCollection();
-        return (bool) $routes->get($route);
+        return (bool)$routes->get($route);
+    }
+
+    public function twigFunction_mailError()
+    {
+        return $this->courrielsDbInfos->countCourrielsToSend();
     }
 
     /** Twig Filters */
@@ -230,65 +240,65 @@ class Twig extends AbstractExtension
     {
 
         $utf8_ansi2 = array(
-            "u00c0" =>"À",
-            "u00c1" =>"Á",
-            "u00c2" =>"Â",
-            "u00c3" =>"Ã",
-            "u00c4" =>"Ä",
-            "u00c5" =>"Å",
-            "u00c6" =>"Æ",
-            "u00c7" =>"Ç",
-            "u00c8" =>"È",
-            "u00c9" =>"É",
-            "u00ca" =>"Ê",
-            "u00cb" =>"Ë",
-            "u00cc" =>"Ì",
-            "u00cd" =>"Í",
-            "u00ce" =>"Î",
-            "u00cf" =>"Ï",
-            "u00d1" =>"Ñ",
-            "u00d2" =>"Ò",
-            "u00d3" =>"Ó",
-            "u00d4" =>"Ô",
-            "u00d5" =>"Õ",
-            "u00d6" =>"Ö",
-            "u00d8" =>"Ø",
-            "u00d9" =>"Ù",
-            "u00da" =>"Ú",
-            "u00db" =>"Û",
-            "u00dc" =>"Ü",
-            "u00dd" =>"Ý",
-            "u00df" =>"ß",
-            "u00e0" =>"à",
-            "u00e1" =>"á",
-            "u00e2" =>"â",
-            "u00e3" =>"ã",
-            "u00e4" =>"ä",
-            "u00e5" =>"å",
-            "u00e6" =>"æ",
-            "u00e7" =>"ç",
-            "u00e8" =>"è",
-            "u00e9" =>"é",
-            "u00ea" =>"ê",
-            "u00eb" =>"ë",
-            "u00ec" =>"ì",
-            "u00ed" =>"í",
-            "u00ee" =>"î",
-            "u00ef" =>"ï",
-            "u00f0" =>"ð",
-            "u00f1" =>"ñ",
-            "u00f2" =>"ò",
-            "u00f3" =>"ó",
-            "u00f4" =>"ô",
-            "u00f5" =>"õ",
-            "u00f6" =>"ö",
-            "u00f8" =>"ø",
-            "u00f9" =>"ù",
-            "u00fa" =>"ú",
-            "u00fb" =>"û",
-            "u00fc" =>"ü",
-            "u00fd" =>"ý",
-            "u00ff" =>"ÿ");
+            "u00c0" => "À",
+            "u00c1" => "Á",
+            "u00c2" => "Â",
+            "u00c3" => "Ã",
+            "u00c4" => "Ä",
+            "u00c5" => "Å",
+            "u00c6" => "Æ",
+            "u00c7" => "Ç",
+            "u00c8" => "È",
+            "u00c9" => "É",
+            "u00ca" => "Ê",
+            "u00cb" => "Ë",
+            "u00cc" => "Ì",
+            "u00cd" => "Í",
+            "u00ce" => "Î",
+            "u00cf" => "Ï",
+            "u00d1" => "Ñ",
+            "u00d2" => "Ò",
+            "u00d3" => "Ó",
+            "u00d4" => "Ô",
+            "u00d5" => "Õ",
+            "u00d6" => "Ö",
+            "u00d8" => "Ø",
+            "u00d9" => "Ù",
+            "u00da" => "Ú",
+            "u00db" => "Û",
+            "u00dc" => "Ü",
+            "u00dd" => "Ý",
+            "u00df" => "ß",
+            "u00e0" => "à",
+            "u00e1" => "á",
+            "u00e2" => "â",
+            "u00e3" => "ã",
+            "u00e4" => "ä",
+            "u00e5" => "å",
+            "u00e6" => "æ",
+            "u00e7" => "ç",
+            "u00e8" => "è",
+            "u00e9" => "é",
+            "u00ea" => "ê",
+            "u00eb" => "ë",
+            "u00ec" => "ì",
+            "u00ed" => "í",
+            "u00ee" => "î",
+            "u00ef" => "ï",
+            "u00f0" => "ð",
+            "u00f1" => "ñ",
+            "u00f2" => "ò",
+            "u00f3" => "ó",
+            "u00f4" => "ô",
+            "u00f5" => "õ",
+            "u00f6" => "ö",
+            "u00f8" => "ø",
+            "u00f9" => "ù",
+            "u00fa" => "ú",
+            "u00fb" => "û",
+            "u00fc" => "ü",
+            "u00fd" => "ý",
+            "u00ff" => "ÿ");
 
         foreach ($utf8_ansi2 as $key => $val) {
             $pos = strpos($str, $key);
@@ -305,7 +315,7 @@ class Twig extends AbstractExtension
      */
     public function twigFilter_boolRtn($val): bool
     {
-        return (bool) $val;
+        return (bool)$val;
     }
 
     /**
@@ -313,7 +323,7 @@ class Twig extends AbstractExtension
      * @param $val2
      * @return bool
      */
-    public function twigFilter_xor($val1, $val2) : bool
+    public function twigFilter_xor($val1, $val2): bool
     {
         return $val1 xor $val2;
     }

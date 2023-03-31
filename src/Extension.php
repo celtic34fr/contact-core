@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Celtic34fr\ContactCore;
 
 use Bolt\Extension\BaseExtension;
+use Celtic34fr\ContactGestion\Widget\CourrielsWidget;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Extension extends BaseExtension
@@ -28,6 +29,7 @@ class Extension extends BaseExtension
     {
         /** ajout de l'espace de nommage pour accès aux templates de l'extension */
         $this->addTwigNamespace("contact-core", dirname(__DIR__)."/templates");
+        $this->addWidget(new CourrielsWidget());
     }
 
     /**

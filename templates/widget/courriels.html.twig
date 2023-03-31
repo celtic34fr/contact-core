@@ -1,0 +1,8 @@
+{% set background = 'background: #C8E8C2;' %}
+{% set background_title = 'background: #344830; color: white;' %}
+{% set mailErrors = mailError() %}
+{% if mailErrors > 0 %}
+    <a href="{{ pazth() }}">Des courriels sont à renvoyer ({{ mailErrors }})</a>
+{% else %}
+    <p>Aucune erreur détectée</p>
+{% endif %}
