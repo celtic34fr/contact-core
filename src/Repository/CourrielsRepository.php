@@ -3,6 +3,7 @@
 namespace Celtic34fr\ContactCore\Repository;
 
 use Celtic34fr\ContactCore\Entity\Courriels;
+use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -35,6 +36,17 @@ class CourrielsRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findAllOnError()
+    {
+        return $this->createQueryBuilder('cc')
+            ->andWhere('cc.send_status = :error')
+            ->setParameter('error', StatusCourrielEnums::Error->_toString())
+            ->orderBy('cc.created_at', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**
