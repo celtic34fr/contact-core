@@ -4,8 +4,10 @@ namespace Celtic34fr\ContactCore\Repository;
 
 use Celtic34fr\ContactCore\Entity\Courriels;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\Trait\DbPaginateTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * @extends ServiceEntityRepository<Courriels>
@@ -17,6 +19,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CourrielsRepository extends ServiceEntityRepository
 {
+    use DbPaginateTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Courriels::class);
@@ -45,8 +49,21 @@ class CourrielsRepository extends ServiceEntityRepository
             ->setParameter('error', StatusCourrielEnums::Error->_toString())
             ->orderBy('cc.created_at', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+    }
+
+    #[ArrayShape(['datas' => "\Doctrine\ORM\Tools\Pagination\Paginator", 'pages' => "\int|null", 'page' => "\int|mixed"])]
+    public function findCourrielsAll(string $status = 'all', int $currentPage = 1, int $limit = 10): array
+    {
+        $qb = $this->createQueryBuilder("bc");
+        if ($status !== 'all') {
+            $qb
+                ->where('bc.send_status = :status')
+                ->setParameter('status', $status);
+        }
+        $qb->orderBy('bc.created_at', 'DESC');
+        $qbq = $qb->getQuery();
+        return $this->paginateDoctrine($qbq, $currentPage, $limit);
     }
 
 //    /**
