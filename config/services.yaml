@@ -17,8 +17,15 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
+    bind:
+      $defaultLocale: '%locale%'
 
   Celtic34fr\ContactCore\AdminMenu:
     class: Celtic34fr\ContactCore\AdminMenu
     arguments: [ '@Symfony\Component\Routing\Generator\UrlGeneratorInterface' ]
     tags: [ 'bolt.extension_backend_menu' ]
+
+  Celtic34fr\ContactCore\Controller\Backend:
+    resource: '../../vendor/celtic34fr/contact-core/src/Controller/Backend/'
+    tags: ['controller.service_arguments']
+

@@ -2,7 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Bolt\Configuration\Config;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -14,12 +14,14 @@ class ExtensionConfig
 
     /** KernelInterface $appKernel */
     private $appKernel;
+    private Config $config;
 
-    public function __construct(KernelInterface $appKernel)
+    public function __construct(KernelInterface $appKernel, Config $config)
     {
         $this->appKernel = $appKernel;
-        $this->projectDir = $appKernel->getProjectDir();
+        $this->projectDir = $this->appKernel->getProjectDir();
         $this->initialize($this->projectDir);
+        $this->config = $config;
     }
 
     /**
@@ -97,6 +99,20 @@ class ExtensionConfig
     }
 
     /**
+     * @return array
+     */
+    public function getAllConfigs(): array
+    {
+        $local = $this->extConfig;
+        $globalsPaths = $this->config->getPaths();
+        $global = [];
+        foreach ($globalsPaths as $globalPath) {
+            $global[$globalPath] = $this->config->get($globalPath);
+        }
+        return array_merge($global, $local);
+    }
+
+    /**
      * @param array $paths
      * @param $localConfig
      * @param int $idx
@@ -139,4 +155,5 @@ class ExtensionConfig
         }
         return null;
     }
+
 }

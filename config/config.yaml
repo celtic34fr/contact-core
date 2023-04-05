@@ -21,3 +21,9 @@ entreprise:
     cplt: ''
     cpost: '34500'
     ville: 'BEZIERS'
+
+fuzzy:
+  enabled: true
+  prefix_length: 2
+  max_expansions: 50
+  distance: 2
