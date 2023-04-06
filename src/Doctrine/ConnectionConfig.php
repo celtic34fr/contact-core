@@ -6,6 +6,7 @@ namespace Celtic34fr\ContactCore\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use TeamTNT\TNTSearch\Stemmer\PorterStemmer;
 
 class ConnectionConfig
 {
@@ -28,10 +29,11 @@ class ConnectionConfig
         return [
             'driver' => $connection->getDatabasePlatform()->getName(),
             'host' => $connection->getHost(),
-            'database' => $connection->getDatabase(),
-            'username' => $connection->getUsername(),
-            'password' => $connection->getPassword(),
-            'storage' => sprintf('%s%s', $this->projectDir, '/var/data/'),
+            'database'  => $connection->getDatabase(),
+            'username'  => $connection->getUsername(),
+            'password'  => $connection->getPassword(),
+            'storage'   => sprintf('%s%s', $this->projectDir, '/var/data/'),
+            'stemmer'   => PorterStemmer::class,
         ];
     }
 }

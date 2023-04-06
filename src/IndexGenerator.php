@@ -41,8 +41,7 @@ class IndexGenerator
     public function update(string $query, string $index, array $ids): void
     {
         if ($ids && is_array($ids)) {
-            $tnt = new TNTSearch;
-            $tnt->loadConfig([]);
+            $tnt = $this->engine->get();
             $tnt->selectIndex("$index.index");
             $index = $tnt->getIndex();
 
