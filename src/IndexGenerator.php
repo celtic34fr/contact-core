@@ -2,6 +2,7 @@
 
 namespace Celtic34fr\ContactCore;
 
+use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\EntityManagerInterface;
 use TeamTNT\TNTSearch\TNTSearch;
 
@@ -15,6 +16,7 @@ class IndexGenerator
     {
         $this->engine = $engine;
         $this->em = $em;
+        $this->connexion = $this->em->getConnection();
     }
 
     public function generate(string $query, string $index): void
@@ -29,14 +31,15 @@ class IndexGenerator
     }
 
     /**
-     * @param string $query     Sql pour insertion dans l'index
-     * @param string $index     Nom de l'index
-     * @param array $ids        Tableau des identifiants d'enregistrement couple de valeur :
+     * @param string $query Sql pour insertion dans l'index
+     * @param string $index Nom de l'index
+     * @param array $ids Tableau des identifiants d'enregistrement couple de valeur :
      *                              id      identifiant de l'enregistrement
      *                              ope     type d'opération :
      *                                  i       pour insertion
      *                                  u       pour mise à jour
      *                                  d       pour suppression
+     * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function update(string $query, string $index, array $ids): void
     {
@@ -46,23 +49,27 @@ class IndexGenerator
             $index = $tnt->getIndex();
 
             foreach ($ids as $item) {
+                $result = [];
                 if ($item['ope'] !== 'd') {
-                    $record = $this->em->getConnection()->executeQuery($query. "AND idx.id = ".$item['id']);
-                    dd($record);
-                    $arrayRecordIndex = [];
+                    $query .= " AND idx.id = :idx";
+                    $stmt = $this->connexion->prepare($query);
+                    $stmt->bindValue('idx', $item['id']);
+                    $result = $stmt->executeQuery()->fetchAllAssociative();
                 }
-                switch (strtolower($item['ope'])) {
-                    case 'i':
-                        /** Recherche enregistrement à traiter */
-                        $index->insert($arrayRecordIndex);
-                        break;
-                    case 'u':
-                        /** Recherche enregistrement à traiter */
-                        $index->update($item['id'], $arrayRecordIndex);
-                        break;
-                    case 'd':
-                        $index->delete($item['id']);
-                        break;
+                if ($result) {
+                    switch (strtolower($item['ope'])) {
+                        case 'i':
+                            /** Recherche enregistrement à traiter */
+                            $index->insert($result);
+                            break;
+                        case 'u':
+                            /** Recherche enregistrement à traiter */
+                            $index->update($item['id'], $result);
+                            break;
+                        case 'd':
+                            $index->delete($item['id']);
+                            break;
+                    }
                 }
             }
         }
