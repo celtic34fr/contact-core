@@ -17,8 +17,6 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    bind:
-      $defaultLocale: '%locale%'
 
   Celtic34fr\ContactCore\AdminMenu:
     class: Celtic34fr\ContactCore\AdminMenu
