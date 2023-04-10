@@ -15,8 +15,7 @@ use Twig\Environment;
 #[Route('courriels')]
 class CourrielsController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
-                                protected ContainerInterface $container)
+    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment)
     {
     }
 
