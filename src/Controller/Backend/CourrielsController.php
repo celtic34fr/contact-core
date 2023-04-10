@@ -15,16 +15,9 @@ use Twig\Environment;
 #[Route('courriels')]
 class CourrielsController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private Environment $twigEnvironment;
-    protected $container;
-
-    public function __construct(EntityManagerInterface $entityManager, Environment $twigEnvironment,
-                                ContainerInterface $container)
+    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
+                                private ContainerInterface $container)
     {
-        $this->entityManager = $entityManager;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->container = $container;
     }
 
     #[Route('/list/{currentPage}', name: 'courriel_list')]

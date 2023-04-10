@@ -2,17 +2,14 @@
 
 namespace Celtic34fr\ContactCore;
 
-use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use TeamTNT\TNTSearch\TNTSearch;
 
 class IndexGenerator
 {
+    private Connection $connexion;
 
-    private TntEngine $engine;
-    private EntityManagerInterface $em;
-
-    public function __construct(TntEngine $engine, EntityManagerInterface $em)
+    public function __construct(private TntEngine $engine, private EntityManagerInterface $em)
     {
         $this->engine = $engine;
         $this->em = $em;

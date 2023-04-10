@@ -10,17 +10,10 @@ use TeamTNT\TNTSearch\TNTSearch;
 
 class TntEngine
 {
-    /** @var ConnectionConfig */
-    private $connectionConfig;
-
     /** @var TNTSearch|null */
     private $tnt;
 
-    /** @var ExtensionConfig  */
-    private ExtensionConfig $extConfig;
-
-
-    public function __construct(ConnectionConfig $connectionConfig, ExtensionConfig $extConfig)
+    public function __construct(private ConnectionConfig $connectionConfig, private ExtensionConfig $extConfig)
     {
         $this->connectionConfig = $connectionConfig;
         $this->extConfig = $extConfig;

@@ -16,15 +16,9 @@ use Twig\TwigTest;
 
 class Twig extends AbstractExtension
 {
-    private ExtensionConfig $extensionConfig;
-    private RouterInterface $router;
-
-    public function __construct(ExtensionConfig $extensionConfig, RouterInterface $router,
-                                CourrielsDbInfos $courrielsDbInfos)
+    public function __construct(private ExtensionConfig $extensionConfig, private RouterInterface $router,
+                                private CourrielsDbInfos $courrielsDbInfos)
     {
-        $this->extensionConfig = $extensionConfig;
-        $this->courrielsDbInfos = $courrielsDbInfos;
-        $this->router = $router;
     }
 
     /**

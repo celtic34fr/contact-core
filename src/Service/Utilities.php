@@ -7,12 +7,10 @@ use Exception;
 
 class Utilities
 {
-    private EntityManagerInterface $entityManager;
     private ?\Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
     }
 

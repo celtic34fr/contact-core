@@ -10,15 +10,11 @@ use TeamTNT\TNTSearch\Stemmer\PorterStemmer;
 
 class ConnectionConfig
 {
-    /** @var EntityManagerInterface */
-    private $em;
-
     /** @var string */
     private $projectDir;
 
-    public function __construct(EntityManagerInterface $em, ContainerInterface $container)
+    public function __construct(private  EntityManagerInterface $em, private ContainerInterface $container)
     {
-        $this->em = $em;
         $this->projectDir = $container->get('kernel')->getProjectDir();
     }
 

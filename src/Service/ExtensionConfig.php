@@ -12,16 +12,10 @@ class ExtensionConfig
     protected array $extInstall;
     protected string $projectDir;
 
-    /** KernelInterface $appKernel */
-    private $appKernel;
-    private Config $config;
-
-    public function __construct(KernelInterface $appKernel, Config $config)
+    public function __construct(private KernelInterface $appKernel, private Config $config)
     {
-        $this->appKernel = $appKernel;
         $this->projectDir = $this->appKernel->getProjectDir();
         $this->initialize($this->projectDir);
-        $this->config = $config;
     }
 
     /**
