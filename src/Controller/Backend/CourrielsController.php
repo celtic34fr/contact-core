@@ -16,7 +16,7 @@ use Twig\Environment;
 class CourrielsController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
-                                private ContainerInterface $container)
+                                protected ContainerInterface $container)
     {
     }
 
