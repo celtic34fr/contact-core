@@ -71,4 +71,33 @@ class IndexGenerator
             }
         }
     }
+
+    /**
+     * @param string $index     Nom de l'index
+     * @param array $entity     tableau des valeur utile pour agir sur TntSearch indexes
+     * @param array $ope        Type d'opération :
+     *                                  i       pour insertion
+     *                                  u       pour mise à jour
+     *                                  d       pour suppression
+     * @throws \Doctrine\DBAL\Driver\Exception
+     */
+    public function updateByArray(string $index, array $entity, string $operation): void
+    {
+        $tnt = $this->engine->get();
+        $tnt->selectIndex("$index.index");
+        $index = $tnt->getIndex();
+        $operation = substr($operation, 0, 1);
+
+        switch($operation) {
+            case 'i':
+                $index->insert($entity);
+                break;
+            case 'u':
+                $index->insert($entity['id'], $entity);
+                break;
+            case 'd':
+                $index->insert($entity['id']);
+                break;
+            }
+    }
 }
