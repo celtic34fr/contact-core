@@ -1,5 +1,7 @@
 # Reference extension configuration file
 
+prefix: '%bolt.table_prefix%'
+
 # Mailer for use MailHog
 mailer:
   user: ''
