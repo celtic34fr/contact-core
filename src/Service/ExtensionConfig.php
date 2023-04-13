@@ -101,8 +101,9 @@ class ExtensionConfig
         $local = $this->extConfig;
         $globalsPaths = $this->config->getPaths();
         $global = [];
-        foreach ($globalsPaths as $globalPath) {
-            $global[$globalPath] = $this->config->get($globalPath);
+        foreach ($globalsPaths as $globalItem => $globalPath) {
+            $global[$globalItem] = $this->config->get($globalPath);
+            $global[$globalItem.'2'] = $this->config->get($globalItem);
         }
         return array_merge($global, $local);
     }
