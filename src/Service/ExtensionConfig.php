@@ -16,7 +16,6 @@ class ExtensionConfig
     {
         $this->projectDir = $this->appKernel->getProjectDir();
         $this->initialize($this->projectDir);
-        $this->extConfig = $this->getAllConfigs();
     }
 
     /**
@@ -50,13 +49,17 @@ class ExtensionConfig
         $paths = explode('/', $path);
         $pathLength = sizeof($paths);
         $idx = 0;
+        $rslt = null;
         $localConfig = $this->extConfig;
         $path = array_shift($paths);
         if (array_key_exists($path, $localConfig)) {
             $idx += 1;
-            return $this->getNext($paths, $localConfig[$path], $idx, $pathLength);
+            $rslt = $this->getNext($paths, $localConfig[$path], $idx, $pathLength);
         }
-        return null;
+        if ($rslt === null) {
+            $rslt = $this->config->get($path);
+        }
+        return $rslt;
     }
 
     /**
@@ -91,21 +94,6 @@ class ExtensionConfig
             if ($name === $extName) return true;
         }
         return false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllConfigs(): array
-    {
-        $local = $this->extConfig;
-        $globalsPaths = $this->config->getPaths();
-        $global = [];
-        foreach ($globalsPaths as $globalItem => $globalPath) {
-            $global[$globalItem] = $this->config->get($globalPath);
-            $global[$globalItem.'2'] = $this->config->get($globalItem);
-        }
-        return array_merge($global, $local);
     }
 
     /**
