@@ -16,6 +16,7 @@ class ExtensionConfig
     {
         $this->projectDir = $this->appKernel->getProjectDir();
         $this->initialize($this->projectDir);
+        $this->extConfig = $this->getAllConfigs();
     }
 
     /**
