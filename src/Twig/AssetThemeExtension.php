@@ -34,7 +34,12 @@ class AssetThemeExtension extends AbstractExtension
             $full_path = $search_path . '/' . $path;
             if ($this->filesystem->exists($full_path)) {
                 /** cas ou le fichier recherché existe */
-                return  $this->packages->getUrl($theme_path, null);
+                return  sprintf(
+                    "%s://%s%s",
+                    isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+                    $_SERVER['SERVER_NAME'],
+                    $this->packages->getUrl($theme_path, null)
+                  );
             }
         }
         throw new Exception("resource thème $theme et/ou fichier $path inconnu ");
