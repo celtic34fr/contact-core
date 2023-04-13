@@ -34,8 +34,7 @@ class AssetThemeExtension extends AbstractExtension
             $full_path = $search_path . '/' . $path;
             if ($this->filesystem->exists($full_path)) {
                 /** cas ou le fichier recherché existe */
-                return $this->assets->getAssetUrl($theme_path,
-                        $this->container->getParameter('bolt.public_folder'));
+                return $this->assets->getAssetUrl($theme_path, null);
             }
         }
         throw new Exception("resource thème $theme et/ou fichier $path inconnu ");
