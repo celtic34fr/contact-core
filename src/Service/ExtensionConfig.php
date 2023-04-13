@@ -44,9 +44,10 @@ class ExtensionConfig
      * @param string $path
      * @return mixed
      */
-    public function get(string $path): mixed
+    public function get(string $path_base): mixed
     {
-        $paths = explode('/', $path);
+        $paths = explode('/', $path_base);
+        $path = $path_base;
         $pathLength = sizeof($paths);
         $idx = 0;
         $rslt = null;
@@ -57,7 +58,7 @@ class ExtensionConfig
             $rslt = $this->getNext($paths, $localConfig[$path], $idx, $pathLength);
         }
         if ($rslt === null) {
-            $rslt = $this->config->get($path);
+            $rslt = $this->config->get($path_base);
         }
         return $rslt;
     }
