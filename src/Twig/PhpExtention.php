@@ -1,23 +1,16 @@
 <?php
 
-declare(strict_types=1);
+namespace Celtic34fr\ContactCore\Twig;
 
-namespace Celtic34fr\ContactCore;
-
-use Celtic34fr\ContactCore\Service\ExtensionConfig;
-use Celtic34fr\ContactCore\Service\CourrielsDbInfos;
-use JetBrains\PhpStorm\Pure;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\RouterInterface;
-use Twig\Extension\AbstractExtension;
+use Twig\TwigTest;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use Twig\TwigTest;
+use Twig\Extension\AbstractExtension;
+use Symfony\Component\Routing\RouterInterface;
 
-class Twig extends AbstractExtension
+class PhpExtention extends AbstractExtension
 {
-    public function __construct(private ExtensionConfig $extensionConfig, private RouterInterface $router,
-                                private CourrielsDbInfos $courrielsDbInfos)
+    public function __construct(private RouterInterface $router)
     {
     }
 
@@ -38,7 +31,6 @@ class Twig extends AbstractExtension
             new TwigFunction('is_bool', [$this, 'twigFunction_is_bool']),
             new TwigFunction('array_to_string', [$this, 'twigFunction_array_to_string']),
             new TwigFunction('preg_replace', [$this, 'twigFunction_preg_replace']),
-//            new TwigFunction('template_exist', [$this, 'twigFunction_template_exist']), -> à récréer par rapport à Bolt CMS
             new TwigFunction('implode', [$this, 'twigFunction_implode']),
             new TwigFunction('is_numeric', [$this, 'twigFunction_is_numeric']),
             new TwigFunction('array_unique', [$this, 'twigFunction_array_unique']),
@@ -51,10 +43,7 @@ class Twig extends AbstractExtension
             new TwigFunction('setStatic', [$this, 'twigFunction_setStatic']),
             new TwigFunction('execStatic', [$this, 'twigFunction_execStatic']),
             new TwigFunction('gettype', [$this, 'twigFunction_gettype']),
-            new TwigFunction('isExtensionInstall', [$this, 'twigFunction_isExtensionInstall']),
             new TwigFunction('isRouteDefined', [$this, 'twigFunction_isRouteDefined']),
-
-            new TwigFunction('mailError', [$this, 'twigFunction_mailError'], $safe),
         ];
     }
 
@@ -87,8 +76,6 @@ class Twig extends AbstractExtension
             new TwigTest('startWith', [$this, 'twigTest_startWith']),
         );
     }
-
-    /** Twig Functions */
 
     /**
      * méthodes d'encapsulation de fonction ou traitements en Php
@@ -208,23 +195,14 @@ class Twig extends AbstractExtension
         return gettype($var);
     }
 
-    #[Pure] public function twigFunction_isExtensionInstall($name): bool
-    {
-        return $this->extensionConfig->isExtnsionInstall($name);
-    }
-
     public function twigFunction_isRouteDefined(string $route): bool
     {
         $routes = $this->router->getRouteCollection();
         return (bool)$routes->get($route);
     }
 
-    public function twigFunction_mailError()
-    {
-        return $this->courrielsDbInfos->countCourrielsToSend();
-    }
-
     /** Twig Filters */
+
 
     /**
      * @param $str
@@ -389,5 +367,16 @@ class Twig extends AbstractExtension
     public function twigTest_startWith($field, $string): bool
     {
         return (strpos($field, $string) == 0 && strpos($field, $string) !== false);
+    }
+
+
+
+    private function str_replace($search, $replace, $subject, $count = '')
+    {
+        if (!empty($count)) {
+            return str_replace($search, $replace, $subject, $count);
+        }
+        return str_replace($search, $replace, $subject);
+
     }
 }
