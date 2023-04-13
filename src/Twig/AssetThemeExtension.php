@@ -5,13 +5,13 @@ namespace Celtic34fr\ContactCore\Twig;
 use Exception;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AssetThemeExtension extends AbstractExtension
 {
-    public function __construct(private AssetExtension $assets, private ContainerInterface $container, private Filesystem $filesystem)
+    public function __construct(private Packages $packages, private ContainerInterface $container, private Filesystem $filesystem)
     {
     }
 
@@ -34,7 +34,7 @@ class AssetThemeExtension extends AbstractExtension
             $full_path = $search_path . '/' . $path;
             if ($this->filesystem->exists($full_path)) {
                 /** cas ou le fichier recherché existe */
-                return $this->assets->getAssetUrl($theme_path, null);
+                return  $this->packages->getUrl($theme_path, null);
             }
         }
         throw new Exception("resource thème $theme et/ou fichier $path inconnu ");
