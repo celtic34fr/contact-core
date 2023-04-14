@@ -2,6 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Twig\Runtime;
 
+use Exception;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\RuntimeExtensionInterface;
