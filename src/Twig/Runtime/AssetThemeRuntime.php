@@ -2,20 +2,25 @@
 
 namespace Celtic34fr\ContactCore\Twig\Runtime;
 
-use Bolt\Twig\AssetsExtension;
 use Exception;
+use Bolt\Configuration\Config;
+use Bolt\Twig\AssetsExtension;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\RuntimeExtensionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AssetThemeRuntime implements RuntimeExtensionInterface
 {
-    public function __construct(private AssetsExtension $asset, private ContainerInterface $container, private Filesystem $filesystem)
+    public function __construct(private AssetsExtension $asset, private ContainerInterface $container, private Filesystem $filesystem,
+    private Config $config)
     {
     }
 
     public function twigFunction_assetTheme(string $path, string $theme = null): string
     {
+        if ($theme === null) {
+            $theme = $this->config->get('bolt.theme');
+        }
         $theme_path = 'theme/'.$theme.'/'.$path;
 
         $search_path = $this->container->getParameter('kernel.project_dir').'/';
