@@ -2,15 +2,15 @@
 
 namespace Celtic34fr\ContactCore\Twig\Runtime;
 
+use Bolt\Twig\AssetsExtension;
 use Exception;
-use Symfony\Component\Asset\Packages;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\RuntimeExtensionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AssetThemeRuntime implements RuntimeExtensionInterface
 {
-    public function __construct(private Packages $packages, private ContainerInterface $container, private Filesystem $filesystem)
+    public function __construct(private AssetsExtension $asset, private ContainerInterface $container, private Filesystem $filesystem)
     {
     }
 
@@ -30,7 +30,7 @@ class AssetThemeRuntime implements RuntimeExtensionInterface
                     "%s://%s%s",
                     isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
                     $_SERVER['SERVER_NAME'],
-                    $this->packages->getUrl($theme_path, null)
+                    $this->asset->getAssetUrl($theme_path, null)
                   );
             }
         }
