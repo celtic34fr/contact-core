@@ -19,7 +19,7 @@ class AssetThemeRuntime implements RuntimeExtensionInterface
     public function twigFunction_assetTheme(string $path, string $theme = null): string
     {
         if ($theme === null) {
-            $theme = $this->config->get('bolt.theme');
+            $theme = $this->config->get('general.theme');
         }
         $theme_path = 'theme/'.$theme.'/'.$path;
 
