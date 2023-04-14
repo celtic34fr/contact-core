@@ -1,85 +1,22 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Twig;
+namespace Celtic34fr\ContactCore\Twig\Runtime;
 
-use Twig\TwigTest;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
-use Twig\Extension\AbstractExtension;
+use DateTime;
+use ReflectionClass;
+use Twig\Extension\RuntimeExtensionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class PhpExtention extends AbstractExtension
+class PhpEncapsulationRuntime implements RuntimeExtensionInterface
 {
     public function __construct(private RouterInterface $router)
     {
     }
 
     /**
-     * Register Twig functions.
-     */
-    public function getFunctions(): array
-    {
-        $safe = [
-            'is_safe' => ['html'],
-        ];
-
-        return [
-            new TwigFunction('strpos', [$this, 'twigFunction_strpos'], $safe),
-            new TwigFunction('str_replace', [$this, 'twigFunction_str_replace']),
-            new TwigFunction('printf', [$this, 'twigFunction_printf']),
-            new TwigFunction('sprintf', [$this, 'twigFunction_sprintf']),
-            new TwigFunction('is_bool', [$this, 'twigFunction_is_bool']),
-            new TwigFunction('array_to_string', [$this, 'twigFunction_array_to_string']),
-            new TwigFunction('preg_replace', [$this, 'twigFunction_preg_replace']),
-            new TwigFunction('implode', [$this, 'twigFunction_implode']),
-            new TwigFunction('is_numeric', [$this, 'twigFunction_is_numeric']),
-            new TwigFunction('array_unique', [$this, 'twigFunction_array_unique']),
-            new TwigFunction('array_filter', [$this, 'twigFunction_array_filter']),
-            new TwigFunction('function_exists', [$this, 'twigFunction_function_exists']),
-            new TwigFunction('ob_start', [$this, 'twigFunction_ob_start']),
-            new TwigFunction('ob_get_clean', [$this, 'twigFunction_ob_get_clean']),
-            new TwigFunction('end', [$this, 'twigFunction_end']),
-            new TwigFunction('getStatic', [$this, 'twigFunction_getStatic']),
-            new TwigFunction('setStatic', [$this, 'twigFunction_setStatic']),
-            new TwigFunction('execStatic', [$this, 'twigFunction_execStatic']),
-            new TwigFunction('gettype', [$this, 'twigFunction_gettype']),
-            new TwigFunction('isRouteDefined', [$this, 'twigFunction_isRouteDefined']),
-        ];
-    }
-
-    /**
-     * Register Twig filters.
-     */
-    public function getFilters(): array
-    {
-        $safe = [
-            'is_safe' => ['html'],
-        ];
-
-        return [
-            new TwigFilter('force_to_int', fn($value) => intval($value)),
-            new TwigFilter('html_entity_decode', [$this, 'twigFilter_html_entity_decode']),
-            new TwigFilter('bool', [$this, 'twigFilter_boolRtn']),
-            new TwigFilter('xor', [$this, 'twigFilter_xor']),
-            new TwigFilter('parseInt', fn($value) => intval($value)),
-            new TwigFilter('parseFloat', fn($value) => floatval($value)),
-            new TwigFilter('json_decode',
-                fn($value) => json_decode(str_replace('\\', '', $value), true)),
-        ];
-    }
-
-    public function getTests(): array
-    {
-        return array(
-            new TwigTest('instanceOf', [$this, 'twigTest_instanceOf']),
-            new TwigTest('typeOf', [$this, 'twigTest_typeOf']),
-            new TwigTest('startWith', [$this, 'twigTest_startWith']),
-        );
-    }
-
-    /**
      * méthodes d'encapsulation de fonction ou traitements en Php
      */
+
     public function twigFunction_strpos($chaine, $part, $offset = 0): bool|int
     {
         return strpos($chaine, $part, $offset);
@@ -176,7 +113,7 @@ class PhpExtention extends AbstractExtension
 
     public function twigFunction_getStatic($object, $var_name)
     {
-        $obj = new \ReflectionClass($object);
+        $obj = new ReflectionClass($object);
         return $obj->getStaticPropertyValue($var_name);
     }
 
@@ -309,7 +246,7 @@ class PhpExtention extends AbstractExtension
      */
     public function twigTest_instanceOf($object, $class): bool
     {
-        $reflectionClass = new \ReflectionClass($class);
+        $reflectionClass = new ReflectionClass($class);
         return $reflectionClass->isInstance($object);
     }
 
@@ -354,7 +291,7 @@ class PhpExtention extends AbstractExtension
                 return is_string($var);
                 break;
             case 'datetime':
-                return ($var instanceof \DateTime);
+                return ($var instanceof DateTime);
                 break;
         }
     }

@@ -1,25 +1,16 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Twig;
+namespace Celtic34fr\ContactCore\Twig\Runtime;
 
-use Exception;
-use Twig\TwigFunction;
-use Twig\Extension\AbstractExtension;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Filesystem\Filesystem;
+use Twig\Extension\RuntimeExtensionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AssetThemeExtension extends AbstractExtension
+class AssetThemeRuntime implements RuntimeExtensionInterface
 {
     public function __construct(private Packages $packages, private ContainerInterface $container, private Filesystem $filesystem)
     {
-    }
-
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('assetTheme', [$this, 'twigFunction_assetTheme']),
-        ];
     }
 
     public function twigFunction_assetTheme(string $path, string $theme = null): string
