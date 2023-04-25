@@ -25,8 +25,7 @@ class TntEngine
             $this->tnt = new TNTSearch();
             $this->tnt->loadConfig($this->connectionConfig->getConfig());
 
-            $configs = $this->extConfig->getAllConfigs();
-            $config = $configs['celtic34fr-contactcore'];
+            $config = $$this->extConfig->get('celtic34fr-contactcore');
 
             $this->tnt->fuzziness = $config['fuzzy']['enabled'] ?? false;
             $this->tnt->fuzzy_distance = $config['fuzzy']['distance'] ?? 2;
