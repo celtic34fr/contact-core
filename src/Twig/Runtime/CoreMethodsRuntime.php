@@ -21,4 +21,10 @@ class CoreMethodsRuntime implements RuntimeExtensionInterface
     {
         return $this->courrielsDbInfos->countCourrielsToSend();
     }
+
+    public function twigFunction_template_exist($template_name): bool
+    {
+        /* $template_name : @namespace/local_path/name.html.twig */
+        return (bool) $this->twig_env->getLoader()->exists($template_name);
+    }
 }

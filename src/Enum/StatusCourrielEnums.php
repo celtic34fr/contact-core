@@ -2,7 +2,8 @@
 
 namespace Celtic34fr\ContactCore\Enum;
 
-enum StatusCourrielEnums: string {
+enum StatusCourrielEnums: string
+{
     case Send = 'SD';
     case Error = 'ER';
     case Created = 'CD';
@@ -21,12 +22,12 @@ enum StatusCourrielEnums: string {
     public static function getCases(): array
     {
         $cases = self::cases();
-        return array_map(static fn(\UnitEnum $case) => $case->name, $cases);
+        return array_map(static fn (\UnitEnum $case) => $case->name, $cases);
     }
 
     public static function getValues(): array
     {
         $cases = self::cases();
-        return array_map(static fn(\UnitEnum $case) => $case->value, $cases);
+        return array_map(static fn (\UnitEnum $case) => $case->value, $cases);
     }
 }

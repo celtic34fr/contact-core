@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Celtic34fr\ContactCore;
+namespace Celtic34fr\ContactCore\Service;
 
 use Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;

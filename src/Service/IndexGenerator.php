@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore;
+namespace Celtic34fr\ContactCore\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;

@@ -2,14 +2,11 @@
 
 namespace Celtic34fr\ContactCore\Entity;
 
-use Celtic34fr\ContactCore\DBAL\Types\CustomerEnumType;
 use Celtic34fr\ContactCore\Enum\CustomerEnums;
 use Celtic34fr\ContactCore\Repository\ClienteleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: ClienteleRepository::class)]
 class Clientele
@@ -31,7 +28,7 @@ class Clientele
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Suivi::class, orphanRemoval: true)]
     private Collection $events;
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->events = new ArrayCollection();
         $this->cliInfos = new ArrayCollection();
@@ -53,7 +50,7 @@ class Clientele
         return $this;
     }
 
-    #[Pure] public function getType(): ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -93,8 +90,8 @@ class Clientele
     }
 
     /**
-     * @return Collection<int, Suivi>
-     */
+    * @return Collection<int, Suivi>
+    */
     public function getEvents(): Collection
     {
         return $this->events;

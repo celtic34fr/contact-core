@@ -13,7 +13,7 @@ class CoreMethodsExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            // new TwigFunction('template_exist', [$this, 'twigFunction_template_exist']), -> à récréer par rapport à Bolt CMS
+            new TwigFunction('isExtensionInstall', [CoreMethodsRuntime::class, 'twigFunction_isExtensionInstall'], self::SAFE),
             new TwigFunction('isExtensionInstall', [CoreMethodsRuntime::class, 'twigFunction_isExtensionInstall'], self::SAFE),
             new TwigFunction('mailError', [CoreMethodsRuntime::class, 'twigFunction_mailError'], self::SAFE),
         ];

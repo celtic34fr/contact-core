@@ -72,9 +72,6 @@ class CliInfos
         return $this;
     }
 
-    /**
-     * @return Clientele
-     */
     public function getClient(): Clientele
     {
         return $this->client;

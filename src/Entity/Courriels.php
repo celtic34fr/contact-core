@@ -5,7 +5,6 @@ namespace Celtic34fr\ContactCore\Entity;
 use Celtic34fr\ContactCore\Enum\CourrielEnums;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Repository\CourrielsRepository;
-use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
@@ -32,14 +31,13 @@ class Courriels
     private ?string $template_courriel = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $send_at = null;
+    private ?\DateTimeImmutable $send_at = null;
 
     #[ORM\Column]
     private ?int $send_times = null;
-
 
     #[ORM\Column(type: 'string', nullable: false)]
     private ?string $send_status = null;
@@ -99,23 +97,23 @@ class Courriels
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
         return $this;
     }
 
-    public function getSendAt(): ?DateTimeImmutable
+    public function getSendAt(): ?\DateTimeImmutable
     {
         return $this->send_at;
     }
 
-    public function setSendAt(?DateTimeImmutable $send_at): self
+    public function setSendAt(?\DateTimeImmutable $send_at): self
     {
         $this->send_at = $send_at;
         return $this;
@@ -157,7 +155,7 @@ class Courriels
         return $this;
     }
 
-    #[Pure] public function getNature(): ?string
+     public function getNature(): ?string
     {
         return $this->nature;
     }

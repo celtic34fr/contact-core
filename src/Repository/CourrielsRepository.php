@@ -7,7 +7,6 @@ use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Trait\DbPaginateTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * @extends ServiceEntityRepository<Courriels>
@@ -52,11 +51,10 @@ class CourrielsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    #[ArrayShape(['datas' => "\Doctrine\ORM\Tools\Pagination\Paginator", 'pages' => "\int|null", 'page' => "\int|mixed"])]
     public function findCourrielsAll(string $status = 'all', int $currentPage = 1, int $limit = 10): array
     {
-        $qb = $this->createQueryBuilder("bc");
-        if ($status !== 'all') {
+        $qb = $this->createQueryBuilder('bc');
+        if ('all' !== $status) {
             $qb
                 ->where('bc.send_status = :status')
                 ->setParameter('status', $status);

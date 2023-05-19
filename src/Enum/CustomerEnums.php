@@ -2,9 +2,8 @@
 
 namespace Celtic34fr\ContactCore\Enum;
 
-use UnitEnum;
-
-enum CustomerEnums: string {
+enum CustomerEnums: string
+{
     case Client = 'CL';
     case Prospect = 'PP';
 
@@ -22,12 +21,12 @@ enum CustomerEnums: string {
     public static function getCases(): array
     {
         $cases = self::cases();
-        return array_map(static fn(UnitEnum $case) => $case->name, $cases);
+        return array_map(static fn (\UnitEnum $case) => $case->name, $cases);
     }
 
     public static function getValues(): array
     {
         $cases = self::cases();
-        return array_map(static fn(UnitEnum $case) => $case->value, $cases);
+        return array_map(static fn (\UnitEnum $case) => $case->value, $cases);
     }
 }

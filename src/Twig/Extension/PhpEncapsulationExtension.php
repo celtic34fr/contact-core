@@ -2,27 +2,27 @@
 
 namespace Celtic34fr\ContactCore\Twig\Extension;
 
-use Twig\TwigTest;
+use Celtic34fr\ContactCore\Twig\Runtime\PhpEncapsulationRuntime;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use Twig\Extension\AbstractExtension;
-use Celtic34fr\ContactCore\Twig\Runtime\PhpEncapsulationRuntime;
+use Twig\TwigTest;
 
 class PhpEncapsulationExtension extends AbstractExtension
 {
-    const SAFE = ['is_safe' => ['html']];
+    public const SAFE = ['is_safe' => ['html']];
 
     public function getFilters(): array
     {
         return [
-            new TwigFilter('force_to_int', fn($value) => intval($value), self::SAFE),
+            new TwigFilter('force_to_int', fn ($value) => intval($value), self::SAFE),
             new TwigFilter('html_entity_decode', [PhpEncapsulationRuntime::class, 'twigFilter_html_entity_decode'], self::SAFE),
             new TwigFilter('bool', [PhpEncapsulationRuntime::class, 'twigFilter_boolRtn'], self::SAFE),
             new TwigFilter('xor', [PhpEncapsulationRuntime::class, 'twigFilter_xor'], self::SAFE),
-            new TwigFilter('parseInt', fn($value) => intval($value), self::SAFE),
-            new TwigFilter('parseFloat', fn($value) => floatval($value), self::SAFE),
+            new TwigFilter('parseInt', fn ($value) => intval($value), self::SAFE),
+            new TwigFilter('parseFloat', fn ($value) => floatval($value), self::SAFE),
             new TwigFilter('json_decode',
-                fn($value) => json_decode(str_replace('\\', '', $value), true), self::SAFE),
+                fn ($value) => json_decode(str_replace('\\', '', $value), true), self::SAFE),
         ];
     }
 

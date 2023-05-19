@@ -2,10 +2,8 @@
 
 namespace Celtic34fr\ContactCore\Twig\Runtime;
 
-use DateTime;
-use ReflectionClass;
-use Twig\Extension\RuntimeExtensionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Twig\Extension\RuntimeExtensionInterface;
 
 class PhpEncapsulationRuntime implements RuntimeExtensionInterface
 {
@@ -14,9 +12,8 @@ class PhpEncapsulationRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * méthodes d'encapsulation de fonction ou traitements en Php
+     * méthodes d'encapsulation de fonction ou traitements en Php.
      */
-
     public function twigFunction_strpos($chaine, $part, $offset = 0): bool|int
     {
         return strpos($chaine, $part, $offset);
@@ -47,9 +44,9 @@ class PhpEncapsulationRuntime implements RuntimeExtensionInterface
 
     public function twigFunction_array_to_string($array = []): string
     {
-        $str = "";
+        $str = '';
         foreach ($array as $key => $item) {
-            $str .= $key . '= "' . $item . '";';
+            $str .= $key.'= "'.$item.'";';
         }
         return $str;
     }
@@ -59,7 +56,7 @@ class PhpEncapsulationRuntime implements RuntimeExtensionInterface
         return preg_replace($pattern, $remplacement, $subject, $limit, $count);
     }
 
-    public function twigFunction_implode($separator = "", ?array $array = null): string
+    public function twigFunction_implode($separator = '', ?array $array = null): string
     {
         return implode($separator, $array);
     }
@@ -113,7 +110,7 @@ class PhpEncapsulationRuntime implements RuntimeExtensionInterface
 
     public function twigFunction_getStatic($object, $var_name)
     {
-        $obj = new ReflectionClass($object);
+        $obj = new \ReflectionClass($object);
         return $obj->getStaticPropertyValue($var_name);
     }
 
@@ -135,133 +132,109 @@ class PhpEncapsulationRuntime implements RuntimeExtensionInterface
     public function twigFunction_isRouteDefined(string $route): bool
     {
         $routes = $this->router->getRouteCollection();
-        return (bool)$routes->get($route);
+        return (bool) $routes->get($route);
     }
 
     /** Twig Filters */
-
-
-    /**
-     * @param $str
-     * @return mixed
-     */
     public function twigFilter_html_entity_decode($str): mixed
     {
-
-        $utf8_ansi2 = array(
-            "u00c0" => "À",
-            "u00c1" => "Á",
-            "u00c2" => "Â",
-            "u00c3" => "Ã",
-            "u00c4" => "Ä",
-            "u00c5" => "Å",
-            "u00c6" => "Æ",
-            "u00c7" => "Ç",
-            "u00c8" => "È",
-            "u00c9" => "É",
-            "u00ca" => "Ê",
-            "u00cb" => "Ë",
-            "u00cc" => "Ì",
-            "u00cd" => "Í",
-            "u00ce" => "Î",
-            "u00cf" => "Ï",
-            "u00d1" => "Ñ",
-            "u00d2" => "Ò",
-            "u00d3" => "Ó",
-            "u00d4" => "Ô",
-            "u00d5" => "Õ",
-            "u00d6" => "Ö",
-            "u00d8" => "Ø",
-            "u00d9" => "Ù",
-            "u00da" => "Ú",
-            "u00db" => "Û",
-            "u00dc" => "Ü",
-            "u00dd" => "Ý",
-            "u00df" => "ß",
-            "u00e0" => "à",
-            "u00e1" => "á",
-            "u00e2" => "â",
-            "u00e3" => "ã",
-            "u00e4" => "ä",
-            "u00e5" => "å",
-            "u00e6" => "æ",
-            "u00e7" => "ç",
-            "u00e8" => "è",
-            "u00e9" => "é",
-            "u00ea" => "ê",
-            "u00eb" => "ë",
-            "u00ec" => "ì",
-            "u00ed" => "í",
-            "u00ee" => "î",
-            "u00ef" => "ï",
-            "u00f0" => "ð",
-            "u00f1" => "ñ",
-            "u00f2" => "ò",
-            "u00f3" => "ó",
-            "u00f4" => "ô",
-            "u00f5" => "õ",
-            "u00f6" => "ö",
-            "u00f8" => "ø",
-            "u00f9" => "ù",
-            "u00fa" => "ú",
-            "u00fb" => "û",
-            "u00fc" => "ü",
-            "u00fd" => "ý",
-            "u00ff" => "ÿ");
+        $utf8_ansi2 = [
+            'u00c0' => 'À',
+            'u00c1' => 'Á',
+            'u00c2' => 'Â',
+            'u00c3' => 'Ã',
+            'u00c4' => 'Ä',
+            'u00c5' => 'Å',
+            'u00c6' => 'Æ',
+            'u00c7' => 'Ç',
+            'u00c8' => 'È',
+            'u00c9' => 'É',
+            'u00ca' => 'Ê',
+            'u00cb' => 'Ë',
+            'u00cc' => 'Ì',
+            'u00cd' => 'Í',
+            'u00ce' => 'Î',
+            'u00cf' => 'Ï',
+            'u00d1' => 'Ñ',
+            'u00d2' => 'Ò',
+            'u00d3' => 'Ó',
+            'u00d4' => 'Ô',
+            'u00d5' => 'Õ',
+            'u00d6' => 'Ö',
+            'u00d8' => 'Ø',
+            'u00d9' => 'Ù',
+            'u00da' => 'Ú',
+            'u00db' => 'Û',
+            'u00dc' => 'Ü',
+            'u00dd' => 'Ý',
+            'u00df' => 'ß',
+            'u00e0' => 'à',
+            'u00e1' => 'á',
+            'u00e2' => 'â',
+            'u00e3' => 'ã',
+            'u00e4' => 'ä',
+            'u00e5' => 'å',
+            'u00e6' => 'æ',
+            'u00e7' => 'ç',
+            'u00e8' => 'è',
+            'u00e9' => 'é',
+            'u00ea' => 'ê',
+            'u00eb' => 'ë',
+            'u00ec' => 'ì',
+            'u00ed' => 'í',
+            'u00ee' => 'î',
+            'u00ef' => 'ï',
+            'u00f0' => 'ð',
+            'u00f1' => 'ñ',
+            'u00f2' => 'ò',
+            'u00f3' => 'ó',
+            'u00f4' => 'ô',
+            'u00f5' => 'õ',
+            'u00f6' => 'ö',
+            'u00f8' => 'ø',
+            'u00f9' => 'ù',
+            'u00fa' => 'ú',
+            'u00fb' => 'û',
+            'u00fc' => 'ü',
+            'u00fd' => 'ý',
+            'u00ff' => 'ÿ'];
 
         foreach ($utf8_ansi2 as $key => $val) {
             $pos = strpos($str, $key);
-            if ($pos !== false) {
+            if (false !== $pos) {
                 $str = $this->str_replace($key, $val, $str);
             }
         }
         return $str;
     }
 
-    /**
-     * @param $val
-     * @return bool
-     */
     public function twigFilter_boolRtn($val): bool
     {
-        return (bool)$val;
+        return (bool) $val;
     }
 
-    /**
-     * @param $val1
-     * @param $val2
-     * @return bool
-     */
     public function twigFilter_xor($val1, $val2): bool
     {
         return $val1 xor $val2;
     }
 
     /** Twig Tests */
-
-    /**
-     * @param $object
-     * @param $class
-     * @return bool
-     */
     public function twigTest_instanceOf($object, $class): bool
     {
-        $reflectionClass = new ReflectionClass($class);
+        $reflectionClass = new \ReflectionClass($class);
         return $reflectionClass->isInstance($object);
     }
 
     /**
      * Description of KALANTwigExtension
-     * => permet le test sur le type d'un champs dans un template
+     * => permet le test sur le type d'un champs dans un template.
      *
-     * @param $var
      * @param null $type_test
-     * @return bool
+     *
      * @author LAURE
      */
     public function twigTest_typeOf($var, $type_test = null): bool
     {
-
         switch ($type_test) {
             default:
                 return false;
@@ -291,22 +264,15 @@ class PhpEncapsulationRuntime implements RuntimeExtensionInterface
                 return is_string($var);
                 break;
             case 'datetime':
-                return ($var instanceof DateTime);
+                return $var instanceof \DateTime;
                 break;
         }
     }
 
-    /**
-     * @param $field
-     * @param $string
-     * @return bool
-     */
     public function twigTest_startWith($field, $string): bool
     {
-        return (strpos($field, $string) == 0 && strpos($field, $string) !== false);
+        return 0 == strpos($field, $string) && false !== strpos($field, $string);
     }
-
-
 
     private function str_replace($search, $replace, $subject, $count = '')
     {
@@ -314,6 +280,5 @@ class PhpEncapsulationRuntime implements RuntimeExtensionInterface
             return str_replace($search, $replace, $subject, $count);
         }
         return str_replace($search, $replace, $subject);
-
     }
 }

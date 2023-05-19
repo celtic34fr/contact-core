@@ -2,11 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Entity;
 
-use Celtic34fr\ContactCore\Repository\PiecesJointesRepository;
-use DateTimeImmutable;
-use Doctrine\DBAL\Types\BlobType;
-use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\DBAL\Types\DateImmutableType;
+use Celtic34fr\ContactCore\PiecesJointesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PiecesJointesRepository::class)]
@@ -27,11 +23,10 @@ class PiecesJointes
     private $file_content = null;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $tempo = null;
-
 
     public function getId(): ?int
     {
@@ -46,7 +41,6 @@ class PiecesJointes
     public function setFileName(string $file_name): self
     {
         $this->file_name = $file_name;
-
         return $this;
     }
 
@@ -58,7 +52,6 @@ class PiecesJointes
     public function setFileMime(string $file_mime): self
     {
         $this->file_mime = $file_mime;
-
         return $this;
     }
 
@@ -70,19 +63,17 @@ class PiecesJointes
     public function setFileContent($file_content): self
     {
         $this->file_content = $file_content;
-
         return $this;
     }
 
-    public function getDateCreated(): ?DateTimeImmutable
+    public function getDateCreated(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setDateCreated(DateTimeImmutable $created_at): self
+    public function setDateCreated(\DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
@@ -94,7 +85,6 @@ class PiecesJointes
     public function setTempo(bool $tempo): self
     {
         $this->tempo = $tempo;
-
         return $this;
     }
 }

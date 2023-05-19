@@ -40,6 +40,7 @@
     </div>
 {% endmacro %}
 
+{# à réécrire hors contexte Wordpress 
 {% macro render_menu(menu_array, main_nav) %}
     {% import _self as self %}
     {% for route, menu in menu_array %}
@@ -75,6 +76,7 @@
     {% endfor %}
     {{ main_nav|raw }}
 {% endmacro %}
+#}
 
 {% macro date(field, format) %}
     {% set dte = field %}

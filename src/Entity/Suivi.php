@@ -3,7 +3,6 @@
 namespace Celtic34fr\ContactCore\Entity;
 
 use Celtic34fr\ContactCore\Repository\SuiviRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SuiviRepository::class)]
@@ -15,7 +14,7 @@ class Suivi
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $evt_at = null;
+    private ?\DateTimeImmutable $evt_at = null;
 
     #[ORM\Column(length: 255)]
     private ?string $event = null;
@@ -29,12 +28,12 @@ class Suivi
         return $this->id;
     }
 
-    public function getEvtAt(): ?DateTimeImmutable
+    public function getEvtAt(): ?\DateTimeImmutable
     {
         return $this->evt_at;
     }
 
-    public function setEvtAt(DateTimeImmutable $evt_at): self
+    public function setEvtAt(\DateTimeImmutable $evt_at): self
     {
         $this->evt_at = $evt_at;
         return $this;

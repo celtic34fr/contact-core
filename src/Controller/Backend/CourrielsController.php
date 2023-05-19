@@ -35,7 +35,7 @@ class CourrielsController extends AbstractController
         } else {
             $this->addFlash('danger', "La table Courriels n'existe pas, veuillez en avertir l'administrateur");
         }
-        return $this->render('@contact-gestion/courriels/index.html.twig', [
+        return $this->render('@contact-core/courriels/index.html.twig', [
             'courriels' => $courriels['datas'] ?? [],
             'currentPage' => $courriels['page'] ?? 0,
             'pages' => $courriels['pages'] ?? 0,
