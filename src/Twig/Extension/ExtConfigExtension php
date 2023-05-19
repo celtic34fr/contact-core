@@ -1,0 +1,19 @@
+<?php
+
+namespace Celtic34fr\ContactCore\Twig\Extension;
+
+use Twig\TwigFunction;
+use Twig\Extension\AbstractExtension;
+use Celtic34fr\ContactCore\Twig\Runtime\ExtConfigRuntime;
+
+class ExtConfigExtension extends AbstractExtension
+{
+    const SAFE = ['is_safe' => ['html']];
+
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('extConfig', [ExtConfigRuntime::class, 'twigFunction_extConfig']),
+        ];
+    }
+}

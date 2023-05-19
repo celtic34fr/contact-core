@@ -1,0 +1,22 @@
+<?php
+
+namespace Celtic34fr\ContactCore\Twig\Runtime;
+
+use Bolt\Configuration\Config;
+use Celtic34fr\ContactCore\Service\ExtensionConfig;
+use Symfony\Component\Filesystem\Filesystem;
+use Twig\Extension\RuntimeExtensionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class AssetThemeRuntime implements RuntimeExtensionInterface
+{
+    public function __construct(private ExtensionConfig $extConfig, private ContainerInterface $container, private Filesystem $filesystem,
+    private Config $config)
+    {
+    }
+
+    public function twigFunction_extConfig(string $path): string
+    {
+        return $this->extConfig->get($path);
+    }
+}
