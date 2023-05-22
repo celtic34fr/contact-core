@@ -18,22 +18,19 @@ class ExtensionConfig
         $this->initialize($this->projectDir);
     }
 
-    /**
-     * @param string $projectDir
-     */
     public function initialize(string $projectDir)
     {
         $this->projectDir = $projectDir;
-        $sources = $this->projectDir . '/config';
-        if (is_dir($sources . '/extensions')) {
+        $sources = $this->projectDir.'/config';
+        if (is_dir($sources.'/extensions')) {
             $sources .= '/extensions';
             $filesNames = scandir($sources);
             foreach ($filesNames as $fileName) {
-                if (!is_dir($sources . '/' . $fileName)) {
-                    $this->extInstall[] = $fileName;
-                    $content = file_get_contents($sources . '/' . $fileName);
-                    $arrays = Yaml::parse($content);
+                if (!is_dir($sources.'/'.$fileName)) {
                     $name = substr($fileName, 0, strpos($fileName, '.'));
+                    $this->extInstall[] = $name;
+                    $content = file_get_contents($sources.'/'.$fileName);
+                    $arrays = Yaml::parse($content);
                     $this->extConfig[$name] = $arrays;
                 }
             }
@@ -42,7 +39,6 @@ class ExtensionConfig
 
     /**
      * @param string $path
-     * @return mixed
      */
     public function get(string $path_base): mixed
     {
@@ -54,20 +50,16 @@ class ExtensionConfig
         $localConfig = $this->extConfig;
         $path = array_shift($paths);
         if (array_key_exists($path, $localConfig)) {
-            $idx += 1;
+            ++$idx;
             $rslt = $this->getNext($paths, $localConfig[$path], $idx, $pathLength);
         }
-        if ($rslt === null) {
+        if (null === $rslt) {
             $rslt = $this->config->get($path_base);
         }
+
         return $rslt;
     }
 
-    /**
-     * @param string $path
-     * @param $value
-     * @return mixed
-     */
     public function set(string $path, $value): mixed
     {
         $paths = explode('/', $path);
@@ -76,60 +68,52 @@ class ExtensionConfig
         $localConfig = $this->extConfig;
         $path = array_pop($paths);
         if (is_array($localConfig) && array_key_exists($path, $localConfig)) {
-            $idx += 1;
-            $localConfig[$path] =  $this->setNext($paths, $localConfig[$path], $idx, $pathLength, $value);
+            ++$idx;
+            $localConfig[$path] = $this->setNext($paths, $localConfig[$path], $idx, $pathLength, $value);
             return $localConfig;
         }
+
         return null;
     }
 
-    /**
-     * @param string $extName
-     * @return bool
-     */
     public function isExtnsionInstall(string $extName): bool
     {
         foreach ($this->extInstall as $extInstalled) {
-            $name = substr($extInstalled, strpos($extInstalled, "-") + 1);
-            $name = substr($name, 0, strpos($name, "."));
-            if ($name === $extName) return true;
+            $name = substr($extInstalled, strpos($extInstalled, '-') + 1);
+            $name = substr($name, 0, (strpos($name, '.') ? strpos($name, '.') : strlen($name)));
+            if ($name === $extName) {
+                return true;
+            }
         }
+
         return false;
     }
 
-    /**
-     * @param array $paths
-     * @param $localConfig
-     * @param int $idx
-     * @param int $pathLength
-     * @return mixed
-     */
+    public function getInstalled()
+    {
+        return $this->extInstall;
+    }
+
     private function getNext(array $paths, $localConfig, int $idx, int $pathLength): mixed
     {
         $path = array_shift($paths);
         if (is_array($localConfig) && array_key_exists($path, $localConfig)) {
-            $idx += 1;
+            ++$idx;
+
             return $this->getNext($paths, $localConfig[$path], $idx, $pathLength);
         }
         if ($idx === $pathLength) {
             return $localConfig;
         }
+
         return null;
     }
 
-    /**
-     * @param array $paths
-     * @param $localConfig
-     * @param int $idx
-     * @param int $pathLength
-     * @param $value
-     * @return mixed
-     */
     private function setNext(array $paths, $localConfig, int $idx, int $pathLength, $value = null): mixed
     {
         $path = array_pop($paths);
         if (is_array($localConfig) && array_key_exists($path, $localConfig)) {
-            $idx += 1;
+            ++$idx;
             $localConfig[$path] = $this->setNext($paths, $localConfig[$path], $idx, $pathLength, $value);
             return $localConfig;
         }
@@ -138,7 +122,7 @@ class ExtensionConfig
         } elseif (($idx + 1) === $pathLength) {
             return [$path => $value];
         }
+
         return null;
     }
-
 }
