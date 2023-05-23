@@ -1,12 +1,23 @@
-{% set background = 'background: #C8E8C2;' %}
-{% set background_title = 'background: #344830; color: white;' %}
+{% set background_message = background_message ??'#C8E8C2' %}
+{% set background_title = background_title ?? '#344830' %}
+{% set color_title = color_title ?? 'white' %}
 {% set mailErrors = mailError() %}
+
+<style>
+    .card-title {
+        background: {{ background_title }};
+        color: {{ color_title }};
+    }
+    .card-message {
+        background: {{ background_message }}
+    }
+</style>
 {#% set mailErrors = 0 %#}
-<div class="card-header">
+<div class="card-header card-title">
     <i class="far fa-envelop"></i> &nbsp;
     <div class="col-12 mx-*0 px-0">Courriels en souffrance</div>
 </div>
-<div class="card-body">
+<div class="card-body card-message">
     <p class="col-12 mx-0 px-0 text-center">
         {% if mailErrors > 0 %}
             <a href="{{ 'path()' }}">Des courriels sont à renvoyer ({{ mailErrors }})</a>
