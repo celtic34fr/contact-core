@@ -19,7 +19,7 @@ class CoreMethodsRuntime implements RuntimeExtensionInterface
         return $this->extensionConfig->isExtnsionInstall($name);
     }
 
-    public function twigFunction_mailError()
+    public function twigFunction_mailError() :int
     {
         return $this->courrielsDbInfos->countCourrielsToSend();
     }
