@@ -30,8 +30,8 @@ class CoreMethodsRuntime implements RuntimeExtensionInterface
         return (bool) $this->twig_env->getLoader()->exists($template_name);
     }
 
-    public function twigFunction_extConfig(string $path): string
+    public function twigFunction_extentionsConfig(): ExtensionConfig
     {
-        return $this->extensionConfig->get($path);
+        return $this->extensionConfig;
     }
 }
