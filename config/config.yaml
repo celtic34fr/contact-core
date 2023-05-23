@@ -29,3 +29,10 @@ fuzzy:
   prefix_length: 2
   max_expansions: 50
   distance: 2
+
+widget:
+  icon: 'fa fa-newspaper'
+  title_background: 'rgba(0, 0, 0, 0.06)'
+  title_color: 'black'
+  message_background: '#C8E8C2'
+  message_color: 'black'

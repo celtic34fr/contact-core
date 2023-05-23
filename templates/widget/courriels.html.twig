@@ -1,6 +1,7 @@
-{% set background_message = background_message ??'#C8E8C2' %}
-{% set background_title = background_title ?? 'rgba(0, 0, 0, 0.06)' %}
-{% set color_title = color_title ?? 'black' %}
+{% set background_message = extConfig("contactcode/widget/message_background") %}
+{% set color_message = extConfig("contactcore/widget/message_color") %}
+{% set background_title = extConfig("contactcore/widget/title_background") %}
+{% set color_title = extConfig("contactcore/widget/title_color") %}
 {% set mailErrors = mailError() %}
 
 <style>
@@ -10,6 +11,7 @@
     }
     .card-message {
         background: {{ background_message }}
+        color: {{ color_message }};
     }
 </style>
 {#% set mailErrors = 0 %#}
