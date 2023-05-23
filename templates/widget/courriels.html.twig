@@ -1,6 +1,6 @@
 {% set background_message = background_message ??'#C8E8C2' %}
-{% set background_title = background_title ?? '#344830' %}
-{% set color_title = color_title ?? 'white' %}
+{% set background_title = background_title ?? 'rgba(0, 0, 0, 0.06)' %}
+{% set color_title = color_title ?? 'black' %}
 {% set mailErrors = mailError() %}
 
 <style>
@@ -14,8 +14,7 @@
 </style>
 {#% set mailErrors = 0 %#}
 <div class="card-header card-title">
-    <i class="far fa-envelop"></i> &nbsp;
-    <div class="col-12 mx-*0 px-0">Courriels en souffrance</div>
+    <i class="far fa-file-alt"></i> &nbsp;Courriels en souffrance
 </div>
 <div class="card-body card-message">
     <p class="col-12 mx-0 px-0 text-center">
