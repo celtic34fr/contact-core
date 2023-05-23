@@ -16,7 +16,7 @@ class CoreMethodsExtension extends AbstractExtension
             new TwigFunction('isExtensionInstall', [CoreMethodsRuntime::class, 'twigFunction_isExtensionInstall'], self::SAFE),
             new TwigFunction('mailError', [CoreMethodsRuntime::class, 'twigFunction_mailError'], self::SAFE),
             new TwigFunction('template_exist', [CoreMethodsRuntime::class, 'twigFunction_template_exist', self::SAFE]),
-            new TwigFunction('extensionsConfig', [ExtConfigRuntime::class, 'twigFunction_extensionsConfig', self::SAFE]),
+            new TwigFunction('extensionsConfig', [CoreMethodsRuntime::class, 'twigFunction_extensionsConfig', self::SAFE]),
         ];
     }
 }
