@@ -2,17 +2,16 @@
 {% set background_title = 'background: #344830; color: white;' %}
 {% set mailErrors = mailError() %}
 {#% set mailErrors = 0 %#}
-<div class="col-12 row mx-0 px-0">
-    <div class="col-12 row mx-0 px-0">
-        <div class="col-12 mx-*0 px-0">Courriels en souffrance</div>
-    </div>
-    <div class="col-12 row mx-0 px-0">
-        <p class="col-12 mx-0 px-0 text-center">
-            {% if mailErrors > 0 %}
-                <a href="{{ 'path()' }}">Des courriels sont à renvoyer ({{ mailErrors }})</a>
-            {% else %}
-                Aucune erreur détectée
-            {% endif %}
-        </p>
-    </div>
+<div class="card-header">
+    <i class="far fa-envelop"></i> &nbsp;
+    <div class="col-12 mx-*0 px-0">Courriels en souffrance</div>
+</div>
+<div class="card-body">
+    <p class="col-12 mx-0 px-0 text-center">
+        {% if mailErrors > 0 %}
+            <a href="{{ 'path()' }}">Des courriels sont à renvoyer ({{ mailErrors }})</a>
+        {% else %}
+            Aucune erreur détectée
+        {% endif %}
+    </p>
 </div>
