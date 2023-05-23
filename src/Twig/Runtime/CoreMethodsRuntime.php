@@ -2,13 +2,15 @@
 
 namespace Celtic34fr\ContactCore\Twig\Runtime;
 
+use Twig\Environment;
 use Twig\Extension\RuntimeExtensionInterface;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Service\CourrielsDbInfos;
 
 class CoreMethodsRuntime implements RuntimeExtensionInterface
 {
-    public function __construct(private ExtensionConfig $extensionConfig, private CourrielsDbInfos $courrielsDbInfos)
+    public function __construct(private ExtensionConfig $extensionConfig, private CourrielsDbInfos $courrielsDbInfos,
+        private Environment $twig_env)
     {
     }
 
