@@ -3,16 +3,19 @@
 namespace Celtic34fr\ContactCore;
 
 use Bolt\Menu\ExtensionBackendMenuInterface;
+use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Knp\Menu\MenuItem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class AdminMenu implements ExtensionBackendMenuInterface
 {
     public const CRM_MENU = 'CRM - Relation client';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private Environment $twigEnvironment)
     {
-        $this->urlGenerator = $urlGenerator;
+        $this->twigEnvironment->addGlobal('extensionConfig', service(ExtensionConfig::class));
     }
 
     public function addItems(MenuItem $menu): void

@@ -26,7 +26,3 @@ services:
   Celtic34fr\ContactCore\Controller\Backend\:
     resource: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Controller/Backend/'
     tags: ['controller.service_arguments']
-
-  twig:
-    globals:
-      extensionConfig: '@Celtic34fr\ContactCore\Service\ExtensionConfig'
