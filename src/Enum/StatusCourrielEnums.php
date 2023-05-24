@@ -4,9 +4,9 @@ namespace Celtic34fr\ContactCore\Enum;
 
 enum StatusCourrielEnums: string
 {
-    case Send = 'SD';
-    case Error = 'ER';
-    case Created = 'CD';
+    case Send       = 'SD'; // envoyé
+    case Error      = 'ER'; // en erreur
+    case Created    = 'CD'; // généré
 
     public function _toString(): string
     {

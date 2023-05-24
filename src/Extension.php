@@ -8,6 +8,7 @@ use Bolt\Extension\BaseExtension;
 use Celtic34fr\ContactGestion\Widget\CourrielsWidget;
 use Symfony\Component\Filesystem\Filesystem;
 
+/** classe de déclaration et initialisation de l'extension Bolt CMS */
 class Extension extends BaseExtension
 {
     /**

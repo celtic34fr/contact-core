@@ -6,6 +6,7 @@ use Bolt\Configuration\Config;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
+/** service visant à mettre à disposition l'ensemble des paramètres de configuration des extension Bolt CMS */
 class ExtensionConfig
 {
     protected array $extConfig;
@@ -18,6 +19,7 @@ class ExtensionConfig
         $this->initialize($this->projectDir);
     }
 
+    /** procédure de récupération et construction du table des paramètres */
     public function initialize(string $projectDir)
     {
         $this->projectDir = $projectDir;
@@ -38,6 +40,7 @@ class ExtensionConfig
     }
 
     /**
+     * méthode de récupération d'un paramètre avec son chemin d'accès comme pour Config->get()
      * @param string $path
      */
     public function get(string $path_base): mixed
@@ -60,6 +63,7 @@ class ExtensionConfig
         return $rslt;
     }
 
+    /** méthode pour ajouter ou metre à jour la valeur d'un paramètre avec son chemin et sa valeur */
     public function set(string $path, $value): mixed
     {
         $paths = explode('/', $path);
@@ -76,6 +80,7 @@ class ExtensionConfig
         return null;
     }
 
+    /** méthode de vérification de la présence d'une extension Bolt CMS */
     public function isExtnsionInstall(string $extName): bool
     {
         foreach ($this->extInstall as $extInstalled) {
@@ -89,10 +94,9 @@ class ExtensionConfig
         return false;
     }
 
-    public function getInstalled()
-    {
-        return $this->extInstall;
-    }
+    /**
+     * ensemble des méthodes privées assurant le bon fonctionnement szq méthodes de la classe
+     */
 
     private function getNext(array $paths, $localConfig, int $idx, int $pathLength): mixed
     {

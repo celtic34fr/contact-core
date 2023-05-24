@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Celtic34fr\ContactCore\Doctrine;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use TeamTNT\TNTSearch\Stemmer\PorterStemmer;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ConnectionConfig
 {
@@ -20,16 +21,20 @@ class ConnectionConfig
 
     public function getConfig(): array
     {
+        /** @var Connection $connection */
         $connection = $this->em->getConnection();
+        $params = $connection->getParams();
 
         return [
-            'driver' => $connection->getDatabasePlatform()->getName(),
-            'host' => $connection->getHost(),
-            'database'  => $connection->getDatabase(),
-            'username'  => $connection->getUsername(),
-            'password'  => $connection->getPassword(),
-            'storage'   => sprintf('%s%s', $this->projectDir, '/var/data/'),
-            'stemmer'   => PorterStemmer::class,
+            'driver'        => $connection->getDatabasePlatform()->getName(),
+            'host'          => $params['host'],
+            'database'      => $params['dbname'],
+            'username'      => $params['user'],
+            'password'      => $params['password'],
+            'port'          => $params['port'],
+            'serverVersion' => $params['serverVersion'],
+            'storage'       => sprintf('%s%s', $this->projectDir, '/var/data/'),
+            'stemmer'       => PorterStemmer::class,
         ];
     }
 }

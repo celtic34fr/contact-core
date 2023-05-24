@@ -4,8 +4,8 @@ namespace Celtic34fr\ContactCore\Enum;
 
 enum CustomerEnums: string
 {
-    case Client = 'CL';
-    case Prospect = 'PP';
+    case Client     = 'CL';  // client
+    case Prospect   = 'PP';  // prospect
 
     public function _toString(): string
     {

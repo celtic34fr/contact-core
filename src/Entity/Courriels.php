@@ -7,7 +7,6 @@ use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Repository\CourrielsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: CourrielsRepository::class)]
 class Courriels
@@ -18,35 +17,35 @@ class Courriels
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $sujet = null;
+    private ?string $sujet = null;                      // sujet donné par l'internaute
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?CliInfos $destinataire = null;
+    private ?CliInfos $destinataire = null;             // lien à l'internaute (info non fixe)
 
     #[ORM\Column]
-    private array $context_courriel = [];
+    private array $context_courriel = [];               // variables pour génération du courriel
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $template_courriel = null;
+    private ?string $template_courriel = null;          // modèle de rendu à utiliser
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $created_at = null;     // date de création
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $send_at = null;
+    private ?\DateTimeImmutable $send_at = null;        // date d'envoi
 
     #[ORM\Column]
-    private ?int $send_times = null;
+    private ?int $send_times = null;                    // nombre d'envoi total
 
     #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $send_status = null;
+    private ?string $send_status = null;                // statut d'envoi du courriel, cf Enum\StatusCourrielEnums
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private array $pieces_jointes = [];
+    private array $pieces_jointes = [];                 // ensble des pièces jointes (table PiecesJointes)
 
     #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $nature = null;
+    private ?string $nature = null;                     // nature, type de courriel, cf Enum\CourrielEnumes
 
     public function getId(): ?int
     {

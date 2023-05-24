@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Twig\Runtime;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
+/** ensembles d'extensions d'encapsulation de fonctions et méthode Php pour accès direct sous TWIG */
 class PhpEncapsulationRuntime implements RuntimeExtensionInterface
 {
     public function __construct(private RouterInterface $router)

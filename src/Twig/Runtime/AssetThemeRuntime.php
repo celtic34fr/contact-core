@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\RuntimeExtensionInterface;
 
+/** classe complément à la fonction TWIG asset() pour prise en charge des thème hors package */
 class AssetThemeRuntime implements RuntimeExtensionInterface
 {
     public function __construct(private AssetsExtension $asset, private ContainerInterface $container, private Filesystem $filesystem,

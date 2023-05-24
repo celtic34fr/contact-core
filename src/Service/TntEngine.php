@@ -8,6 +8,7 @@ use Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use TeamTNT\TNTSearch\TNTSearch;
 
+/** classe permettant l'utilisation et la mise en oeuvre de l'outil TNTSearch */
 class TntEngine
 {
     /** @var TNTSearch|null */

@@ -20,13 +20,13 @@ class Clientele
     private ?string $courriel = null;
 
     #[ORM\Column(type: 'text', length: 255, nullable: true)]
-    private ?string $type = null;
+    private ?string $type = null;   // Cf. Enum^CustomerEnums
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: CliInfos::class)]
-    private Collection $cliInfos;
+    private Collection $cliInfos;   // information nom, prénom, tél. pouvant être multiple
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Suivi::class, orphanRemoval: true)]
-    private Collection $events;
+    private Collection $events;     // lien avec la table Suivi : évènement sur l'entity internaute (client/prospect)
 
     public function __construct()
     {

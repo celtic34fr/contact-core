@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Service;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
+/** classe en charge du rendfu de fichier PDF en utilisant DomPDF */
 class PdfRender
 {
     private Dompdf $domPdf;

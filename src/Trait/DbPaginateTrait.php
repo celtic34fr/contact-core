@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Trait;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
+/** classe de gestion de la pagination au travers de l'ORM Doctrine */
 trait DbPaginateTrait
 {
     private function paginateDoctrine(Query $dql, int $currentPageNo = 1, int $limit = 10): array

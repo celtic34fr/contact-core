@@ -21,6 +21,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+/** classe en charge de la gestion des envois de courriels */
 class SendMailer
 {
     private ?Mailer $mailer;

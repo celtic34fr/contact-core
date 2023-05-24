@@ -8,6 +8,7 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Twig\TwigTest;
 
+/** ensembles d'extensions d'encapsulation de fonctions et méthode Php pour accès direct sous TWIG */
 class PhpEncapsulationExtension extends AbstractExtension
 {
     public const SAFE = ['is_safe' => ['html']];

@@ -4,7 +4,9 @@ namespace Celtic34fr\ContactCore\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Celtic34fr\ContactCore\Service\TntEngine;
 
+/** Classe permettant la mise en oeuvre de l'outil TNTSearch à partir de la class TntEngine */
 class IndexGenerator
 {
     private Connection $connexion;
@@ -16,6 +18,11 @@ class IndexGenerator
         $this->connexion = $this->em->getConnection();
     }
 
+    /** 
+     * méthode de génération d'un index de recherche
+     * @param string $query Sql pour insertion dans l'index
+     * @param string $index Nom de l'index
+     */
     public function generate(string $query, string $index): void
     {
         $tnt = $this->engine->get();
@@ -28,6 +35,7 @@ class IndexGenerator
     }
 
     /**
+     * méthode vidant à mettre à jour un index en fonction d'informations founies (tableau ids)
      * @param string $query Sql pour insertion dans l'index
      * @param string $index Nom de l'index
      * @param array $ids Tableau des identifiants d'enregistrement couple de valeur :
@@ -73,6 +81,7 @@ class IndexGenerator
     }
 
     /**
+     * méthode visant à mettre à jour un index en fonction d'informations fournies pour un type d'opération
      * @param string $index     Nom de l'index
      * @param array $entity     tableau des valeur utile pour agir sur TntSearch indexes
      * @param array $ope        Type d'opération :

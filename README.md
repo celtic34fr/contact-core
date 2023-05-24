@@ -12,13 +12,6 @@ Installation:
 composer require celtic34fr/contact-core
 ```
 
-In your project, folder config/packages, in doctrine.yaml file, you have to add the following libes in doctrine/orm section:
-```
-        dql:
-            string_functions:
-                MATCH_AGAINST: Celtic34fr\ContactCore\Extensions\Doctrine\MatchAgainst
-```
-for integrating fulltext search needed by other Contact Extension as contact-gestion
 
 ## Running PHPStan and Easy Codings Standard
 

@@ -16,13 +16,13 @@ entreprise:
   designation: ''
   siren: '123456789'
   siret: '12345678901234'
-  courriel: 'deveze.services@gmail.com'
-  telephone: '+337 82 35 90 65 / 07 82 35 90 65'
+  courriel: 'your.email@provider.com'
+  telephone: 'your phone number'
   adresse:
-    adr: '9, rue des Spahis'
-    cplt: ''
-    cpost: '34500'
-    ville: 'BEZIERS'
+    adr: 'address'
+    cplt: 'more informations'
+    cpost: 'french zip code'
+    ville: 'town'
 
 fuzzy:
   enabled: true

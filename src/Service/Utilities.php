@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
+/** classe réunissant des méthodes utilitraires pour le projet */
 class Utilities
 {
     private ?\Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
@@ -15,6 +16,7 @@ class Utilities
     }
 
     /**
+     * m"thode de test d'existance d'une table dans l'ORM Doctrine
      * @throws Exception
      */
     public function existsTable(string $table_name): bool
@@ -26,6 +28,7 @@ class Utilities
     }
 
     /**
+     * méthode de test d'existance de tables dans l'ORM Doctrine
      * @throws Exception
      */
     public function existsTables(array $tables_name): bool

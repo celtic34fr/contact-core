@@ -6,6 +6,7 @@ use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 use Celtic34fr\ContactCore\Twig\Runtime\CoreMethodsRuntime;
 
+/** ensemble d'extensions TWIG spécifiques au projet */
 class CoreMethodsExtension extends AbstractExtension
 {
     const SAFE = ['is_safe' => ['html']];

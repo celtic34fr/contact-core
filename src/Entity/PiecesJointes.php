@@ -14,19 +14,19 @@ class PiecesJointes
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    private string $file_name;
+    private string $file_name;                      // nom du fichier origine
 
     #[ORM\Column(length: 255, nullable: false)]
-    private string $file_mime;
+    private string $file_mime;                      // type de fichier
 
     #[ORM\Column(type: 'blob')]
-    private $file_content = null;
+    private $file_content = null;                   // contenu proprement dit du fichier
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $created_at = null; // date de création
 
     #[ORM\Column(nullable: true)]
-    private ?bool $tempo = null;
+    private ?bool $tempo = null;                    // flag indiquant si le fichier est à garder (false) ou non (true)
 
     public function getId(): ?int
     {

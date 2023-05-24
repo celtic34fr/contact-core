@@ -7,6 +7,7 @@ use Twig\Extension\RuntimeExtensionInterface;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Service\CourrielsDbInfos;
 
+/** ensemble d'extensions TWIG spécifiques au projet */
 class CoreMethodsRuntime implements RuntimeExtensionInterface
 {
     public function __construct(private ExtensionConfig $extensionConfig, private CourrielsDbInfos $courrielsDbInfos,

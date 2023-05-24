@@ -14,16 +14,16 @@ class CliInfos
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $nom = null;        // nom de l'internaute
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $prenom = null;
+    private ?string $prenom = null;     // pénom de l'internaute
 
     #[ORM\Column(length: 24, nullable: true)]
-    private ?string $telephone = null;
+    private ?string $telephone = null;  // numéro de téléphone
 
     #[ORM\ManyToOne(inversedBy: 'cliInfos')]
-    private ?Clientele $client;
+    private ?Clientele $client;         // lien avec la table des information fixes : courriel
 
     public function getId(): ?int
     {

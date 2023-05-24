@@ -4,7 +4,7 @@ namespace Celtic34fr\ContactCore\Enum;
 
 enum CourrielEnums: string
 {
-    case Contact = 'QR';
+    case Contact = 'QR';    // demande d'informations
 
     public function _toString(): string
     {

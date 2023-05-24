@@ -41,6 +41,7 @@ class CourrielsRepository extends ServiceEntityRepository
         }
     }
 
+    /** recherche des Courriels en erreur d'envoi principalement */
     public function findAllOnError()
     {
         return $this->createQueryBuilder('cc')
@@ -51,6 +52,7 @@ class CourrielsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**recherche de tous les Courriels ayant le statut passé en paramètre, tout par défaut */
     public function findCourrielsAll(string $status = 'all', int $currentPage = 1, int $limit = 10): array
     {
         $qb = $this->createQueryBuilder('bc');
