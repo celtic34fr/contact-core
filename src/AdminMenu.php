@@ -15,7 +15,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
 
     public function __construct(private UrlGeneratorInterface $urlGenerator, private Environment $twigEnvironment)
     {
-        $this->twigEnvironment->addGlobal('extensionConfig', service(ExtensionConfig::class));
+        $this->twigEnvironment->addGlobal('extensionsConfig', service(ExtensionConfig::class));
     }
 
     public function addItems(MenuItem $menu): void
