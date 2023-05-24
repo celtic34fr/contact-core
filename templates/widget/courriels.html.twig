@@ -1,7 +1,7 @@
-{% set background_message = extensionsConfig().get("contactcode/widget/message_background") %}
-{% set color_message = extensionsConfig().get("contactcore/widget/message_color") %}
-{% set background_title = extensionsConfig().get("contactcore/widget/title_background") %}
-{% set color_title = extensionsConfig().get("contactcore/widget/title_color") %}
+{% set background_message = extConfig_get("contactcode/widget/message_background") %}
+{% set color_message = extConfig_get("contactcore/widget/message_color") %}
+{% set background_title = extConfig_get("contactcore/widget/title_background") %}
+{% set color_title = extConfig_get("contactcore/widget/title_color") %}
 {% set mailErrors = mailError() %}
 
 <style>

@@ -29,4 +29,9 @@ class CoreMethodsRuntime implements RuntimeExtensionInterface
         /* $template_name : @namespace/local_path/name.html.twig */
         return (bool) $this->twig_env->getLoader()->exists($template_name);
     }
+
+    public function twigFunction_extConfig_get(string $path): mixed
+    {
+        return $this->extensionConfig->get($path);
+    }
 }
