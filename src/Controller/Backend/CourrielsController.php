@@ -2,13 +2,13 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
+use Twig\Environment;
+use Doctrine\ORM\EntityManagerInterface;
 use Celtic34fr\ContactCore\Entity\Courriels;
 use Celtic34fr\ContactCore\Service\Utilities;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('courriels')]
 class CourrielsController extends AbstractController
