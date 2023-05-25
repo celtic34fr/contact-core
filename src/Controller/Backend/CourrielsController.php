@@ -5,7 +5,7 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 use Twig\Environment;
 use Doctrine\ORM\EntityManagerInterface;
 use Celtic34fr\ContactCore\Entity\Courriels;
-use Celtic34fr\ContactCore\Service\Utilities;
+use Celtic34fr\ContactCore\Trait\Utilities;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,9 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('courriels')]
 class CourrielsController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
-        private Utilities $utility)
+    use Utilities;
+
+    private $schemaManager;
+
+    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment)
     {
+            $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
     }
 
     #[Route('/list/{currentPage}', name: 'courriel_list')]
@@ -28,7 +32,7 @@ class CourrielsController extends AbstractController
         $courriels = [];
         $dbPrefix = $this->getParameter('bolt.table_prefix');
 
-        if ($this->utility->existsTable($dbPrefix.'courriels') == true) {
+        if ($this->existsTable($dbPrefix.'courriels') == true) {
             $courriels = $this->entityManager->getRepository(Courriels::class)
                 ->findCourrielsAll($currentPage);
         } else {

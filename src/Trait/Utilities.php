@@ -1,19 +1,11 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Service;
+namespace Celtic34fr\ContactCore\Trait;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
-/** classe réunissant des méthodes utilitraires pour le projet */
-class Utilities
+trait Utilities
 {
-    private ?\Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
-
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-        $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
-    }
 
     /**
      * m"thode de test d'existance d'une table dans l'ORM Doctrine
@@ -38,4 +30,5 @@ class Utilities
         }
         throw new Exception("Can't obtain SchemaManager from EntityManager, verify the database parameters");
     }
+
 }
