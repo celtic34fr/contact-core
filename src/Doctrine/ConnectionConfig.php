@@ -32,7 +32,6 @@ class ConnectionConfig
             'username'      => $params['user'],
             'password'      => $params['password'],
             'port'          => $params['port'],
-            'serverVersion' => $params['serverVersion'],
             'storage'       => sprintf('%s%s', $this->projectDir, '/var/data/'),
             'stemmer'       => PorterStemmer::class,
         ];
