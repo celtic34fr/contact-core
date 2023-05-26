@@ -1,9 +1,6 @@
 # An example of a services.yaml file in an extension
 
 doctrine:
-  dbal:
-      types:
-          phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
   orm:
     auto_generate_proxy_classes: '%kernel.debug%'
     naming_strategy: doctrine.orm.naming_strategy.underscore
