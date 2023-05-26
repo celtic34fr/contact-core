@@ -2,8 +2,9 @@
 
 namespace Celtic34fr\ContactCore\Entity;
 
-use Celtic34fr\ContactCore\Repository\CliInfosRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Celtic34fr\ContactCore\Repository\CliInfosRepository;
+use Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType;
 
 #[ORM\Entity(repositoryClass: CliInfosRepository::class)]
 class CliInfos
@@ -19,7 +20,7 @@ class CliInfos
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;     // pénom de l'internaute
 
-    #[ORM\Column(length: 24, nullable: true)]
+    #[ORM\Column(type: PhoneNumberType::class, nullable: true)]
     private ?string $telephone = null;  // numéro de téléphone
 
     #[ORM\ManyToOne(inversedBy: 'cliInfos')]
