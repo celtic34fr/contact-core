@@ -19,7 +19,7 @@ class CliInfos
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;     // pénom de l'internaute
 
-    #[ORM\Column(length: 38, nullable: true)]
+    #[ORM\Column(type: "phone_number", nullable: true)]
     private ?string $telephone = null;  // numéro de téléphone
 
     #[ORM\ManyToOne(inversedBy: 'cliInfos')]
