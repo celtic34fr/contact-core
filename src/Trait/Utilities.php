@@ -36,13 +36,30 @@ trait Utilities
      */
     public function ucfirstPrenom(string $field) : string
     {
+        /** chaîne vide en entrée => erreur : retourne faux (false) */
+        if (!$field) {
+            return false;
+        }
+
         $tab = explode('-', $field);
         $rlst = "";
-        foreach ($tab as $elt) {
-            $rlst .= ucfirst(trim($elt)). "-";
+
+        if (sizeof($tab) > 1) {
+            foreach ($tab as $elt) {
+                $rlst .= ucfirst(trim($elt)). "-";
+            }
+            $field = substr($rlst, 0, strlen($rlst - 1));
         }
-        $rlst = substr($rlst, 0, strlen($rlst - 1));
-        return $rlst;
+        if (strpos($field, " ")) {
+            $tab = explode(" ", $field);
+            if (sizeof($tab) > 1) {
+                foreach ($tab as $elt) {
+                    $rlst .= ucfirst(trim($elt)). " ";
+                }
+                $field = substr($rlst, 0, strlen($rlst - 1));
+            }
+        }
+        return $field;
     }
 
 }
