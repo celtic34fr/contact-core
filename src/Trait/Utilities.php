@@ -39,7 +39,7 @@ trait Utilities
         $tab = explode('-', $field);
         $rlst = "";
         foreach ($tab as $elt) {
-            $rlst .= ucfirst($elt). "-";
+            $rlst .= ucfirst(trim($elt)). "-";
         }
         $rlst = substr($rlst, 0, strlen($rlst - 1));
         return $rlst;
