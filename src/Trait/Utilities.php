@@ -31,4 +31,18 @@ trait Utilities
         throw new Exception("Can't obtain SchemaManager from EntityManager, verify the database parameters");
     }
 
+    /**
+     * méthode visant à mettre la première lettre d'un prénom, composé ou non, en majuscule
+     */
+    public function ucfirstPrenom(string $field) : string
+    {
+        $tab = explode('-', $field);
+        $rlst = "";
+        foreach ($tab as $elt) {
+            $rlst .= ucfirst($elt). "-";
+        }
+        $rlst = substr($rlst, 0, strlen($rlst - 1));
+        return $rlst;
+    }
+
 }
