@@ -1,4 +1,4 @@
-# Celtic34fr Contact Extension v0.0.1-dev
+# Bolt CMS 6 Celtic34fr Contact Extension Core v0.0.1-dev
 
 Author: Gilbert ARMENGAUD
 
