@@ -4,11 +4,13 @@ namespace Celtic34fr\ContactCore\Trait;
 
 use Exception;
 use Celtic34fr\ContactCore\Menu\MenuItem;
+use Knp\Menu\MenuItem as KnpMenuItem;
 
 trait AdminMenuTrait
 {
-    private function extractsMenus(MenuItem $menu): array
+    private function extractsMenus(KnpMenuItem $menu): array
     {
+        /** @var MenuItem $menu */
         $factory = $menu->getFactory();
 
         $menuBefore = new MenuItem('before', $factory);
