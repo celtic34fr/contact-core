@@ -20,7 +20,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
     public function addItems(MenuItem $menu): void
     {
         /** @var MenuItemContacts $menuContact */
-        list($menuFefore, $menuContacts, $emnuAfter) = $this->extractsMenus($menu);
+        list($menuBefore, $menuContacts, $menuAfter) = $this->extractsMenus($menu);
         if (!$menuContacts->hasChild("Gestion des Contacts")) {
             $menuContacts->addChild('Gestion des Contacts', [
                 'extras' => [
@@ -63,6 +63,8 @@ class AdminMenu implements ExtensionBackendMenuInterface
             ]
         ];
         $menuContacts = $this->addMenu($utilitairesItems, $menuContacts);
+
+        $menu = $this->rebuildMenu($menu, $menuBefore, $menuContacts, $menuAfter);
 
         /*
         if (!$menu->getChild("Gestion des Contacts")) {
