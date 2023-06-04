@@ -3,60 +3,48 @@
 namespace Celtic34fr\ContactCore\Trait;
 
 use Exception;
-use Knp\Menu\MenuItem;
+use Celtic34fr\ContactCore\Menu\MenuItem;
 
 trait AdminMenuTrait
 {
     private function extractsMenus(MenuItem $menu): array
     {
-        $menuBefore = $this->emptyMenuItem(clone $menu);
-        $menuContacts = $this->emptyMenuItem(clone $menu);
-        $menuAfter = $this->emptyMenuItem(clone $menu);
+        $factory = $menu->getFactory();
+
+        $menuBefore = new MenuItem('before', $factory);
+        $menuContacts = new MenuItem('contacts', $factory);
+        $menuAfter = new MenuItem('after', $factory);
         $children = $menu->getChildren();
         $contact = false;
         $idx = 0;
 
+        /** @var MenuItem $child */
         foreach ($children as $name => $child) {
             if ((!$child->getExtra('group') || $child->getExtra('group') != 'Contact') && !$contact) {
-                $menuBefore->addChild($name, [
-                    'uri' => $child->getUri(),
-                    'extras' => $child->getExtras(),
-                ]);
+                $menuBefore->addChild($name, $child->getOptions());
                 if ($child->getChildren()) {
+                    /** @var MenuItem $childChild */
                     foreach ($child->getChildren() as $childName => $childChild) {
-                        $menuBefore[$name]->addChild($childName, [
-                            'uri' => $childChild->getUri(),
-                            'extras' => $childChild->getExtras(),
-                        ]);
+                        $menuBefore[$name]->addChild($childName, $childChild->getOptions());
                     }
                 }
                 $idx += 1;
             } elseif (!$contact || $child->getExtra('group') == 'Contact') {
                 $contact = true;
-                $menuContacts->addChild($name, [
-                    'uri' => $child->getUri(),
-                    'extras' => $child->getExtras(),
-                ]);
+                $menuContacts->addChild($name, $child->getOptions());
                 if ($child->getChildren()) {
+                    /** @var MenuItem $childChild */
                     foreach ($child->getChildren() as $childName => $childChild) {
-                        $menuContacts[$name]->addChild($childName, [
-                            'uri' => $childChild->getUri(),
-                            'extras' => $childChild->getExtras(),
-                        ]);
+                        $menuContacts[$name]->addChild($childName, $childChild->getOptions());
                     }
                 }
                 $idx += 1;
             } else {
-                $menuAfter->addChild($name, [
-                    'uri' => $child->getUri(),
-                    'extras' => $child->getExtras(),
-                ]);
+                $menuAfter->addChild($name, $child->getOptions());
                 if ($child->getChildren()) {
+                    /** @var MenuItem $childChild */
                     foreach ($child->getChildren() as $childName => $childChild) {
-                        $menuAfter[$name]->addChild($childName, [
-                            'uri' => $childChild->getUri(),
-                            'extras' => $childChild->getExtras(),
-                        ]);
+                        $menuAfter[$name]->addChild($childName, $childChild->getOptions());
                     }
                 }
                 break;
@@ -102,52 +90,39 @@ trait AdminMenuTrait
         return $menu;
     }
 
-    private function rebuildMenu(MenuItem $menu, MenuItem $menuBefore, MenuItem $menuContacts, MenuItem $menuAfter): MenuItem
+    private function rebuildMenu(string $menuName, MenuItem $menuBefore, MenuItem $menuContacts, MenuItem $menuAfter): MenuItem
     {
-        $menu = $this->emptyMenuItem($menu);
+        $menu = new MenuItem($menuName, $menuBefore->getFactory());
+        /** @var MenuItem $child */
         foreach ($menuBefore->getChildren() as $name => $child) {
-            $menu->addChild($name, [
-                'uri' => $child->getUri(),
-                'extras' => $child->getExtras(),
-            ]);
+            $menu->addChild($name, $child->getOptions());
             if ($child->getChildren()) {
+                /** @var MenuItem $childChild */
                 foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, [
-                        'uri' => $childChild->getUri(),
-                        'extras' => $childChild->getExtras(),
-                    ]);
+                    $menu[$name]->addChild($childName, $childChild->getOptions());
                 }
             }
         }
+        /** @var MenuItem $child */
         foreach ($menuContacts->getChildren() as $name => $child) {
-            $menu->addChild($name, [
-                'uri' => $child->getUri(),
-                'extras' => $child->getExtras(),
-            ]);
+            $menu->addChild($name, $child->getOptions());
             if ($child->getChildren()) {
+                /** @var MenuItem $childChild */
                 foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, [
-                        'uri' => $childChild->getUri(),
-                        'extras' => $childChild->getExtras(),
-                    ]);
+                    $menu[$name]->addChild($childName, $childChild->getOptions());
                 }
             }
         }
+        /** @var MenuItem $child */
         foreach ($menuAfter->getChildren() as $name => $child) {
-            $menu->addChild($name, [
-                'uri' => $child->getUri(),
-                'extras' => $child->getExtras(),
-            ]);
+            $menu->addChild($name, $child->getOptions());
             if ($child->getChildren()) {
+                /** @var MenuItem $childChild */
                 foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, [
-                        'uri' => $childChild->getUri(),
-                        'extras' => $childChild->getExtras(),
-                    ]);
+                    $menu[$name]->addChild($childName, $childChild->getOptions());
                 }
             }
         }
-
         return $menu;
     }
 }
