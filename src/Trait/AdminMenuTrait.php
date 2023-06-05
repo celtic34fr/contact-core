@@ -97,31 +97,31 @@ trait AdminMenuTrait
         $menu = new MenuItem($menuName, $factory);
         /** @var MenuItem $child */
         foreach ($menuBefore->getChildren() as $name => $child) {
-            $menu->addChild($name, $child->getOptions());
+            $menu->addChild($name, $this->getMenuOptions($child));
             if ($child->getChildren()) {
                 /** @var MenuItem $childChild */
                 foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, $childChild->getOptions());
+                    $menu[$name]->addChild($childName, $this->getMenuOptions($childChild));
                 }
             }
         }
         /** @var MenuItem $child */
         foreach ($menuContacts->getChildren() as $name => $child) {
-            $menu->addChild($name, $child->getOptions());
+            $menu->addChild($name, $this->getMenuOptions($child));
             if ($child->getChildren()) {
                 /** @var MenuItem $childChild */
                 foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, $childChild->getOptions());
+                    $menu[$name]->addChild($childName, $this->getMenuOptions($childChild));
                 }
             }
         }
         /** @var MenuItem $child */
         foreach ($menuAfter->getChildren() as $name => $child) {
-            $menu->addChild($name, $child->getOptions());
+            $menu->addChild($name, $this->getMenuOptions($child));
             if ($child->getChildren()) {
                 /** @var MenuItem $childChild */
                 foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, $childChild->getOptions());
+                    $menu[$name]->addChild($childName, $this->getMenuOptions($childChild));
                 }
             }
         }
