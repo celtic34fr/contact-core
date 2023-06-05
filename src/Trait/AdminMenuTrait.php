@@ -22,30 +22,30 @@ trait AdminMenuTrait
         /** @var MenuItem $child */
         foreach ($children as $name => $child) {
             if ((!$child->getExtra('group') || $child->getExtra('group') != 'Contact') && !$contact) {
-                $menuBefore->addChild($name, $child->getOptions());
+                $menuBefore->addChild($name, $this->getMenuOptions($child));
                 if ($child->getChildren()) {
                     /** @var MenuItem $childChild */
                     foreach ($child->getChildren() as $childName => $childChild) {
-                        $menuBefore[$name]->addChild($childName, $childChild->getOptions());
+                        $menuBefore[$name]->addChild($childName, $this->getMenuOptions($childChild));
                     }
                 }
                 $idx += 1;
             } elseif (!$contact || $child->getExtra('group') == 'Contact') {
                 $contact = true;
-                $menuContacts->addChild($name, $child->getOptions());
+                $menuContacts->addChild($name, $this->getMenuOptions($child));
                 if ($child->getChildren()) {
                     /** @var MenuItem $childChild */
                     foreach ($child->getChildren() as $childName => $childChild) {
-                        $menuContacts[$name]->addChild($childName, $childChild->getOptions());
+                        $menuContacts[$name]->addChild($childName, $this->getMenuOptions($childChild));
                     }
                 }
                 $idx += 1;
             } else {
-                $menuAfter->addChild($name, $child->getOptions());
+                $menuAfter->addChild($name, $this->getMenuOptions($child));
                 if ($child->getChildren()) {
                     /** @var MenuItem $childChild */
                     foreach ($child->getChildren() as $childName => $childChild) {
-                        $menuAfter[$name]->addChild($childName, $childChild->getOptions());
+                        $menuAfter[$name]->addChild($childName, $this->getMenuOptions($childChild));
                     }
                 }
                 break;
@@ -93,7 +93,8 @@ trait AdminMenuTrait
 
     private function rebuildMenu(string $menuName, MenuItem $menuBefore, MenuItem $menuContacts, MenuItem $menuAfter): MenuItem
     {
-        $menu = new MenuItem($menuName, $menuBefore->getFactory());
+        $factory = new MenuFactory();
+        $menu = new MenuItem($menuName, $factory);
         /** @var MenuItem $child */
         foreach ($menuBefore->getChildren() as $name => $child) {
             $menu->addChild($name, $child->getOptions());
@@ -125,5 +126,20 @@ trait AdminMenuTrait
             }
         }
         return $menu;
+    }
+
+    public function getMenuOptions(KnpMenuItem $menu): array
+    {
+        return [
+            'name' => $menu->getName(),
+            'label' => $menu->getLabel(),
+            'linkAttributes' => $menu->getLinkAttributes(),
+            'childrenAttributes' => $menu->getChildrenAttributes(),
+            'labelAttributes' => $menu->getLabelAttributes(),
+            'uri' => $menu->getUri(),
+            'attributes' => $menu->getAttributes(),
+            'extras' => $menu->getExtras(),
+            'displayChildren' => $menu->getDisplayChildren(),
+        ];
     }
 }
