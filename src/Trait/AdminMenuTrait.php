@@ -91,40 +91,10 @@ trait AdminMenuTrait
         return $menu;
     }
 
-    private function rebuildMenu(string $menuName, MenuItem $menuBefore, MenuItem $menuContacts, MenuItem $menuAfter): MenuItem
+    private function rebuildMenu(KnpMenuItem $menu, MenuItem $menuBefore, MenuItem $menuContacts, MenuItem $menuAfter): KnpMenuItem
     {
-        $factory = new MenuFactory();
-        $menu = new MenuItem($menuName, $factory);
-        /** @var MenuItem $child */
-        foreach ($menuBefore->getChildren() as $name => $child) {
-            $menu->addChild($name, $this->getMenuOptions($child));
-            if ($child->getChildren()) {
-                /** @var MenuItem $childChild */
-                foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, $this->getMenuOptions($childChild));
-                }
-            }
-        }
-        /** @var MenuItem $child */
-        foreach ($menuContacts->getChildren() as $name => $child) {
-            $menu->addChild($name, $this->getMenuOptions($child));
-            if ($child->getChildren()) {
-                /** @var MenuItem $childChild */
-                foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, $this->getMenuOptions($childChild));
-                }
-            }
-        }
-        /** @var MenuItem $child */
-        foreach ($menuAfter->getChildren() as $name => $child) {
-            $menu->addChild($name, $this->getMenuOptions($child));
-            if ($child->getChildren()) {
-                /** @var MenuItem $childChild */
-                foreach ($child->getChildren() as $childName => $childChild) {
-                    $menu[$name]->addChild($childName, $this->getMenuOptions($childChild));
-                }
-            }
-        }
+        $children = array_merge($menuBefore->getChildren(), $menuContacts->getChildren(), $menuAfter->getChildren());
+        $menu->setChildren($children);
         return $menu;
     }
 
