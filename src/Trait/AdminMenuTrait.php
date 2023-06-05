@@ -125,10 +125,6 @@ trait AdminMenuTrait
                 }
             }
         }
-
-        dump($menuBefore, $menuContacts, $menuAfter);
-        dd($menu);
-
         return $menu;
     }
 
