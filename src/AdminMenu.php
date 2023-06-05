@@ -49,16 +49,14 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ];
         }
-        $utilitairesItems[] = [
-            'Gestion des courriels' => [
-                'type' => 'smenu',
-                'parent' => "Utilitaires",
-                'item' => [
-                    'uri' => $this->urlGenerator->generate('courriel_list'),
-                    'extras' => [
-                        'icon' => 'fa-envelope-circle-check',
-                        'group' => 'Contact',
-                    ]
+        $utilitairesItems['Gestion des courriels'] = [
+            'type' => 'smenu',
+            'parent' => "Utilitaires",
+            'item' => [
+                'uri' => $this->urlGenerator->generate('courriel_list'),
+                'extras' => [
+                    'icon' => 'fa-envelope-circle-check',
+                    'group' => 'Contact',
                 ]
             ]
         ];
