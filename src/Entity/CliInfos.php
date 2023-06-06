@@ -52,11 +52,11 @@ class CliInfos
         return $this;
     }
 
-    public function getFullName(): string
+    public function getFullname(): string
     {
         $fullname = $this->nom;
         if ($this->prenom) {
-            $fullname .= ' '.$this->prenom;
+            $fullname .= ' ' . $this->prenom;
         }
         return $fullname;
     }
