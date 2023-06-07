@@ -25,6 +25,23 @@
 			width: 33.33%;
 			float: left;
 		}
+
+		.w-full.r-tbody,
+		.w-full.r-thead {
+			clear: both;
+		}
+
+		.r-table .r-tr .r-th {
+			color: black;
+			font-weight: bold;
+			background-color: #dedede;
+		}
+
+		.r-table .r-tr .r-td {
+			color: black;
+			font-weight: normal;
+			background-color: #ffffff;
+		}
 	</style>
 {% endblock %}
 
@@ -37,15 +54,17 @@
 						<div class="col-2 text-center r-th">Date de création</div>
 						<div class="col-4 text-start r-th px-2">Destinataire</div>
 						<div class="col-4 text-start r-th px-2">Sujet</div>
+						<div class="col-2 text-center r-th">Action(s)</div>
 					</div>
 				</div>
 			</div>
-			<div class="w-full  r-tbody">
+			<div class="w-full r-tbody">
 				{% for courriel in courriels %}
 					<div class="w-full r-tr">
 						<div class="col-2 text-center r-td">{{ courriel.getCreatedAt()|date("d/m/Y") }}</div>
 						<div class="col-4 text-start px-2 r-td">{{ courriel.getClient().getCourriel() }}</div>
 						<div class="col-4 text-start px-2 r-td">{{ courriel.getSujet() }}</div>
+						<div class="col-2 text-center r-td"></div>
 					</div>
 				{% else %}
 					<div class="w-full r-tr">
