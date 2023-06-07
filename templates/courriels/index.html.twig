@@ -14,6 +14,18 @@
 
 {% block stylesheets %}
 	{{ parent() }}
+
+	<style>
+		.w-full .col-2 {
+			width: 16.67%;
+			margin: 0;
+		}
+
+		.w-full .col-4 {
+			width: 33.33%;
+			margin: 0;
+		}
+	</style>
 {% endblock %}
 
 {% block main %}
@@ -33,7 +45,7 @@
 					<div class="w-full r-tr">
 						<div class="col-2 text-center r-td">{{ courriel.getCreatedAt()|date("d/m/Y") }}</div>
 						<div class="col-4 text-start px-2 r-td">{{ courriel.getClient().getCourriel() }}</div>
-						<div class="col-4 text-start px-2 r-td">{{ courriel.getSujet() }}</div>
+						<div class="col-4 text-start px-2 r-td">{{ courriel.getSujet() }}</div>
 					</div>
 				{% else %}
 					<div class="w-full r-tr">
