@@ -49,13 +49,11 @@
 	<div class="table-request w-full">
 		<div class="w-full r-table">
 			<div class="w-full r-thead">
-				<div class="w-full r-tr">
-					<div class="w-full r-tr py-1">
-						<div class="col-2 text-center r-th">Date de création</div>
-						<div class="col-4 text-start r-th px-2">Destinataire</div>
-						<div class="col-4 text-start r-th px-2">Sujet</div>
-						<div class="col-2 text-center r-th">Action(s)</div>
-					</div>
+				<div class="w-full r-tr py-1">
+					<div class="col-2 text-center r-th">Date de création</div>
+					<div class="col-4 text-start r-th px-2">Destinataire</div>
+					<div class="col-4 text-start r-th px-2">Sujet</div>
+					<div class="col-2 text-center r-th">Action(s)</div>
 				</div>
 			</div>
 			<div class="w-full r-tbody">
@@ -67,7 +65,7 @@
 						<div class="col-2 text-center r-td"></div>
 					</div>
 				{% else %}
-					<div class="w-full r-tr">
+					<div class="w-full r-tr py-1">
 						<div class="w-full r-td text-center">Pas de Courriel en Base</div>
 					</div>
 				{% endfor %}
