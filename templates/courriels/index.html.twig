@@ -4,38 +4,46 @@
 {% import "@contact-core/macros/form_classic.html.twig" as forms %}
 
 {% block shoulder %}
-    {{ "Liste des Courriels générés par l'application" }}
+	{{ "Liste des Courriels générés par l'application" }}
 {% endblock shoulder %}
 
 {% block title %}
-    <i class="fas mr-2 link--icon fa-clipboard-question"></i>
-    Liste des Courriels en base
+	<i class="fas mr-2 link--icon fa-clipboard-question"></i>
+	Liste des Courriels en base
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block main %}
-    <div class="table-request w-full">
-        <div class="w-full r-table">
-            <div class="w-full r-thead">
-                <div class="w-full r-tr">
-                    <div class="w-full r-tr">
-                        <div class="col-2 text-center r-th"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="w-full  r-tbody">
-                {% for courriel in courriels %}
-                    <div class="w-full r-tr">
-                        <div class="col-2 text-center r-td">{{ courriel.getCreatedAt()|date("d/m/Y") }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {{ navigate.page_navigate({
+	<div class="table-request w-full">
+		<div class="w-full r-table">
+			<div class="w-full r-thead">
+				<div class="w-full r-tr">
+					<div class="w-full r-tr">
+						<div class="col-2 text-center r-th">Date de création</div>
+						<div class="col-4 text-start r-th px-2">Destinataire</div>
+						<div class="col-4 text-start r-th px-2">Sujet</div>
+					</div>
+				</div>
+			</div>
+			<div class="w-full  r-tbody">
+				{% for courriel in courriels %}
+					<div class="w-full r-tr">
+						<div class="col-2 text-center r-td">{{ courriel.getCreatedAt()|date("d/m/Y") }}</div>
+						<div class="col-4 text-start px-2 r-td">{{ courriel.getClient().getCourriel() }}</div>
+						<div class="col-4 text-start px-2 r-td">{{ courriel.getSujet() }}</div>
+					</div>
+				{% else %}
+					<div class="w-full r-tr">
+						<div class="w-full r-td text-center">Pas de Courriel en Base</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	{{ navigate.page_navigate({
         'currentPage': currentPage,
         'pages': pages,
         'prefix': 'r',
@@ -45,14 +53,14 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('contact-assets/js/bootstrap.min.js') }}"></script>
+	{{ parent() }}
+	<script src="{{ asset('contact-assets/js/bootstrap.min.js') }}"></script>
 
-    <script>
-        function redirect(url) {
-            window.location.href = url;
-        }
-    </script>
-    <script src="{{ asset('contact-assets/js/_paginate.js') }}"></script>
-    <script src="{{ asset('contact-assets/js/_goPage.js') }}"></script>
+	<script>
+		function redirect(url) {
+window.location.href = url;
+}
+	</script>
+	<script src="{{ asset('contact-assets/js/_paginate.js') }}"></script>
+	<script src="{{ asset('contact-assets/js/_goPage.js') }}"></script>
 {% endblock %}
