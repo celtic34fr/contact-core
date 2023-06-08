@@ -1,7 +1,6 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
 {% import '@contact-core/macros/form_classic.html.twig' as forms %}
 {% import "@contact-core/macros/paginate.html.twig" as navigate %}
-{% import "@contact-core/macros/form_classic.html.twig" as forms %}
 
 {% block shoulder %}
 	{{ "Liste des Courriels générés par l'application" }}
@@ -46,50 +45,85 @@
 {% endblock %}
 
 {% block main %}
-	<div class="table-request w-full">
-		<div class="w-full r-table">
-			<div class="w-full r-thead">
-				<div class="w-full r-tr py-1">
-					<div class="col-2 text-center r-th">Date de création</div>
-					<div class="col-4 text-start r-th px-2">Destinataire</div>
-					<div class="col-4 text-start r-th px-2">Sujet</div>
-					<div class="col-2 text-center r-th">Action(s)</div>
+	<form method="post" id="select_mail" class="col-12 row">
+		{{ forms.hidden('nav', nav) }}
+		{{ forms.hidden('page', page) }}
+
+		<div class="col-12 row">
+			<h3 class="col-8 text-start">Liste des courriels en base</h3>
+			{{ forms.select('Limit', 'Lignes par page', {
+				'selection': limit,
+				'datas': { {'label': '10', 'value': 10}, {'label': '20', 'value': 20}, {'label': '50', 'value': 50} }
+			}) }}
+		</div>
+		<div class="table-request w-full">
+			<div class="w-full r-table">
+				<div class="w-full r-thead">
+					<div class="w-full r-tr py-1">
+						<div class="col-1 text-center r-th"></div>
+						<div class="col-1 text-center r-th">Créé le</div>
+						<div class="col-4 text-start r-th px-2">Destinataire</div>
+						<div class="col-4 text-start r-th px-2">Sujet</div>
+						<div class="col-1 text-center r-th">Envoyé le</div>
+						<div class="col-1 text-center r-th"></div>
+					</div>
+				</div>
+				<div class="w-full r-tbody">
+					{% for courriel in courriels %}
+						<div class="w-full r-tr py-1">
+							<div class="col-1 r-td">
+								{% set checked = (courriel.getId() in choices|keys) %}
+								{{ forms.checkbox(courriel.getId()~'choice', checked, {'class': 'text-center'}) }}
+							</div>
+							<div class="col-1 text-center r-td">{{ courriel.getCreatedAt()|date("d/m/Y") }}</div>
+							<div class="col-4 text-start px-2 r-td">{{ courriel.getClient().getCourriel() }}</div>
+							<div class="col-4 text-start px-2 r-td">{{ courriel.getSujet() }}</div>
+							<div class="col-1 text-center p-0 r-td">{{ courriel.getSendAt() ?? "" }}</div>
+							<div class="col-1 text-center r-td">
+								{{ forms.btn('edit', '<i class="fa fa-print"></i>',
+                            {'class': 'padding-0-02 prt-pj', 'bclass': 'bg-info',
+                                'title': 'Imprimer le courriel', 'type': 'button', 'event': 'onClick',
+                                'codeJS': 'printcourriel('~path('print_courriel', {'id': courriel.getId()})~');' }) }}
+							</div>
+						</div>
+					{% else %}
+						<div class="w-full r-tr py-1">
+							<div class="w-full r-td text-center">Pas de Courriel en Base</div>
+						</div>
+					{% endfor %}
 				</div>
 			</div>
-			<div class="w-full r-tbody">
-				{% for courriel in courriels %}
-					<div class="w-full r-tr py-1">
-						<div class="col-2 text-center r-td">{{ courriel.getCreatedAt()|date("d/m/Y") }}</div>
-						<div class="col-4 text-start px-2 r-td">{{ courriel.getClient().getCourriel() }}</div>
-						<div class="col-4 text-start px-2 r-td">{{ courriel.getSujet() }}</div>
-						<div class="col-2 text-center r-td"></div>
-					</div>
-				{% else %}
-					<div class="w-full r-tr py-1">
-						<div class="w-full r-td text-center">Pas de Courriel en Base</div>
-					</div>
-				{% endfor %}
-			</div>
 		</div>
-	</div>
-	{{ navigate.page_navigate({
+		{{ navigate.page_navigate({
         'currentPage': currentPage,
         'pages': pages,
         'prefix': 'r',
         'route': 'courriel_list',
         'class': 'col-12 row',
     }) }}
+
+		<div class="form-nav row">
+			<div class="ur-button-container col-6" style="text-align: left;">
+				{{ forms.btn('record_brouillon', 'Renvoyer les mails choisis',
+                    {'bclass': 'btn btn-success',
+                        'event': 'onClick',
+                        'codeJS': "submit_form(2)"}) }}
+			</div>
+			<div class="ur-button-container col-6" style="text-align: right;">
+				{{ forms.btn('cancel', 'Retour au tableau de bord',
+                    {'bclass': 'btn btn-warning',
+                        'event': 'onClick',
+                        'codeJS': "submit_form(99)"}) }}
+			</div>
+		</div>
+	</form>
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
 	<script src="{{ asset('contact-assets/js/bootstrap.min.js') }}"></script>
 
-	<script>
-		function redirect(url) {
-window.location.href = url;
-}
-	</script>
+	<script src="{{ asset('contact-assets/js/utilities_courriels.js') }}"></script>
 	<script src="{{ asset('contact-assets/js/_paginate.js') }}"></script>
 	<script src="{{ asset('contact-assets/js/_goPage.js') }}"></script>
 {% endblock %}
