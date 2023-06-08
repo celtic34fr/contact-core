@@ -60,7 +60,7 @@ class CourrielsController extends AbstractController
                 $type = $form['type'] ?? "all";
                 $limit = $form['limit'] ?? 10;
                 $choices = $form['choices'] ?? [];
-                $pages = $form['pages'];
+                $pages = $form['pages'] ?? 0;
 
                 $courriels = $this->entityManager->getRepository(Courriels::class)
                     ->findCourrielsAll($type, $currentPage, $limit);
