@@ -113,6 +113,7 @@ class CourrielsController extends AbstractController
                     'pages' => $courriels['pages'] ?? 0,
                     'nav' => $nav,
                     'choices' => $choices,
+                    'limit' => $limit,
                 ]);
         } else {
             $this->addFlash('danger', "La table Courriels n'existe pas, veuillez en avertir l'administrateur");
