@@ -15,18 +15,18 @@
 	{{ parent() }}
 
 	<style>
-		.w-full .col-2 {
+		.col-12 row .col-2 {
 			width: 16.67%;
 			float: left;
 		}
 
-		.w-full .col-4 {
+		.col-12 row .col-4 {
 			width: 33.33%;
 			float: left;
 		}
 
-		.w-full.r-tbody,
-		.w-full.r-thead {
+		.col-12 row.r-tbody,
+		.col-12 row.r-thead {
 			clear: both;
 		}
 
@@ -59,10 +59,26 @@
 					3: {'label': '50', 'value': 50} }
 			}) }}
 		</div>
-		<div class="table-request w-full">
-			<div class="w-full r-table">
-				<div class="w-full r-thead">
-					<div class="w-full r-tr py-1">
+
+		<div class="form-nav row col-12">
+			<div class="ur-button-container col-6 text-center">
+				{{ forms.btn('record_brouillon', 'Renvoyer les mails choisis',
+                    {'class': 'btn btn-success',
+                        'event': 'onClick',
+                        'codeJS': "submit_form(2)"}) }}
+			</div>
+			<div class="ur-button-container col-6 text-center">
+				{{ forms.btn('cancel', 'Retour au tableau de bord',
+                    {'class': 'btn btn-warning',
+                        'event': 'onClick',
+                        'codeJS': "submit_form(99)"}) }}
+			</div>
+		</div>
+
+		<div class="table-request col-12 row mb-3">
+			<div class="col-12 row r-table">
+				<div class="col-12 row r-thead">
+					<div class="col-12 row r-tr py-1">
 						<div class="col-1 text-center r-th"></div>
 						<div class="col-1 text-center r-th">Créé le</div>
 						<div class="col-4 text-start r-th px-2">Destinataire</div>
@@ -71,9 +87,9 @@
 						<div class="col-1 text-center r-th"></div>
 					</div>
 				</div>
-				<div class="w-full r-tbody">
+				<div class="col-12 row r-tbody">
 					{% for courriel in courriels %}
-						<div class="w-full r-tr py-1">
+						<div class="col-12 row r-tr py-1">
 							<div class="col-1 r-td">
 								{% set checked = (courriel.getId() in choices|keys) %}
 								{{ forms.checkbox(courriel.getId()~'choice', checked, {'class': 'text-center'}) }}
@@ -90,8 +106,8 @@
 							</div>
 						</div>
 					{% else %}
-						<div class="w-full r-tr py-1">
-							<div class="w-full r-td text-center">Pas de Courriel en Base</div>
+						<div class="col-12 row r-tr py-1">
+							<div class="col-12 r-td text-center">Pas de Courriel en Base</div>
 						</div>
 					{% endfor %}
 				</div>
@@ -104,21 +120,6 @@
         'route': 'courriel_list',
         'class': 'col-12 row',
     }) }}
-
-		<div class="form-nav row">
-			<div class="ur-button-container col-6" style="text-align: left;">
-				{{ forms.btn('record_brouillon', 'Renvoyer les mails choisis',
-                    {'bclass': 'btn btn-success',
-                        'event': 'onClick',
-                        'codeJS': "submit_form(2)"}) }}
-			</div>
-			<div class="ur-button-container col-6" style="text-align: right;">
-				{{ forms.btn('cancel', 'Retour au tableau de bord',
-                    {'bclass': 'btn btn-warning',
-                        'event': 'onClick',
-                        'codeJS': "submit_form(99)"}) }}
-			</div>
-		</div>
 	</form>
 {% endblock %}
 
