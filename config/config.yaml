@@ -10,20 +10,6 @@ mailer:
   port: '1025'
   encryption: ''
 
-courriel_reponse: 'no-reply@example.com'
-
-entreprise:
-  designation: ''
-  siren: '123456789'
-  siret: '12345678901234'
-  courriel: 'your.email@provider.com'
-  telephone: 'your phone number'
-  adresse:
-    adr: 'address'
-    cplt: 'more informations'
-    cpost: 'french zip code'
-    ville: 'town'
-
 fuzzy:
   enabled: true
   prefix_length: 2
