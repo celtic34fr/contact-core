@@ -3,7 +3,7 @@
 namespace Celtic34fr\ContactCore\Service;
 
 use Celtic34fr\ContactCore\Entity\Courriels;
-use Celtic34fr\ContactCore\Trait\DbPaginateTrait;
+use Celtic34fr\ContactCore\Traits\DbPaginateTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 
