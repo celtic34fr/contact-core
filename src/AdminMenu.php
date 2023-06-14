@@ -3,7 +3,7 @@
 namespace Celtic34fr\ContactCore;
 
 use Bolt\Menu\ExtensionBackendMenuInterface;
-use Celtic34fr\ContactCore\Trait\AdminMenuTrait;
+use Celtic34fr\ContactCore\Traits\AdminMenuTrait;
 use Celtic34fr\ContactCore\Menu\MenuItem as MenuItemContacts;
 use Knp\Menu\MenuItem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
