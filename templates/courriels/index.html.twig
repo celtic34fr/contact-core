@@ -50,7 +50,6 @@
 		{{ forms.hidden('currentPage', currentPage) }}
 
 		<div class="col-12 row">
-			<h3 class="col-8 text-start">Liste des courriels en base</h3>
 			{{ forms.select('Limit', 'Lignes par page', {
 				'selection': limit,
 				'datas': { 
@@ -107,7 +106,7 @@
 						</div>
 					{% else %}
 						<div class="col-12 row r-tr py-1">
-							<div class="col-12 r-td text-center">Pas de Courriel en Base</div>
+							<div class="col-12 r-td text-center text-danger">Pas de Courriel en Base</div>
 						</div>
 					{% endfor %}
 				</div>
