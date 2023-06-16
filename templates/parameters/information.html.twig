@@ -2,12 +2,12 @@
 
 
 {% block shoulder %}
-	{{ "Liste des Courriels générés par l'application" }}
+	{{ "Pareamétrages" }}
 {% endblock shoulder %}
 
 {% block title %}
-	<i class="fas mr-2 link--icon fa-clipboard-question"></i>
-	Liste des Courriels en base
+	<i class="fas mr-2 link--icon fa-building"></i>
+	Mes Informations de base
 {% endblock %}
 
 {% block stylesheets %}
@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block main %}
+	{{ doem(form) }}
 {% endblock %}
 
 {% block javascripts %}

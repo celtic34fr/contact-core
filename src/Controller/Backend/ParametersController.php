@@ -2,16 +2,18 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
-use Celtic34fr\ContactCore\Entity\Courriels;
-use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
-use Celtic34fr\ContactCore\Traits\Utilities;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Twig\Environment;
+use Doctrine\ORM\EntityManagerInterface;
+use Celtic34fr\ContactCore\Entity\Courriels;
+use Celtic34fr\ContactCore\Traits\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
+use Celtic34fr\ContactCore\Service\ExtensionConfig;
+use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('parameters')]
 class ParametersController extends AbstractController
@@ -20,7 +22,8 @@ class ParametersController extends AbstractController
 
     private $schemaManager;
 
-    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment)
+    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
+            private ExtensionConfig $extConfig)
     {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
     }
@@ -32,90 +35,30 @@ class ParametersController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $courriels = [];
-        $dbPrefix = $this->getParameter('bolt.table_prefix');
-        $form = [
-            'page' => 1,
-            'limit' => 10
-        ];
+        if ($this->extConfig->isExtnsionInstall("contact-core")) {
 
-        if ($this->existsTable($dbPrefix . 'courriels') == true) {
-            $choices =  [];
-            $nav = 0;
-            $currentPage = 1;
-            $limit = 10;
-            $type = "all";
+        $entreprise = $this->extConfig->get('contact-core/entreprise');
+        if (!$entreprise) {
+            $entreprise  = [
+                'designation' => null,
+                'siren' => null,
+                'siret' => null,
+                'courriel' => null,
+                'telephone' => null,
+                'courriel_reponse'=> null,              
+            ];
+        }
 
-            if ($request->getMethod() == 'POST') {
-                $form = $this->formatFormData($_POST);
+        $entrepriseInfos = new EntrepriseInfos();
+        $entrepriseInfos->setByArray($entreprise);
+        $form = $this->createForm(EntrepriseInfosType::class, $entrepriseInfos);
 
-                /** aiguillage pour action */
-                $nav = $form['nav'] ?? null;
-                if (!$nav) {
-                    throw new Exception("Code $nav non géré");
-                }
-                $nav = (int) $nav;
-                $currentPage = $form['page'] ?? 1;
-                $type = $form['type'] ?? "all";
-                $limit = $form['limit'] ?? 10;
-                $choices = $form['choices'] ?? [];
-                $pages = $form['pages'] ?? 0;
-
-                $courriels = $this->entityManager->getRepository(Courriels::class)
-                    ->findCourrielsAll($type, $currentPage, $limit);
-
-                switch ($nav) {
-                    case 99: // retour au tableau de bord
-                        $response =  $this->redirectToRoute('bolt_dashboard');
-                        break;
-                    case 4: // bascule courriel en errur à tout courriel
-                        $type = "all";
-                        $currentPage = 1;
-                        break;
-                    case 3: // bascule tout courriel à courriel en erreur
-                        $type = StatusCourrielEnums::Error;
-                        $currentPage = 1;
-                        break;
-                    case 2: // renvoi des courriel(s) sélectionné(s)
-                        foreach ($choices as $choice) {
-                            // réémission des courriels choisis
-                            /** @var Courriels $courriel */
-                            $courriel = $this->entityManager->getRepository(Courriels::class)->find((int) $choice);
-                            $sended = $mailer->sendTemplate(
-                                $courriel->getDestinataire(),
-                                $courriel->getTemplateCourriel(),
-                                $courriel->getSujet(),
-                                $courriel->getContextCourriel()
-                            );
-                            if ($sended) {
-                                $courriel->setSendStatus(StatusCourrielEnums::Send->_toString());
-                            }
-                        }
-                        $this->entityManager->flush();
-                        break;
-                    case 1: // navigation +1 page
-                    case -1: // navigation -1 page
-                        if ($currentPage > 1 && $nav === -1) {
-                            $currentPage -= 1;
-                        }
-                        if ($currentPage < $pages && $nav === 1) {
-                            $currentPage += 1;
-                        }
-                }
-            }
-            $courriels = $this->entityManager->getRepository(Courriels::class)
-                ->findCourrielsAll($type, $currentPage, $limit);
-            $response =
+        $response =
                 $this->render('@contact-core/parameters/information.html.twig', [
-                    'courriels' => $courriels['datas'] ?? [],
-                    'currentPage' => $courriels['page'] ?? 1,
-                    'pages' => $courriels['pages'] ?? 0,
-                    'nav' => $nav,
-                    'choices' => $choices,
-                    'limit' => $limit,
+                    'form' => $form->createView(),
                 ]);
         } else {
-            $this->addFlash('danger', "La table Courriels n'existe pas, veuillez en avertir l'administrateur");
+            throw new Exception("L'extension contact-core semble ne pas être installée, vérifiez votre configuration");
         }
         return $response;
     }

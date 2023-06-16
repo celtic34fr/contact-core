@@ -22,3 +22,11 @@ widget:
   title_color: 'black'
   message_background: '#C8E8C2'
   message_color: 'black'
+
+entreprise:
+  designation: ''
+  siren: '123456789'
+  siret: '12345678901234'
+  courriel: 'your.email@provider.com'
+  telephone: 'your phone number'
+  courriel_reponse: 'no-reply@example.com'
