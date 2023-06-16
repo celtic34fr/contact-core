@@ -44,6 +44,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                             'group' => 'Contact',
                             'name' => 'Utilitaires',
                             'slug' => 'utilitaires',
+                            'icon' => 'fa-tools'
                         ]
                     ]
                 ]
