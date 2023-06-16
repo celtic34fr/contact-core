@@ -27,7 +27,6 @@ class AdminMenu implements ExtensionBackendMenuInterface
                     'name' => 'Gestion des Contacts',
                     'type' => 'separator',
                     'group' => 'Contact',
-                    'icon' => "fa-file-signature"
                 ]
             ]);
         }
@@ -57,7 +56,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
             'item' => [
                 'uri' => $this->urlGenerator->generate('courriel_list'),
                 'extras' => [
-                    'icon' => 'fa-envelope-circle-check',
+                    'icon' => 'fa-envelope',
                     'group' => 'Contact',
                 ]
             ]
