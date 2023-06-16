@@ -27,6 +27,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                     'name' => 'Gestion des Contacts',
                     'type' => 'separator',
                     'group' => 'Contact',
+                    'icon' => "fa-file-signature"
                 ]
             ]);
         }
