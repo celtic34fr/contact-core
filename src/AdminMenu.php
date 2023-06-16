@@ -61,7 +61,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
-        $menuContacts = $this->addMenu($utilitairesItems, $menuContacts);
+        $menuContacts = $this->addMenu($configurationItems, $menuContacts);
 
         $utilitairesItems = [];
         if (!$menuContacts->hasChild("Utilitaires")) {
