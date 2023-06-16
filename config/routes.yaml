@@ -2,4 +2,4 @@
 reference_extension:
   resource: '../../vendor/celtic34fr/contact-core/src/Controller/Backend/'
   prefix: '%bolt.backend_url%'
-  type: attribute
+  type: annotation
