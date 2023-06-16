@@ -31,6 +31,38 @@ class AdminMenu implements ExtensionBackendMenuInterface
             ]);
         }
 
+        $configurationItems = [];
+        if (!$menuContacts->hasChild("Paramètres")) {
+            $configurationItems = [
+                "Paramètres" => [
+                    'type' => 'menu',
+                    'item' => [
+                        'uri' => $this->urlGenerator->generate('bolt_menupage', [
+                            'slug' => 'parametres',
+                        ]),
+                        'extras' => [
+                            'group' => 'Contact',
+                            'name' => 'Paramètres',
+                            'slug' => 'parametres',
+                            'icon' => 'fa-tools'
+                        ]
+                    ]
+                ]
+            ];
+        }
+        $configurationItems['Mes Informations'] = [
+            'type' => 'smenu',
+            'parent' => "Paramètres",
+            'item' => [
+                'uri' => $this->urlGenerator->generate('my_informations'),
+                'extras' => [
+                    'icon' => 'fa-building',
+                    'group' => 'Contact',
+                ]
+            ]
+        ];
+        $menuContacts = $this->addMenu($utilitairesItems, $menuContacts);
+
         $utilitairesItems = [];
         if (!$menuContacts->hasChild("Utilitaires")) {
             $utilitairesItems = [
@@ -44,7 +76,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                             'group' => 'Contact',
                             'name' => 'Utilitaires',
                             'slug' => 'utilitaires',
-                            'icon' => 'fa-tools'
+                            'icon' => 'fa-toolbox'
                         ]
                     ]
                 ]
