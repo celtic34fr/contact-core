@@ -44,9 +44,11 @@ class EntrepriseInfos
         $this->courriel_reponse = $parameters['courriel_reponse'] ?? "";
 
         /** Traitement de la question du logo */
-        if (is_string($parameters['logo'])) {
+        if (array_key_exists('logo', $parameters) && is_string($parameters['logo'])) {
             $filesystem = new Filesystem();
             $projectDir = $this->getContainer()->getParameter('kernel.project_dir');
+        } else {
+            $this->logo = null;
         }
         return $this;
     }
