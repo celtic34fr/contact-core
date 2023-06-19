@@ -35,7 +35,7 @@ class ParametersController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        if ($this->extConfig->isExtnsionInstall("contact-core")) {
+        if ($this->extConfig->isExtnsionInstall("contactcore")) {
 
         $entreprise = $this->extConfig->get('contact-core/entreprise');
         if (!$entreprise) {
