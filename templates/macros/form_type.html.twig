@@ -371,7 +371,7 @@
     {% set viewBtn = args.viewBtn is defined ? args.viewBtn : viewBtn %}
     {% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
 
-    {% set hidden_name = args.hidden_name %}
+    {% set hidden_name = args.hidden_name ?? field.vars.id~"-hidden" %}
 
     {% set attributes %}
         {% if multiple %} multiple {% endif %}
