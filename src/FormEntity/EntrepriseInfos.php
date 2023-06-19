@@ -8,18 +8,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class EntrepriseInfos
 {
-    private string $designation = null;
-    private string $siren = null;
-    private string $siret = null;
-    private string $courriel = null;
-    private string $telephone = null;
-    private string $courriel_reponse = null;
+    private ?string $designation = null;
+    private ?string $siren = null;
+    private ?string $siret = null;
+    private ?string $courriel = null;
+    private ?string $telephone = null;
+    private ?string $courriel_reponse = null;
     #[Assert\File(
         maxSize: '4096k',
         extensions: ['png', 'gif', 'jpg', 'jpeg', 'svg'],
         extensionsMessage: 'Veuillez choisir une image comme logo'
     )]
-    private File $logo = null;
+    private ?File $logo = null;
 
 
     public function __construct(array $parameters = null)
