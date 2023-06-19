@@ -2,6 +2,10 @@
 
 namespace Celtic34fr\ContactCore\FormEntity;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+
 class EntrepriseInfos
 {
     private string $designation = null;
@@ -9,9 +13,21 @@ class EntrepriseInfos
     private string $siret = null;
     private string $courriel = null;
     private string $telephone = null;
-    private string $courriel_reponse = null;              
+    private string $courriel_reponse = null;
+    #[Assert\File(
+        maxSize: '4096k',
+        extensions: ['png', 'gif', 'jpg', 'jpeg', 'svg'],
+        extensionsMessage: 'Veuillez choisir une image comme logo'
+    )]
+    private File $logo = null;
 
 
+    public function __construct(array $parameters = null)
+    {
+        if ($parameters) {
+            $this->setByArray($parameters);
+        }
+    }
 
     /**
      * Set EntrepriseInfos attributes by array
@@ -26,6 +42,12 @@ class EntrepriseInfos
         $this->courriel = $parameters['courriel'] ?? "";
         $this->telephone = $parameters['telephone'] ?? "";
         $this->courriel_reponse = $parameters['courriel_reponse'] ?? "";
+
+        /** Traitement de la question du logo */
+        if (is_string($parameters['logo'])) {
+            $filesystem = new Filesystem();
+            $projectDir = $this->getContainer()->getParameter('kernel.project_dir');
+        }
         return $this;
     }
 

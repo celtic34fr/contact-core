@@ -52,7 +52,7 @@ function handleFiles(files, dropzone) {
 }  
 
 function uploadFile(file, i, dropzone) { // <- Add `i` parameter
-    var url = 'YOUR URL HERE';
+    var url = '/parameters/uploadLogo';
     var xhr = new XMLHttpRequest();
     var formData = new FormData();
     xhr.open('POST', url, true);

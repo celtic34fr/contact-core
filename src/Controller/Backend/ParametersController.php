@@ -64,6 +64,14 @@ class ParametersController extends AbstractController
     }
 
     /**
+     * méthode AJAX de chargement du logo par drag&Drop
+     */
+    #[Route('/uploadLogo', name: 'upload-logo', methods:['POST'])]
+    public function uploadLogo(): void
+    {
+    }
+
+    /**
      * @param array $post
      * @return array
      */

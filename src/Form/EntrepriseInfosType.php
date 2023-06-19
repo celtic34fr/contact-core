@@ -3,6 +3,8 @@
 namespace Celtic34fr\ContactCore\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
@@ -37,6 +39,14 @@ class EntrepriseInfosType extends AbstractType
         ->add('telephone', TextType::class, [
             'label' => "Son téléphone (stardard d'accueil)",
             'required' => true,
+        ])
+        ->add('logo', FileType::class, [
+            'required' => false,
+            'label' => '',
+            'multiple' => false,
+        ])
+        ->add('record', SubmitType::class, [
+            'label' => 'Enregistrer les informations',
         ])
         ;
     }

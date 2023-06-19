@@ -1,5 +1,5 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
-
+{% import '@contact-core/macros/form_type.html.twig' as fields %}
 
 {% block shoulder %}
 	{{ "Pareamétrages" }}
@@ -8,6 +8,69 @@
 {% block title %}
 	<i class="fas mr-2 link--icon fa-building"></i>
 	Mes Informations de base
+
+	{{ form_start(form, {'class': 'col-12 mx-0 px-0 row'}) }}
+		{{ form_row(form._token) }}
+		{% set errors = formErrors(form) %}
+		{% if errors|length %}
+			<ul class="errors-form col12 row px-0 mx-0">
+				{% for champ, erreur in errors %}
+					<li class="error-line col-12 text-xs">
+						champ <strong>{{ champ }}</strong> : {{ erreur }}
+					</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+		<div class="col-12 mt-2 row px-0 mx-0">
+			{{ fields.field(form.designation, "", {
+				'class': 'col-12 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
+			}) }}
+		</div>
+		<div class="col-12 mt-2 row px-0 mx-0">
+			{{ fields.field(form.siren, "", {
+				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
+			}) }}
+			{{ fields.field(form.siret, '', {
+				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre prénom',
+				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'}
+			}) }}
+		</div>
+		<div class="col-12 mt-2 row px-0 mx-0">
+			{{ fields.field(form.courriel, "", {
+				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
+			}) }}
+			{{ fields.field(form.courriel_reponse, '', {
+				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre prénom',
+				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'}
+			}) }}
+		</div>
+		<div class="col-12 mt-2 row px-0 mx-0">
+			{{ fields.field(form.telephone, "", {
+				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
+			}) }}
+			{{ fields.dragNDrop(form.logo, '', {
+				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre prénom',
+				'label_class': 'col-4 px-2 text-sm', 
+				'accept': ['png', 'gif', 'jpg', 'jpeg', 'svg'],
+                'multiple': false, 'progressbar': true, 'gallery': true,
+                'url' => '{{ path("upload-logo") }}', 'maxSize': '4096k',
+                'maxFiles': 1, 'removeBtn': true,
+
+			}) }}
+		</div>
+		<div class="col-12 row mt-2 px-0 mx-0">
+			{{ fields.submitbtn(form.record, "", {
+				'class': 'col-12 text-white gradient text-center btn btn-success',
+			}) }}
+		</div>
+	{{ form_end(form, {render_rest: false}) }}
+	<div class="col-12 row mt-2 text-right text-gray-600 px-0 mx-3">
+		* champs obligatoires
+	</div>
 {% endblock %}
 
 {% block stylesheets %}
