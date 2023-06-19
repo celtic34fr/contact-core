@@ -8,6 +8,13 @@
 {% block title %}
 	<i class="fas mr-2 link--icon fa-building"></i>
 	Mes Informations de base
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block main %}
 
 	{{ form_start(form, {'class': 'col-12 mx-0 px-0 row'}) }}
 		{{ form_row(form._token) }}
@@ -71,14 +78,6 @@
 	<div class="col-12 row mt-2 text-right text-gray-600 px-0 mx-3">
 		* champs obligatoires
 	</div>
-{% endblock %}
-
-{% block stylesheets %}
-	{{ parent() }}
-{% endblock %}
-
-{% block main %}
-	{{ doem(form) }}
 {% endblock %}
 
 {% block javascripts %}
