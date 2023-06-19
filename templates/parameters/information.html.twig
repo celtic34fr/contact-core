@@ -61,13 +61,13 @@
 			}) }}
 			{{ fields.dragNDrop(form.logo, 'Le logo de votre structure', {
 				'class': 'col-6 mb-2 mx-0 pe-0 ps-1',
+                'url': '{{ path("upload-logo") }}', 'maxSize': '4096k',
+                'maxFiles': 1, 'removeBtn': true,
 			}) }}
 			{#
 				'label_class': 'col-4 px-2 text-sm', 
 				'accept': ['png', 'gif', 'jpg', 'jpeg', 'svg'],
                 'multiple': false, 'progressbar': true, 'gallery': true,
-                'url': '{{ path("upload-logo") }}', 'maxSize': '4096k',
-                'maxFiles': 1, 'removeBtn': true,
 
 			#}
 		</div>
