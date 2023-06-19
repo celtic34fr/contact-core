@@ -13,7 +13,7 @@ class EntrepriseInfos
     private ?string $siret = null;
     private ?string $courriel = null;
     private ?string $telephone = null;
-    private ?string $courriel_reponse = null;
+    private ?string $reponse = null;
     #[Assert\File(
         maxSize: '4096k',
         extensions: ['png', 'gif', 'jpg', 'jpeg', 'svg'],
@@ -41,7 +41,7 @@ class EntrepriseInfos
         $this->siret = $parameters['siret'] ?? "";
         $this->courriel = $parameters['courriel'] ?? "";
         $this->telephone = $parameters['telephone'] ?? "";
-        $this->courriel_reponse = $parameters['courriel_reponse'] ?? "";
+        $this->reponse = $parameters['reponse'] ?? "";
 
         /** Traitement de la question du logo */
         if (array_key_exists('logo', $parameters) && is_string($parameters['logo'])) {
@@ -155,21 +155,21 @@ class EntrepriseInfos
     }
 
     /**
-     * Get the value of courriel_reponse
+     * Get the value of reponse
      */ 
-    public function getCourriel_reponse(): ?string
+    public function getReponse(): ?string
     {
-        return $this->courriel_reponse;
+        return $this->reponse;
     }
 
     /**
-     * Set the value of courriel_reponse
+     * Set the value of reponse
      *
      * @return  EntrepriseInfos
      */ 
-    public function setCourriel_reponse($courriel_reponse): self
+    public function setReponse($reponse): self
     {
-        $this->courriel_reponse = $courriel_reponse;
+        $this->reponse = $reponse;
 
         return $this;
     }

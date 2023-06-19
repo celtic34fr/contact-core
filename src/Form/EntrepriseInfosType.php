@@ -32,7 +32,7 @@ class EntrepriseInfosType extends AbstractType
             'label' => 'Votre adresse Courriel',
             'required' => false,
         ])
-        ->add('courriel_reponse', TextType::class, [
+        ->add('reponse', TextType::class, [
             'label' => 'Votre adresse Courriel de réponse',
             'required' => false,
         ])
