@@ -344,7 +344,7 @@
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
     {% set label_class = args.label_class is defined ? args.label_class : "" %}
     {% set class = (args.class is defined ? args.class : "") ~ " drop-area" %}
-    {% set disabled = (args.disabled is defined ? args.disabled|booléen : false %}
+    {% set disabled = args.disabled is defined ? args.disabled|booléen : false %}
 
     {% set accept = field.vars.attr.accept is defined ? field.vars.attr.accept : "" %}
     {% set accept = args.accept is defined ? args.accept : accept %}
