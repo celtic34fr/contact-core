@@ -5,13 +5,12 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 use Exception;
 use Twig\Environment;
 use Doctrine\ORM\EntityManagerInterface;
-use Celtic34fr\ContactCore\Entity\Courriels;
 use Celtic34fr\ContactCore\Traits\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
-use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
