@@ -173,4 +173,24 @@ class EntrepriseInfos
 
         return $this;
     }
+
+    /**
+     * Get the value of logo
+     */ 
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * Set the value of logo
+     *
+     * @return  self
+     */ 
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
 }
