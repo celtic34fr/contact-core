@@ -12,6 +12,7 @@
 
 {% block stylesheets %}
 	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('contact-assets/css/dragNDrop.css') }}"/>
 {% endblock %}
 
 {% block main %}
@@ -84,4 +85,5 @@
 
 {% block javascripts %}
 	{{ parent() }}
+	<script src="{{ asset('contact-assets/js/dragNDrop.js') }}"></script>
 {% endblock %}
