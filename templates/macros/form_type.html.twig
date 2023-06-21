@@ -412,7 +412,10 @@
                 {% elseif label|length > 0 %}
                     <label class="{{ label_class }}" for="{{ field.vars.id }}">{{ label }}</label>
                 {% endif %}
-                <p><input type="button" value="Choisissez un fichier" onclick="file_explorer();"/></p>
+                <p>
+                    <input type="button" value="Choisissez un fichier"
+                                onclick="file_explorer('{{ field.vars.id }}-drop-area');"/>
+                </p>
                 <input type="file" id="{{ field.vars.id }}" name="{{ field.vars.id }}" {{ attributes|raw }}/>
             </div>
         </div>

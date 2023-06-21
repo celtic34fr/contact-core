@@ -103,6 +103,7 @@ dropAreas.forEach(droparea => function() {
 
 // nouveaux modules
 
-function file_explorer() {
-    document.getElementById('selectfile').click();
+function file_explorer(drop_area) {
+    let zone = document.querySelector("#"+drop_area);
+    zone.querySelector('selectfile').click();
 }
