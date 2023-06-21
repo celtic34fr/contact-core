@@ -1,0 +1,29 @@
+{% extends '@contact-core/layout_backend.html.twig' %}
+
+{% block shoulder %}
+	{{ "Utilitaires" }}
+{% endblock shoulder %}
+
+{% block title %}
+	<i class="fas mr-2 link--icon fa-building"></i>
+	Visualisation de fichier pièce jointe
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block main %}
+    <h2>&nbsp;{{ title }}</h2>
+    <hr>
+    {% if 'image' in mime %}
+        <img src="data:{{ mime }};base64,{{ content }}" width="{{ width }}">
+    {% elseif 'pdf' in mime %}
+        <embed src="data:application/pdf;base64,{{ content }}" type="application/pdf" width="100%" height="600px"></embed>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}
+

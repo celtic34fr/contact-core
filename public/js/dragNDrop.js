@@ -99,4 +99,10 @@ dropAreas.forEach(droparea => function() {
     });
 
     dropArea.addEventListener('drop', handleDrop, false);
-}):
+});
+
+// nouveaux modules
+
+function file_explorer() {
+    document.getElementById('selectfile').click();
+}
