@@ -407,7 +407,7 @@
         <div class="drop_file_zone" ondrop="upload_file(event)" ondragover="return false">
             <div class="drag_upload_file">
                 {% if placeholder|length > 0 %}
-                        <p>{{ placehoder }}</p>
+                        <p>{{ placeholder }}</p>
                         <p>ou</p>
                 {% elseif label|length > 0 %}
                     <label class="{{ label_class }}" for="{{ field.vars.id }}">{{ label }}</label>
