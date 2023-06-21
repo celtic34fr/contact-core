@@ -30,37 +30,37 @@
 		{% endif %}
 		<div class="col-12 mt-2 row px-0 mx-0">
 			{{ fields.field(form.designation, "", {
-				'class': 'col-12 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'class': 'col-12 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre désignation commerciale',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
 		</div>
 		<div class="col-12 mt-2 row px-0 mx-0">
 			{{ fields.field(form.siren, "", {
-				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre SIREN',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
 			{{ fields.field(form.siret, '', {
-				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre prénom',
+				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre SIRET',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'}
 			}) }}
 		</div>
 		<div class="col-12 mt-2 row px-0 mx-0">
 			{{ fields.field(form.courriel, "", {
-				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre adresse courriel globale',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
 			{{ fields.field(form.reponse, '', {
-				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre prénom',
+				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre adresse courriel de réponse',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'}
 			}) }}
 		</div>
 		<div class="col-12 mt-2 row px-0 mx-0">
 			{{ fields.field(form.telephone, "", {
-				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre nom*',
+				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre Téléphone',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
 			{{ fields.dragNDrop(form.logo, 'Le logo de votre structure', {
-				'class': 'col-6 mb-2 mx-0 pe-0 ps-1',
+				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre Logo',
                 'url': '{{ path("upload-logo") }}', 'maxSize': '4096k',
                 'maxFiles': 1, 'removeBtn': true,
 			}) }}
