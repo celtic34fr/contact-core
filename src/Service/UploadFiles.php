@@ -125,7 +125,6 @@ class UploadFiles
                             break;
                     }
                     $initial_datas[] = $item;
-                    */
                 }
             }
         }
