@@ -1,3 +1,4 @@
+/*
 let dropAreas = document.querySelectorAll('.drop-area');
 let filesDone = 0;
 let filesToDo = 0;
@@ -100,6 +101,7 @@ dropAreas.forEach(droparea => function() {
 
     dropArea.addEventListener('drop', handleDrop, false);
 });
+*/
 
 // nouveaux modules
 
