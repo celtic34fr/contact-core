@@ -61,13 +61,13 @@
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
 			{{ fields.dragNDrop(form.logo, 'Le logo de votre structure', {
-				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre Logo',
+				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Déposez ici Votre Logo',
                 'url': '{{ path("upload-logo") }}', 'maxSize': '4096k',
                 'maxFiles': 1, 'removeBtn': true,
+				'accept': ['png', 'gif', 'jpg', 'jpeg', 'svg'],
 			}) }}
 			{#
 				'label_class': 'col-4 px-2 text-sm', 
-				'accept': ['png', 'gif', 'jpg', 'jpeg', 'svg'],
                 'multiple': false, 'progressbar': true, 'gallery': true,
 
 			#}
