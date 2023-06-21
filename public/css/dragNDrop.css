@@ -38,3 +38,27 @@
  .fileElem {
     display: none;
  }
+
+/* nouveau CSS */
+
+ .drop-area .drop_file_zone {
+    background-color: #EEE;
+    border: #999 5px dashed;
+    width: 290px;
+    height: 200px;
+    padding: 8px;
+    font-size: 18px;
+ }
+
+ .drop-area .drag_upload_file {
+    width: 50%;
+    margin: 0 auto;
+ }
+
+ .drop-area .drag_upload_file p {
+    text-align: center;
+ }
+
+ .drop-area .drag_upload_file input[type=file] {
+    display: none;
+ }
