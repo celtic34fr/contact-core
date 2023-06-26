@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1920, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="{{ mime }}">
+    <title>Document</title>
+</head>
+<body>
+
+<style media="print">
+    @page {
+        margin: 0 !important;
+    }
+
+    body {
+        margin: 1cm !important;
+    }
+
+    #wpadminbar, footer {
+        display: none !important;
+    }
+
+    div.page_break + div.page_break {
+        page-break-before: always;
+    }
+
+    .hidden {
+
+    }
+</style>
+
+{% if 'image' in mime %}
+    <img src="data:{{ mime }};base64,{{ content }}" width="{{ width }}">
+{% elseif 'pdf' in mime %}
+    <div style="display: none !important;">
+        <form><input type="button" onClick="printObjectPdf()" class="btn" value="Print"/></form>
+    </div>
+    <iframe id="printf" name="printf" src="data:application/pdf;base64,{{ content }}"
+            frameborder="0" width="440" height="580" style="width: 440px; height: 580px;display: none;"></iframe>
+    <object id="idPdf" onreadystatechange="idPdf_onreadystatechange()"
+            width="440" height="580" style="width: 440px; height: 580px;" type="application/pdf"
+            data="data:application/pdf;base64,{{ content }}">
+        <embed src="data:application/pdf;base64,{{ content }}" width="440" height="580"
+               style="width: 440px; height: 580px;" type="application/pdf">
+        </embed>
+        <span>PDF plugin is not available.</span>
+    </object>
+{% elseif 'docs' in mime %}
+    {% for doc in content %}
+        <div class="page_break">
+            {{ doc.content|raw }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<script type="text/javascript">
+    function printIframePdf() {
+        window.frames["printf"].focus();
+        try {
+            window.frames["printf"].print();
+        } catch (e) {
+            window.print();
+            console.log(e);
+        }
+    }
+
+    function printObjectPdf() {
+        try {
+            document.getElementById('idPdf').Print();
+        } catch (e) {
+            printIframePdf();
+            console.log(e);
+        }
+    }
+
+    function idPdf_onreadystatechange() {
+        if (idPdf.readyState === 4)
+            setTimeout(printObjectPdf, 1000);
+    }
+
+    window.addEventListener("load", function () {
+        {% if 'pdf' in mime %}
+        const btn = document.querySelector("form input[type=button]");
+        btn.click();
+        {% else %}
+        window.print();
+        {% endif %}
+        window.onfocus=function(){ window.close();}
+    })
+</script>
+
+</body>
+</html>

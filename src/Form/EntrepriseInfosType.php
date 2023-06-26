@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntrepriseInfosType extends AbstractType
@@ -44,7 +45,10 @@ class EntrepriseInfosType extends AbstractType
             'required' => false,
             'label' => '',
             'multiple' => false,
+            'mapped' => false,
         ])
+        ->add('logo_mine', HiddenType::class)
+        ->add('logo_content', HiddenType::class)
         ->add('record', SubmitType::class, [
             'label' => 'Enregistrer les informations',
         ])

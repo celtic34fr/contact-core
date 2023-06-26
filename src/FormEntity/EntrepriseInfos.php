@@ -14,6 +14,9 @@ class EntrepriseInfos
     private ?string $courriel = null;
     private ?string $telephone = null;
     private ?string $reponse = null;
+    private ?string $logo_mine = null;
+    private ?string $logo_content = null;
+
     #[Assert\File(
         maxSize: '4096k',
         extensions: ['png', 'gif', 'jpg', 'jpeg', 'svg'],
@@ -44,6 +47,12 @@ class EntrepriseInfos
         $this->reponse = $parameters['reponse'] ?? "";
 
         /** Traitement de la question du logo */
+        if (array_key_exists('logo', $parameters) && !empty($parameters['logo'])) {
+            $logo = $parameters['logo'];
+            $this->logo_mine = $logo['mime'];
+            $this->logo_content = $logo['content'];
+        }
+
         if (array_key_exists('logo', $parameters) && is_string($parameters['logo'])) {
             $filesystem = new Filesystem();
             $projectDir = $this->getContainer()->getParameter('kernel.project_dir');
@@ -191,6 +200,44 @@ class EntrepriseInfos
     {
         $this->logo = $logo;
 
+        return $this;
+    }
+
+    /**
+     * Get the value of logo_mine
+     */ 
+    public function getLogo_mine(): ?string
+    {
+        return $this->logo_mine;
+    }
+
+    /**
+     * Set the value of logo_mine
+     *
+     * @return  EntrepriseInfos
+     */ 
+    public function setLogo_mine(string $logo_mine): self
+    {
+        $this->logo_mine = $logo_mine;
+        return $this;
+    }
+
+    /**
+     * Get the value of logo_content
+     */ 
+    public function getLogo_content(): ?string
+    {
+        return $this->logo_content;
+    }
+
+    /**
+     * Set the value of logo_content
+     *
+     * @return  EntrepriseInfos
+     */ 
+    public function setLogo_content($logo_content):self
+    {
+        $this->logo_content = $logo_content;
         return $this;
     }
 }

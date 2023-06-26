@@ -33,6 +33,9 @@ class PiecesJointes
     #[ORM\Column(nullable: true)]
     private ?string $utility = null;                // utilité de la pièce jointe : logo entreprise, image pour courriel ....
 
+    #[ORM\Column(length: 255)]
+    private ?string $file_size = null;                   // taille de la pièce jointe format normalisé
+
     /** 
      * @return int|null
      */
@@ -83,6 +86,12 @@ class PiecesJointes
     public function getFileContent()
     {
         return $this->file_content;
+    }
+
+    public function getFileContentBase64(): string
+    {
+        $content = stream_get_contents($this->file_content);
+        return base64_encode($content);
     }
 
     /** 
@@ -150,9 +159,24 @@ class PiecesJointes
             return $this;
         }
         return false;
+    }
 
-        $this->utility = $utility;
+    /**
+     * Get the value of size
+     */ 
+    public function getFileSize(): ?string
+    {
+        return $this->file_size;
+    }
 
+    /**
+     * Set the value of size
+     *
+     * @return  PiecesJointes
+     */ 
+    public function setFileSize(string $fileSize): self
+    {
+        $this->file_size = $fileSize;
         return $this;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
+use Celtic34fr\ContactCore\Entity\PiecesJointes;
+use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Exception;
 use Twig\Environment;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
+use Celtic34fr\ContactCore\Repository\PiecesJointesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('parameters')]
@@ -20,11 +23,15 @@ class ParametersController extends AbstractController
     use Utilities;
 
     private $schemaManager;
+    private PiecesJointesRepository $piecesJointesRepo;
 
-    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
-            private ExtensionConfig $extConfig)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private Environment $twigEnvironment,
+        private ExtensionConfig $extConfig
+    ) {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
+        $this->piecesJointesRepo = $entityManager->getRepository(PiecesJointes::class);
     }
 
     #[Route('/informations', name: 'info-structure')]
@@ -35,24 +42,41 @@ class ParametersController extends AbstractController
     public function index(Request $request): Response
     {
         if ($this->extConfig->isExtnsionInstall("contactcore")) {
+            /* recherche des logo en temporaire (tempo: true) pour suppression de la base */
+            $logosTempo = $this->piecesJointesRepo
+                               ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
+            if ($logosTempo) {
+                foreach ($$logosTempo as $logoTempo) {
+                    $this->entityManager->remove($logoTempo);
+                }
+                $this->entityManager->flush();
+            }
 
-        $entreprise = $this->extConfig->get('contact-core/entreprise');
-        if (!$entreprise) {
-            $entreprise  = [
-                'designation' => null,
-                'siren' => null,
-                'siret' => null,
-                'courriel' => null,
-                'telephone' => null,
-                'courriel_reponse'=> null,              
-            ];
-        }
+            $entreprise = $this->extConfig->get('contact-core/entreprise');
+            if (!$entreprise) {
+                $entreprise  = [
+                    'designation' => null,
+                    'siren' => null,
+                    'siret' => null,
+                    'courriel' => null,
+                    'telephone' => null,
+                    'courriel_reponse' => null,
+                ];
+            }
+            /** @var PiecesJointes $logo */
+            $logo = $this->piecesJointesRepo->findOneBy(['utilities' => UtilitiesPJEnums::Logo->_toString()]);
+            $item = [];
+            if ($logo) {
+                $item['mime'] = $logo->getFileMime();
+                $item['content'] = $logo->getFileContentBase64();
+            }
+            $entreprise['logo'] = $item;
 
-        $entrepriseInfos = new EntrepriseInfos();
-        $entrepriseInfos->setByArray($entreprise);
-        $form = $this->createForm(EntrepriseInfosType::class, $entrepriseInfos);
+            $entrepriseInfos = new EntrepriseInfos();
+            $entrepriseInfos->setByArray($entreprise);
+            $form = $this->createForm(EntrepriseInfosType::class, $entrepriseInfos);
 
-        $response =
+            $response =
                 $this->render('@contact-core/parameters/information.html.twig', [
                     'form' => $form->createView(),
                 ]);
@@ -65,7 +89,7 @@ class ParametersController extends AbstractController
     /**
      * méthode AJAX de chargement du logo par drag&Drop
      */
-    #[Route('/uploadLogo', name: 'upload-logo', methods:['POST'])]
+    #[Route('/uploadLogo', name: 'upload-logo', methods: ['POST'])]
     public function uploadLogo(): void
     {
     }
