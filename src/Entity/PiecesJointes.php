@@ -5,10 +5,11 @@ namespace Celtic34fr\ContactCore\Entity;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Celtic34fr\ContactCore\PiecesJointesRepository;
+use Celtic34fr\ContactCore\PieceJointeRepository;
 
-#[ORM\Entity(repositoryClass: PiecesJointesRepository::class)]
-class PiecesJointes
+#[ORM\Entity(repositoryClass: PieceJointeRepository::class)]
+#[ORM\Table(name:'pieces_jointes')]
+class PieceJointe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -54,7 +55,7 @@ class PiecesJointes
 
     /**
      * @param string $file_name
-     * @return PiecesJointes
+     * @return PieceJointe
      */
     public function setFileName(string $file_name): self
     {
@@ -72,7 +73,7 @@ class PiecesJointes
 
     /** 
      * @param string $file_mime
-     * @return PiecesJointes
+     * @return PieceJointe
      */
     public function setFileMime(string $file_mime): self
     {
@@ -96,7 +97,7 @@ class PiecesJointes
 
     /** 
      * @param $file_content
-     * @return PiecesJointes
+     * @return PieceJointe
      */
    public function setFileContent($file_content): self
     {
@@ -114,7 +115,7 @@ class PiecesJointes
 
     /** 
      * @param DateTimeImmutable $created_at
-     * @return PiecesJointes
+     * @return PieceJointe
      */
     public function setDateCreated(DateTimeImmutable $created_at): self
     {
@@ -132,7 +133,7 @@ class PiecesJointes
 
     /**
      * @param bool $tempo
-     * @return PiecesJointes
+     * @return PieceJointe
      */
     public function setTempo(bool $tempo): self
     {
@@ -150,7 +151,7 @@ class PiecesJointes
 
     /**
      * @param string $utility
-     * @return  PiecesJointes|bool
+     * @return  PieceJointe|bool
      */ 
     public function setUtility(string $utility): mixed
     {
@@ -172,7 +173,7 @@ class PiecesJointes
     /**
      * Set the value of size
      *
-     * @return  PiecesJointes
+     * @return  PieceJointe
      */ 
     public function setFileSize(string $fileSize): self
     {

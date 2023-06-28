@@ -2,8 +2,9 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
-use Celtic34fr\ContactCore\Entity\Courriels;
+use Celtic34fr\ContactCore\Entity\Courriel;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\Repository\CourrielRepository;
 use Celtic34fr\ContactCore\Service\SendMailer;
 use Celtic34fr\ContactCore\Traits\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +22,8 @@ class CourrielsController extends AbstractController
 
     private $schemaManager;
 
-    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment)
+    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
+        private CourrielRepository $courrielRepository)
     {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
     }
@@ -62,8 +64,7 @@ class CourrielsController extends AbstractController
                 $choices = $form['choices'] ?? [];
                 $pages = $form['pages'] ?? 0;
 
-                $courriels = $this->entityManager->getRepository(Courriels::class)
-                    ->findCourrielsAll($type, $currentPage, $limit);
+                $courriels = $this->courrielRepository->findCourrielsAll($type, $currentPage, $limit);
 
                 switch ($nav) {
                     case 99: // retour au tableau de bord
@@ -80,8 +81,8 @@ class CourrielsController extends AbstractController
                     case 2: // renvoi des courriel(s) sélectionné(s)
                         foreach ($choices as $choice) {
                             // réémission des courriels choisis
-                            /** @var Courriels $courriel */
-                            $courriel = $this->entityManager->getRepository(Courriels::class)->find((int) $choice);
+                            /** @var Courriel $courriel */
+                            $courriel = $this->courrielRepository->find((int) $choice);
                             $sended = $mailer->sendTemplate(
                                 $courriel->getDestinataire(),
                                 $courriel->getTemplateCourriel(),
@@ -104,8 +105,7 @@ class CourrielsController extends AbstractController
                         }
                 }
             }
-            $courriels = $this->entityManager->getRepository(Courriels::class)
-                ->findCourrielsAll($type, $currentPage, $limit);
+            $courriels = $this->courrielRepository->findCourrielsAll($type, $currentPage, $limit);
             $response =
                 $this->render('@contact-core/courriels/index.html.twig', [
                     'courriels' => $courriels['datas'] ?? [],

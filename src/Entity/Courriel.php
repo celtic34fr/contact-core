@@ -4,12 +4,13 @@ namespace Celtic34fr\ContactCore\Entity;
 
 use Celtic34fr\ContactCore\Enum\CourrielEnums;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
-use Celtic34fr\ContactCore\Repository\CourrielsRepository;
+use Celtic34fr\ContactCore\Repository\CourrielRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CourrielsRepository::class)]
-class Courriels
+#[ORM\Entity(repositoryClass: CourrielRepository::class)]
+#[ORM\Table(name:'courriels')]
+class Courriel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

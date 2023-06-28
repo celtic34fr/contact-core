@@ -2,15 +2,16 @@
 
 namespace Celtic34fr\ContactCore\Service;
 
+use DateTime;
 use Bolt\Entity\User;
-use Celtic34fr\ContactCore\Entity\PiecesJointes;
+use DateTimeImmutable;
 use Symfony\Component\Asset\Packages;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UploadFiles
@@ -42,7 +43,7 @@ class UploadFiles
 
         $ext = '.' . strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-        $final_file = rand(1000, 1000000) . $file;
+        $final_file = (new DateTime('now'))->format("Ymdhis") . $file;
 
         if (in_array($ext, $valid_extensions)) {
 
@@ -68,7 +69,7 @@ class UploadFiles
 
             if (empty($errMsg)) {
                 $file_raw = file_get_contents($tmp);
-                $fichier = new PiecesJointes();
+                $fichier = new PieceJointe();
 
                 $fichier->setFileContent($file_raw);
                 $fichier->setFileName($final_file);
@@ -76,6 +77,8 @@ class UploadFiles
                 $fichier->setDateCreated(new DateTimeImmutable('now'));
                 $fichier->setTempo(true);
                 $fichier->setUtility($cible);
+                $fichier->setFileSize($this->filesize_formated((int) $siz));
+                $fichier->setFileContent($file_raw);
 
                 $this->entityManager->persist($fichier);
                 $this->entityManager->flush();
@@ -101,8 +104,8 @@ class UploadFiles
             }
             if (!$err_msg) {
                 foreach ($pj_ids as $pj_id) {
-                    /** @var PiecesJointes $pj */
-                    $pj = $this->entityManager->getRepository(PiecesJointes::class)->find($pj_id);
+                    /** @var PieceJointe $pj */
+                    $pj = $this->entityManager->getRepository(PieceJointe::class)->find($pj_id);
 
                     $item = [];
                     $item['id'] = $pj_id;
@@ -129,5 +132,12 @@ class UploadFiles
             }
         }
         return [$err_msg, $initial_datas];
+    }
+
+    private function filesize_formated(int $size)
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $power = $size > 0 ? floor(log($size, 1024)) : 0;
+        return number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
     }
 }

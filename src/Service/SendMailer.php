@@ -3,8 +3,8 @@
 namespace Celtic34fr\ContactCore\Service;
 
 use Celtic34fr\ContactCore\Entity\CliInfos;
-use Celtic34fr\ContactCore\Entity\Courriels;
-use Celtic34fr\ContactCore\Entity\PiecesJointes;
+use Celtic34fr\ContactCore\Entity\Courriel;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Celtic34fr\ContactCore\Enum\CourrielEnums;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use DateTimeImmutable;
@@ -77,15 +77,15 @@ class SendMailer
             $nb_elt = 0;
             foreach ($context['attachments'] as $attachment) {
                 $nb_elt++;
-                /** @var PiecesJointes $file */
-                $file = $this->em->getRepository(PiecesJointes::class)->find($attachment);
+                /** @var PieceJointe $file */
+                $file = $this->em->getRepository(PieceJointe::class)->find($attachment);
                 $email->attach($file->getFileContent(), "pj_" . $nb_elt, $file->getFileMime());
             }
         }
         $res = $this->send($email);
         /** enregistrement systématique des mails envoyés réunion du 2022/08/18 */
         /** resend : true si revoi de courriel, false si envoi initial */
-        $mail = new Courriels();
+        $mail = new Courriel();
         $mail->setContextCourriel($context)->setSujet($subject)->setTemplateCourriel($template_name)
             ->setDestinataire($destinataire)->setCreatedAt(new DateTimeImmutable('now'))
             ->setSendTimes(1)->setNature(CourrielEnums::Contact->_toString());
@@ -100,7 +100,7 @@ class SendMailer
         return $res;
     }
 
-    public function resendMail(Courriels $mail)
+    public function resendMail(Courriel $mail)
     {
         $destinataire = $mail->getDestinataire();
 

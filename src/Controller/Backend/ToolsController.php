@@ -7,11 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Celtic34fr\ContactCore\Entity\PiecesJointes;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Celtic34fr\ContactCore\Repository\PiecesJointesRepository;
+use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/tools', name: 'tools_')]
@@ -21,18 +21,16 @@ class ToolsController extends AbstractController
     const raw_doc = __CLASS__ . '::raw_doc';
     const print_doc = __CLASS__ . '::print_doc';
 
-    private PiecesJointesRepository $piecesJointesRepo;
-
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager,
+                private PieceJointeRepository $pieceJointeRepo)
     {
-        $this->piecesJointesRepo = $this->entityManager->getRepository(PiecesJointes::class);
     }
 
     #[Route('/visu_doc/{id}', name: 'visu_doc')]
     public function view_pj(int $id): Response
     {
-        /** @var PiecesJointes $pieceJointe */
-        $pieceJointe = $this->piecesJointesRepo->find($id);
+        /** @var PieceJointe $pieceJointe */
+        $pieceJointe = $this->pieceJointeRepo->find($id);
         $contexte = [
             'mime' => $pieceJointe->getFileMime(),
             'width' => '80%',
@@ -46,8 +44,8 @@ class ToolsController extends AbstractController
     #[Route('/raw_doc/{id}', name: 'raw_doc')]
     public function raw_doc(int $id): Response
     {
-        /** @var PiecesJointes $pieceJointe */
-        $pieceJointe = $this->piecesJointesRepo->find($id);
+        /** @var PieceJointe $pieceJointe */
+        $pieceJointe = $this->pieceJointeRepo->find($id);
 
         $response = new Response();
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $pieceJointe->getFileName());
@@ -62,7 +60,7 @@ class ToolsController extends AbstractController
     }
 
     #[Route('print_doc/{id}', name: 'print_doc')]
-    public function print_docu(PiecesJointes $document): Response
+    public function print_docu(PieceJointe $document): Response
     {
         $context = [
             'mime' => $document->getFileMime(),
@@ -77,7 +75,7 @@ class ToolsController extends AbstractController
     {
         $medias = $_FILES;
         foreach ($medias as $media) {
-            $document = new PiecesJointes();
+            $document = new PieceJointe();
             $document->setFileName($media['name']);
             $document->setFileMime($media['type']);
             $document->setFileSize($this->filesize_formated((int) $media['size']));

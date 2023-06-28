@@ -53,12 +53,15 @@ class EntrepriseInfos
             $this->logo_content = $logo['content'];
         }
 
+        /* TODO : à revoir
         if (array_key_exists('logo', $parameters) && is_string($parameters['logo'])) {
             $filesystem = new Filesystem();
             $projectDir = $this->getContainer()->getParameter('kernel.project_dir');
         } else {
             $this->logo = null;
         }
+        */
+
         return $this;
     }
 

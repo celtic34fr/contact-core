@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use Celtic34fr\ContactCore\Entity\CliInfos;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Celtic34fr\ContactCore\Entity\Clientele;
-use Celtic34fr\ContactCore\Entity\Courriels;
+use Celtic34fr\ContactCore\Entity\Courriel;
 use App\DataFixtures\ContactCore\ClientelesFixtures;
 use Celtic34fr\ContactCore\Enum\CourrielEnums;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
@@ -33,7 +33,7 @@ class CourielsFixtures  extends Fixture implements FixtureGroupInterface, Depend
                 $cliInfos = $manager->getRepository(CliInfos::class)->findOneBy(['telephone' => '04673788'.$clientIDX.$cliInfosIDX]);
 
                 if ($cliInfos) {
-                    $courriel = new Courriels();
+                    $courriel = new Courriel();
                     $courriel->setDestinataire($cliInfos);
 
                     $courriel->setSujet("");

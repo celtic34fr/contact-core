@@ -10,8 +10,6 @@ use Bolt\Widget\Injector\RequestZone;
 use Bolt\Widget\StopwatchAwareInterface;
 use Bolt\Widget\StopwatchTrait;
 use Bolt\Widget\TwigAwareInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /** widget visant à afficher le nombre de courriels en exhec d'envoi */
 class CourrielsWidget extends BaseWidget implements TwigAwareInterface, CacheAwareInterface, StopwatchAwareInterface

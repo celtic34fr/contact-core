@@ -2,7 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
-use Celtic34fr\ContactCore\Entity\PiecesJointes;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Exception;
 use Twig\Environment;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
-use Celtic34fr\ContactCore\Repository\PiecesJointesRepository;
+use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('parameters')]
@@ -23,15 +23,14 @@ class ParametersController extends AbstractController
     use Utilities;
 
     private $schemaManager;
-    private PiecesJointesRepository $piecesJointesRepo;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Environment $twigEnvironment,
-        private ExtensionConfig $extConfig
+        private ExtensionConfig $extConfig,
+        private PieceJointeRepository $pieceJointeRepo
     ) {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
-        $this->piecesJointesRepo = $entityManager->getRepository(PiecesJointes::class);
     }
 
     #[Route('/informations', name: 'info-structure')]
@@ -43,7 +42,7 @@ class ParametersController extends AbstractController
     {
         if ($this->extConfig->isExtnsionInstall("contactcore")) {
             /* recherche des logo en temporaire (tempo: true) pour suppression de la base */
-            $logosTempo = $this->piecesJointesRepo
+            $logosTempo = $this->pieceJointeRepo
                                ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
             if ($logosTempo) {
                 foreach ($$logosTempo as $logoTempo) {
@@ -63,8 +62,8 @@ class ParametersController extends AbstractController
                     'courriel_reponse' => null,
                 ];
             }
-            /** @var PiecesJointes $logo */
-            $logo = $this->piecesJointesRepo->findOneBy(['utilities' => UtilitiesPJEnums::Logo->_toString()]);
+            /** @var PieceJointe $logo */
+            $logo = $this->pieceJointeRepo->findOneBy(['utilities' => UtilitiesPJEnums::Logo->_toString()]);
             $item = [];
             if ($logo) {
                 $item['mime'] = $logo->getFileMime();

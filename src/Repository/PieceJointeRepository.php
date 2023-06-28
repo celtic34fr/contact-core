@@ -2,26 +2,26 @@
 
 namespace Celtic34fr\ContactCore\Repository;
 
-use Celtic34fr\ContactCore\Entity\PiecesJointes;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<PiecesJointes>
+ * @extends ServiceEntityRepository<PieceJointe>
  *
- * @method PiecesJointes|null find($id, $lockMode = null, $lockVersion = null)
- * @method PiecesJointes|null findOneBy(array $criteria, array $orderBy = null)
- * @method PiecesJointes[]    findAll()
- * @method PiecesJointes[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PiecesJointe|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PiecesJointe|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PiecesJointe[]    findAll()
+ * @method PiecesJointe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PiecesJointesRepository extends ServiceEntityRepository
+class PieceJointeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, PiecesJointes::class);
+        parent::__construct($registry, PieceJointe::class);
     }
 
-    public function save(PiecesJointes $entity, bool $flush = false): void
+    public function save(PieceJointe $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
         if ($flush) {
@@ -29,7 +29,7 @@ class PiecesJointesRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(PiecesJointes $entity, bool $flush = false): void
+    public function remove(PieceJointe $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
         if ($flush) {
@@ -38,7 +38,7 @@ class PiecesJointesRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return PiecesJointes[] Returns an array of PiecesJointes objects
+//     * @return PieceJointe[] Returns an array of PieceJointe objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -52,7 +52,7 @@ class PiecesJointesRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?PiecesJointes
+//    public function findOneBySomeField($value): ?PieceJointe
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

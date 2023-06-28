@@ -2,30 +2,30 @@
 
 namespace Celtic34fr\ContactCore\Repository;
 
-use Celtic34fr\ContactCore\Entity\Courriels;
+use Celtic34fr\ContactCore\Entity\Courriel;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Traits\DbPaginateTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Courriels>
+ * @extends ServiceEntityRepository<Courriel>
  *
- * @method Courriels|null find($id, $lockMode = null, $lockVersion = null)
- * @method Courriels|null findOneBy(array $criteria, array $orderBy = null)
- * @method Courriels[]    findAll()
- * @method Courriels[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Courriel|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Courriel|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Courriel[]    findAll()
+ * @method Courriel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CourrielsRepository extends ServiceEntityRepository
+class CourrielRepository extends ServiceEntityRepository
 {
     use DbPaginateTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Courriels::class);
+        parent::__construct($registry, Courriel::class);
     }
 
-    public function save(Courriels $entity, bool $flush = false): void
+    public function save(Courriel $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
         if ($flush) {
@@ -33,7 +33,7 @@ class CourrielsRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Courriels $entity, bool $flush = false): void
+    public function remove(Courriel $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
         if ($flush) {
@@ -67,7 +67,7 @@ class CourrielsRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return CRMCourriels[] Returns an array of CRMCourriels objects
+//     * @return Courriel[] Returns an array of Courriel objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -81,7 +81,7 @@ class CourrielsRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?CRMCourriels
+//    public function findOneBySomeField($value): ?Courriel
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

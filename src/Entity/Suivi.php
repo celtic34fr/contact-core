@@ -6,6 +6,7 @@ use Celtic34fr\ContactCore\Repository\SuiviRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SuiviRepository::class)]
+#[ORM\Table(name:'suivis')]
 class Suivi
 {
     #[ORM\Id]

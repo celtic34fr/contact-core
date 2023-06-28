@@ -2,7 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Service;
 
-use Celtic34fr\ContactCore\Entity\Courriels;
+use Celtic34fr\ContactCore\Repository\CourrielRepository;
 use Celtic34fr\ContactCore\Traits\DbPaginateTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
@@ -11,15 +11,13 @@ class CourrielsDbInfos
 {
     use DbPaginateTrait;
 
-    private ObjectRepository|\Doctrine\ORM\EntityRepository $courrielsRepository;
-
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager,
+        private CourrielRepository $courrielRepository)
     {
-        $this->courrielsRepository = $entityManager->getRepository(Courriels::class);
     }
 
     public function countCourrielsToSend(): int
     {
-        return sizeof($this->courrielsRepository->findAllOnError()) ?? 0;
+        return sizeof($this->courrielRepository->findAllOnError()) ?? 0;
     }
 }
