@@ -94,6 +94,11 @@ class ExtensionConfig
         return false;
     }
 
+    public function getInstalledExtensions(): array
+    {
+        return $this->extInstall;
+    }
+
     /**
      * ensemble des méthodes privées assurant le bon fonctionnement szq méthodes de la classe
      */
