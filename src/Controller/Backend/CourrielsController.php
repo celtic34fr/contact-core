@@ -21,11 +21,12 @@ class CourrielsController extends AbstractController
     use Utilities;
 
     private $schemaManager;
+    private CourrielRepository $courrielRepository;
 
-    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment,
-        private CourrielRepository $courrielRepository)
+    public function __construct(private EntityManagerInterface $entityManager, private Environment $twigEnvironment)
     {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
+        $this->courrielRepository = $entityManager->getRepository(Courriel::class);
     }
 
     #[Route('/list/{currentPage}', name: 'courriel_list')]
