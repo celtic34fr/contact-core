@@ -63,7 +63,7 @@ class ParametersController extends AbstractController
                 ];
             }
             /** @var PieceJointe $logo */
-            $logo = $this->pieceJointeRepo->findOneBy(['utilities' => UtilitiesPJEnums::Logo->_toString()]);
+            $logo = $this->pieceJointeRepo->findOneBy(['utility' => UtilitiesPJEnums::Logo->_toString()]);
             $item = [];
             if ($logo) {
                 $item['mime'] = $logo->getFileMime();
