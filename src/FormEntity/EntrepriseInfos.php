@@ -14,7 +14,7 @@ class EntrepriseInfos
     private ?string $courriel = null;
     private ?string $telephone = null;
     private ?string $reponse = null;
-    private ?string $logo_mine = null;
+    private ?string $logo_mime = null;
     private ?string $logo_content = null;
 
     #[Assert\File(
@@ -49,7 +49,7 @@ class EntrepriseInfos
         /** Traitement de la question du logo */
         if (array_key_exists('logo', $parameters) && !empty($parameters['logo'])) {
             $logo = $parameters['logo'];
-            $this->logo_mine = $logo['mime'];
+            $this->logo_mime = $logo['mime'];
             $this->logo_content = $logo['content'];
         }
 
@@ -207,28 +207,28 @@ class EntrepriseInfos
     }
 
     /**
-     * Get the value of logo_mine
+     * Get the value of logo_mime
      */ 
-    public function getLogo_mine(): ?string
+    public function getLogoMime(): ?string
     {
-        return $this->logo_mine;
+        return $this->logo_mime;
     }
 
     /**
-     * Set the value of logo_mine
+     * Set the value of logo_mime
      *
      * @return  EntrepriseInfos
      */ 
-    public function setLogo_mine(string $logo_mine): self
+    public function setLogoMime(string $logo_mime): self
     {
-        $this->logo_mine = $logo_mine;
+        $this->logo_mime = $logo_mime;
         return $this;
     }
 
     /**
      * Get the value of logo_content
      */ 
-    public function getLogo_content(): ?string
+    public function getLogoContent(): ?string
     {
         return $this->logo_content;
     }
@@ -238,7 +238,7 @@ class EntrepriseInfos
      *
      * @return  EntrepriseInfos
      */ 
-    public function setLogo_content($logo_content):self
+    public function setLogoContent($logo_content):self
     {
         $this->logo_content = $logo_content;
         return $this;
