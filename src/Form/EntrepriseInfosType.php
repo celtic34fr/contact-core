@@ -47,7 +47,7 @@ class EntrepriseInfosType extends AbstractType
             'multiple' => false,
             'mapped' => false,
         ])
-        ->add('logo_mine', HiddenType::class)
+        ->add('logo_mime', HiddenType::class)
         ->add('logo_content', HiddenType::class)
         ->add('record', SubmitType::class, [
             'label' => 'Enregistrer les informations',
