@@ -2,10 +2,6 @@
 
 namespace Celtic34fr\ContactCore\FormEntity;
 
-use libphonenumber\PhoneNumber;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
 use Celtic34fr\ContactCore\Validator\Constraint as AppAssert;
 class EntrepriseInfos
 {
