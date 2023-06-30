@@ -13,7 +13,7 @@ class EntrepriseInfos
     private ?string $siren = null;
     private ?string $siret = null;
     private ?string $courriel = null;
-    private ?PhoneNumber $telephone = null;
+    private ?string $telephone = null;
     private ?string $reponse = null;
     private ?int $logoID = null;
 
@@ -175,7 +175,7 @@ class EntrepriseInfos
     /**
      * Get the value of logoID
      */ 
-    public function getLogoID()
+    public function getLogoID(): ?int
     {
         return $this->logoID;
     }
@@ -185,7 +185,7 @@ class EntrepriseInfos
      *
      * @return  self
      */ 
-    public function setLogoID($logoID)
+    public function setLogoID(int $logoID)
     {
         $this->logoID = $logoID;
         return $this;

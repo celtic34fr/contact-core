@@ -2,11 +2,12 @@
 
 namespace Celtic34fr\ContactCore\Entity;
 
-use Celtic34fr\ContactCore\Enum\CustomerEnums;
-use Celtic34fr\ContactCore\Repository\ClienteleRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\TextType;
+use Doctrine\Common\Collections\Collection;
+use Celtic34fr\ContactCore\Enum\CustomerEnums;
+use Doctrine\Common\Collections\ArrayCollection;
+use Celtic34fr\ContactCore\Repository\ClienteleRepository;
 
 #[ORM\Entity(repositoryClass: ClienteleRepository::class)]
 #[ORM\Table(name:'clienteles')]
@@ -17,10 +18,10 @@ class Clientele
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: TextType::class, length: 255)]
     private ?string $courriel = null;
 
-    #[ORM\Column(type: 'text', length: 255, nullable: true)]
+    #[ORM\Column(type: TextType::class, length: 255, nullable: true)]
     private ?string $type = null;   // Cf. Enum^CustomerEnums
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: CliInfos::class)]

@@ -2,11 +2,15 @@
 
 namespace Celtic34fr\ContactCore\Entity;
 
+use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\TextType;
+use Doctrine\DBAL\Types\ArrayType;
+use Doctrine\DBAL\Types\IntegerType;
 use Celtic34fr\ContactCore\Enum\CourrielEnums;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Repository\CourrielRepository;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CourrielRepository::class)]
 #[ORM\Table(name:'courriels')]
@@ -17,35 +21,35 @@ class Courriel
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: TextType::class, length: 255)]
     private ?string $sujet = null;                      // sujet donné par l'internaute
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?CliInfos $destinataire = null;             // lien à l'internaute (info non fixe)
 
-    #[ORM\Column]
+    #[ORM\Column(type: ArrayType::class)]
     private array $context_courriel = [];               // variables pour génération du courriel
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: TextType::class, length: 255, nullable: true)]
     private ?string $template_courriel = null;          // modèle de rendu à utiliser
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;     // date de création
+    #[ORM\Column(type: DateTimeImmutableType::class, nullable: false)]
+    private ?DateTimeImmutable $created_at = null;     // date de création
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $send_at = null;        // date d'envoi
+    #[ORM\Column(type: DateTimeImmutableType::class, nullable: true)]
+    private ?DateTimeImmutable $send_at = null;        // date d'envoi
 
-    #[ORM\Column]
+    #[ORM\Column(type: IntegerType::class)]
     private ?int $send_times = null;                    // nombre d'envoi total
 
-    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\Column(type: TextType::class, nullable: false)]
     private ?string $send_status = null;                // statut d'envoi du courriel, cf Enum\StatusCourrielEnums
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: ArrayType::class, nullable: true)]
     private array $pieces_jointes = [];                 // ensble des pièces jointes (table PiecesJointes)
 
-    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\Column(type: TextType::class, nullable: false)]
     private ?string $nature = null;                     // nature, type de courriel, cf Enum\CourrielEnumes
 
     public function getId(): ?int
@@ -69,7 +73,7 @@ class Courriel
         return $this->destinataire;
     }
 
-    public function setDestinataire(?CliInfos $destinataire): self
+    public function setDestinataire(CliInfos $destinataire): self
     {
         $this->destinataire = $destinataire;
         return $this;
@@ -91,29 +95,29 @@ class Courriel
         return $this->template_courriel;
     }
 
-    public function setTemplateCourriel(?string $template_courriel): self
+    public function setTemplateCourriel(string $template_courriel): self
     {
         $this->template_courriel = $template_courriel;
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
         return $this;
     }
 
-    public function getSendAt(): ?\DateTimeImmutable
+    public function getSendAt(): ?DateTimeImmutable
     {
         return $this->send_at;
     }
 
-    public function setSendAt(?\DateTimeImmutable $send_at): self
+    public function setSendAt(DateTimeImmutable $send_at): self
     {
         $this->send_at = $send_at;
         return $this;
@@ -149,7 +153,7 @@ class Courriel
         return $this->pieces_jointes;
     }
 
-    public function setPiecesJointes(?array $pieces_jointes): self
+    public function setPiecesJointes(array $pieces_jointes): self
     {
         $this->pieces_jointes = $pieces_jointes;
         return $this;
