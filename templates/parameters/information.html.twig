@@ -60,12 +60,10 @@
 				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre Téléphone',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
-
-			<pre>
-				{{ dump(form.logo) }}
-			</pre>
 			{{ fields.dragNDrop(form.logo, {
-				'label': 'Déposez-Glissez votre logo',
+				'label': 'Déposez-Glissez votre logo','maxFiles': 1,
+				'accept': ".png,.gif,.jpg,.jpeg,.svg",'url': '{{ path("upload-logo") }}',
+				'maxSize': '4096k', 'removeBtn': true, 'viewxBtn': true, 'hidden_name': form.logo.vars.id~'logo',
 			}) }}
 
 			{#
