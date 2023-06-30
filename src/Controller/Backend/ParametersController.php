@@ -78,7 +78,7 @@ class ParametersController extends AbstractController
             $entrepriseInfos = new EntrepriseInfos();
             $entrepriseInfos->setByArray($entreprise);
             $form = $this->createForm(EntrepriseInfosType::class, $entrepriseInfos);
-            $form->handleRequest();
+            $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //traitement du formulaire
