@@ -336,6 +336,10 @@
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
 {% macro dragNDrop(field, args={}) %}
+    <pre>
+        {{ dump(args) }}
+    </pre>
+
 	{% set label = args.label is defined ? args.label : field.vars.label %}
 	{% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
 	{% set label_class = args.label_class is defined ? args.label_class : "" %}
@@ -371,7 +375,7 @@
 	{% set viewBtn = args.viewBtn is defined ? args.viewBtn : viewBtn %}
 	{% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
 
-	{% set hidden_name = args.hidden_name ?? field.vars.id~"-hidden" %}
+	{% set hidden_name = args.hidden_name ?? (field.vars.id~"-hidden") %}
 
 	{% set attributes %}
 		{% if multiple %} multiple {% endif %}
