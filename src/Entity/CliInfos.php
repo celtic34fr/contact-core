@@ -4,6 +4,8 @@ namespace Celtic34fr\ContactCore\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Celtic34fr\ContactCore\Repository\CliInfosRepository;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 #[ORM\Entity(repositoryClass: CliInfosRepository::class)]
 class CliInfos
@@ -19,11 +21,16 @@ class CliInfos
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;     // pénom de l'internaute
 
-    #[ORM\Column(type: "phone_number", nullable: true)]
-    private ?string $telephone = null;  // numéro de téléphone
+    #[ORM\Column(type: "phone_number", nullable: false)]
+    private ?string $telephone;  // numéro de téléphone
 
     #[ORM\ManyToOne(inversedBy: 'cliInfos')]
     private ?Clientele $client;         // lien avec la table des information fixes : courriel
+
+    public function __construct()
+    {
+        $this->telephone = (PhoneNumberUtil::getInstance())->parse("")
+    }
 
     public function getId(): ?int
     {
