@@ -209,7 +209,7 @@ async function uploadFile(file, objet) {
 // }
 
 function clickHandle(event) {
-    if (event.target.matches('div.drop-area')) {
+    if (event.target.closest('div').matches('div.drop-area')) {
 
     }
     if (event.target.matches('span.viewBtn')) {

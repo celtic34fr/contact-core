@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 use Exception;
 use Bolt\Entity\User;
 use Twig\Environment;
+use Bolt\Configuration\Config;
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\ORM\EntityManagerInterface;
 use Celtic34fr\ContactCore\Traits\Utilities;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Celtic34fr\ContactCore\Service\UploadFiles;
 use Symfony\Component\Routing\Annotation\Route;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
@@ -27,15 +29,18 @@ class ParametersController extends AbstractController
     use Utilities;
 
     private $schemaManager;
+    private ExtensionConfig $extConfig;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Environment $twigEnvironment,
-        private ExtensionConfig $extConfig,
         private PieceJointeRepository $pieceJointeRepo,
         private UploadFiles $uploadFiles,
+        private KernelInterface $kernel,
+        private Config $config
     ) {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
+        $this->extConfig = new ExtensionConfig($this->kernel, $this->config);
     }
 
     #[Route('/informations', name: 'info-structure')]
