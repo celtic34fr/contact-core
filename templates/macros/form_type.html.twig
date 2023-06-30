@@ -335,8 +335,8 @@
 {# macro gragNDrop zone de déposer-glisser pour chargement de fichier #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
-{% macro dragNDrop(field, label='', args={}) %}
-	{% set label = label is not empty ? label : field.vars.label %}
+{% macro dragNDrop(field, args={}) %}
+	{% set label = args.label is defined ? args.label : field.vars.label %}
 	{% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
 	{% set label_class = args.label_class is defined ? args.label_class : "" %}
 	{% set class = (args.class is defined ? args.class : "") ~ " drop-area" %}
