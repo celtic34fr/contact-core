@@ -21,11 +21,7 @@ class UploadFiles
     {
     }
 
-    public function uploadFile(
-        Request $request,
-        array $valid_extensions,
-        array $dimensions,
-        string $cible,
+    public function uploadFile(Request $request, array $valid_extensions, array $dimensions, string $cible,
         User $owner
     ): JsonResponse {
         if (!$request->isXmlHttpRequest() || empty($_FILES)) {
@@ -109,7 +105,7 @@ class UploadFiles
 
                     $item = [];
                     $item['id'] = $pj_id;
-                    $item['view_url'] = $this->router->generate('view_pj', ['id' => $pj_id, 'pjs' => $table]);
+                    $item['view_url'] = $this->router->generate('view_doc', ['id' => $pj_id]);
 
                     switch ($mode) {
                         case 'icon':
@@ -124,7 +120,7 @@ class UploadFiles
                             $item['preview_url'] = $url;
                             break;
                         case 'thumbnail':
-                            $item['preview_url'] = $this->router->generate('raw_pj', ['id' => $pj_id, 'pjs' => $table]);
+                            $item['preview_url'] = $this->router->generate('raw_doc', ['id' => $pj_id]);
                             break;
                     }
                     $initial_datas[] = $item;

@@ -340,12 +340,12 @@
 	{% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
 	{% set label_class = args.label_class is defined ? args.label_class : "" %}
 	{% set class = (args.class is defined ? args.class : "") ~ " drop-area" %}
-	{% set disabled = args.disabled is defined ? args.disabled|bool : false %}
+    {% set disabled = args.disabled is defined ? args.disabled|bool : false %}
+
 	{% set accept = field.vars.attr.accept is defined ? field.vars.attr.accept : "" %}
 	{% set accept = args.accept is defined ? args.accept : accept %}
 	{% set multiple = field.vars.attr.multiple is defined ? field.vars.attr.multiple : false %}
 	{% set multiple = args.multiple is defined ? args.multiple : multiple %}
-
 	{% set progressbar = field.vars.attr.progressbar is defined ? field.vars.attr.progressbar : false %}
 	{% set progressbar = args.progressbar is defined ? args.progressbar : progressbar %}
 	{% set gallery = field.vars.attr.gallery is defined ? field.vars.attr.gallery : false %}
@@ -388,7 +388,6 @@
 		{% if disabled %} disabled="disabled" {% endif %}
 	{% endset %}
 
-{#
 	<div id="{{ field.vars.id }}-drop-area" class="{{ class }}">
         <input type="file" id="{{ field.vars.id }}" name="{{ field.vars.id }}"
             {{ attributes|raw }}
@@ -401,34 +400,6 @@
 		    <div id="{{ field.vars.id }}-gallery" class="gallery"></div>
 	    {% endif %}
     </div>
-#}
-
-    <div id="{{ field.vars.id }}-drop-area" class="{{ class }}">
-        <div class="drop_file_zone" ondrop="upload_file(event)" ondragover="return false">
-            <div class="drag_upload_file">
-                {% if placeholder|length > 0 %}
-                        <p>{{ placeholder }}</p>
-                        <p>ou</p>
-                {% elseif label|length > 0 %}
-                    <label class="{{ label_class }}" for="{{ field.vars.id }}">{{ label }}</label>
-                {% endif %}
-                <p>
-                    <input type="button" value="Choisissez un fichier"
-                                onclick="file_explorer('{{ field.vars.id }}-drop-area');"/>
-                </p>
-                <input type="file" id="{{ field.vars.id }}" name="{{ field.vars.id }}" class="selectFile"
-                        {{ attributes|raw }}/>
-            </div>
-        </div>
-        {% if progressbar %}
-            <progress id="{{ field.vars.id }}progress-bar" class="progress" max="100" value="0"></progress>
-        {% endif %}
-        {% if gallery %}
-            <div id="{{ field.vars.id }}-gallery" class="gallery"></div>
-        {% endif %}
-
-    </div>
-
 {% endmacro %}
 
 {# macro hidden : input[type=hidden] #}

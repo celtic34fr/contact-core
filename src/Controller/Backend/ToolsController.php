@@ -26,7 +26,7 @@ class ToolsController extends AbstractController
     {
     }
 
-    #[Route('/visu_doc/{id}', name: 'visu_doc')]
+    #[Route('/view_doc/{id}', name: 'view_doc')]
     public function view_pj(int $id): Response
     {
         /** @var PieceJointe $pieceJointe */
