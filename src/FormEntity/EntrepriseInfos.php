@@ -2,6 +2,7 @@
 
 namespace Celtic34fr\ContactCore\FormEntity;
 
+use libphonenumber\PhoneNumber;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,7 +13,7 @@ class EntrepriseInfos
     private ?string $siren = null;
     private ?string $siret = null;
     private ?string $courriel = null;
-    private ?string $telephone = null;
+    private ?PhoneNumber $telephone = null;
     private ?string $reponse = null;
     private ?int $logoID = null;
 
@@ -37,13 +38,6 @@ class EntrepriseInfos
         $this->courriel = $parameters['courriel'] ?? "";
         $this->telephone = $parameters['telephone'] ?? "";
         $this->reponse = $parameters['reponse'] ?? "";
-
-        /** Traitement de la question du logo */
-        if (array_key_exists('logo', $parameters) && !empty($parameters['logo'])) {
-            $logo = $parameters['logo'];
-            $this->logo_mime = $logo['mime'];
-            $this->logo_content = $logo['content'];
-        }
 
         /* TODO : à revoir
         if (array_key_exists('logo', $parameters) && is_string($parameters['logo'])) {
