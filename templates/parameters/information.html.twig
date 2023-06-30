@@ -64,7 +64,9 @@
 			<pre>
 				{{ dump(form.logo) }}
 			</pre>
-			{{ fields.dragNDrop(form.logo, {}) }}
+			{{ fields.dragNDrop(form.logo, {
+				'label': 'Déposez-Glissez votre logo',
+			}) }}
 
 			{#
 			{{ fields.dragNDrop(form.logo, {
