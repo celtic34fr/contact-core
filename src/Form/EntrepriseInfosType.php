@@ -3,13 +3,14 @@
 namespace Celtic34fr\ContactCore\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class EntrepriseInfosType extends AbstractType
 {
@@ -37,7 +38,7 @@ class EntrepriseInfosType extends AbstractType
             'label' => 'Votre adresse Courriel de réponse',
             'required' => false,
         ])
-        ->add('telephone', TextType::class, [
+        ->add('telephone', PhoneNumberType::class, [
             'label' => "Son téléphone (stardard d'accueil)",
             'required' => true,
         ])
