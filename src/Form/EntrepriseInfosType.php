@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
+use Celtic34fr\ContactCore\Validator\Constraint\FrenchPhoneNumber;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -40,6 +41,9 @@ class EntrepriseInfosType extends AbstractType
         ->add('telephone', TextType::class, [
             'label' => "Son téléphone (stardard d'accueil)",
             'required' => true,
+            'constraints' => [
+                new FrenchPhoneNumber(['country' => 'FR']),
+            ]
         ])
         ->add('logo', FileType::class, [
             'required' => false,
