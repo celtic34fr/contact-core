@@ -29,7 +29,7 @@ class CliInfos
 
     public function __construct()
     {
-        $this->telephone = (PhoneNumberUtil::getInstance())->parse("")
+        $this->telephone = (PhoneNumberUtil::getInstance())->parse("");
     }
 
     public function getId(): ?int
