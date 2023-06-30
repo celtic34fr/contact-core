@@ -14,15 +14,7 @@ class EntrepriseInfos
     private ?string $courriel = null;
     private ?string $telephone = null;
     private ?string $reponse = null;
-    private ?string $logo_mime = null;
-    private ?string $logo_content = null;
-
-    #[Assert\File(
-        maxSize: '4096k',
-        extensions: ['png', 'gif', 'jpg', 'jpeg', 'svg'],
-        extensionsMessage: 'Veuillez choisir une image comme logo'
-    )]
-    private ?File $logo = null;
+    private ?int $logoID = null;
 
 
     public function __construct(array $parameters = null)
@@ -187,60 +179,21 @@ class EntrepriseInfos
     }
 
     /**
-     * Get the value of logo
+     * Get the value of logoID
      */ 
-    public function getLogo()
+    public function getLogoID()
     {
-        return $this->logo;
+        return $this->logoID;
     }
 
     /**
-     * Set the value of logo
+     * Set the value of logoID
      *
      * @return  self
      */ 
-    public function setLogo($logo)
+    public function setLogoID($logoID)
     {
-        $this->logo = $logo;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of logo_mime
-     */ 
-    public function getLogoMime(): ?string
-    {
-        return $this->logo_mime;
-    }
-
-    /**
-     * Set the value of logo_mime
-     *
-     * @return  EntrepriseInfos
-     */ 
-    public function setLogoMime(string $logo_mime): self
-    {
-        $this->logo_mime = $logo_mime;
-        return $this;
-    }
-
-    /**
-     * Get the value of logo_content
-     */ 
-    public function getLogoContent(): ?string
-    {
-        return $this->logo_content;
-    }
-
-    /**
-     * Set the value of logo_content
-     *
-     * @return  EntrepriseInfos
-     */ 
-    public function setLogoContent($logo_content):self
-    {
-        $this->logo_content = $logo_content;
+        $this->logoID = $logoID;
         return $this;
     }
 }

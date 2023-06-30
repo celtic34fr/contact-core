@@ -62,8 +62,9 @@
 			}) }}
 			{{ fields.dragNDrop(form.logo, {
 				'label': 'Déposez-Glissez votre logo','maxFiles': 1,
-				'accept': ".png,.gif,.jpg,.jpeg,.svg",'url': '{{ path("upload-logo") }}',
-				'maxSize': '4096k', 'removeBtn': true, 'viewxBtn': true, 'hidden_name': form.logo.vars.id~'logo',
+				'accept': ".png,.gif,.jpg,.jpeg,.svg",'url': path("upload-logo"),
+				'maxSize': '4096k', 'removeBtn': true, 'viewxBtn': true, 'hidden_name': 'logoID',
+				'initial_data': logoDB
 			}) }}
 
 			{#

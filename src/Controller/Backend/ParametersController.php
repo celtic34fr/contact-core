@@ -73,7 +73,7 @@ class ParametersController extends AbstractController
             if ($logo) {
                 list($errors, $item) = $this->uploadFiles->prepare_initial_datas([$logo->getId()], 'thumbnail');
             }
-            $entreprise['logo'] = $item;
+            $logoDB = (empty($errors)) ? $item : [];
 
             $entrepriseInfos = new EntrepriseInfos();
             $entrepriseInfos->setByArray($entreprise);
@@ -107,6 +107,7 @@ class ParametersController extends AbstractController
             $response =
                 $this->render('@contact-core/parameters/information.html.twig', [
                     'form' => $form->createView(),
+                    'logoDB' => $logoDB,
                 ]);
         } else {
             throw new Exception("L'extension contact-core semble ne pas être installée, vérifiez votre configuration");
