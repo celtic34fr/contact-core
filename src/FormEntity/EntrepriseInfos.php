@@ -6,14 +6,17 @@ use libphonenumber\PhoneNumber;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Celtic34fr\ContactCore\Validator\Constraint as AppAssert;
 class EntrepriseInfos
 {
     private ?string $designation = null;
     private ?string $siren = null;
     private ?string $siret = null;
     private ?string $courriel = null;
+
+    #[AppAssert\PhoneNumber(['country' => 'FR'])]
     private ?string $telephone = null;
+
     private ?string $reponse = null;
     private ?int $logoID = null;
 

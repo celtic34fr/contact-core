@@ -6,7 +6,7 @@ use Exception;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class FrenchPhoneNumberValidator extends ConstraintValidator
+class PhoneNumberValidator extends ConstraintValidator
 {
     public function validate($phoneNumber, Constraint $constraint): void
     {
