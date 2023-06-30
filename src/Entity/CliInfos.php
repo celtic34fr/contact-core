@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Celtic34fr\ContactCore\Repository\CliInfosRepository;
 use Doctrine\DBAL\Types\TextType;
+use Celtic34fr\ContactCore\Validator\Constraint as AppAssert;
 
 #[ORM\Entity(repositoryClass: CliInfosRepository::class)]
 class CliInfos
@@ -21,6 +22,7 @@ class CliInfos
     private ?string $prenom = null;     // pénom de l'internaute
 
     #[ORM\Column(type: TextType::class, nullable: false)]
+    #[AppAssert\FrenchPhoneNumber(country:'FR')]
     private ?string $telephone;  // numéro de téléphone
 
     #[ORM\ManyToOne(inversedBy: 'cliInfos')]
