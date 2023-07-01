@@ -4,14 +4,18 @@ namespace Celtic34fr\ContactCore\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Celtic34fr\ContactCore\Service\TntEngine;
+use Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
+use TeamTNT\TNTSearch\Indexer\TNTIndexer;
 
 /** Classe permettant la mise en oeuvre de l'outil TNTSearch à partir de la class TntEngine */
 class IndexGenerator
 {
     private Connection $connexion;
 
-    public function __construct(private TntEngine $engine, private EntityManagerInterface $em)
+    public function __construct(private TntEngine $engine, private EntityManagerInterface $em,
+        private ConnectionConfig $connectionConfig)
     {
         $this->engine = $engine;
         $this->em = $em;
@@ -49,9 +53,7 @@ class IndexGenerator
     public function update(string $query, string $index, array $ids): void
     {
         if ($ids && is_array($ids)) {
-            $tnt = $this->engine->get();
-            $tnt->selectIndex("$index.index");
-            $index = $tnt->getIndex();
+            $index = $this->isExistOrCreateIndex($index, $query);
 
             foreach ($ids as $item) {
                 $result = [];
@@ -88,15 +90,13 @@ class IndexGenerator
      *                                  i       pour insertion
      *                                  u       pour mise à jour
      *                                  d       pour suppression
+     * @param string $query Sql pour insertion dans l'index
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function updateByArray(string $index, array $entity, string $operation): void
+    public function updateByArray(string $index, array $entity, string $operation, string $query): void
     {
-        $tnt = $this->engine->get();
-        $tnt->selectIndex("$index.index");
-        $index = $tnt->getIndex();
+        $index = $this->isExistOrCreateIndex($index, $query);
         $operation = substr($operation, 0, 1);
-
         switch($operation) {
             case 'i':
                 $index->insert($entity);
@@ -108,5 +108,18 @@ class IndexGenerator
                 $index->insert($entity['id']);
                 break;
             }
+    }
+
+    private function isExistOrCreateIndex(string $indexName, string $query): TNTIndexer
+    {
+        $tnt = $this->engine->get();
+        $config = $this->connectionConfig->getConfig();
+        $fileName = $config['storage'] . "/$indexName.index";
+        $filesystem = new Filesystem();
+        if (!$filesystem->exists($fileName)) {
+            $this->generate($query, $indexName);
+        }
+        $tnt->selectIndex("$indexName.index");
+        return $tnt->getIndex();
     }
 }
