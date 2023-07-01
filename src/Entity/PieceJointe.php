@@ -6,7 +6,6 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\BlobType;
 use Doctrine\DBAL\Types\TextType;
-use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\PieceJointeRepository;
@@ -32,7 +31,7 @@ class PieceJointe
     #[ORM\Column(type: DateTimeImmutableType::class, nullable: true)]
     private ?DateTimeImmutable $created_at = null; // date de création
 
-    #[ORM\Column(type: BooleanType::class, nullable: true)]
+    #[ORM\Column('bool', nullable: true)]
     private ?bool $tempo = null;                    // flag indiquant si le fichier est à garder (false) ou non (true)
 
     #[ORM\Column(type: TextType::class, nullable: true)]
