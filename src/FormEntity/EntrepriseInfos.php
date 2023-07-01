@@ -9,10 +9,7 @@ class EntrepriseInfos
     private ?string $siren = null;
     private ?string $siret = null;
     private ?string $courriel = null;
-
-    #[AppAssert\PhoneNumber(['country' => 'FR'])]
     private ?string $telephone = null;
-
     private ?string $reponse = null;
     private ?int $logoID = null;
 
@@ -37,16 +34,7 @@ class EntrepriseInfos
         $this->courriel = $parameters['courriel'] ?? "";
         $this->telephone = $parameters['telephone'] ?? "";
         $this->reponse = $parameters['reponse'] ?? "";
-
-        /* TODO : à revoir
-        if (array_key_exists('logo', $parameters) && is_string($parameters['logo'])) {
-            $filesystem = new Filesystem();
-            $projectDir = $this->getContainer()->getParameter('kernel.project_dir');
-        } else {
-            $this->logo = null;
-        }
-        */
-
+        $this->logoID = $parameters['logoID'] ?? null;
         return $this;
     }
 

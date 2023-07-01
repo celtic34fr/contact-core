@@ -77,6 +77,7 @@ class ParametersController extends AbstractController
             $item = [];
             if ($logo) {
                 list($errors, $item) = $this->uploadFiles->prepare_initial_datas([$logo->getId()], 'thumbnail');
+                $entreprise['logoID'] = $logo->getId();
             }
             $logoDB = (empty($errors)) ? $item : [];
 
@@ -101,6 +102,7 @@ class ParametersController extends AbstractController
                     /** @var PieceJointe $logo */
                     $logo->setTempo(false);
                     $this->pieceJointeRepo->save($logo, true);
+                    $yaml['entreprise']['LogoID'] = $logo->getId();
                 }
 
                 $new_yaml = Yaml::dump($yaml, 2);
