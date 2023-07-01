@@ -30,17 +30,18 @@ class ParametersController extends AbstractController
 
     private $schemaManager;
     private ExtensionConfig $extConfig;
+    private PieceJointeRepository $pieceJointeRepo;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Environment $twigEnvironment,
-        private PieceJointeRepository $pieceJointeRepo,
         private UploadFiles $uploadFiles,
         private KernelInterface $kernel,
         private Config $config
     ) {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
         $this->extConfig = new ExtensionConfig($this->kernel, $this->config);
+        $this->pieceJointeRepo = $entityManager->getRepository(PieceJointe::class);
     }
 
     #[Route('/informations', name: 'info-structure')]
