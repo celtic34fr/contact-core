@@ -3,10 +3,8 @@
 namespace Celtic34fr\ContactCore\Entity;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\DBAL\Types\BlobType;
-use Doctrine\DBAL\Types\TextType;
-use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\PieceJointeRepository;
 
@@ -19,25 +17,25 @@ class PieceJointe
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: TextType::class, length: 255, nullable: false)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
     private string $file_name;                      // nom du fichier origine
 
-    #[ORM\Column(type: TextType::class, length: 255, nullable: false)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
     private string $file_mime;                      // type de fichier
 
-    #[ORM\Column(type: BlobType::class)]
+    #[ORM\Column(type: Types::BLOB)]
     private $file_content = null;                   // contenu proprement dit du fichier
 
-    #[ORM\Column(type: DateTimeImmutableType::class, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $created_at = null; // date de création
 
-    #[ORM\Column('bool', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $tempo = null;                    // flag indiquant si le fichier est à garder (false) ou non (true)
 
-    #[ORM\Column(type: TextType::class, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $utility = null;                // utilité de la pièce jointe : logo entreprise, image pour courriel ....
 
-    #[ORM\Column(type: TextType::class, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
     private ?string $file_size = null;                   // taille de la pièce jointe format normalisé
 
     /** 

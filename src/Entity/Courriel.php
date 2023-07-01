@@ -4,13 +4,10 @@ namespace Celtic34fr\ContactCore\Entity;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\DBAL\Types\TextType;
-use Doctrine\DBAL\Types\ArrayType;
-use Doctrine\DBAL\Types\IntegerType;
 use Celtic34fr\ContactCore\Enum\CourrielEnums;
-use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Repository\CourrielRepository;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: CourrielRepository::class)]
 #[ORM\Table(name:'courriels')]
@@ -21,35 +18,35 @@ class Courriel
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: TextType::class, length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     private ?string $sujet = null;                      // sujet donné par l'internaute
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?CliInfos $destinataire = null;             // lien à l'internaute (info non fixe)
 
-    #[ORM\Column(type: ArrayType::class)]
+    #[ORM\Column(type: Types::ARRAY)]
     private array $context_courriel = [];               // variables pour génération du courriel
 
-    #[ORM\Column(type: TextType::class, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
     private ?string $template_courriel = null;          // modèle de rendu à utiliser
 
-    #[ORM\Column(type: DateTimeImmutableType::class, nullable: false)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private ?DateTimeImmutable $created_at = null;     // date de création
 
-    #[ORM\Column(type: DateTimeImmutableType::class, nullable: true)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $send_at = null;        // date d'envoi
 
-    #[ORM\Column(type: IntegerType::class)]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $send_times = null;                    // nombre d'envoi total
 
-    #[ORM\Column(type: TextType::class, nullable: false)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
     private ?string $send_status = null;                // statut d'envoi du courriel, cf Enum\StatusCourrielEnums
 
-    #[ORM\Column(type: ArrayType::class, nullable: true)]
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private array $pieces_jointes = [];                 // ensble des pièces jointes (table PiecesJointes)
 
-    #[ORM\Column(type: TextType::class, nullable: false)]
+    #[ORM\Column(type: TypeS::TEXT, nullable: false)]
     private ?string $nature = null;                     // nature, type de courriel, cf Enum\CourrielEnumes
 
     public function getId(): ?int

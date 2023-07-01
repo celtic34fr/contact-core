@@ -3,9 +3,8 @@
 namespace Celtic34fr\ContactCore\Entity;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\DBAL\Types\TextType;
-use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Celtic34fr\ContactCore\Repository\SuiviRepository;
 
 #[ORM\Entity(repositoryClass: SuiviRepository::class)]
@@ -17,10 +16,10 @@ class Suivi
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: DateTimeImmutableType::class)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?DateTimeImmutable $evt_at = null;
 
-    #[ORM\Column(type: TextType::class, length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     private ?string $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]

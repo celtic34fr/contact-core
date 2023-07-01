@@ -2,7 +2,6 @@
 
 namespace Celtic34fr\ContactCore\FormEntity;
 
-use Celtic34fr\ContactCore\Validator\Constraint as AppAssert;
 class EntrepriseInfos
 {
     private ?string $designation = null;
