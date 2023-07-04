@@ -178,7 +178,7 @@ class ParametersController extends AbstractController
             "edt" => "Edition de la liste de paramètre $cle",
         ];
 
-        return $this->render("@contact-rdv/parameters/form.html.twig", [
+        return $this->render("@contact-core/parameters/form.html.twig", [
                 'cle' => $cle,
                 'title' => $title[$mode],
         ]);
