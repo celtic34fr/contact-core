@@ -1,0 +1,47 @@
+{% extends '@contact-core/layout_backend.html.twig' %}
+
+{% block shoulder %}
+	{{ "Paramétrages" }}
+{% endblock shoulder %}
+
+{% block title %}
+	<i class="fas mr-2 link--icon fa-building"></i>
+    Mes Listes de Parameters
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{% endblock %}
+
+{% block main %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Créée le</th>
+                <th>Valeurs</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paramList in paramsList %}
+                <tr>
+                    <td>{{ paramList.name }}</td>
+                    <td>{{ paramList.description }}</td>
+                    <td>{{ paramList.created_at|date("d/m/Y") }}</td>
+                    <td>{{ paramList.count }}</td>
+                    <td></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">Pas de liste de paramètres en base</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

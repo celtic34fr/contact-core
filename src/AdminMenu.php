@@ -61,6 +61,17 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
+        $configurationItems['Mes Listes de Parameters'] = [
+            'type' => 'smenu',
+            'parent' => "Paramètres",
+            'item' => [
+                'uri' => $this->urlGenerator->generate('params-list'),
+                'extras' => [
+                    'icon' => 'fa-building',
+                    'group' => 'Contact',
+                ]
+            ]
+        ];
         $menuContacts = $this->addMenu($configurationItems, $menuContacts);
 
         $utilitairesItems = [];

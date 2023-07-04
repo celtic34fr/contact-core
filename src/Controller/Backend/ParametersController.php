@@ -6,6 +6,7 @@ use Exception;
 use Bolt\Entity\User;
 use Twig\Environment;
 use Bolt\Configuration\Config;
+use Celtic34fr\ContactCore\Entity\Parameter;
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\ORM\EntityManagerInterface;
 use Celtic34fr\ContactCore\Traits\Utilities;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
+use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -31,6 +33,7 @@ class ParametersController extends AbstractController
     private $schemaManager;
     private ExtensionConfig $extConfig;
     private PieceJointeRepository $pieceJointeRepo;
+    private ParameterRepository $parameterRepo;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -42,13 +45,14 @@ class ParametersController extends AbstractController
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
         $this->extConfig = new ExtensionConfig($this->kernel, $this->config);
         $this->pieceJointeRepo = $entityManager->getRepository(PieceJointe::class);
+        $this->parameterRepo = $entityManager->getRepository(Parameter::class);
     }
 
-    #[Route('/informations', name: 'info-structure')]
     /**
      * interface pour afficher les requêtes adressées par les internautes
      * @throws Exception
      */
+    #[Route('/informations', name: 'info-structure')]
     public function index(Request $request): Response
     {
         if ($this->extConfig->isExtnsionInstall("contactcore")) {
@@ -132,6 +136,16 @@ class ParametersController extends AbstractController
         $owner = $this->getUser();
         return $this->uploadFiles->uploadFile(
             $request, [".png",".gif",".jpg",".jpeg",".svg"], [], UtilitiesPJEnums::Logo->_toString(), $owner);
+    }
+
+    #[Route('/params_list', name: 'params-list')]
+    public function params_list()
+    {
+        $paramsList = $this->parameterRepo->getNameParametersList();
+
+        $this->render('@contact-core/parameters/params_list.html.twig', [
+            'paramsList' => $paramsList,
+        ]);
     }
 
     /**
