@@ -55,7 +55,7 @@ class ParameterRepository extends ServiceEntityRepository
             ];
             $qb = $this->createQueryBuilder('p')
                 ->where('p.cle = :name')
-                ->setParameter('name', $name)
+                ->setParameter('name', $item->getCle())
                 ->getQuery();
             $occur['valeurs'] = $qb->getResult()->count();
             $nameList[(int) $item->getOrd() - 1] = $occur;
@@ -69,7 +69,8 @@ class ParameterRepository extends ServiceEntityRepository
         $rslt = $this->findBy(['cle' => $name], ['ord' => 'ASC']);
         if (!$rslt) return [];
         foreach ($rslt as $item) {
-            $paramList[(int) $item->getOrd() - 1] = $item->getValeur();
+            if ((int) $item->getOrd() > 9)
+                $paramList[(int) $item->getOrd() - 1] = $item->getValeur();
         }
         return $paramList;
     }

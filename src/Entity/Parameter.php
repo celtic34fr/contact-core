@@ -9,6 +9,7 @@ use DateTimeImmutable;
 
 #[ORM\Entity(repositoryClass: ParameterRepository::class)]
 #[ORM\Table(name: 'parameters')]
+#[ORM\HasLifecycleCallbacks]
 class Parameter
 {
     #[ORM\Id]
