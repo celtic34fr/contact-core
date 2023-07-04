@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use Celtic34fr\ContactCore\PieceJointeRepository;
+use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 
 #[ORM\Entity(repositoryClass: PieceJointeRepository::class)]
 #[ORM\Table(name:'pieces_jointes')]
