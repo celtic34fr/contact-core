@@ -4,19 +4,6 @@ namespace Celtic34fr\ContactCore\Traits;
 
 trait ParametersEntityTrait
 {
-    const HEADER = [
-        'name', 'backgroudColor', 'borderColor', 'textColor'
-    ];
-    const PARAM_CLE = "calNature";
-
-    private ParameterRepository $repository;
-
-    public function __construct(private LifecycleEventArgs $events)
-    {
-        parent::__construct();
-        $this->repository = $events->getObjectManager()->getRepository(Parameter::class);
-    }
-
     public function getValues(): array
     {
         $datas = explode("|", $this->getValeur());

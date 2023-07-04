@@ -8,6 +8,19 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 class ParamsCalNature extends Parameter
 {
+    const HEADER = [
+        'name', 'backgroudColor', 'borderColor', 'textColor'
+    ];
+    const PARAM_CLE = "calNature";
+
+    private ParameterRepository $repository;
+
+    public function __construct(private LifecycleEventArgs $events)
+    {
+        parent::__construct();
+        $this->repository = $events->getObjectManager()->getRepository(Parameter::class);
+    }
+
     use ParametersEntityTrait;
 
     public function getName(): mixed
