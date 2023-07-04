@@ -30,6 +30,8 @@ class ParametersController extends AbstractController
 {
     use Utilities;
 
+    const newEditAction = __CLASS__ . '::newEditAction';
+
     private $schemaManager;
     private ExtensionConfig $extConfig;
     private PieceJointeRepository $pieceJointeRepo;
@@ -145,6 +147,40 @@ class ParametersController extends AbstractController
 
         return $this->render('@contact-core/parameters/params_list.html.twig', [
             'paramsList' => $paramsList,
+        ]);
+    }
+
+    #[Route('/new_params_list', name: 'new-params-list')]
+    public function new_params_list(Request $request)
+    {
+        $paramList = [];
+        $mode = "new";
+        $cle = "";
+        $args = compact('mode', 'cle', 'paramList');
+        return $this->forward(self::newEditAction, $args);
+    }
+
+    #[Route('/edit_params_list/{id}', name: 'edit-params-list')]
+    public function edit_params_list(Request $request, Parameter $paramTitre)
+    {
+        $paramList = $this->parameterRepo->getParamtersList($paramTitre->getCle());
+        $mode = "edt";
+        $cle = $paramTitre->getCle();
+        $args = compact('mode', 'cle', 'paramList');
+        return $this->forward(self::newEditAction, $args);
+    }
+
+    public function newEditAction(Request $request, string $mode, string $cle, array $paramList)
+    {
+        $paramTitre = $this->parameterRepo->findOneBy(['cle' => $cle]);
+        $title = [
+            'new'   => "Créaztion d'une liste de paramètres",
+            "edt" => "Edition de la liste de paramètre $cle",
+        ];
+
+        return $this->render("@contact-rdv/parameters/form.html.twig", [
+                'cle' => $cle,
+                'title' => $title[$mode],
         ]);
     }
 
