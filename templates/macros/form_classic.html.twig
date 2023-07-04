@@ -117,6 +117,23 @@
             {{ attributes|raw }}>
 {% endmacro %}
 
+{% macro cancelbtn(name, label="", args= {}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+    {% set event = args.event is defined ? args.event : "" %}
+    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+
+    {% set attributes %}
+        {% if class|length %} class="{{ class }}" {% endif %}
+        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+            {{ event }}="{{ codeJS }}"
+        {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+    <input id="{{ name }}" name="{{ name }}" type="reset" value="{{ label }}" {{ attributes|raw }}>
+{% endmacro %}
+
 {# macro btn Bouton pouvant avoir un évènement intégré #}
 {# - name           : nom et identifiant #}
 {# - label          : label ou libellé à afficher dans le bouton #}
