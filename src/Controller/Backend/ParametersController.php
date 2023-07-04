@@ -143,7 +143,7 @@ class ParametersController extends AbstractController
     {
         $paramsList = $this->parameterRepo->getNameParametersList();
 
-        $this->render('@contact-core/parameters/params_list.html.twig', [
+        return $this->render('@contact-core/parameters/params_list.html.twig', [
             'paramsList' => $paramsList,
         ]);
     }
