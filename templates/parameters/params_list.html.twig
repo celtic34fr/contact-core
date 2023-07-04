@@ -14,17 +14,17 @@
 {% endblock %}
 
 {% block main %}
-    <table>
+    <table class="table table-striped table-bordered border-primary">
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Description</th>
-                <th>Créée le</th>
-                <th>Valeurs</th>
-                <th>Actions</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Description</th>
+                <th scope="col">Créée le</th>
+                <th scope="col">Valeurs</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-group-divider"></tbody>
             {% for paramList in paramsList %}
                 <tr>
                     <td>{{ paramList.name }}</td>
