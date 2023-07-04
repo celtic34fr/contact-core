@@ -2,8 +2,12 @@
 
 namespace Celtic34fr\ContactCore\Enum;
 
+use Celtic34fr\ContactCore\Traits\EnumToArray;
+
 enum CourrielEnums: string
 {
+    use EnumToArray;
+
     case Contact = 'QR';    // demande d'informations
 
     public function _toString(): string
@@ -15,17 +19,5 @@ enum CourrielEnums: string
     {
         $courrielValuesTab = array_column(self::cases(), 'value');
         return in_array($value, $courrielValuesTab);
-    }
-
-    public static function getCases(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->name, $cases);
-    }
-
-    public static function getValues(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->value, $cases);
     }
 }

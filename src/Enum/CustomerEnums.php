@@ -2,8 +2,12 @@
 
 namespace Celtic34fr\ContactCore\Enum;
 
+use Celtic34fr\ContactCore\Traits\EnumToArray;
+
 enum CustomerEnums: string
 {
+    use EnumToArray;
+
     case Client     = 'CL';  // client
     case Prospect   = 'PP';  // prospect
 
@@ -16,17 +20,5 @@ enum CustomerEnums: string
     {
         $courrielValuesTab = array_column(self::cases(), 'value');
         return in_array($value, $courrielValuesTab);
-    }
-
-    public static function getCases(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->name, $cases);
-    }
-
-    public static function getValues(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->value, $cases);
     }
 }

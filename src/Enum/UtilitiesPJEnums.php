@@ -2,8 +2,12 @@
 
 namespace Celtic34fr\ContactCore\Enum;
 
+use Celtic34fr\ContactCore\Traits\EnumToArray;
+
 enum UtilitiesPJEnums: string
 {
+    use EnumToArray;
+
     case Logo = 'LG';       // logo d'entreprise
     case Courriel = 'CR';   // pour un courriel
 
@@ -17,17 +21,5 @@ enum UtilitiesPJEnums: string
     {
         $utilitiesValuesTab = array_column(self::cases(), 'value');
         return in_array($value, $utilitiesValuesTab);
-    }
-
-    public static function getCases(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->name, $cases);
-    }
-
-    public static function getValues(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->value, $cases);
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Celtic34fr\ContactCore\Enum;
 
+use Celtic34fr\ContactCore\Traits\EnumToArray;
+
 enum StatusCourrielEnums: string
 {
+    use EnumToArray;
+
     case Send       = 'SD'; // envoyé
     case Error      = 'ER'; // en erreur
     case Created    = 'CD'; // généré
@@ -17,17 +21,5 @@ enum StatusCourrielEnums: string
     {
         $courrielValuesTab = array_column(self::cases(), 'value');
         return in_array($value, $courrielValuesTab);
-    }
-
-    public static function getCases(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->name, $cases);
-    }
-
-    public static function getValues(): array
-    {
-        $cases = self::cases();
-        return array_map(static fn (\UnitEnum $case) => $case->value, $cases);
     }
 }
