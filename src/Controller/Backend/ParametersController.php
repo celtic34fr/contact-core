@@ -3,10 +3,8 @@
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
 use Exception;
-use Bolt\Entity\User;
 use Twig\Environment;
 use Bolt\Configuration\Config;
-use Bolt\Utils\Excerpt;
 use Celtic34fr\ContactCore\Entity\Parameter;
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\ORM\EntityManagerInterface;
