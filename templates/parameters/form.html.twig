@@ -16,8 +16,12 @@
 
 {% block main %}
 	{{ form_start(form, {'action': path('info-structure'), 'method': 'POST'}) }}
-		{{ fields.field(form.name) }}
-		{{ fields.field(form.description) }}
+		{{ fields.field(form.name, "", {
+			'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.name.vars.value}
+		}) }}
+		{{ fields.field(form.description, "", {
+			'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.description.vars.value}
+		}) }}
 
 		<ul>
 			{% for valueField in form.values %}
