@@ -192,6 +192,7 @@ class ParametersController extends AbstractController
     {
         $errMsgs = [];
         $paramTitre = $this->parameterRepo->findOneBy(['cle' => $cle]);
+        $paramDescription = null;
 
         /** double contrôle pour accès direct même si peu probable */
         $parameterList = new ParameterFE();
