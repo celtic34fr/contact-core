@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block main %}
-	{{ form_start(form, {'action': path('info-structure'), 'method': 'POST') }}
+	{{ form_start(form, {'action': path('info-structure'), 'method': 'POST'}) }}
 		{{ fields.field(form.name) }}
 		{{ fields.field(form.description) }}
 
