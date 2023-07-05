@@ -42,6 +42,7 @@ class ParameterType extends AbstractType
             ],
         ])
         ->add('values', CollectionType::class, [
+            'label' => 'Liste des valeurs',
             'entry_type' => TextType::class,
             'allow_add' => true,
             'allow_delete' => true,

@@ -25,6 +25,8 @@
 			'class': 'col-12 my-3',
 		}) }}
 
+		{{ form_label(form.emails) }}
+		{{ form_errors(form.emails) }}
 		<ul>
 			{% for valueField in form.values %}
 				<li>
