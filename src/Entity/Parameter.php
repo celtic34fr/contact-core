@@ -17,7 +17,7 @@ class Parameter
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 16)]
     private string $cle;
 
     #[ORM\Column(type: Types::INTEGER)]
@@ -27,11 +27,14 @@ class Parameter
     private string $valeur;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
-    private DateTimeImmutable $create_at;
+    private DateTimeImmutable $created_at;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    private DateTimeImmutable $updated_at;
 
     public function __construct()
     {
-        $this->create_at = new DateTimeImmutable('now');        
+        $this->created_at = new DateTimeImmutable('now');        
     }
 
     /**
@@ -97,20 +100,38 @@ class Parameter
     }
 
     /**
-     * Get the value of create_at
+     * Get the value of created_at
      */ 
-    public function getCreate_at(): DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
-        return $this->create_at;
+        return $this->created_at;
     }
 
     /**
-     * Set the value of create_at
+     * Set the value of created_at
      * @return  self
      */ 
-    public function setCreate_at(DateTimeImmutable $create_at): self
+    public function setCreatedAt(DateTimeImmutable $created_at): self
     {
-        $this->create_at = $create_at;
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    /**
+     * Get the value of updated_at
+     */
+    public function getUpdatedAt(): DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Set the value of updated_at
+     * @return  self
+     */
+    public function setUpdatedAt(DateTimeImmutable $updated_at): self
+    {
+        $this->updated_at = $updated_at;
         return $this;
     }
 }

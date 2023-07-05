@@ -1,4 +1,5 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
+{% import '@contact-core/macros/form_type.html.twig' as fields %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -14,6 +15,23 @@
 {% endblock %}
 
 {% block main %}
+	{{ form_start(form, {'action': path('info-structure'), 'method': 'POST') }}
+		{{ fields.field(form.name) }}
+		{{ fields.field(form.description) }}
+
+		<ul>
+			{% for valueField in form.values %}
+				<li>
+					{{ form_errors(valueField) }}
+					{{ form_widget(valueField) }}
+				</li>
+			{% endfor %}
+		</ul>
+
+	{{ form_end(form, {render_rest: false}) }}
+	<div class="col-12 mt-2 text-right text-gray-600 px-0 mx-3">
+		* champs obligatoires
+	</div>
 {% endblock %}
 
 {% block javascripts %}

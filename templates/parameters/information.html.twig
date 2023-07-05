@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block main %}
+	{{ form_start(form, {'action': path('info-structure'), 'method': 'POST') }}
 		{{ form_row(form._token) }}
 		{% set errors = formErrors(form) %}
 		{% if errors|length %}

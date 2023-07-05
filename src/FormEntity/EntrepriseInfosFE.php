@@ -2,7 +2,7 @@
 
 namespace Celtic34fr\ContactCore\FormEntity;
 
-class EntrepriseInfos
+class EntrepriseInfosFE
 {
     private ?string $designation = null;
     private ?string $siren = null;

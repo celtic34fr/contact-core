@@ -6,6 +6,7 @@ use Exception;
 use Bolt\Entity\User;
 use Twig\Environment;
 use Bolt\Configuration\Config;
+use Bolt\Utils\Excerpt;
 use Celtic34fr\ContactCore\Entity\Parameter;
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,9 +21,12 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
-use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
+use Celtic34fr\ContactCore\Form\ParameterType;
+use Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
+use Celtic34fr\ContactCore\FormEntity\ParameterFE;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('parameters')]
@@ -88,7 +92,7 @@ class ParametersController extends AbstractController
             }
             $logoDB = (empty($errors)) ? $item : [];
 
-            $entrepriseInfos = new EntrepriseInfos();
+            $entrepriseInfos = new EntrepriseInfosFE();
             $entrepriseInfos->setByArray($entreprise);
             $form = $this->createForm(EntrepriseInfosType::class, $entrepriseInfos);
             $form->handleRequest($request);
@@ -156,31 +160,111 @@ class ParametersController extends AbstractController
         $paramList = [];
         $mode = "new";
         $cle = "";
+        
         $args = compact('mode', 'cle', 'paramList');
         return $this->forward(self::newEditAction, $args);
     }
 
     #[Route('/edit_params_list/{id}', name: 'edit-params-list')]
-    public function edit_params_list(Request $request, Parameter $paramTitre)
+    public function edit_params_list(Request $request, int $idx)
     {
-        $paramList = $this->parameterRepo->getParamtersList($paramTitre->getCle());
         $mode = "edt";
-        $cle = $paramTitre->getCle();
+        $cle = "";
+        $paramList = [];
+
+        if ((int) $idx < 1) {
+            $errMsgs[] = "PAramètre d'accès à la liste de valeur incompatible";
+        } else {
+            $paramTitre = $this->parameterRepo->find($idx);
+            if (!$paramTitre) {
+                $this->addFlash('error', "Liste de paramètres introuvable, traitement impossible");
+                $this->redirectToRoute("params-list");
+            } else {
+                $cle = $paramTitre->getCle();
+                $paramList = $this->parameterRepo->getParamtersList($paramTitre->getCle());
+            }
+        }
         $args = compact('mode', 'cle', 'paramList');
         return $this->forward(self::newEditAction, $args);
     }
 
-    public function newEditAction(Request $request, string $mode, string $cle, array $paramList)
+    public function newEditAction(Request $request, string $mode, string $cle = null, array $paramList = [])
     {
+        $errMsgs = [];
         $paramTitre = $this->parameterRepo->findOneBy(['cle' => $cle]);
-        $title = [
-            'new'   => "Créaztion d'une liste de paramètres",
-            "edt" => "Edition de la liste de paramètre $cle",
-        ];
+
+        /** double contrôle pour accès direct même si peu probable */
+        $parameterList = new ParameterFE();
+        if ($cle) {
+            $paramDescription = $this->parameterRepo->findOneBy(['cle' => $cle]);
+        }
+        if (!$cle && $paramList) {
+            $errMsgs[] = "Valeurs de liste sans description, traitement impossible";
+        }
+        if ($paramList && !is_array($paramList)) {
+            $errMsgs[] = "Liste de valeurs format imcompatible, traitement impossible";
+        }
+        switch($mode) {
+            case "new":
+                if ($paramDescription) {
+                    $errMsgs[] = "Liste de valeur $cle existe déjà, impossible d'en créer une ayant la même clé d'accès";
+                }
+                $title = "Création d'une liste de paramètres";
+                break;
+            case "edt":
+                if (!$paramDescription) {
+                    $errMsgs[] = "Demande de modification de la liste de valeur $cle qui n'est pas trouvée, traitement impossible";
+                }
+                $title = "Edition de la liste de paramètres $cle";
+                $parameterList->setName($cle);
+                $parameterList->setDescription($paramDescription->getValeur());
+                if ($paramList) {
+                    $parameterList->setValues($paramList);
+                }
+                break;
+            default:
+                $errMsgs[] = "$mode non prévue, traitement impossible";
+                break; 
+        }
+
+        $form = $this->createForm(ParameterType::class, $parameterList);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** traitement du formulaire pour création / mise à jour de liste de paramètres */
+            $formDatas = $form->getData();
+
+            /** traitement entête de descrition */
+            $paramDescription = $this->parameterRepo->findOneBy(['cle' => $formDatas['name']]);
+            if (!$paramDescription) {
+                $paramDescription = new Parameter();
+                $paramDescription->setCle($formDatas['name']);
+                $paramDescription->setOrd(0);
+                $paramDescription->setValeur($formDatas['description']);
+                $this->parameterRepo->save($paramDescription, false);
+            } else {
+                $paramDescription->setValeur($formDatas['description']);
+                $paramDescription->setUpdatedAt(new DateTimeImmutable('now'));
+            }
+
+            /** traitement des valeur dans la liste */
+            if (array_key_exists('values', $formDatas) && $formDatas['values']) {
+                foreach ($formDatas['values'] as $idx => $value) {
+                    $parameterOccur = new Parameter();
+                    $parameterOccur->setCle($paramDescription->getCle());
+                    $parameterOccur->setOrd($idx + 1);
+                    $parameterOccur->setValeur($value);
+                    $this->parameterRepo->save($parameterOccur, false);
+                }
+            }
+            $this->entityManager->flush();
+        }
 
         return $this->render("@contact-core/parameters/form.html.twig", [
-                'cle' => $cle,
-                'title' => $title[$mode],
+            'cle' => $cle,
+            'title' => $title,
+            'form' => $form->createView(),
+            'errMsgs' => $errMsgs,
         ]);
     }
 

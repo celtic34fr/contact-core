@@ -4,7 +4,7 @@ namespace Celtic34fr\ContactCore\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Celtic34fr\ContactCore\FormEntity\EntrepriseInfos;
+use Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -59,7 +59,7 @@ class EntrepriseInfosType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => EntrepriseInfos::class,
+            'data_class' => EntrepriseInfosFE::class,
         ]);
     }
 }

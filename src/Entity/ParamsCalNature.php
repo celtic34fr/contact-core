@@ -9,7 +9,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 class ParamsCalNature extends Parameter
 {
     const HEADER = [
-        'name', 'backgroudColor', 'borderColor', 'textColor'
+        'name', 'description', 'backgroudColor', 'borderColor', 'textColor'
     ];
     const PARAM_CLE = "calNature";
 
@@ -31,6 +31,16 @@ class ParamsCalNature extends Parameter
     public function setName(string $name): mixed
     {
         return $this->setItem('name', $name);
+    }
+
+    public function getDescription(): mixed
+    {
+        return $this->getItem('description');
+    }
+
+    public function setDescription(string $name): mixed
+    {
+        return $this->setItem('description', $name);
     }
 
     public function getBackgroundColor(): string
