@@ -69,6 +69,8 @@
 			btn.addEventListener("click", function (e) {
 				const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 				const item = document.createElement('li');
+				item.classList.add("col-12");
+				item.classList.add("row");
 				item.innerHTML = collectionHolder.dataset.prototype.replace(/__name/g, collectionHolder.dataset.index);
 				collectionHolder.appendChild(item);
 				collectionHolder.dataset.index ++;
