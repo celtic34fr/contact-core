@@ -53,4 +53,18 @@
 
 {% block javascripts %}
 	{{ parent() }}
+
+	<script>
+		const addFormToCollection = (e) => {
+			const collectionHolder = document.querySelector('.' + currentTarget.dataset.collectionHolderClass);
+			const item = document.createElement('li');
+			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name/g, collectionHolder.dataset.index);
+			collectionHolder.appendChild(item);
+			collectionHolder.dataset.index++;
+		}
+
+		document.querySelectorAll('.add_item_link').forEach(btn => {
+			btn.addEventListener("click", addFormtoCollection);
+		});
+	</script>
 {% endblock %}
