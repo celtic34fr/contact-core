@@ -28,14 +28,18 @@
 	<div class="col-12 row">
 		{{ form_label(form.values) }}
 		{{ form_errors(form.values) }}
-		<ul class="values" data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-10'}})|e('html_attr') }}">
+		<ul class="values col-12 row"
+			data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" 
+			data-prototype="{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-10'}})|e('html_attr') }}">
 			{% for valueField in form.values %}
 				<li class"col-12 row my-2">
 					{{ form_widget(valueField, {'attr': {'class': 'col-10'}}) }}
 				</li>
 			{% endfor %}
 		</ul>
-		<button type="button" class="add_item_link btn btn-success" data-collection-holder-class="values">Ajouter une valeur</button>
+		<button type="button" class="add_item_link btn btn-success" data-collection-holder-class="values col-12">
+			Ajouter une valeur
+		</button>
 	</div>
 
 	{{ fields.submitbtn(form.record, "" , {'class': 'col-12 btn btn-primary my-3'}) }}
