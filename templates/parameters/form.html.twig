@@ -27,6 +27,12 @@
 
 		{{ form_label(form.values) }}
 		{{ form_errors(form.values) }}
+		
+		<pre>
+			{{ dump(form.values, form.?values|length) }}
+		</pre>
+
+		{#
 		<ul class="values"
 			data-index="{{ form.values|length > 0 ? (form.values|last).vars.name + 1 : 0 }}"
 			data-prototype="{{ form_widget(form.values.vars.prototype)|e('html_attr') }}"
@@ -38,6 +44,8 @@
 				</li>
 			{% endfor %}
 		</ul>
+		#}
+
 		<button type="button" class="add_item_link" data-collection-holder-class="values">Ajouter une valeur</button>
 	{{ form_end(form, {render_rest: false}) }}
 	<div class="col-12 mt-2 text-right text-gray-600 px-0 mx-3">
