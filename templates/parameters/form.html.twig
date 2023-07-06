@@ -16,35 +16,28 @@
 
 {% block main %}
 	{{ form_start(form, {'action': path('info-structure'), 'method': 'POST'}) }}
-		{{ fields.field(form.name, "", {
-			'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.name.vars.value},
-			'class': 'col-12 my-3',
-		}) }}
-		{{ fields.field(form.description, "", {
-			'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.description.vars.value},
-			'class': 'col-12 my-3',
-		}) }}
+	{{ fields.field(form.name, "", {
+		'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.name.vars.value},
+		'class': 'col-12 my-3',
+	}) }}
+	{{ fields.field(form.description, "", {
+		'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.description.vars.value},
+		'class': 'col-12 my-3',
+	}) }}
 
-		{{ form_row(form.values) }}
+	{{ form_label(form.values) }}
+	{{ form_errors(form.values) }}
 
-		{#
-		{{ form_label(form.values) }}
-		{{ form_errors(form.values) }}
+	<ul class="values" data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.values.vars.prototype)|e('html_attr') }}">
+		{% for valueField in form.values %}
+			<li>
+				{{ form_errors(valueField) }}
+				{{ form_widget(valueField) }}
+			</li>
+		{% endfor %}
+	</ul>
 
-		<ul class="values"
-			data-index="{{ form.values|length > 0 ? (form.values|last).vars.name + 1 : 0 }}"
-			data-prototype="{{ form_widget(form.values.vars.prototype)|e('html_attr') }}"
-		>
-			{% for valueField in form.values %}
-				<li>
-					{{ form_errors(valueField) }}
-					{{ form_widget(valueField) }}
-				</li>
-			{% endfor %}
-		</ul>
-		#}
-
-		<button type="button" class="add_item_link" data-collection-holder-class="values">Ajouter une valeur</button>
+	<button type="button" class="add_item_link btn btn-success" data-collection-holder-class="values">Ajouter une valeur</button>
 	{{ form_end(form, {render_rest: false}) }}
 	<div class="col-12 mt-2 text-right text-gray-600 px-0 mx-3">
 		* champs obligatoires
@@ -55,16 +48,37 @@
 	{{ parent() }}
 
 	<script>
-		const addFormtoCollection = (e) => {
-			const collectionHolder = document.querySelector('.' + currentTarget.dataset.collectionHolderClass);
-			const item = document.createElement('li');
-			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name/g, collectionHolder.dataset.index);
-			collectionHolder.appendChild(item);
-			collectionHolder.dataset.index++;
+		function addTagFormDeleteLink(item) {
+			const removeFormButton = document.createElement('button');
+			removeFormButton.classList.add("btn");
+			removeFormButton.classList.add("btn-warning");
+			removeFormButton.setAttribute('title', 'Supprimer la valeur');
+			const removeFormIcon = document.createElement("i");
+			removeFormIcon.classList.add("fa");
+			removeFormIcon.classList.add("fa-trash");
+			removeFormButton.append(removeFormIcon);
+			item.append(removeFormButton);
+
+			removeFormButton.addEventListener('click', (e) => {
+				e.preventDefault();
+				item.remove();
+			});
 		}
 
 		document.querySelectorAll('.add_item_link').forEach(btn => {
-			btn.addEventListener("click", addFormtoCollection());
+			btn.addEventListener("click", function (e) {
+				const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+				const item = document.createElement('li');
+				item.innerHTML = collectionHolder.dataset.prototype.replace(/__name/g, collectionHolder.dataset.index);
+				collectionHolder.appendChild(item);
+				collectionHolder.dataset.index ++;
+				addTagFormDeleteLink(item);
+			});
+		});
+
+		document.querySelectorAll('ul.values li').forEach((val) => {
+			addTagFormDeleteLink(val)
 		});
 	</script>
 {% endblock %}
+
