@@ -125,6 +125,11 @@ class Parameter
         return $this->updated_at;
     }
 
+    public function isEmptyUpdatedAt()
+    {
+        return empty($this->updated_at);
+    }
+
     /**
      * Set the value of updated_at
      * @return  self

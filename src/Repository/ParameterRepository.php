@@ -52,7 +52,7 @@ class ParameterRepository extends ServiceEntityRepository
                 'name' => $item->getCle(),
                 'description' => $item->getValeur(),
                 'created_at' => $item->getCreatedAt(),
-                'updated_at' => $item->getUpdatedAt(),
+                'updated_at' => !$item->isEmptyUpdatedAt() ? $item->getUpdatedAt() : null,
             ];
             $qb = $this->createQueryBuilder('p')
                 ->where('p.cle = :name')
