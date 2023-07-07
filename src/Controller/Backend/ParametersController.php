@@ -264,6 +264,7 @@ class ParametersController extends AbstractController
             'title' => $title,
             'form' => $form->createView(),
             'errMsgs' => $errMsgs,
+            'mode' => $mode,
         ]);
     }
 
