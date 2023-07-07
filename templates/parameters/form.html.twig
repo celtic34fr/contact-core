@@ -83,18 +83,19 @@
 
 			removeFormButton.addEventListener('click', (e) => {
 				e.preventDefault();
-				let index = parseInt(e.currentTarget.parentElement.querySelector("input").dataset.ord);
-				let spans = e.currentTarget.parentElement.parentElement.querySelectorAll("span");
+				let item = e.currentTarget.parentElement;
+				let index = parseInt(item.querySelector("input").dataset.ord);
+				let spans = item.parentElement.querySelectorAll("span");
 				spans.forEach(span => {
 					let idx = parseInt(span.innerHTML);
+					let idxStr = idx.toString();
+					let nidxStr = (idx - 1).toString();
 					let input = span.parentElement.querySelector("input");
+
 					if (idx > index) {
-						span.innerHTML = (idx - 1) + " : ";
-						let name = input.name;
-						let id = input.id;
-						name.replace(idx.toString(), (idx - 1).toString());
-						id.replace(idx.toString(), (idx - 1).toString());
-						input.name = name;
+						span.innerHTML = nidxStr + " : ";
+						input.name = name.replace(idxStr, nidxStr);
+						input.id = id.replace(idx.toString(), (idx - 1).toString());
 						input.dataset.ord = idx - 1;
 					}
 				});
