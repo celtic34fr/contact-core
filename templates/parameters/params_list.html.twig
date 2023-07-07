@@ -11,7 +11,8 @@
 {% endblock %}
 
 {% block stylesheets %}
-{{ parent() }}
+{{ parent() }}eter
+
 {% endblock %}
 
 {% block main %}
@@ -35,11 +36,13 @@
             			<td>{{ paramList.valeurs }}</td>
 			            <td>
 							{{ generals.btnRedirect('edt' ~ paramList.id, '<i class="fa fa-pen"></i>', {
-								'class': 'col-2 btn btn-success', 'totle': 'Editer la liste',
+								'class': 'col-2 btn btn-success', 'title': 'Editer la liste',
+								'bclass': 'btn btn-success p-0 m-auto',
 								'route': 'edt-params-list', 'params': {'id': paramList.id}
 							}) }}
 							{{ generals.btnRedirect('del' ~ paramList.id, '<i class="fa fa-trash"></i>', {
-								'class': 'col-2 btn btn-warning', 'totle': 'Supprimer la liste',
+								'class': 'col-2 btn btn-warning', 'title': 'Supprimer la liste',
+								'bclass': 'btn btn-warning p-0 m-auto',
 								'route': 'del-params-list', 'params': {'id': paramList.id}
 							}) }}
 
