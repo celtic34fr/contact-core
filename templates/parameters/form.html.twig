@@ -84,17 +84,21 @@
 			removeFormButton.addEventListener('click', (e) => {
 				e.preventDefault();
 				let item = e.currentTarget.parentElement;
+                let list = item.parentElement;
 				let index = parseInt(item.querySelector("input").dataset.ord);
-				let spans = item.parentElement.querySelectorAll("span");
+				item.remove();
+
+                let spans = list.querySelectorAll("span");
 				spans.forEach(span => {
 					let idx = parseInt(span.innerHTML);
 
 					if (idx > index) {
-						span.innerHTML = nidxStr + " : ";
 						let idxStr = idx.toString();
 						let nidxStr = (idx - 1).toString();
 						let input = span.parentElement.querySelector("input");
 						let iclone = input.cloneNode(1);
+
+                        span.innerHTML = nidxStr + " : ";
 						iclone.id = input.id.replace(idxStr, nidxStr);
 						iclone.name = input.name.replace(idxStr, nidxStr);
 						iclone.value = input.value;
@@ -103,7 +107,6 @@
 						span.after(iclone);
 					}
 				});
-				item.remove();
 			});
 		}
 
