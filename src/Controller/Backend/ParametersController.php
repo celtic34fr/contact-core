@@ -185,7 +185,6 @@ class ParametersController extends AbstractController
     public function newEditAction(Request $request, string $mode, string $cle = null, array $paramList = [])
     {
         $errMsgs = [];
-        $paramTitre = $this->parameterRepo->findOneBy(['cle' => $cle]);
         $paramDescription = null;
 
         /** double contrôle pour accès direct même si peu probable */
@@ -260,7 +259,7 @@ class ParametersController extends AbstractController
             'form' => $form->createView(),
             'errMsgs' => $errMsgs,
             'mode' => $mode,
-            'id' => $paramDescription ? $paramDescription->getId() : null,
+            'id' => ($mode == "edt") ? $paramDescription->getId() : null,
         ]);
     }
 

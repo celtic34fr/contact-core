@@ -73,7 +73,7 @@ class ParameterRepository extends ServiceEntityRepository
         $rslt = $this->findBy(['cle' => $name], ['ord' => 'ASC']);
         if (!$rslt) return [];
         foreach ($rslt as $item) {
-            if ((int) $item->getOrd() > 9)
+            if ((int) $item->getOrd() > 0)
                 $paramList[(int) $item->getOrd() - 1] = $item->getValeur();
         }
         return $paramList;
