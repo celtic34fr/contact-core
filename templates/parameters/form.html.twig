@@ -105,7 +105,8 @@
 		});
 
 		document.querySelectorAll('ul.values li').forEach((val) => {
-			let ord = parseInt(val.dataset.ord);
+			let input = val.querySelector("input");
+			let ord = parseInt(input.dataset.ord);
 			addTagFormDeleteLink(val, ord)
 		});
 
