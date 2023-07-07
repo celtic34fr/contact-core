@@ -33,7 +33,17 @@
             			<td>{{ paramList.description }}</td>
 			            <td>{{ paramList.created_at|date("d/m/Y") }}</td>
             			<td>{{ paramList.valeurs }}</td>
-			            <td></td>
+			            <td>
+							{{ generals.btnRedirect('edt'~parameList.id, '<i class="fa fa-pen"></i>', {
+								'class': 'col-2 btn btn-success', 'totle': 'Editer la liste',
+								'route': 'edt-params-list', 'params': {'id': parameterList.id}
+							}) }}
+							{{ generals.btnRedirect('del'~parameList.id, '<i class="fa fa-trash"></i>', {
+								'class': 'col-2 btn btn-warning', 'totle': 'Supprimer la liste',
+								'route': 'del-params-list', 'params': {'id': parameterList.id}
+							}) }}
+
+						</td>
             		</tr>
             	{% else %}
             		<tr>

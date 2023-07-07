@@ -263,6 +263,11 @@ class ParametersController extends AbstractController
         ]);
     }
 
+    #[Route('/delete_params_list/{id}', name: 'del-params-list')]
+    public function delete_params_list(Request $request, Parameter $parameter)
+    {
+    }
+
     /**
      * @param array $post
      * @return array
