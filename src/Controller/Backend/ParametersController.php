@@ -251,6 +251,9 @@ class ParametersController extends AbstractController
                 }
             }
             $this->entityManager->flush();
+            $message =  (($mode == "new") ? "Création " : "Mise à jour "). "de la liste de paramètre effectuée avec succès";
+            $this->addFlash('success',$message);
+            $this->redirectToRoute("params-list");
         }
 
         return $this->render("@contact-core/parameters/form.html.twig", [
@@ -264,8 +267,30 @@ class ParametersController extends AbstractController
     }
 
     #[Route('/delete_params_list/{id}', name: 'del-params-list')]
+    /** suppression de liste de paramètres */
     public function delete_params_list(Request $request, Parameter $parameter)
     {
+        $parameterList = $this->parameterRepo->getParamtersList($parameter->getCle());
+
+        if ($request->getMethod() == "POST") {
+            /** tritement demande suppression */
+            $datas = $request->request->all();
+            if (array_key_exists("delt", $datas)) {
+                foreach($parameterList as $ord => $value) {
+                    $paramItem = $this->parameterRepo->findOneBy(['cle' => $parameter->getCle(), 'ord' => (int) $ord + 1]);
+                    $this->entityManager->remove($paramItem);
+                }
+                $this->entityManager->remove($parameter);
+                $this->entityManager->flush();
+            
+                $this->redirectToRoute("params-list");
+            }
+        }
+
+        return $this->render("@contact-core/parameters/delt.html.twig", [
+            'parameter' => $parameter,
+            'parameterList' => $parameterList,
+        ]);
     }
 
     /**
