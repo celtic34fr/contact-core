@@ -51,7 +51,7 @@ class ParameterRepository extends ServiceEntityRepository
             $occur = [
                 'name' => $item->getCle(),
                 'description' => $item->getValeur(),
-                'created_at' => $item->getCreateAt(),
+                'created_at' => $item->getCreatedAt(),
             ];
             $qb = $this->createQueryBuilder('p')
                 ->where('p.cle = :name')
