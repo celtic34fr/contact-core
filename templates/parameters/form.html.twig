@@ -44,7 +44,7 @@
 				data-prototype="{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-10', 'data-ord': '__name__'}})|e('html_attr') }}">
 				{% for idx, valueField in form.values %}
 					<li class="col-12 row my-2">
-						{{ form_widget(valueField, {'attr': {'class': 'col-10', 'data-ord': idx}})}}) }}
+						{{ form_widget(valueField, {'attr': {'class': 'col-10', 'data-ord': idx} }) }}
 					</li>
 				{% endfor %}
 			</ul>
