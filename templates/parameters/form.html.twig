@@ -94,8 +94,6 @@
 
 					if (idx > index) {
 						span.innerHTML = nidxStr + " : ";
-						input.name = name.replace(idxStr, nidxStr);
-						input.id = id.replace(idx.toString(), (idx - 1).toString());
 						input.dataset.ord = idx - 1;
 					}
 				});
