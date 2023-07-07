@@ -25,34 +25,35 @@
 		{% endif %}
 	{% endset %}
 	{{ form_start(form, {'action': urlForm, 'method': 'POST'}) }}
-		{{ form_row(form._token) }}
+	{{ form_row(form._token) }}
 
-		{{ fields.field(form.name, "", {
+	{{ fields.field(form.name, "", {
 			'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.name.vars.value},
 			'class': 'col-12 my-3',
 		}) }}
-		{{ fields.field(form.description, "", {
+	{{ fields.field(form.description, "", {
 			'il_class': {'label': 'col-4', 'input': 'col-8', 'value': form.description.vars.value},
 			'class': 'col-12 my-3',
 		}) }}
 
-		<div class="col-12 row">
-			{{ form_label(form.values) }}
-			{{ form_errors(form.values) }}
-			<ul class="values col-12 row"
-				data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" 
-				data-prototype="{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-10', 'data-ord': '__name__'}})|e('html_attr') }}">
-				{% for idx, valueField in form.values %}
-					<li class="col-12 row my-2">
-						{{ form_widget(valueField, {'attr': {'class': 'col-10', 'data-ord': idx} }) }}
-					</li>
-				{% endfor %}
-			</ul>
-			<button type="button" class="add_item_link btn btn-success" data-collection-holder-class="values">
-				Ajouter une valeur
-			</button>
-		</div>
-		{{ fields.submitbtn(form.record, "" , {'class': 'col-12 btn btn-primary my-3'}) }}
+	<div class="col-12 row">
+		{{ form_label(form.values) }}
+		{{ form_errors(form.values) }}
+		<ul class="values col-12 row" data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" data-prototype='<span class="col-1">__name__ : </span>{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-9', 'data-ord': '__name__'}})|e(' html_attr') }}'>
+			{% for idx, valueField in form.values %}
+				<li class="col-12 row my-2">
+					<span class="col-1">{{idx}}
+						:
+					</span>
+					{{ form_widget(valueField, {'attr': {'class': 'col-9', 'data-ord': idx} }) }}
+				</li>
+			{% endfor %}
+		</ul>
+		<button type="button" class="add_item_link btn btn-success" data-collection-holder-class="values">
+			Ajouter une valeur
+		</button>
+	</div>
+	{{ fields.submitbtn(form.record, "" , {'class': 'col-12 btn btn-primary my-3'}) }}
 	{{ form_end(form, {render_rest: false}) }}
 	<div class="col-12 mt-2 text-right text-gray-600 px-0 mx-3">
 		* champs obligatoires
@@ -80,6 +81,14 @@
 
 			removeFormButton.addEventListener('click', (e) => {
 				e.preventDefault();
+				let index = parseInt(e.currentTarget.parentElement.querySelector("input").dataset.ord);
+				let spans = e.currentTarget.parentElement.parentElement.querySelectorAll("span");
+				spans.forEach(span => {
+					let idx = parseInt(span.innerHTML);
+					if (idx > index) {
+						span.innerHTML = (idx - 1) + " : ";
+					}
+				});
 				item.remove();
 			});
 		}
@@ -110,7 +119,7 @@
 			addTagFormDeleteLink(val, ord)
 		});
 
-		document.addEventListener("DOMContentLoaded", function() {
+		document.addEventListener("DOMContentLoaded", function () {
 			const bouton = document.querySelector(".add_item_link")
 			const valuesNBR = document.querySelectorAll("ul.values li");
 			if (valuesNBR.length < 1) {
