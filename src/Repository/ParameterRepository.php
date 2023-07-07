@@ -52,12 +52,15 @@ class ParameterRepository extends ServiceEntityRepository
                 'name' => $item->getCle(),
                 'description' => $item->getValeur(),
                 'created_at' => $item->getCreatedAt(),
+                'updated_at' => $item->getUpdatedAt(),
             ];
             $qb = $this->createQueryBuilder('p')
                 ->where('p.cle = :name')
                 ->setParameter('name', $item->getCle())
-                ->getQuery();
-            $occur['valeurs'] = $qb->getResult()->count();
+                ->getQuery()
+                ->getResult()
+                ;
+            $occur['valeurs'] = $qb ? sizeof($qb) : 0;
             $nameList[(int) $item->getOrd() - 1] = $occur;
         }
         return $nameList;
