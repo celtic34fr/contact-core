@@ -34,13 +34,13 @@
 			            <td>{{ paramList.created_at|date("d/m/Y") }}</td>
             			<td>{{ paramList.valeurs }}</td>
 			            <td>
-							{{ generals.btnRedirect('edt'~paramList.id, '<i class="fa fa-pen"></i>', {
+							{{ generals.btnRedirect('edt' ~ paramList.id, '<i class="fa fa-pen"></i>', {
 								'class': 'col-2 btn btn-success', 'totle': 'Editer la liste',
-								'route': 'edt-params-list', 'params': {'id': parameterList.id}
+								'route': 'edt-params-list', 'params': {'id': paramList.id}
 							}) }}
-							{{ generals.btnRedirect('del'~paramList.id, '<i class="fa fa-trash"></i>', {
+							{{ generals.btnRedirect('del' ~ paramList.id, '<i class="fa fa-trash"></i>', {
 								'class': 'col-2 btn btn-warning', 'totle': 'Supprimer la liste',
-								'route': 'del-params-list', 'params': {'id': parameterList.id}
+								'route': 'del-params-list', 'params': {'id': paramList.id}
 							}) }}
 
 						</td>
