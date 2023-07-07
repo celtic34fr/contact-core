@@ -91,6 +91,12 @@
 					let idxStr = idx.toString();
 					let nidxStr = (idx - 1).toString();
 					let input = span.parentElement.querySelector("input");
+					let iclone = input.cloneNode(1);
+					iclone.id = input.id.replace(idxStr, nidxStr);
+					iclone.name = input.name.replace(idxStr, nidxStr);
+					iclone.dataset.ord = nidxStr;
+					input.remove();
+					span.after(iclone);
 
 					if (idx > index) {
 						span.innerHTML = nidxStr + " : ";
