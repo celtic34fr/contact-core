@@ -163,7 +163,7 @@ class ParametersController extends AbstractController
         return $this->forward(self::newEditAction, $args);
     }
 
-    #[Route('/edit_params_list/{id}', name: 'edit-params-list')]
+    #[Route('/edit_params_list/{id}', name: 'edt-params-list')]
     public function edit_params_list(Request $request, int $idx)
     {
         $mode = "edt";
@@ -171,7 +171,7 @@ class ParametersController extends AbstractController
         $paramList = [];
 
         if ((int) $idx < 1) {
-            $errMsgs[] = "PAramètre d'accès à la liste de valeur incompatible";
+            $errMsgs[] = "Paramètre d'accès à la liste de valeur incompatible";
         } else {
             $paramTitre = $this->parameterRepo->find($idx);
             if (!$paramTitre) {
