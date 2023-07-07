@@ -41,10 +41,10 @@
 			{{ form_errors(form.values) }}
 			<ul class="values col-12 row"
 				data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" 
-				data-prototype="{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-10'}})|e('html_attr') }}">
-				{% for valueField in form.values %}
+				data-prototype="{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-10', 'data-ord': '__name__'}})|e('html_attr') }}">
+				{% for idx, valueField in form.values %}
 					<li class="col-12 row my-2">
-						{{ form_widget(valueField, {'attr': {'class': 'col-10'}}) }}
+						{{ form_widget(valueField, {'attr': {'class': 'col-10', 'data-ord': (idx + 1)}}) }}
 					</li>
 				{% endfor %}
 			</ul>
