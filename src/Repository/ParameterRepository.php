@@ -49,6 +49,7 @@ class ParameterRepository extends ServiceEntityRepository
         if (!$rslt) return [];
         foreach ($rslt as $item) {
             $occur = [
+                'id' => $item->getId(),
                 'name' => $item->getCle(),
                 'description' => $item->getValeur(),
                 'created_at' => $item->getCreatedAt(),

@@ -169,24 +169,15 @@ class ParametersController extends AbstractController
     }
 
     #[Route('/edit_params_list/{id}', name: 'edt-params-list')]
-    public function edit_params_list(Request $request, int $idx)
+    public function edit_params_list(Request $request, Parameter $parameter)
     {
         $mode = "edt";
         $cle = "";
         $paramList = [];
 
-        if ((int) $idx < 1) {
-            $errMsgs[] = "Paramètre d'accès à la liste de valeur incompatible";
-        } else {
-            $paramTitre = $this->parameterRepo->find($idx);
-            if (!$paramTitre) {
-                $this->addFlash('error', "Liste de paramètres introuvable, traitement impossible");
-                $this->redirectToRoute("params-list");
-            } else {
-                $cle = $paramTitre->getCle();
-                $paramList = $this->parameterRepo->getParamtersList($paramTitre->getCle());
-            }
-        }
+        $cle = $parameter->getCle();
+        $paramList = $this->parameterRepo->getParamtersList($parameter->getCle());
+
         $args = compact('mode', 'cle', 'paramList');
         return $this->forward(self::newEditAction, $args);
     }
