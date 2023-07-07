@@ -6,11 +6,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ParameterFE
 {
+    #[Assert\NotBlank()]
     private string $name;
+    #[Assert\NotBlank()]
     private string $description;
 
     #[Assert\NotBlank()]
-    private array $values;
+    private array $values = [];
 
     /**
      * Get the value of name
