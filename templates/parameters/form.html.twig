@@ -72,13 +72,13 @@
 			});
 		}
 
-		function addEmptyLi() {
-			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+		function addEmptyLi(bouton) {
+			const collectionHolder = document.querySelector('.' + bouton.dataset.collectionHolderClass);
 			const item = document.createElement('li');
 			item.classList.add("col-12");
 			item.classList.add("row");
 			item.classList.add("my-2");
-			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name/g, collectionHolder.dataset.index);
+			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
 			collectionHolder.appendChild(item);
 			collectionHolder.dataset.index ++;
 			addTagFormDeleteLink(item);
@@ -86,7 +86,7 @@
 
 		document.querySelectorAll('.add_item_link').forEach(btn => {
 			btn.addEventListener("click", function (e) {
-				addEmptyLi();
+				addEmptyLi(e.currentTarget);
 			});
 		});
 
@@ -95,9 +95,10 @@
 		});
 
 		document.addEventListener("DOMContentLoaded", function() {
+			const bouton = document.querySelector("add_item_link")
 			const valuesNBR = document.querySelectorAll("ul.values li");
 			if (valuesNBR.length < 1) {
-				addEmptyLi();
+				addEmptyLi(bouton);
 			} else {
 				valueNBR.forEach(val => {
 					console.log(val);;
