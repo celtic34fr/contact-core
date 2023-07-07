@@ -92,8 +92,8 @@
 						span.innerHTML = (idx - 1) + " : ";
 						let name = input.name;
 						let id = input.id;
-						name.replace(idx, (idx - 1));
-						id.replace(idx, (idx - 1));
+						name.replace(idx.toString(), (idx - 1).toString());
+						id.replace(idx.toString(), (idx - 1).toString());
 						input.name = name;
 						input.dataset.ord = idx - 1;
 					}
