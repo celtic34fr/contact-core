@@ -15,7 +15,16 @@
 {% endblock %}
 
 {% block main %}
-	{{ form_start(form, {'action': path(mode~'-params-list'), 'method': 'POST'}) }}
+	{% set urlForm %}
+		{% if mode == "new" %}
+			{{ path(mode~'-params-list') }}
+		{% elseif mode == "edt" %}
+			{{ path(mode~'-params-list', {'id': id}) }}
+		{% else %}
+			#
+		{% endif %}
+	{% endset %}
+	{{ form_start(form, {'action': urlForm, 'method': 'POST'}) }}
 		{{ form_row(form._token) }}
 
 		{{ fields.field(form.name, "", {

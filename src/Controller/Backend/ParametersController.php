@@ -260,6 +260,7 @@ class ParametersController extends AbstractController
             'form' => $form->createView(),
             'errMsgs' => $errMsgs,
             'mode' => $mode,
+            'id' => $paramDescription ? $paramDescription->getId() : null,
         ]);
     }
 
