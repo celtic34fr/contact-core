@@ -63,7 +63,7 @@
 	{{ parent() }}
 
 	<script>
-		function addTagFormDeleteLink(item) {
+		function addTagFormDeleteLink(item, index) {
 			const removeFormButton = document.createElement('button');
 			removeFormButton.classList.add("btn");
 			removeFormButton.classList.add("btn-warning");
@@ -73,6 +73,9 @@
 			removeFormIcon.classList.add("fa");
 			removeFormIcon.classList.add("fa-trash");
 			removeFormButton.append(removeFormIcon);
+			if (index < 1) {
+				removeFormButton.disabled = true;
+			}
 			item.append(removeFormButton);
 
 			removeFormButton.addEventListener('click', (e) => {
@@ -89,13 +92,10 @@
 			item.classList.add("row");
 			item.classList.add("my-2");
 			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, index);
-			if (index < 1) {
-				item.setAttribute('disabled', true);
-			}
 			collectionHolder.appendChild(item);
 
 			collectionHolder.dataset.index ++;
-			addTagFormDeleteLink(item);
+			addTagFormDeleteLink(item, index);
 		}
 
 		document.querySelectorAll('.add_item_link').forEach(btn => {
@@ -105,7 +105,8 @@
 		});
 
 		document.querySelectorAll('ul.values li').forEach((val) => {
-			addTagFormDeleteLink(val)
+			let ord = parseInt(val.dataset.ord);
+			addTagFormDeleteLink(val, ord)
 		});
 
 		document.addEventListener("DOMContentLoaded", function() {
