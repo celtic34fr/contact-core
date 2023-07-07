@@ -62,7 +62,7 @@ class ParametersController extends AbstractController
         if ($this->extConfig->isExtnsionInstall("contactcore")) {
             /* recherche des logo en temporaire (tempo: true) pour suppression de la base */
             $logosTempo = $this->pieceJointeRepo
-                               ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
+                ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
             if ($logosTempo) {
                 foreach ($$logosTempo as $logoTempo) {
                     $this->entityManager->remove($logoTempo);
@@ -97,8 +97,8 @@ class ParametersController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //traitement du formulaire
-                $configFile = $this->container->get('kernel')->getRootDir().'config/extensions/celtic34fr-contactcore.yaml';
-                $yaml = Yaml::parse(file_get_contents( $configFile));
+                $configFile = $this->container->get('kernel')->getRootDir() . 'config/extensions/celtic34fr-contactcore.yaml';
+                $yaml = Yaml::parse(file_get_contents($configFile));
                 $yaml['entreprise']['designation'] = $entrepriseInfos->getDesignation() ?? "";
                 $yaml['entreprise']['siren'] = $entrepriseInfos->getSiren() ?? "";
                 $yaml['entreprise']['siret'] = $entrepriseInfos->getSiret() ?? "";
@@ -116,7 +116,7 @@ class ParametersController extends AbstractController
 
                 $new_yaml = Yaml::dump($yaml, 2);
                 file_put_contents($configFile, $new_yaml);
-                $this->addFlash('success','Fichier de configuration bien modifié et enregistré');
+                $this->addFlash('success', 'Fichier de configuration bien modifié et enregistré');
                 $this->redirectToRoute('bolt_dashboard');
             }
 
@@ -139,7 +139,12 @@ class ParametersController extends AbstractController
     {
         $owner = $this->getUser();
         return $this->uploadFiles->uploadFile(
-            $request, [".png",".gif",".jpg",".jpeg",".svg"], [], UtilitiesPJEnums::Logo->_toString(), $owner);
+            $request,
+            [".png", ".gif", ".jpg", ".jpeg", ".svg"],
+            [],
+            UtilitiesPJEnums::Logo->_toString(),
+            $owner
+        );
     }
 
     #[Route('/params_list', name: 'params-list')]
@@ -158,7 +163,7 @@ class ParametersController extends AbstractController
         $paramList = [];
         $mode = "new";
         $cle = "";
-        
+
         $args = compact('mode', 'cle', 'paramList');
         return $this->forward(self::newEditAction, $args);
     }
@@ -203,7 +208,7 @@ class ParametersController extends AbstractController
         if ($paramList && !is_array($paramList)) {
             $errMsgs[] = "Liste de valeurs format imcompatible, traitement impossible";
         }
-        switch($mode) {
+        switch ($mode) {
             case "new":
                 if ($paramDescription) {
                     $errMsgs[] = "Liste de valeur $cle existe déjà, impossible d'en créer une ayant la même clé d'accès";
@@ -223,7 +228,7 @@ class ParametersController extends AbstractController
                 break;
             default:
                 $errMsgs[] = "$mode non prévue, traitement impossible";
-                break; 
+                break;
         }
 
         $form = $this->createForm(ParameterType::class, $parameterList);
@@ -231,24 +236,23 @@ class ParametersController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** traitement du formulaire pour création / mise à jour de liste de paramètres */
-            $formDatas = $form->getData();
-
             /** traitement entête de descrition */
-            $paramDescription = $this->parameterRepo->findOneBy(['cle' => $formDatas['name']]);
+            $cle = $parameterList->getName();
+            $paramDescription = $this->parameterRepo->findOneBy(['cle' => $cle]);
             if (!$paramDescription) {
                 $paramDescription = new Parameter();
-                $paramDescription->setCle($formDatas['name']);
+                $paramDescription->setCle($cle);
                 $paramDescription->setOrd(0);
-                $paramDescription->setValeur($formDatas['description']);
+                $paramDescription->setValeur($parameterList->getDescription());
                 $this->parameterRepo->save($paramDescription, false);
             } else {
-                $paramDescription->setValeur($formDatas['description']);
+                $paramDescription->setValeur($parameterList->getDescription());
                 $paramDescription->setUpdatedAt(new DateTimeImmutable('now'));
             }
 
             /** traitement des valeur dans la liste */
-            if (array_key_exists('values', $formDatas) && $formDatas['values']) {
-                foreach ($formDatas['values'] as $idx => $value) {
+            if ($parameterList->getValues()) {
+                foreach ($parameterList->getValues() as $idx => $value) {
                     $parameterOccur = new Parameter();
                     $parameterOccur->setCle($paramDescription->getCle());
                     $parameterOccur->setOrd($idx + 1);

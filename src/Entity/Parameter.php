@@ -29,7 +29,7 @@ class Parameter
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private DateTimeImmutable $created_at;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private DateTimeImmutable $updated_at;
 
     public function __construct()
