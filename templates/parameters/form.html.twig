@@ -124,25 +124,25 @@
 			addTagFormDeleteLink(item, index);
 		}
 
-		document.querySelectorAll('.add_item_link').forEach(btn => {
-			btn.addEventListener("click", function (e) {
-				addEmptyLi(e.currentTarget);
-			});
-		});
-
-		document.querySelectorAll('ul.values li').forEach((val) => {
-			let input = val.querySelector("input");
-			let ord = parseInt(input.dataset.ord);
-			addTagFormDeleteLink(val, ord)
-		});
-
 		document.addEventListener("DOMContentLoaded", function () {
+			document.querySelectorAll('.add_item_link').forEach(btn => {
+				btn.addEventListener("click", function (e) {
+					addEmptyLi(e.currentTarget);
+				});
+			});
+
+			document.querySelectorAll('ul.values li').forEach((val) => {
+				let input = val.querySelector("input");
+				let ord = parseInt(input.dataset.ord);
+				addTagFormDeleteLink(val, ord)
+			});
+
 			const bouton = document.querySelector(".add_item_link")
 			const valuesNBR = document.querySelectorAll("ul.values li");
 			if (valuesNBR.length < 1) {
 				addEmptyLi(bouton);
 			}
-		})
+		});
 	</script>
 {% endblock %}
 
