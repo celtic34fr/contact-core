@@ -19,7 +19,7 @@ class ParameterType extends AbstractType
     {
         $builder
         ->add('name', TextType::class, [
-            'label' => "Clé d'access",
+            'label' => "Clé d'accès",
             'required' => true,
             'constraints' => [
                 new NotBlank(),
