@@ -8,7 +8,7 @@ trait ParametersEntityTrait
 {
     public function getValues(): array
     {
-        $datas = $this->getValeur();
+        $datas = $this->valeur;
         if ($datas) {
             $datas = explode("|", $datas);
             return array_combine(self::HEADER, $datas);
@@ -19,7 +19,7 @@ trait ParametersEntityTrait
     public function setValues(array $values)
     {
         $chaine = implode('|', $values);
-        return $this->setValeur($chaine);
+        return $this->valeur = $chaine;
     }
 
     public function getItem(string $key): mixed
