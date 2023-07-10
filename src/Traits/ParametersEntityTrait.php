@@ -8,8 +8,12 @@ trait ParametersEntityTrait
 {
     public function getValues(): array
     {
-        $datas = explode("|", $this->getValeur());
-        return array_combine(self::HEADER, $datas);
+        $datas = $this->getValeur();
+        if ($datas) {
+            $datas = explode("|", $datas);
+            return array_combine(self::HEADER, $datas);
+        }
+        return [];
     }
 
     public function setValues(array $values)
