@@ -26,7 +26,6 @@ trait ParametersEntityTrait
 
     public function setItem(string $name, string $val): mixed
     {
-        if (!array_key_exists($name, $this->getParamsListNames())) return false;
         $datas = $this->getValues();
         $datas[$name] = $val;
         return $this->setValues($datas);
