@@ -51,7 +51,7 @@ trait ParametersEntityTrait
     public function persist($entity): void
     {
         $parameter = new Parameter();
-        $parameter->setCle($entity->gerCle());
+        $parameter->setCle($entity->getCle());
         $parameter->setOrd($entity->getOrd());
         $parameter->setValeur($entity->getValeur());
         $this->em->flush($parameter);
