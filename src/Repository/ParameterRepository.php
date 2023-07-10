@@ -101,6 +101,26 @@ class ParameterRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function reorgValues(string $cle): void
+    {
+        $values = $this->createQueryBuilder('p')
+            ->where("p.cle = :cle")
+            ->orderBy("ord", "ASC")
+            ->setParameter('cle', $cle)
+            ->getQuery()
+            ->getResult()
+        ;
+        if ($values) {
+            $idxOrd = 0;
+            /** @var Parameter $value */
+            foreach($values as $value) {
+                $value->setOrd($idxOrd);
+                $this->getEntityManager()->flush();
+                $idxOrd++;
+            }
+        }
+    }
+
     //    /**
     //     * @return Parameter[] Returns an array of Parameter objects
     //     */
