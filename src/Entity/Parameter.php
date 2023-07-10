@@ -84,7 +84,7 @@ class Parameter
     /**
      * Get the value of valeur
      */ 
-    public function getValeur(): string
+    public function getValeur(): ?string
     {
         return $this->valeur;
     }
