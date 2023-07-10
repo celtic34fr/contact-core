@@ -2,6 +2,8 @@
 
 namespace Celtic34fr\ContactCore\Traits;
 
+use Celtic34fr\ContactCore\Entity\Parameter;
+
 trait ParametersEntityTrait
 {
     public function getValues(): array
@@ -44,5 +46,14 @@ trait ParametersEntityTrait
             $natures[] = $item['name'];
         }
         return $natures;
+    }
+
+    public function persist($entity): void
+    {
+        $parameter = new Parameter();
+        $parameter->setCle($entity->gerCle());
+        $parameter->setOrd($entity->getOrd());
+        $parameter->setValeur($entity->getValeur());
+        $this->em->flush($parameter);
     }
 }
