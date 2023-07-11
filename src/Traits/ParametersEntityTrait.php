@@ -70,7 +70,7 @@ trait ParametersEntityTrait
         $datas = $this->param->getValeur() ?? [];
         if ($datas) {
             $datas = explode("|", $datas);
-            return array_combine(self::HEADER, $datas);
+            return $this->array_combine(self::HEADER, $datas);
         }
         return [];
     }
@@ -107,9 +107,21 @@ trait ParametersEntityTrait
         foreach ($datas as $data) {
             $item = $data->getValeur();
             $item = explode("|", $item);
-            $item = array_combine(self::HEADER, $item);
+            $item = $this->array_combine(self::HEADER, $item);
             $natures[] = $item['name'];
         }
         return $natures;
+    }
+
+    private function array_combine(array $keys, array $values): array
+    {
+        $arrayComnined = [];
+        $maxIdx = max(sizeof($keys), sizeof($values));
+        for ($idx = 0; $idx < $maxIdx; $idx++) {
+            $lkey = array_key_exists($idx, $keys) ? $keys[$idx] : $idx;
+            $lvalue = array_key_exists($idx, $values) ? $values[$idx] : null;
+            $arrayComnined[$lkey] = $lvalue;
+        }
+        return $arrayComnined;
     }
 }
