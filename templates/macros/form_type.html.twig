@@ -18,6 +18,7 @@
 	{% set disabled = args.disabled ?? false %}
 	{% set value = args.value ?? field.vars.value %}
 	{% set required = field.vars.required ?? false %}
+    {% set dataset = args.dataset ?? {} %}
 
 	{% set label_class %}
     	{{ ((il_class is defined and il_class.label is defined) ? il_class.label : '') }}
@@ -43,13 +44,17 @@
                 {{ label|raw }}
             </label>
         {% endif %}
-        {{ form_widget(field, {'value': value,
-            'attr': {
-                'data-id': field.vars.id,
-                'placeholder': placeholder,
-                'class': input_class,
-                'disabled': disabled,
-            } }) }}
+        {% set attributes = {
+            'data-id': field.vars.id,
+            'placeholder': placeholder,
+            'class': input_class,
+            'disabled': disabled,
+        } %}
+        {% for name, value in dataset %}
+            {% set attributes = attributes|merge({(name): value}) %}
+        {% endfor %}
+
+        {{ form_widget(field, {'value': value, 'attr': attributes }) }}
     </div>
 {% endmacro %}
 

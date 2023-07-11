@@ -206,6 +206,7 @@
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
     {% set form = args.form is defined ? args.form : '' %}
     {% set disabled = args.disabled is defined ? args.disabled : false %}
+    {% set dataset = args.dataset ?? {} %}
 
     {% if "[" in name and "]" in name %}
         {% set id = name|slice(0, strpos(name, '['))
@@ -220,6 +221,9 @@
         {% if placeholder|length %} placehoder="{{ placeholder }}" {% endif %}
         {% if form|length %} form="{{ form }}" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
+        {% for name, value in dataset %}
+            data-{{ name }}="{{ value }}" 
+        {% endfor %}
     {% endset %}
 
     <div class="{{ class is not empty ? class : '' }}">
