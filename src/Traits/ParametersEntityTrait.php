@@ -103,9 +103,11 @@ trait ParametersEntityTrait
     {
         $datas = $this->getParamsListValues(self::PARAM_CLE);
         $natures = [];
+        /** @var Parameter $data */
         foreach ($datas as $data) {
-            $data = explode("|", $data);
-            $item = array_combine(self::HEADER, $data);
+            $item = $data->getValeur();
+            $item = explode("|", $item);
+            $item = array_combine(self::HEADER, $item);
             $natures[] = $item['name'];
         }
         return $natures;

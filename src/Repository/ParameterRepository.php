@@ -74,7 +74,7 @@ class ParameterRepository extends ServiceEntityRepository
         if (!$rslt) return [];
         foreach ($rslt as $item) {
             if ((int) $item->getOrd() > 0)
-                $paramList[(int) $item->getOrd() - 1] = $item->getValeur();
+                $paramList[(int) $item->getOrd() - 1] = $item;
         }
         return $paramList;
     }
