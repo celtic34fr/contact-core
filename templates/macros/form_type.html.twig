@@ -51,7 +51,7 @@
             'disabled': disabled,
         } %}
         {% for name, value in dataset %}
-            {% set attributes = attributes|merge({(name): value}) %}
+            {% set attributes = attributes|merge({('data-'~name): value}) %}
         {% endfor %}
 
         {{ form_widget(field, {'value': value, 'attr': attributes }) }}
