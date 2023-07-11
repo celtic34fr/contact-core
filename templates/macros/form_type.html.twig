@@ -51,7 +51,7 @@
             'disabled': disabled,
         } %}
         {% for name, value in dataset %}
-            {% set name = 'data-'~name %}
+            {% set name = "data-"~name %}
             {% set attributes = attributes|merge({(name): value}) %}
         {% endfor %}
 
