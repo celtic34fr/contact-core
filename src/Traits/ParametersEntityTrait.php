@@ -67,7 +67,7 @@ trait ParametersEntityTrait
 
     public function getValues(): array
     {
-        $datas = $this->param->getValeur();
+        $datas = $this->param->getValeur() ?? [];
         if ($datas) {
             $datas = explode("|", $datas);
             return array_combine(self::HEADER, $datas);
@@ -104,7 +104,8 @@ trait ParametersEntityTrait
         $datas = $this->getParamsListValues(self::PARAM_CLE);
         $natures = [];
         foreach ($datas as $data) {
-            $item = $data->getValeur();
+            $data = explode("|", $data);
+            $item = array_combine(self::HEADER, $data);
             $natures[] = $item['name'];
         }
         return $natures;
