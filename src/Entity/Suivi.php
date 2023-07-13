@@ -17,7 +17,9 @@ class Suivi
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\DateTime]
     private ?DateTimeImmutable $evt_at = null;
 
