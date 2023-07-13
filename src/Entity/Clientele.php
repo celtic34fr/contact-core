@@ -8,6 +8,8 @@ use Celtic34fr\ContactCore\Enum\CustomerEnums;
 use Doctrine\Common\Collections\ArrayCollection;
 use Celtic34fr\ContactCore\Repository\ClienteleRepository;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
+use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 
 #[ORM\Entity(repositoryClass: ClienteleRepository::class)]
 #[ORM\Table(name:'clienteles')]
@@ -19,9 +21,17 @@ class Clientele
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
+    #[Assert\Email(message: "L'adresse courriel {{ value }} est invalide")]
     private ?string $courriel = null;
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
+    #[CustomAssert\CustomerType]
     private ?string $type = null;   // Cf. Enum^CustomerEnums
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: CliInfos::class)]

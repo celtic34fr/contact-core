@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PieceJointeRepository::class)]
 #[ORM\Table(name:'pieces_jointes')]
@@ -18,24 +19,34 @@ class PieceJointe
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
     private string $file_name;                      // nom du fichier origine
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
     private string $file_mime;                      // type de fichier
 
     #[ORM\Column(type: Types::BLOB)]
     private $file_content = null;                   // contenu proprement dit du fichier
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?DateTimeImmutable $created_at = null; // date de création
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
+    #[Assert\Type('boolean')]
     private ?bool $tempo = null;                    // flag indiquant si le fichier est à garder (false) ou non (true)
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $utility = null;                // utilité de la pièce jointe : logo entreprise, image pour courriel ....
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $file_size = null;                   // taille de la pièce jointe format normalisé
 
     /** 

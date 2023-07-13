@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Celtic34fr\ContactCore\Repository\SuiviRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SuiviRepository::class)]
 #[ORM\Table(name:'suivis')]
@@ -17,13 +18,16 @@ class Suivi
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Assert\DateTime]
     private ?DateTimeImmutable $evt_at = null;
 
     #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[Assert\Type('string')]
     private ?string $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Type(Clientele::class)]
     private ?Clientele $client = null;
 
     public function getId(): ?int

@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class PhoneNumber extends Constraint
 {
-    public $badFormat = "Le numéro de téléphone n'est pas au bon format, courrifez";
+    public $badFormat = "Le numéro de téléphone n'est pas au bon format, corrigez-le";
     public $not10Number = "Le numéro de téléphone doit avoir 10 chiffres séparé ou non par des esâces ou des tirets";
 
     public function getTargets()

@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use DateTimeImmutable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParameterRepository::class)]
 #[ORM\Table(name: 'parameters')]
@@ -18,18 +19,31 @@ class Parameter
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, length: 16)]
+    #[Assert\Length(
+        min: 4,     minMessage: "Une clé d'accès doit comporter au moins 4 caractères",
+        max: 16,    maxMessage: "Une clé d'accès doit comporter au plus 16 caractères"
+    )]
+    #[Assert\Type('string')]
     private string $cle;
 
     #[ORM\Column(type: Types::INTEGER)]
+    #[Assert\Type('integer')]
     private int $ord = 0;
 
-    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
     private string $valeur;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\DateTime]
     private DateTimeImmutable $created_at;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private DateTimeImmutable $updated_at;
 
     public function __construct()

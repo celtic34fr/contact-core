@@ -8,6 +8,8 @@ use Celtic34fr\ContactCore\Enum\CourrielEnums;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Repository\CourrielRepository;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
+use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 
 #[ORM\Entity(repositoryClass: CourrielRepository::class)]
 #[ORM\Table(name:'courriels')]
@@ -19,34 +21,48 @@ class Courriel
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
     private ?string $sujet = null;                      // sujet donné par l'internaute
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Type(CliInfos::class)]
     private ?CliInfos $destinataire = null;             // lien à l'internaute (info non fixe)
 
     #[ORM\Column(type: Types::ARRAY)]
     private array $context_courriel = [];               // variables pour génération du courriel
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $template_courriel = null;          // modèle de rendu à utiliser
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\DateTime]
     private ?DateTimeImmutable $created_at = null;     // date de création
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?DateTimeImmutable $send_at = null;        // date d'envoi
 
     #[ORM\Column(type: Types::INTEGER)]
+    #[Assert\Type('integer')]
     private ?int $send_times = null;                    // nombre d'envoi total
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Assert\Type('string')]
+    #[CustomAssert\CourrielStatusType]
     private ?string $send_status = null;                // statut d'envoi du courriel, cf Enum\StatusCourrielEnums
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private array $pieces_jointes = [];                 // ensble des pièces jointes (table PiecesJointes)
 
     #[ORM\Column(type: TypeS::TEXT, nullable: false)]
+    #[Assert\Type('string')]
+    #[CustomAssert\CourrielType]
     private ?string $nature = null;                     // nature, type de courriel, cf Enum\CourrielEnumes
 
     public function getId(): ?int
