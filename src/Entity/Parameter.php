@@ -18,43 +18,45 @@ class Parameter
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    protected ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, length: 16)]
     #[Assert\Length(
-        min: 4,     minMessage: "Une clé d'accès doit comporter au moins 4 caractères",
-        max: 16,    maxMessage: "Une clé d'accès doit comporter au plus 16 caractères"
+        min: 4,
+        minMessage: "Une clé d'accès doit comporter au moins 4 caractères",
+        max: 16,
+        maxMessage: "Une clé d'accès doit comporter au plus 16 caractères"
     )]
     #[Assert\Type('string')]
-    private string $cle;
+    protected string $cle;
 
     #[ORM\Column(type: Types::INTEGER)]
     #[Assert\Type('integer')]
-    private int $ord = 0;
+    protected int $ord = 0;
 
     #[ORM\Column(type: Types::JSON, length: 255, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    private string $valeur;
+    protected $valeur = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\DateTime]
-    private DateTimeImmutable $created_at;
+    protected DateTimeImmutable $created_at;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Assert\DateTime]
-    private DateTimeImmutable $updated_at;
+    protected DateTimeImmutable $updated_at;
 
     public function __construct()
     {
-        $this->created_at = new DateTimeImmutable('now');        
+        $this->created_at = new DateTimeImmutable('now');
     }
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -62,7 +64,7 @@ class Parameter
 
     /**
      * Get the value of cle
-     */ 
+     */
     public function getCle(): string
     {
         return $this->cle;
@@ -71,7 +73,7 @@ class Parameter
     /**
      * Set the value of cle
      * @return  self
-     */ 
+     */
     public function setCle(string $cle): self
     {
         $this->cle = $cle;
@@ -80,7 +82,7 @@ class Parameter
 
     /**
      * Get the value of ord
-     */ 
+     */
     public function getOrd(): int
     {
         return $this->ord;
@@ -89,7 +91,7 @@ class Parameter
     /**
      * Set the value of ord
      * @return  self
-     */ 
+     */
     public function setOrd(int $ord): self
     {
         $this->ord = $ord;
@@ -99,7 +101,7 @@ class Parameter
     /**
      * Get the value of valeur
      * @return  null|string|array
-     */ 
+     */
     public function getValeur(): mixed
     {
         return $this->valeur;
@@ -108,7 +110,7 @@ class Parameter
     /**
      * Set the value of valeur
      * @return  self
-     */ 
+     */
     public function setValeur(mixed $valeur): self
     {
         $this->valeur = $valeur;
@@ -117,7 +119,7 @@ class Parameter
 
     /**
      * Get the value of created_at
-     */ 
+     */
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->created_at;
@@ -126,7 +128,7 @@ class Parameter
     /**
      * Set the value of created_at
      * @return  self
-     */ 
+     */
     public function setCreatedAt(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
