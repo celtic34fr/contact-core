@@ -42,7 +42,7 @@
 	<div class="col-12 row">
 		{{ form_label(form.values) }}
 		{{ form_errors(form.values) }}
-		<ul class="values col-12 row" data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" data-prototype='<span class="col-1">__name__ : </span>{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-9', 'data-ord': '__name__'}})|e(' html_attr') }}'>
+		<ul class="values col-12 row" data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" data-prototype='<span class="col-1">__name__ : </span>{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-9', 'data-ord': '__name__'}})|e('html_attr') }}'>
 			{% for idx, valueField in form.values %}
 				<li class="col-12 row my-2">
 					<span class="col-1">
