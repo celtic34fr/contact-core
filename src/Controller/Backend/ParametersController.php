@@ -29,7 +29,7 @@ use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
 
-#[Route('parameters')]
+#[Route('parameters-')]
 class ParametersController extends AbstractController
 {
     use Utilities;
@@ -181,7 +181,7 @@ class ParametersController extends AbstractController
         $paramList = [];
 
         $cle = $parameter->getCle();
-        $paramList = $this->parameterRepo->getParamtersList($parameter->getCle());
+        $paramList = $this->parameterRepo->getValuesParamterList($parameter->getCle());
 
         $args = compact('mode', 'cle', 'paramList');
         return $this->forward(self::newEditAction, $args);
@@ -218,7 +218,7 @@ class ParametersController extends AbstractController
                 $parameterList->setName($cle);
                 $parameterList->setDescription($paramDescription->getValeur());
                 if ($paramList) {
-                    $parameterList->setValues($paramList);
+                    $parameterList->setValues($this->extractValues($paramList));
                 }
                 break;
             default:
@@ -256,8 +256,8 @@ class ParametersController extends AbstractController
                 }
             }
             $this->entityManager->flush();
-            $message =  (($mode == "new") ? "Création " : "Mise à jour "). "de la liste de paramètre effectuée avec succès";
-            $this->addFlash('success',$message);
+            $message =  (($mode == "new") ? "Création " : "Mise à jour ") . "de la liste de paramètre effectuée avec succès";
+            $this->addFlash('success', $message);
             $this->redirectToRoute("params-list");
         }
 
@@ -281,13 +281,13 @@ class ParametersController extends AbstractController
             /** tritement demande suppression */
             $datas = $request->request->all();
             if (array_key_exists("delt", $datas)) {
-                foreach($parameterList as $ord => $value) {
+                foreach ($parameterList as $ord => $value) {
                     $paramItem = $this->parameterRepo->findOneBy(['cle' => $parameter->getCle(), 'ord' => (int) $ord + 1]);
                     $this->entityManager->remove($paramItem);
                 }
                 $this->entityManager->remove($parameter);
                 $this->entityManager->flush();
-            
+
                 $this->redirectToRoute("params-list");
             }
         }
@@ -322,5 +322,15 @@ class ParametersController extends AbstractController
             }
         }
         return $form;
+    }
+
+    private function extractValues(array $paramsValues): array
+    {
+        $values = [];
+        /** @var Parameter $paramValue */
+        foreach ($paramsValues as $paramValue) {
+            $values[$paramValue->getId()] = $paramValue->getValeur();
+        }
+        return $values;
     }
 }

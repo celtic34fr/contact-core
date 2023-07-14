@@ -44,8 +44,7 @@ class ParameterRepository extends ServiceEntityRepository
             ->where('p.ord = 0')
             ->orderBy('p.cle', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
         if (!$rslt) return [];
         foreach ($rslt as $item) {
             $occur = [
@@ -59,9 +58,8 @@ class ParameterRepository extends ServiceEntityRepository
                 ->where('p.cle = :name')
                 ->setParameter('name', $item->getCle())
                 ->getQuery()
-                ->getResult()
-                ;
-            $occur['valeurs'] = $qb ? sizeof($qb) : 0;
+                ->getResult();
+            $occur['valeurs'] = $qb ? sizeof($qb) - 1 : 0;
             $nameList[] = $occur;
         }
         return $nameList;
@@ -108,12 +106,11 @@ class ParameterRepository extends ServiceEntityRepository
             ->orderBy("ord", "ASC")
             ->setParameter('cle', $cle)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
         if ($values) {
             $idxOrd = 0;
             /** @var Parameter $value */
-            foreach($values as $value) {
+            foreach ($values as $value) {
                 $value->setOrd($idxOrd);
                 $this->getEntityManager()->flush();
                 $idxOrd++;

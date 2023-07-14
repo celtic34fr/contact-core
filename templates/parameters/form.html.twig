@@ -1,5 +1,6 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
+{% import '@contact-core/macros/generals.html.twig' as generals %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -16,13 +17,13 @@
 
 {% block main %}
 	{% set urlForm %}
-		{% if mode == "new" %}
-			{{ path(mode~'-params-list') }}
-		{% elseif mode == "edt" %}
-			{{ path(mode~'-params-list', {'id': id}) }}
-		{% else %}
-			#
-		{% endif %}
+	{% if mode == "new" %}
+		{{ path(mode~'-params-list') }}
+	{% elseif mode == "edt" %}
+		{{ path(mode~'-params-list', {'id': id}) }}
+	{% else %}
+		#
+	{% endif %}
 	{% endset %}
 	{{ form_start(form, {'action': urlForm, 'method': 'POST'}) }}
 	{{ form_row(form._token) }}
@@ -41,7 +42,7 @@
 	<div class="col-12 row">
 		{{ form_label(form.values) }}
 		{{ form_errors(form.values) }}
-		<ul class="values col-12 row" data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" data-prototype='<span class="col-1">__name__ : </span>{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-9', 'data-ord': '__name__'}})|e('html_attr') }}'>
+		<ul class="values col-12 row" data-index="{{ form.values.children|length > 0 ? (form.values.children|last).vars.name + 1 : 0 }}" data-prototype='<span class="col-1">__name__ : </span>{{ form_widget(form.values.vars.prototype, {'attr': {'class': 'col-9', 'data-ord': '__name__'}})|e(' html_attr') }}'>
 			{% for idx, valueField in form.values %}
 				<li class="col-12 row my-2">
 					<span class="col-1">
@@ -55,7 +56,14 @@
 			Ajouter une valeur
 		</button>
 	</div>
-	{{ fields.submitbtn(form.record, "" , {'class': 'col-12 btn btn-primary my-3'}) }}
+
+	<div class="col-12 row m-0 p-o">
+		{{ fields.submitbtn(form.record, "" , {'class': 'col-4 offset-1 btn btn-primary my-3'}) }}
+		{{ generals.btnRedirect('cancel', "", {
+			'class': 'col-4 offset-2 btn btn-warning my-3', 'bclass': 'btn btn-warning', 'route': 'parameters-params-list'
+		}) }}
+	</div>
+
 	{{ form_end(form, {render_rest: false}) }}
 	<div class="col-12 mt-2 text-right text-gray-600 px-0 mx-3">
 		* champs obligatoires
@@ -84,65 +92,65 @@
 			removeFormButton.addEventListener('click', (e) => {
 				e.preventDefault();
 				let item = e.currentTarget.parentElement;
-                let list = item.parentElement;
+				let list = item.parentElement;
 				let index = parseInt(item.querySelector("input").dataset.ord);
 				item.remove();
 
-                let spans = list.querySelectorAll("span");
+				let spans = list.querySelectorAll("span");
 				spans.forEach(span => {
-					let idx = parseInt(span.innerHTML);
+				let idx = parseInt(span.innerHTML);
 
-					if (idx > index) {
-						let idxStr = idx.toString();
-						let nidxStr = (idx - 1).toString();
-						let input = span.parentElement.querySelector("input");
-						let iclone = input.cloneNode(1);
+				if (idx > index) {
+					let idxStr = idx.toString();
+					let nidxStr = (idx - 1).toString();
+					let input = span.parentElement.querySelector("input");
+					let iclone = input.cloneNode(1);
 
-                        span.innerHTML = nidxStr + " : ";
-						iclone.id = input.id.replace(idxStr, nidxStr);
-						iclone.name = input.name.replace(idxStr, nidxStr);
-						iclone.value = input.value;
-						iclone.dataset.ord = nidxStr;
-						input.remove();
-						span.after(iclone);
-					}
-				});
+					span.innerHTML = nidxStr + " : ";
+					iclone.id = input.id.replace(idxStr, nidxStr);
+					iclone.name = input.name.replace(idxStr, nidxStr);
+					iclone.value = input.value;
+					iclone.dataset.ord = nidxStr;
+					input.remove();
+					span.after(iclone);
+				}
 			});
-		}
-
-		function addEmptyLi(bouton) {
-			const collectionHolder = document.querySelector('.' + bouton.dataset.collectionHolderClass);
-			const index = parseInt(collectionHolder.dataset.index);
-			const item = document.createElement('li');
-			item.classList.add("col-12");
-			item.classList.add("row");
-			item.classList.add("my-2");
-			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, index);
-			collectionHolder.appendChild(item);
-
-			collectionHolder.dataset.index ++;
-			addTagFormDeleteLink(item, index);
-		}
-
-		document.addEventListener("DOMContentLoaded", function () {
-			document.querySelectorAll('.add_item_link').forEach(btn => {
-				btn.addEventListener("click", function (e) {
-					addEmptyLi(e.currentTarget);
-				});
-			});
-
-			document.querySelectorAll('ul.values li').forEach((val) => {
-				let input = val.querySelector("input");
-				let ord = parseInt(input.dataset.ord);
-				addTagFormDeleteLink(val, ord)
-			});
-
-			const bouton = document.querySelector(".add_item_link")
-			const valuesNBR = document.querySelectorAll("ul.values li");
-			if (valuesNBR.length < 1) {
-				addEmptyLi(bouton);
-			}
 		});
+	}
+
+	function addEmptyLi(bouton) {
+		const collectionHolder = document.querySelector('.' + bouton.dataset.collectionHolderClass);
+		const index = parseInt(collectionHolder.dataset.index);
+		const item = document.createElement('li');
+		item.classList.add("col-12");
+		item.classList.add("row");
+		item.classList.add("my-2");
+		item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, index);
+		collectionHolder.appendChild(item);
+
+		collectionHolder.dataset.index ++;
+		addTagFormDeleteLink(item, index);
+	}
+
+	document.addEventListener("DOMContentLoaded", function () {
+		document.querySelectorAll('.add_item_link').forEach(btn => {
+		btn.addEventListener("click", function (e) {
+		addEmptyLi(e.currentTarget);
+	});
+});
+
+document.querySelectorAll('ul.values li').forEach((val) => {
+let input = val.querySelector("input");
+let ord = parseInt(input.dataset.ord);
+addTagFormDeleteLink(val, ord)
+});
+
+const bouton = document.querySelector(".add_item_link")
+const valuesNBR = document.querySelectorAll("ul.values li");
+if (valuesNBR.length < 1) {
+addEmptyLi(bouton);
+}
+});
 	</script>
 {% endblock %}
 
