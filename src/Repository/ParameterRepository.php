@@ -62,7 +62,7 @@ class ParameterRepository extends ServiceEntityRepository
                 ->getResult()
                 ;
             $occur['valeurs'] = $qb ? sizeof($qb) : 0;
-            $nameList[(int) $item->getOrd() - 1] = $occur;
+            $nameList[] = $occur;
         }
         return $nameList;
     }
