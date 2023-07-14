@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ParameterRepository::class)]
 #[ORM\Table(name: 'parameters')]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 class Parameter
 {
     #[ORM\Id]
@@ -30,10 +32,9 @@ class Parameter
     #[Assert\Type('integer')]
     private int $ord = 0;
 
-    #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
+    #[ORM\Column(type: Types::JSON, length: 255, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Type('string')]
     private string $valeur;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
