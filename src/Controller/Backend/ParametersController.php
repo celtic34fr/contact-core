@@ -29,7 +29,7 @@ use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
 
-#[Route('parameters-')]
+#[Route('parameters/', name: 'parameters-')]
 class ParametersController extends AbstractController
 {
     use Utilities;
