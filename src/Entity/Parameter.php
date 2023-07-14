@@ -98,6 +98,7 @@ class Parameter
 
     /**
      * Get the value of valeur
+     * @return  null|string|array
      */ 
     public function getValeur(): mixed
     {
