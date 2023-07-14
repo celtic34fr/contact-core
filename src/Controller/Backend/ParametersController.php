@@ -4,28 +4,30 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 
 use Exception;
 use Twig\Environment;
+use DateTimeImmutable;
 use Bolt\Configuration\Config;
-use Celtic34fr\ContactCore\Entity\Parameter;
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\ORM\EntityManagerInterface;
+use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\Traits\Utilities;
 use Symfony\Component\HttpFoundation\Request;
 use Celtic34fr\ContactCore\Entity\PieceJointe;
+use Celtic34fr\ContactCore\Form\ParameterType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 use Celtic34fr\ContactCore\Service\UploadFiles;
 use Symfony\Component\Routing\Annotation\Route;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Celtic34fr\ContactCore\FormEntity\ParameterFE;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
-use Celtic34fr\ContactCore\Form\ParameterType;
 use Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
-use Celtic34fr\ContactCore\FormEntity\ParameterFE;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
-use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Packages;
 
 #[Route('parameters')]
 class ParametersController extends AbstractController
@@ -38,11 +40,13 @@ class ParametersController extends AbstractController
     private ExtensionConfig $extConfig;
     private PieceJointeRepository $pieceJointeRepo;
     private ParameterRepository $parameterRepo;
+    private UploadFiles $uploadFiles;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private RouterInterface $router,
+        private Packages $assetManager,
         private Environment $twigEnvironment,
-        private UploadFiles $uploadFiles,
         private KernelInterface $kernel,
         private Config $config
     ) {
@@ -50,6 +54,7 @@ class ParametersController extends AbstractController
         $this->extConfig = new ExtensionConfig($this->kernel, $this->config);
         $this->pieceJointeRepo = $entityManager->getRepository(PieceJointe::class);
         $this->parameterRepo = $entityManager->getRepository(Parameter::class);
+        $this->uploadFiles = new UploadFiles($entityManager, $router, $assetManager);
     }
 
     /**
