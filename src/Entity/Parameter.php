@@ -99,7 +99,7 @@ class Parameter
     /**
      * Get the value of valeur
      */ 
-    public function getValeur(): ?string
+    public function getValeur(): mixed
     {
         return $this->valeur;
     }
@@ -108,7 +108,7 @@ class Parameter
      * Set the value of valeur
      * @return  self
      */ 
-    public function setValeur(string $valeur): self
+    public function setValeur(mixed $valeur): self
     {
         $this->valeur = $valeur;
         return $this;
