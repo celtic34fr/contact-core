@@ -65,7 +65,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
-                'uri' => $this->urlGenerator->generate('params-list'),
+                'uri' => $this->urlGenerator->generate('parameters-params-list'),
                 'extras' => [
                     'icon' => 'fa-building',
                     'group' => 'Contact',

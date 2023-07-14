@@ -18,9 +18,9 @@
 {% block main %}
 	{% set urlForm %}
 	{% if mode == "new" %}
-		{{ path(mode~'-params-list') }}
+		{{ path('parameters-params-list-'~mode) }}
 	{% elseif mode == "edt" %}
-		{{ path(mode~'-params-list', {'id': id}) }}
+		{{ path('parameters-params-list-'~mode, {'id': id}) }}
 	{% else %}
 		#
 	{% endif %}

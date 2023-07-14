@@ -29,7 +29,7 @@ use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
 
-#[Route('parameters/', name: 'parameters-')]
+#[Route('parameters', name: 'parameters-')]
 class ParametersController extends AbstractController
 {
     use Utilities;
@@ -162,7 +162,7 @@ class ParametersController extends AbstractController
         ]);
     }
 
-    #[Route('/new_params_list', name: 'new-params-list')]
+    #[Route('/new_params_list', name: 'params-list-new')]
     public function new_params_list(Request $request)
     {
         $paramList = [];
@@ -173,7 +173,7 @@ class ParametersController extends AbstractController
         return $this->forward(self::newEditAction, $args);
     }
 
-    #[Route('/edit_params_list/{id}', name: 'edt-params-list')]
+    #[Route('/edit_params_list/{id}', name: 'params-list-edt')]
     public function edit_params_list(Request $request, Parameter $parameter)
     {
         $mode = "edt";
@@ -258,7 +258,7 @@ class ParametersController extends AbstractController
             $this->entityManager->flush();
             $message =  (($mode == "new") ? "Création " : "Mise à jour ") . "de la liste de paramètre effectuée avec succès";
             $this->addFlash('success', $message);
-            $this->redirectToRoute("params-list");
+            $this->redirectToRoute("parameters-params-list");
         }
 
         return $this->render("@contact-core/parameters/form.html.twig", [
@@ -271,7 +271,7 @@ class ParametersController extends AbstractController
         ]);
     }
 
-    #[Route('/delete_params_list/{id}', name: 'del-params-list')]
+    #[Route('/delete_params_list/{id}', name: 'params-list-del')]
     /** suppression de liste de paramètres */
     public function delete_params_list(Request $request, Parameter $parameter)
     {
@@ -288,7 +288,7 @@ class ParametersController extends AbstractController
                 $this->entityManager->remove($parameter);
                 $this->entityManager->flush();
 
-                $this->redirectToRoute("params-list");
+                $this->redirectToRoute("parameter-params-list");
             }
         }
 
