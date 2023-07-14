@@ -22,9 +22,9 @@
         		<tr>
 		        	<th scope="col" class="col-2">Nom</th>
 			        <th scope="col" class="col-5">Description</th>
-        			<th scope="col" class="col-2">Créée le</th>
-		        	<th scope="col" class="col-1">Valeurs</th>
-					<th scope="col" class="col-2">Actions</th>
+        			<th scope="col" class="col-2 text-center">Créée le</th>
+		        	<th scope="col" class="col-1 text-center">Valeurs</th>
+					<th scope="col" class="col-2 text-center">Actions</th>
         		</tr>
 	        </thead>
         	<tbody class="table-group-divider"></tbody>
@@ -32,8 +32,8 @@
             		<tr>
 						<td class="col-2">{{ paramList.name }}</td>
             			<td class="col-5">{{ paramList.description }}</td>
-			            <td class="col-2">{{ paramList.created_at|date("d/m/Y") }}</td>
-            			<td class="col-1">{{ paramList.valeurs }}</td>
+			            <td class="col-2 text-center">{{ paramList.created_at|date("d/m/Y") }}</td>
+            			<td class="col-1 text-center">{{ paramList.valeurs }}</td>
 						<td class="col-2">
 							{{ generals.btnRedirect('edt' ~ paramList.id, '<i class="fa fa-pen"></i>', {
 								'class': 'col-4 btn btn-success', 'title': 'Editer la liste',
