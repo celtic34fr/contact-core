@@ -1,17 +1,16 @@
 {# rendu de bouton radio hors formulaire #}
 
 {% macro form_start(name= "", args = {}) %}
-    {% set method = args.method is defined ? args.method : 'POST' %}
-    {% set action = args.action is defined ?args.action : "#" %}
-    {% set class = args.class is defined ? args.class : 'col-12 row' %}
+	{% set method = args.method is defined ? args.method : 'POST' %}
+	{% set action = args.action is defined ?args.action : "#" %}
+	{% set class = args.class is defined ? args.class : 'col-12 row' %}
 
-    <form action="{{ action }}" method="{{ method }}" class="{{ class }}"
-        {% if name is not empty %} name="{{ name }}" {% endif %}
-    >
+	<form action="{{ action }}" method="{{ method }}" class="{{ class }}"
+    {% if name is not empty %} name="{{ name }}" {% endif %}>
 {% endmacro %}
 
 {% macro form_end() %}
-    </form>
+	</form>
 {% endmacro %}
 
 {# macro radioBtn Radio Bouton #}
@@ -22,23 +21,25 @@
 {# - oclass         : classe CSS à appliquer au radio bouton #}
 {# - disabled       : booléen indiquant si le radio bouton est actif (false) ou inactif (true) #}
 {% macro radioBtn(name, occur, args={}) %}
-    {% set ovalue = args.ovalue is defined ? args.ovalue : "" %}
-    {% set olabel = args.olabel is defined ? args.olabel : "" %}
-    {% set oclass = args.oclass is defined ? args.oclass : "" %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
+	{% set ovalue = args.ovalue is defined ? args.ovalue : "" %}
+	{% set olabel = args.olabel is defined ? args.olabel : "" %}
+	{% set oclass = args.oclass is defined ? args.oclass : "" %}
+	{% set disabled = args.disabled is defined ? args.disabled : false %}
 
-    {% set attributes %}
-        {% if oclass|length %} class="{{ oclass }} {% endif %}
-        {% if disabled %} disabled="disabled" {% endif %}
-    {% endset %}
+	{% set attributes %}
+		{% if oclass|length %} class="{{ oclass }}" {% endif %}
+		{% if disabled %} disabled="disabled" {% endif %}
+	{% endset %}
+
     {% if olabel|length %}
-        <label for="{{ name~occur }}">{{ olabel }}
+        <label for="{{ name~occur }}"> {{ olabel }}
     {% endif %}
     <input type="radio" id="{{ name~occur }}" name="{{ name }}" value="{{ ovalue }}"
-            {{ attributes }}/>
+        {{ attributes }}
+    />
     {% if olabel|length %}
         </label>
-    {% endif %}
+	{% endif %}
 {% endmacro %}
 
 {# macro checkbox Case à cocher #}
@@ -53,36 +54,35 @@
 {# - title          : titre affecté à l'objet pour faire office de tooltip #}
 {# - row            : booléen d'activation (false) ou désactivation (true) de la classe row pour le groupe #}
 {% macro checkbox(name, value=false, args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set ckclass = args.ckclass is defined ? args.ckclass : "" %}
-    {% set lbclass = args.lbclass is defined ? args.lbclass : "" %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-    {% set title = args.title is defined ? args.title : "" %}
-    {% set label = args.label is defined ? args.label : "" %}
-    {% set row = args.row is defined ? args.row : true %}
+	{% set class = args.class is defined ? args.class : "" %}
+	{% set ckclass = args.ckclass is defined ? args.ckclass : "" %}
+	{% set lbclass = args.lbclass is defined ? args.lbclass : "" %}
+	{% set disabled = args.disabled is defined ? args.disabled : false %}
+	{% set title = args.title is defined ? args.title : "" %}
+	{% set label = args.label is defined ? args.label : "" %}
+	{% set row = args.row is defined ? args.row : true %}
     {% if ckclass|length and lbclass|length and row %}
-        {% set class = class ~ ('col-12' in class ? '' : ' col-12') ~ ' row' %}
-    {% else %}
-        {% if class is empty %}
-            {% set class = 'col-12' %}
-        {% endif %}
-    {% endif %}
+		{% set class = class ~ ('col-12' in class ? '' : ' col-12') ~ ' row' %}
+	{% else %}
+		{% if class is empty %}
+			{% set class = 'col-12' %}
+		{% endif %}
+	{% endif %}
 
-    {% set attributes %}
+	{% set attributes %}
         {% if ckclass|length %} class="{{ ckclass }}" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
         {% if title|length %} title="{{ title }}" {% endif %}
-    {% endset %}
+	{% endset %}
 
-    <div class="{{ class }}">
-        {% if label|length %}
-            <label for="{{ name }}" id="{{ name }}_label" {% if lbclass|length %}class="{{ lbclass }}"{% endif %}>
-                {{ label }}
-            </label>
-        {% endif %}
-        <input type="checkbox" name="{{ name }}" id="{{ name }}" {% if value != false %} checked="checked" {% endif %}
-                {{ attributes|raw }}/>
-    </div>
+	<div class="{{ class }}">
+		{% if label|length %}
+			<label for="{{ name }}" id="{{ name }}_label" {% if lbclass|length %} class="{{ lbclass }}" {% endif %}>
+				{{ label }}
+			</label>
+		{% endif %}
+		<input type="checkbox" name="{{ name }}" id="{{ name }}" {% if value != false %} checked="checked" {% endif %} {{ attributes|raw }}/>
+	</div>
 {% endmacro %}
 
 {# macro hidden Input type Hidden (caché) #}
@@ -91,18 +91,25 @@
 {# dans le tableau args #}
 {# - class          : classe CSS à appliquer (possible : inutile) #}
 {# - ref            : identifiant servant de référence pour un autre champ pouvant modifier la valeur par défaut #}
-{% macro hidden(name, value, args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set ref = args.ref is defined ? args.ref : "" %}
-    {% set form = args.form is defined ? args.form : '' %}
+	{% macro hidden(name, value, args={}) %}
+	{% set class = args.class is defined ? args.class : "" %}
+	{% set ref = args.ref is defined ? args.ref : "" %}
+	{% set form = args.form is defined ? args.form : '' %}
 
-    {% set attributes = '' %}
-    {% if ref|length %}{% set attributes = attributes ~ 'data-ref="' ~ ref ~ '" ' %}{% endif %}
-    {% if class|length %}{% set attributes = attributes ~ 'class="' ~ class ~ '" ' %}{% endif %}
-    {% if form|length %}{% set attributes = attributes ~ 'form="' ~ form ~ '" ' %}{% endif %}
+	{% set attributes = '' %}
+    {% if ref|length %}
+        {% set attributes = attributes ~ 'data-ref="' ~ ref ~ '" ' %}
+    {% endif %}
+    {% if class|length %}
+        {% set attributes = attributes ~ 'class="' ~ class ~ '" ' %}
+    {% endif %}
+    {% if form|length %}
+        {% set attributes = attributes ~ 'form="' ~ form ~ '" ' %}
+    {% endif %}
 
     <input type="hidden" name="{{ name }}" id="{{ name }}" value="{{ value }}"
-            {{ attributes|raw }}/>
+        {{ attributes|raw }}
+    />
 {% endmacro %}
 
 {# macro submitbtn Bouton de soumission de formulaire #}
@@ -114,38 +121,39 @@
 {# - codeJS         : code JavaScript à exécuter #}
 {# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
 {% macro submitbtn(name, label="", args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set event = args.event is defined ? args.event : "" %}
-    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
+	{% set class = args.class is defined ? args.class : "" %}
+	{% set event = args.event is defined ? args.event : "" %}
+	{% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+	{% set disabled = args.disabled is defined ? args.disabled : false %}
 
-    {% set attributes %}
-        {% if class|length %} class="{{ class }}" {% endif %}
-        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+	{% set attributes %}
+		{% if class|length %} class="{{ class }}" {% endif %}
+		{% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
             {{ event }}="{{ codeJS }}"
-        {% endif %}
-        {% if disabled %} disabled="disabled" {% endif %}
-    {% endset %}
+	    {% endif %}
+		{% if disabled %} disabled="disabled" {% endif %}
+	{% endset %}
 
     <input id="{{ name }}" name="{{ name }}" type="submit" value="{{ label }}"
-            {{ attributes|raw }}>
+        {{ attributes|raw }}
+    >
 {% endmacro %}
 
 {% macro cancelbtn(name, label="", args= {}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-    {% set event = args.event is defined ? args.event : "" %}
-    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+	{% set class = args.class is defined ? args.class : "" %}
+	{% set disabled = args.disabled is defined ? args.disabled : false %}
+	{% set event = args.event is defined ? args.event : "" %}
+	{% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
 
-    {% set attributes %}
-        {% if class|length %} class="{{ class }}" {% endif %}
-        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
-            {{ event }}="{{ codeJS }}"
-        {% endif %}
-        {% if disabled %} disabled="disabled" {% endif %}
-    {% endset %}
+	{% set attributes %}
+    	{% if class|length %} class="{{ class }}" {% endif %}
+	    {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+		    {{ event }}="{{ codeJS }}"
+	    {% endif %}
+	    {% if disabled %} disabled="disabled" {% endif %}
+	{% endset %}
 
-    <input id="{{ name }}" name="{{ name }}" type="reset" value="{{ label }}" {{ attributes|raw }}>
+	<input id="{{ name }}" name="{{ name }}" type="reset" value="{{ label }}" {{ attributes|raw }}>
 {% endmacro %}
 
 {# macro btn Bouton pouvant avoir un évènement intégré #}
@@ -171,25 +179,30 @@
     {% set disabled = args.disabled is defined ? args.disabled : false %}
 
     {% set attributes %}
-        {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}
-        {% if class|length %} class="{{ class }}" {% endif %}
-        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+        {% if name|length %}id="{{ name }} " name="{{ name }} " {% endif %}
+		{% if class|length %} class="{{ class }} " {% endif %}
+		{% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
             {{ event }}="{{ codeJS }}"
-        {% endif %}
-        {% if title|length %} title="{{ title }}" {% endif %}
-        {% if formnovalidate %} formnovalidate="formnovalidate" {% endif %}
-        {% if data_url|length %} data-url="{{ data_url }}" {% endif %}
+    	{% endif %}
+		{% if title|length %} title="{{ title }}" {% endif %}
+		{% if formnovalidate %}
+	        formnovalidate="formnovalidate"
+    	{% endif %}
+		{% if data_url|length %}
+            data-url="{{ data_url }}"
+	    {% endif %}
         type="{{ type }}"
-        {% set args_keys = args|keys %}
-        {% for key in args_keys %}
-            {% if key starts with 'data-' %}
+    	{% set args_keys = args|keys %}
+		{% for key in args_keys %}
+			{% if key starts with 'data-' %}
                 {{ key }}="{{ args[key] }}"
-            {% endif %}
-        {% endfor %}
-        {% if disabled %} disabled {% endif %}
-    {% endset %}
-
-    <button {{ attributes|raw }}>{{ label|raw }}</button>
+        	{% endif %}
+	    {% endfor %}
+		{% if disabled %} disabled {% endif %}
+	{% endset %}
+    <button {{ attributes|raw }}>
+        {{ label|raw }}
+    </button>
 {% endmacro %}
 
 {# macro input Input HTML multifonction #}
@@ -236,7 +249,7 @@
         {% if form|length %} form="{{ form }}" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
         {% for name, value in dataset %}
-            data-{{ name }}="{{ value }}" 
+            data-{{ name }}="{{ value }}"
         {% endfor %}
     {% endset %}
 
@@ -295,9 +308,9 @@
         {% if accept is not empty %} accept="{{ accept }}" {% endif %}
         {% if url is not empty %} data-url="{{ url }}" {% endif %}
         {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
-        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}"{% endif %}
-        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}"{% endif %}
-        {% if maxFiles > 0 %} data-max-file="{{ maxFiles }}"{% endif %}
+        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
+        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}
+        {% if maxFiles > 0 %} data-max-file="{{ maxFiles }}" {% endif %}
         {% if removeBtn > 0 and not disabled %} data-remove-btn="{{ removeBtn }}" {% endif %}
         {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
         {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
@@ -305,18 +318,15 @@
         {% if disabled %} disabled="disabled" {% endif %}
     {% endset %}
 
-    <div id="{{ name }}-drop-area" class="drop-area">
-        <input type="file" id="{{ name }}" name="{{ name }}" class="{{ class }}"
-                {{ attributes|raw }}
-        >
+    <div id="{{ name }}-drop-area" class="drop-area"> <input type="file" id="{{ name }}" name="{{ name }}" class="{{ class }}" {{ attributes|raw }}>
         <label class="{{ label_class }}" for="{{ name }}">{{ label }}</label>
         {% if progressbar %}
-            <progress id="{{ name }}progress-bar" class="progress" max=100 value=0></progress>
-        {% endif %}
-        {% if gallery %}
-            <div id="{{ name }}-gallery" class="gallery"></div>
-        {% endif %}
-    </div>
+            <progress id="{{ name }}progress-bar" class="progress" max="100" value="0"></progress>
+		{% endif %}
+		{% if gallery %}
+			<div id="{{ name }}-gallery" class="gallery"></div>
+		{% endif %}
+	</div>
 {% endmacro %}
 
 {# #}
@@ -357,7 +367,7 @@
     {% endif %}
 
     {% set sattributes %}
-        {% if sclass|length %} class="select {{ sclass }}"{% endif %}
+        {% if sclass|length %} class="select{{ sclass }}" {% endif %}
         {% if multiple %} multiple="multiple" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
     {% endset %}
@@ -366,15 +376,16 @@
         {% if lclass|length %} class="{{ lclass }}" {% endif %}
     {% endset %}
 
-    <div id="{{ idname }}_select" {% if class|length %}class="{{ class }}"{% endif %}>
+    <div id="{{ idname }}_select" 
+        {% if class|length %} class="{{ class }}" {% endif %}>
         {% if label|length %}
             <label for="{{ name }}" {{ lattributes }}>{{ label }}</label>
         {% endif %}
-        <select id="{{ idname }}"
-                name="{{ name }}" {{ sattributes }} {% if placeholder|length %}data-placeholder="{{ placeholder }}"{% endif %}>
-            {% if placeholder|length %}
+        <select id="{{ idname }}" name="{{ name }}" {{ sattributes }}
+            {% if placeholder|length %} data-placeholder="{{ placeholder }}" {% endif %}>
+			{% if placeholder|length %}
                 {% set attrPlaceholder %}
-                    disabled="disabled"
+                    disabled="disabled" 
                     {% if selection is empty %}
                         selected="selected"
                     {% endif %}
@@ -386,9 +397,8 @@
             {% for idx, data in datas %}
                 {% if idx > 0 %}
                     <option value="{{ data.value }}" title="{{ data.label|raw }}"
-                            {% if data.disabled is defined and data.disabled %}disabled="disabled"{% endif %}
-                            {% if data.value == selection %}selected="selected"{% endif %}
-                    >
+                        {% if data.disabled is defined and data.disabled %} disabled="disabled" {% endif %}
+                        {% if data.value == selection %} selected="selected" {% endif %}>
                         {{ data.label|raw }}
                     </option>
                 {% endif %}
@@ -426,10 +436,8 @@
     {% set class = args.class is defined ? args.class : "" %}
     {% set disabled = args.disabled is defined ? args.disabled : false %}
     {% set fields = args.fields is defined ? args.fields : {} %}
-
     <div id="{{ group }}" name="{{ group }}" class="{{ class }} row"
-         {% if title is defined and title is not empty %}title="{{ title| raw }}"{% endif %}
-    >
+        {% if title is defined and title is not empty %} title="{{ title| raw }}"{% endif %}>
         {% for field, attrs in fields %}
             {% set macro = attrs.type %}
             {% set args = attrs.args %}
@@ -475,30 +483,24 @@
     {% set edisabled = edisabled ? 'disabled="disabled"' : '' %}
 
     <div id="datepickerRange_{{ debut }}_{{ fin }}" data-start="{{ debut }}" data-end="{{ fin }}"
-         {% if date_min|length %}data-date-min="{{ date_min }}"{% endif %}
-         class="row datepickerRange{% if class|length %} {{ class }}{% endif %}"
-    >
-        <div{% if sclass|length %} class="{{ sclass }}"{% endif %}>
+        {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
+        class="row datepickerRange{% if class|length %} {{ class }}{% endif %}">
+        <div {% if sclass|length %} class="{{ sclass }}" {% endif %}>
             <label for="{{ debut }}_dpicker"
-                   {% if slabel_class|length %}class="{{ slabel_class }}"{% endif %}>
-                {{ slabel }}
-            </label>
-            <input type="text" name="start_{{ debut }}" id="{{ debut }}_dpicker"
-                   class="start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }}
-            >
-            {{ form_forms.input( debut, "", {'class': 'hidden_start', 'type': 'hidden'} ) }}
-        </div>
-        <div{% if eclass|length %} class="{{ eclass }}"{% endif %}
-                {% if elabel_class|length %}class="{{ elabel_class }}"{% endif %}>
-            <label for="{{ fin }}_dpicker">
-                {{ elabel }}
-            </label>
-            <input type="text" name="start_{{ fin }}" id="{{ fin }}_dpicker"
-                   class="end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }}
-            >
-            {{ form_forms.input( fin, "", {'class': 'hidden_start', 'type': 'hidden'} ) }}
-        </div>
-    </div>
+                {% if slabel_class|length %} class="{{ slabel_class }}" {% endif %}>{{ slabel }}
+			</label>
+			<input type="text" name="start_{{ debut }}" id="{{ debut }}_dpicker" 
+                class="start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }}>
+			{{ form_forms.input( debut, "", {'class': 'hidden_start', 'type': 'hidden'} ) }}
+		</div>
+		<div {% if eclass|length %} class="{{ eclass }}" {% endif %} {% if elabel_class|length %} class="{{ elabel_class }}" {% endif %}>
+			<label for="{{ fin }}_dpicker">
+				{{ elabel }}
+			</label>
+			<input type="text" name="start_{{ fin }}" id="{{ fin }}_dpicker" class="end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }}>
+			{{ form_forms.input( fin, "", {'class': 'hidden_start', 'type': 'hidden'} ) }}
+		</div>
+	</div>
 
     {# {% set class = args.class ?? "" %} #}
     {# {% set date_min = args.date_min ?? "" %} #}
