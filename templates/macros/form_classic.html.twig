@@ -179,8 +179,8 @@
     {% set disabled = args.disabled is defined ? args.disabled : false %}
 
     {% set attributes %}
-        {% if name|length %}id="{{ name }} " name="{{ name }} " {% endif %}
-		{% if class|length %} class="{{ class }} " {% endif %}
+        {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}
+		{% if class|length %} class="{{ class }}" {% endif %}
 		{% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
             {{ event }}="{{ codeJS }}"
     	{% endif %}
