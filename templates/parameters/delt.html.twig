@@ -14,41 +14,43 @@
 {% endblock %}
 
 {% block main %}
-    <div class="col-12 row m-0 p-0">
-        <table class="col-12 table-bordered m-0 p-0 border-primary">
-            <tr class="row col-12 m-0 p-1">
-                <td class="col-4 table-secondary">Description</td>
-                <td colspan="3" class="p-1 col-8">{{ parameter.getValeur() }}</td>
-            </tr>
-            <tr class="row col-12 m-0 p-1">
-                <td class="col-4 table-secondary">Créée le</td>
-                <td class="col-4">{{ parameter.getCreatedAt()|date("d/m/Y") }}</td>
-                <td class="col-4 table-secondary">Modifiée le</td>
-                <td class="col-4">
-                    {{ parameter.isEmptyUpdatedAt() ? "" : parameter.getUpdatedAt()|date("d/m/Y") }}
-                </td>
-            </tr>
-        </table>
+	<div class="col-12 row m-0 p-0">
+		<table class="col-12 table-bordered m-0 p-0 border-primary">
+			<tr class="row col-12 m-0 p-1">
+				<td class="col-4 table-secondary">Description</td>
+				<td colspan="3" class="p-1 col-8">{{ parameter.getValeur() }}</td>
+			</tr>
+			<tr class="row col-12 m-0 p-1">
+				<td class="col-4 table-secondary">Créée le</td>
+				<td class="col-4">{{ parameter.getCreatedAt()|date("d/m/Y") }}</td>
+				<td class="col-4 table-secondary">Modifiée le</td>
+				<td class="col-4">
+					{{ parameter.isEmptyUpdatedAt() ? "" : parameter.getUpdatedAt()|date("d/m/Y") }}
+				</td>
+			</tr>
+		</table>
 
-        <table class="col-12 m-0 p-0">
-            <thead class="col-12 row">
-                <tr class="col-12 row">
-                    <td class="col-2">Indice</td>
-                    <td class="col-10">Valeur</td>                   
-                </tr>
-            </thead>
-            <tbody class="col-12 row">
-                {% for idx, param in parameterList %}
-                <tr class="col-12 row">
-                    <td class="col-2">{{ idx - 1 }}</td>
-                    <td class="col-10">{{ param.getValeur() }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+		<table class="col-12 m-0 p-0 table-bordered mt-2">
+			<thead class="col-12 row m-0 p-0">
+				<tr class="col-12 row m-0 p-0">
+					<td class="col-2 m-0 py-0 px-1">Indice</td>
+					<td class="col-10 m-0 py-0 px-1">Valeur</td>
+				</tr>
+			</thead>
+			<tbody class="col-12 row m-0 p-0">
+				{% for idx, param in parameterValues %}
+					{% set val = param.getValeur() %}
+					<tr class="col-12 row m-0 p-0">
+						<td class="col-2 m-0 py-0 px-1">{{ idx }}</td>
+						<td class="col-10 m-0 py-0 px-1">{{ val }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
 {% endblock %}
+
