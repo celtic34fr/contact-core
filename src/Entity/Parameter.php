@@ -11,8 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ParameterRepository::class)]
 #[ORM\Table(name: 'parameters')]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\InheritanceType('SINGLE_TABLE')]
-#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 class Parameter
 {
     #[ORM\Id]
