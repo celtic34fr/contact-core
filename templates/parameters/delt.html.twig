@@ -15,22 +15,20 @@
 
 {% block main %}
     <div class="col-12 row m-0 p-0">
-        <div class="col-12 row m-0 p-0">
-            <span class="col-2 my-1">Description</span>
-            <span class="col-10 my-1">{{ parameter.getValeur() }}</span>
-        </div>
-        <div class="col-12 row m-0 p-0">
-            <div class="col-6 row my-1">
-                <span class="col-4">Créée le</span>
-                <span class="col-8">{{ parameter.getCreatedAt()|date("d/m/Y") }}</span>
-            </div>
-            <div class="col-6 row my-1">
-                <span class="col-4">Modifiée le</span>
-                <span class="col-8">
+        <table class="col-12">
+            <tr class="row">
+                <td class="col-4">Description</td>
+                <td colspan="3">{{ parameter.getValeur() }}</td>
+            </tr>
+            <tr class="row">
+                <td class="col-4">Créée le</td>
+                <td class="col-4">{{ parameter.getCreatedAt()|date("d/m/Y") }}</td>
+                <td class="col-4">Modifiée le</td>
+                <td class="col-4">
                     {{ parameter.isEmptyUpdatedAt() ? "" : parameter.getUpdatedAt()|date("d/m/Y") }}
-                </span>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
     </div>
 {% endblock %}
 
