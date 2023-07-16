@@ -1,4 +1,5 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
+{% import '@contact-core/macros/form_classic.html.twig' as forms %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -48,9 +49,54 @@
 			</tbody>
 		</table>
 	</div>
+
+    <div id="confirm-delete" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+                    <h3>Suppression d'une liste</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Etes-vous bien sûr ?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYes" class="btn btn-danger">Oui</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn btn-bs-warning">Nom</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ forms.form_start("delete", { 'method': "POST", 'class': 'col-12 row' }) }}
+        {{ form.btn('delete', "Supprimer la liste", {
+            'class': 'btn btn-danger col-4 offset-1', 'bclass': 'btn btn-danger', 'type': 'submit',
+        }) }}
+        {{ form.btn('cancel', "Annuler l'opération", {
+            'class': 'btn btn-bs-warning col-4 offset-2', 'bclass': 'btn btn-bs-warning', 'type': 'submit',
+        } ) }}
+    {{ forms.form_stop() }}
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
+
+    <script>
+        document.querySelector("#delete").addEventListener('click', btn => {
+            modalMODAL.show();
+        });
+
+        document.querySelector("btnYes").addEventListener('click', btn => {
+            form.submit();
+        });
+
+        document.addEventListener(DOMContentLoaded, function() {
+            let modalHTML = document.querySelector("#confirm-delete")
+            let modalMODAL = new bootstrap.Modal(modalHTML, {
+                keyboard: false,
+                focus: false;
+            });
+        })
+    </script>
 {% endblock %}
 

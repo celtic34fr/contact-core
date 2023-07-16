@@ -1,5 +1,19 @@
 {# rendu de bouton radio hors formulaire #}
 
+{% macro form_start(name= "", args = {}) %}
+    {% set method = args.method is defined ? args.method : 'POST' %}
+    {% set actions = args.action is defined ?args.action : "#" %}
+    {% set class = args.class is defined ? args.class : 'col-12 row' %}
+
+    <form action="{{ action }}" method="{{ method }}" class="{{ class }}"
+        {% if name is not empty %} name="{{ name }}" {% endif %}
+    >
+{% endmacro %}
+
+{% macro form_end() %}
+    </form>
+{% endmacro %}
+
 {# macro radioBtn Radio Bouton #}
 {# - name           : nom et identifiant #}
 {# - occur          : occurance du radio bouton pour complément d'identifiant #}
