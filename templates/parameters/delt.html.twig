@@ -69,10 +69,10 @@
     </div>
 
     {{ forms.form_start("delete", { 'method': "POST", 'class': 'col-12 row' }) }}
-        {{ form.btn('delete', "Supprimer la liste", {
+        {{ forms.btn('delete', "Supprimer la liste", {
             'class': 'btn btn-danger col-4 offset-1', 'bclass': 'btn btn-danger', 'type': 'submit',
         }) }}
-        {{ form.btn('cancel', "Annuler l'opération", {
+        {{ forms.btn('cancel', "Annuler l'opération", {
             'class': 'btn btn-bs-warning col-4 offset-2', 'bclass': 'btn btn-bs-warning', 'type': 'submit',
         } ) }}
     {{ forms.form_stop() }}
