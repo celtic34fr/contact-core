@@ -275,7 +275,7 @@ class ParametersController extends AbstractController
     /** suppression de liste de paramètres */
     public function delete_params_list(Request $request, Parameter $parameter)
     {
-        $parameterList = $this->parameterRepo->getParamtersList($parameter->getCle());
+        $parameterList = $this->parameterRepo->getValuesParamterList($parameter->getCle());
 
         if ($request->getMethod() == "POST") {
             /** tritement demande suppression */
