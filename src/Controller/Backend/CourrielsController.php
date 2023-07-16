@@ -69,7 +69,7 @@ class CourrielsController extends AbstractController
 
                 switch ($nav) {
                     case 99: // retour au tableau de bord
-                        $response =  $this->redirectToRoute('bolt_dashboard');
+                        return  $this->redirectToRoute('bolt_dashboard');
                         break;
                     case 4: // bascule courriel en errur à tout courriel
                         $type = "all";
