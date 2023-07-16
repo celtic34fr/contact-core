@@ -1,12 +1,19 @@
 
-.btn-bs-warning {
-    color: #000;
-    background-color: #ffc107;
-    border-color: #ffc107
+.btn-bs-warning,
+.tingle-btn--warning {
+    color: #000 !important;
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
 }
 
 .btn-bs-warning:hover {
     color: #000;
     background-color: #ffca2c;
     border-color: #ffc720
+}
+
+.tingle-btn--danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
 }

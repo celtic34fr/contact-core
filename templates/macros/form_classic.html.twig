@@ -6,7 +6,7 @@
 	{% set class = args.class is defined ? args.class : 'col-12 row' %}
 
 	<form action="{{ action }}" method="{{ method }}" class="{{ class }}"
-    {% if name is not empty %} name="{{ name }}" {% endif %}>
+    {% if name is not empty %} id="{{ name }}" name="{{ name }}" {% endif %}>
 {% endmacro %}
 
 {% macro form_end() %}

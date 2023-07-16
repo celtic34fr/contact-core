@@ -12,6 +12,8 @@
 
 {% block stylesheets %}
 	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('contact-assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('contact-assets/css/tingle.css') }}">
 
 	<style>
 		.modal.fade {
@@ -64,47 +66,39 @@
             'class': 'btn btn-bs-warning col-4 offset-2', 'bclass': 'btn btn-bs-warning', 'type': 'submit',
         } ) }}
 	{{ forms.form_end() }}
-
-	<div class="modal fade" id="confirm-delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Suppression d'une liste de paramètreq</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<p>Etes-vous bien sûr de vouloir supprimer la liste de paramètres.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-bs-dismiss="modal">OUI</button>
-					<button type="button" class="btn btn-bs-warning">NON</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
 	<script src="{{ asset('contact-assets/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('contact-assets/js/tingle.js') }}"></script>
 
 	<script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let modalHTML = document.querySelector("#confirm-delete")
-            let modalMODAL = new bootstrap.Modal(modalHTML, {
-                keyboard: false,
-                focus: false,
-            });
+		let modal = new tingle.modal({
+			footer: true,
+			stickyFooter: false,
+			closeMethods: ['button'],
+			closeLabel: "Close",
+			cssClass: ['custom-class-1', 'custom-class-2'],
+			beforeClose: function() {
+				return true; // close the modal
+				return false; // nothing happens
+			}
+		});
+		modal.setContent('<h1>Etes-vous sûr de vouloir supprimer la liste de paramètres</h1>');
+		modal.addFooterBtn('OUI', 'tingle-btn tingle-btn--danger col-5', function() {
+			const form = document.querySelector('#delete');
+			form.submit();
+		});
+		modal.addFooterBtn('NOM', 'tingle-btn tingle-btn--warning col-5 tingle-btn--pull-right', function() {
+			modal.close();
+		});
 
+		document.addEventListener("DOMContentLoaded", function () {
 			document.querySelector("#delList").addEventListener('click', function(evt) {
 				evt.preventDefault();
 				evt.stopPropagation();
-				modalMODAL.show();
-			});
-
-			modalHTML.querySelector(".btn-success").addEventListener('click', btn => {
-				form.submit();
+				modal.open();
 			});
 		})
 	</script>
