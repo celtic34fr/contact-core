@@ -47,20 +47,23 @@ class ParameterRepository extends ServiceEntityRepository
             ->getResult();
         if (!$rslt) return [];
         foreach ($rslt as $item) {
-            $occur = [
-                'id' => $item->getId(),
-                'name' => $item->getCle(),
-                'description' => $item->getValeur(),
-                'created_at' => $item->getCreatedAt(),
-                'updated_at' => !$item->isEmptyUpdatedAt() ? $item->getUpdatedAt() : null,
-            ];
-            $qb = $this->createQueryBuilder('p')
-                ->where('p.cle = :name')
-                ->setParameter('name', $item->getCle())
-                ->getQuery()
-                ->getResult();
-            $occur['valeurs'] = $qb ? sizeof($qb) - 1 : 0;
-            $nameList[] = $occur;
+            /** prise de toutes les lises de para mètres sauf celle préfixée par 'SYS' pour système */
+            if (strpos(strtoupper($item->getCle()), 'SYS') === false) {
+                $occur = [
+                    'id' => $item->getId(),
+                    'name' => $item->getCle(),
+                    'description' => $item->getValeur(),
+                    'created_at' => $item->getCreatedAt(),
+                    'updated_at' => !$item->isEmptyUpdatedAt() ? $item->getUpdatedAt() : null,
+                ];
+                $qb = $this->createQueryBuilder('p')
+                    ->where('p.cle = :name')
+                    ->setParameter('name', $item->getCle())
+                    ->getQuery()
+                    ->getResult();
+                $occur['valeurs'] = $qb ? sizeof($qb) - 1 : 0;
+                $nameList[] = $occur;
+            }
         }
         return $nameList;
     }
