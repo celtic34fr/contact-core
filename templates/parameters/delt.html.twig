@@ -15,15 +15,15 @@
 
 {% block main %}
     <div class="col-12 row m-0 p-0">
-        <table class="col-12">
-            <tr class="row">
-                <td class="col-4">Description</td>
-                <td colspan="3">{{ parameter.getValeur() }}</td>
+        <table class="col-12 table-bordered m-0 p-0">
+            <tr class="row col-12 m-0 p-0">
+                <td class="col-4 table-secondary">Description</td>
+                <td colspan="3" class="p-1">{{ parameter.getValeur() }}</td>
             </tr>
-            <tr class="row">
-                <td class="col-4">Créée le</td>
+            <tr class="row col-12 m-0 p-0">
+                <td class="col-4 table-secondary">Créée le</td>
                 <td class="col-4">{{ parameter.getCreatedAt()|date("d/m/Y") }}</td>
-                <td class="col-4">Modifiée le</td>
+                <td class="col-4 table-secondary">Modifiée le</td>
                 <td class="col-4">
                     {{ parameter.isEmptyUpdatedAt() ? "" : parameter.getUpdatedAt()|date("d/m/Y") }}
                 </td>
