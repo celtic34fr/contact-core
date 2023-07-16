@@ -275,14 +275,14 @@ class ParametersController extends AbstractController
     /** suppression de liste de paramètres */
     public function delete_params_list(Request $request, Parameter $parameter)
     {
-        $parameterList = $this->parameterRepo->getValuesParamterList($parameter->getCle());
+        $parameterValues = $this->parameterRepo->getValuesParamterList($parameter->getCle());
         $title = "Demande de suppression de la liste " . $parameter->getCle();
 
         if ($request->getMethod() == "POST") {
             /** tritement demande suppression */
             $datas = $request->request->all();
             if (array_key_exists("delt", $datas)) {
-                foreach ($parameterList as $ord => $value) {
+                foreach ($parameterValues as $ord => $value) {
                     $paramItem = $this->parameterRepo->findOneBy(['cle' => $parameter->getCle(), 'ord' => (int) $ord + 1]);
                     $this->entityManager->remove($paramItem);
                 }
@@ -296,6 +296,7 @@ class ParametersController extends AbstractController
         return $this->render("@contact-core/parameters/delt.html.twig", [
             'title' => $title,
             'parameter' => $parameter,
+            'parameterValues' => $parameterValues,
         ]);
     }
 
