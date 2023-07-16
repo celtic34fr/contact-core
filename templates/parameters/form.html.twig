@@ -98,59 +98,59 @@
 
 				let spans = list.querySelectorAll("span");
 				spans.forEach(span => {
-				let idx = parseInt(span.innerHTML);
+					let idx = parseInt(span.innerHTML);
 
-				if (idx > index) {
-					let idxStr = idx.toString();
-					let nidxStr = (idx - 1).toString();
-					let input = span.parentElement.querySelector("input");
-					let iclone = input.cloneNode(1);
+					if (idx > index) {
+						let idxStr = idx.toString();
+						let nidxStr = (idx - 1).toString();
+						let input = span.parentElement.querySelector("input");
+						let iclone = input.cloneNode(1);
 
-					span.innerHTML = nidxStr + " : ";
-					iclone.id = input.id.replace(idxStr, nidxStr);
-					iclone.name = input.name.replace(idxStr, nidxStr);
-					iclone.value = input.value;
-					iclone.dataset.ord = nidxStr;
-					input.remove();
-					span.after(iclone);
-				}
+						span.innerHTML = nidxStr + " : ";
+						iclone.id = input.id.replace(idxStr, nidxStr);
+						iclone.name = input.name.replace(idxStr, nidxStr);
+						iclone.value = input.value;
+						iclone.dataset.ord = nidxStr;
+						input.remove();
+						span.after(iclone);
+					}
+				});
 			});
+		}
+
+		function addEmptyLi(bouton) {
+			const collectionHolder = document.querySelector('.' + bouton.dataset.collectionHolderClass);
+			const index = parseInt(collectionHolder.dataset.index);
+			const item = document.createElement('li');
+			item.classList.add("col-12");
+			item.classList.add("row");
+			item.classList.add("my-2");
+			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, index);
+			collectionHolder.appendChild(item);
+
+			collectionHolder.dataset.index ++;
+			addTagFormDeleteLink(item, index);
+		}
+
+		document.addEventListener("DOMContentLoaded", function () {
+			document.querySelectorAll('.add_item_link').forEach(btn => {
+				btn.addEventListener("click", function (e) {
+					addEmptyLi(e.currentTarget);
+				});
+			});
+
+			document.querySelectorAll('ul.values li').forEach((val) => {
+				let input = val.querySelector("input");
+				let ord = parseInt(input.dataset.ord);
+				addTagFormDeleteLink(val, ord)
+			});
+
+			const bouton = document.querySelector(".add_item_link")
+			const valuesNBR = document.querySelectorAll("ul.values li");
+			if (valuesNBR.length < 1) {
+				addEmptyLi(bouton);
+			}
 		});
-	}
-
-	function addEmptyLi(bouton) {
-		const collectionHolder = document.querySelector('.' + bouton.dataset.collectionHolderClass);
-		const index = parseInt(collectionHolder.dataset.index);
-		const item = document.createElement('li');
-		item.classList.add("col-12");
-		item.classList.add("row");
-		item.classList.add("my-2");
-		item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, index);
-		collectionHolder.appendChild(item);
-
-		collectionHolder.dataset.index ++;
-		addTagFormDeleteLink(item, index);
-	}
-
-	document.addEventListener("DOMContentLoaded", function () {
-		document.querySelectorAll('.add_item_link').forEach(btn => {
-		btn.addEventListener("click", function (e) {
-		addEmptyLi(e.currentTarget);
-	});
-});
-
-document.querySelectorAll('ul.values li').forEach((val) => {
-let input = val.querySelector("input");
-let ord = parseInt(input.dataset.ord);
-addTagFormDeleteLink(val, ord)
-});
-
-const bouton = document.querySelector(".add_item_link")
-const valuesNBR = document.querySelectorAll("ul.values li");
-if (valuesNBR.length < 1) {
-addEmptyLi(bouton);
-}
-});
 	</script>
 {% endblock %}
 

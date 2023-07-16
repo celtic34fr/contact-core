@@ -295,7 +295,7 @@ class ParametersController extends AbstractController
         return $this->render("@contact-core/parameters/delt.html.twig", [
             'parameter' => $parameter,
             'parameterList' => $parameterList,
-        ]);
+            'title' => "Demande de suppression de la liste {$parameter->getCle()}",
     }
 
     /**
