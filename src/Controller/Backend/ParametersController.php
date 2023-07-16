@@ -296,6 +296,7 @@ class ParametersController extends AbstractController
             'parameter' => $parameter,
             'parameterList' => $parameterList,
             'title' => "Demande de suppression de la liste {$parameter->getCle()}",
+        ]);
     }
 
     /**
