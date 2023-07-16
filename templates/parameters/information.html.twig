@@ -1,5 +1,6 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
+{% import '@contact-core/macros/genetals.html.twig' as generals %}
 {% import '@contact-core/macros/form.js.twig' as formJS %}
 
 {% block shoulder %}
@@ -84,7 +85,10 @@
 		</div>
 		<div class="col-12 row mt-2 px-0 mx-0">
 			{{ fields.submitbtn(form.record, "", {
-				'class': 'col-12 text-white gradient text-center btn btn-success',
+				'class': 'col-4 offset-1 text-white gradient text-center btn btn-success',
+			}) }}
+			{{ generals.btnRedirect('cancel', "Tout annuler", {
+				'class': 'col-4 offset-2 btn btn-bs-warning my-3', 'bclass': 'btn btn-bs-warning', 'route': 'bolt-dashboad'
 			}) }}
 		</div>
 	{{ form_end(form, {render_rest: false}) }}
