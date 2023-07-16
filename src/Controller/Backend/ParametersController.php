@@ -278,6 +278,7 @@ class ParametersController extends AbstractController
         $parameterList = $this->parameterRepo->getValuesParamterList($parameter->getCle());
 
         if ($request->getMethod() == "POST") {
+            $title = "Demande de suppression de la liste ".$parameter->getCle();
             /** tritement demande suppression */
             $datas = $request->request->all();
             if (array_key_exists("delt", $datas)) {
@@ -293,9 +294,8 @@ class ParametersController extends AbstractController
         }
 
         return $this->render("@contact-core/parameters/delt.html.twig", [
+            'title' => $title,
             'parameter' => $parameter,
-            'parameterList' => $parameterList,
-            'title' => "Demande de suppression de la liste {$parameter->getCle()}",
         ]);
     }
 
