@@ -26,7 +26,9 @@
             </div>
             <div class="col-6 row my-1">
                 <span class="col-4">Modifiée le</span>
-                <span class="col-8">{{ parameter.getUpdatedAt()|date("d/m/Y") }}</span>
+                <span class="col-8">
+                    {{ parameter.isEmptyUpdatedAt() ? "" : parameter.getUpdatedAt()|date("d/m/Y") }}
+                </span>
             </div>
         </div>
     </div>
