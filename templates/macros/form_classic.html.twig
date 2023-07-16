@@ -2,7 +2,7 @@
 
 {% macro form_start(name= "", args = {}) %}
     {% set method = args.method is defined ? args.method : 'POST' %}
-    {% set actions = args.action is defined ?args.action : "#" %}
+    {% set action = args.action is defined ?args.action : "#" %}
     {% set class = args.class is defined ? args.class : 'col-12 row' %}
 
     <form action="{{ action }}" method="{{ method }}" class="{{ class }}"
