@@ -35,7 +35,7 @@ class Parameter
     #[ORM\Column(type: Types::JSON, length: 255, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    protected $valeur = null;
+    protected string $valeur = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     #[Assert\NotBlank]
@@ -45,7 +45,7 @@ class Parameter
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Assert\DateTime]
-    protected DateTimeImmutable $updated_at;
+    protected ?DateTimeImmutable $updated_at;
 
     public function __construct()
     {
@@ -107,6 +107,7 @@ class Parameter
 
     /**
      * Set the value of valeur
+     * @param string|array $valeyur
      * @return  self
      */
     public function setValeur(mixed $valeur): self
