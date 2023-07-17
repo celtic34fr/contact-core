@@ -14,12 +14,6 @@
 	{{ parent() }}
 	<link rel="stylesheet" href="{{ asset('contact-assets/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('contact-assets/css/tingle.css') }}">
-
-	<style>
-		.modal.fade {
-			z-index: 10000000;
-		}
-	</style>
 {% endblock %}
 
 {% block main %}
@@ -100,7 +94,7 @@
 		}
 
 		function cancel() {
-			location.href = "{{ path('parameters-params-list ') }}";
+			location.href = "{{ path('parameters-params-list') }}";
 		}
 	</script>
 {% endblock %}

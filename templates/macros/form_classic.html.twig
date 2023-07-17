@@ -1,5 +1,9 @@
 {# rendu de bouton radio hors formulaire #}
 
+{# macro form_start Entête/Ouverture de formulaire #}
+{# - method     : Méthode d'envoye du formuliare, par défaut : 'POST' #}
+{# - action     : URL d'appel serveur, par défaut '#' = pas d'appel #}
+{# - class      : Classe(s) CSS de présentation Bootstrap du formulaire, par défaut 'col-12 row' #}
 {% macro form_start(name= "", args = {}) %}
 	{% set method = args.method is defined ? args.method : 'POST' %}
 	{% set action = args.action is defined ?args.action : "#" %}
@@ -9,6 +13,7 @@
     {% if name is not empty %} id="{{ name }}" name="{{ name }}" {% endif %}>
 {% endmacro %}
 
+{# macro form_end Fermeture de formulaire #}
 {% macro form_end() %}
 	</form>
 {% endmacro %}
