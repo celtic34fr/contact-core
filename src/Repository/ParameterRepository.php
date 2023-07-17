@@ -121,6 +121,17 @@ class ParameterRepository extends ServiceEntityRepository
         }
     }
 
+    public function findItemsByCle(string $cle)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.cle = :cle')
+            ->andWhere('p.ord > 0')
+            ->setParameter('cle', $cle)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     //    /**
     //     * @return Parameter[] Returns an array of Parameter objects
     //     */
