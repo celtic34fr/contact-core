@@ -91,7 +91,7 @@
 {# dans le tableau args #}
 {# - class          : classe CSS à appliquer (possible : inutile) #}
 {# - ref            : identifiant servant de référence pour un autre champ pouvant modifier la valeur par défaut #}
-	{% macro hidden(name, value, args={}) %}
+{% macro hidden(name, value, args={}) %}
 	{% set class = args.class is defined ? args.class : "" %}
 	{% set ref = args.ref is defined ? args.ref : "" %}
 	{% set form = args.form is defined ? args.form : '' %}

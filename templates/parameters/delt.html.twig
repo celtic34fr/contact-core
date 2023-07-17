@@ -61,9 +61,11 @@
 	{{ forms.form_start("delete", { 'method': "POST", 'class': 'col-12 row my-3' }) }}
 	{{ forms.btn('delList', "Supprimer la liste", {
             'class': 'btn btn-danger col-4 offset-1', 'bclass': 'btn btn-danger', 'type': 'submit',
+			'event': 'onClick', 'codeJS': 'confirm()',
         }) }}
 	{{ forms.btn('canList', "Annuler l'opération", {
             'class': 'btn btn-bs-warning col-4 offset-2', 'bclass': 'btn btn-bs-warning', 'type': 'submit',
+			'event': 'onClick', 'codeJS': 'cancel()',
         } ) }}
 	{{ forms.form_end() }}
 {% endblock %}
@@ -87,20 +89,19 @@
 		});
 		modal.setContent('<h1>Etes-vous sûr de vouloir supprimer la liste de paramètres</h1>');
 		modal.addFooterBtn('OUI', 'tingle-btn tingle-btn--danger col-5', function() {
-			const form = document.querySelector('#delete');
-			form.submit();
+			document.querySelector('form').submit();
 		});
 		modal.addFooterBtn('NOM', 'tingle-btn tingle-btn--warning col-5 tingle-btn--pull-right', function() {
 			modal.close();
 		});
 
-		document.addEventListener("DOMContentLoaded", function () {
-			document.querySelector("#delList").addEventListener('click', function(evt) {
-				evt.preventDefault();
-				evt.stopPropagation();
-				modal.open();
-			});
-		})
+		function confirm() {
+			modal.open();
+		}
+
+		function cancel() {
+			location.href = "{{ path('parameters-params-list ') }}";
+		}
 	</script>
 {% endblock %}
 
