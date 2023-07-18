@@ -6,7 +6,7 @@ use Celtic34fr\ContactCore\Entity\Courriel;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Celtic34fr\ContactCore\Repository\CourrielRepository;
 use Celtic34fr\ContactCore\Service\SendMailer;
-use Celtic34fr\ContactCore\Traits\Utilities;
+use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,7 @@ use Twig\Environment;
 #[Route('courriels')]
 class CourrielsController extends AbstractController
 {
-    use Utilities;
+    use UtilitiesTrait;
 
     private $schemaManager;
     private CourrielRepository $courrielRepository;

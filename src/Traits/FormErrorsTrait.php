@@ -2,7 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Traits;
 
-trait FromErrorsTrait
+trait FormErrorsTrait
 {
 
     private function getErrors($form): array

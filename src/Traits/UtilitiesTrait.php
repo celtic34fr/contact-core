@@ -4,7 +4,7 @@ namespace Celtic34fr\ContactCore\Traits;
 
 use Exception;
 
-trait Utilities
+trait UtilitiesTrait
 {
 
     /**
