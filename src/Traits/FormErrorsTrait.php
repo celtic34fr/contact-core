@@ -18,7 +18,8 @@ trait FormErrorsTrait
 
         foreach ($form->all() as $child) {
             if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrors($child);
+                $childIdx = $child->getConfig()->getOption('label');
+                $errors[$childIdx] = $this->getErrors($child);
             }
         }
         return $errors;
