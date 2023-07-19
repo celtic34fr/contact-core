@@ -139,6 +139,8 @@
 
 	{% set class = "form-check" ~ (class|length ? " " ~ class : "") %}
 	{% set inline = inline ? " one-line" : "" %}
+    {% set labelClass = "" %}
+    {% set inputClass = "" %}
 	{% if cl_class is not empty %}
 		{% set labelClass = cl_class.label ?? "" %}
 	    {% set inputClass = cl_class.check ?? "" %}
