@@ -128,8 +128,21 @@ class ParameterRepository extends ServiceEntityRepository
             ->andWhere('p.ord > 0')
             ->setParameter('cle', $cle)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+    }
+
+    public function findByPartialFields(array $criteria, array $orderBy = null)
+    {
+        $qb = $this->createQueryBuilder('p');
+        foreach ($criteria as $cle => $partial) {
+            $qb->andWhere("p.$cle LIKE '%$partial%'");
+        }
+        if ($orderBy) {
+            foreach ($orderBy as $cle => $order) {
+                $qb->orderBy($cle, $order);
+            }
+        }
+        return $qb->getQuery()->getResult();
     }
 
     //    /**
