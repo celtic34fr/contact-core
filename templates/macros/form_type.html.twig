@@ -205,7 +205,7 @@
 {# dans le tableau args #}
 {# - date           : valeur initiale du choix de la date #}
 {% macro datepickerInlineField(field, args={}) %}
-	{% set class = (args.class is defined ? args.class : "") ~ " date-picker" %}
+	{% set class = (args.class is defined ? args.class : "") ~ " datepicker" %}
 
 	{% set date_date = args.date_date is defined ? args.date_date : "" %}
     {% if date_date is empty %}
@@ -259,20 +259,22 @@
 		{# is other type #}
 	{% endif %}
 
-	{% import _self as form_fields %}
-	<div {% if class is not empty %} class="{{ class }}" {% else %} style="display: contents" {% endif %}>
-		<label for="{{ field.vars.name }}" class="{{ label_class }}">
-			{{ label|raw }}
-		</label>
-		<input id="{{ field.vars.id }}_dpicker" type="text" class="datepicker {{ input_class }}"
-        {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
-        {% if date_date != "0000-00-00" %} data-date="{{ date_date }}" {% endif %}
-        {% if title|length %} title="{{ title }}" {% endif %}
-        {% if name|length %} name="{{ name }}" {% endif %}
-        {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
-        {% if disabled %} disabled="disabled" {% endif %}>
-		{{ form_fields.hidden(field, {'class': 'hidden'}) }}
-	</div>
+    {% import _self as form_fields %}
+    <div {% if class is not empty %} class="datepicker {{ class }}" {% else %} style="display: contents" {% endif %}>
+        <label for="{{ field.vars.name }}" class="{{ label_class }}">
+            {{ label|raw }}
+        </label>
+        <input id="{{ field.vars.id }}_dpicker" type="text" class="datepicker {{ input_class }}"
+            {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
+            {% if date_date != "0000-00-00" and date_date is not empty %} data-date="{{ date_date }}" {% endif %}
+            {% if title|length %} title="{{ title }}" {% endif %}
+            {% if name|length %} name="{{ name }}" {% endif %}
+            {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
+            {% if disabled %} disabled="disabled" {% endif %}
+        >
+        {% set fieldValue = form_fields.datetimeArrayToString(field.vars.value) %}
+        {{ form_fields.hidden(field, {'class': 'hidden', 'value': fieldValue}) }}
+    </div>
 {% endmacro %}
 
 {# macro datepickerRange zone de sélection de 2 dateq #}
@@ -327,7 +329,8 @@
 			</label>
 			<input type="text" name="start_{{ field_start.vars.id }}" id="{{ field_start.vars.id }}_dpicker"
                 class="start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }}>
-            {{ form_fields.hidden( field_start, {'class': 'hidden_start'} ) }}
+            {% set fieldValue = form_fields.datetimeArrayToString(field_start.vars.value) %}
+            {{ form_fields.hidden(field_start, {'class': 'hidden_start', 'value': fieldValue}) }}
         </div>
 		<div {% if eclass|length %} class="{{ eclass }}" {% endif %}>
 			<label for="{{ field_end.vars.id }}_dpicker" {% if elabel_class|length %} class="{{ elabel_class }}" {% endif %}>
@@ -335,19 +338,47 @@
 			</label>
 			<input type="text" name="end_{{ field_start.vars.id }}" id="{{ field_end.vars.id }}_dpicker"
                 class="end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }}>
-            {{ form_fields.hidden( field_end, {'class': 'hidden_end'} ) }}
+            {% set fieldValue = form_fields.datetimeArrayToString(field_end.vars.value) %}
+            {{ form_fields.hidden(field_end, {'class': 'hidden_start', 'value': fieldValue}) }}
 		</div>
 	</div>
 {% endmacro %}
 
-{# macro gragNDrop zone de déposer-glisser pour chargement de fichier #}
+{% macro timepicker(field, label="", args= {}) %}
+    <div class="col-12 row timepicker"></div>
+{% endmacro %}
+
+{% macro timepickerRange(field_start, field_end, args={}) %}
+    <div class="col-12 row timepicker">
+        <div class="col-12 row start"></div>
+        <div class="col-12 row end"></div>
+    </div>
+{% endmacro %}
+
+{% macro datetimepicker(field, label="", args={}) %}
+    <div class="col-12 row">
+        <div class="date"></div>
+        <div class="time"></div>
+    </div>
+{% endmacro %}
+
+{% macro datetimepickerRange(field_start, field_end, args={}) %}
+    <div class="col-12 row">
+        <div class="col-12 start">
+            <div class="date"></div>
+            <div class="time"></div>
+        </div>
+        <div class="col-12 end">
+            <div class="date"></div>
+            <div class="time"></div>
+        </div>
+    </div>
+{% endmacro %}
+
+{# macro dragNDrop zone de déposer-glisser pour chargement de fichier #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
 {% macro dragNDrop(field, args={}) %}
-    <pre>
-        {{ dump(args) }}
-    </pre>
-
 	{% set label = args.label is defined ? args.label : field.vars.label %}
 	{% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
 	{% set label_class = args.label_class is defined ? args.label_class : "" %}
@@ -594,7 +625,7 @@
     </div>
 {% endmacro %}
 
-{# macro textarea pour affichag de zone de saisie de texte #}
+{# macro textarea pour affichage de zone de saisie de texte #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
 {#                    dans le tableau args #}
@@ -646,4 +677,15 @@
             {{ value }}
         </textarea>
     </div>
+{% endmacro %}
+
+{# macro datetimeArrayToString pour transformer un datetime en string #}
+{# - datetime       : valeur proprement dite du datetime : #}
+{#      tableau avec 2 tableaus : date et time #}
+{#          date : [year, month, day] #}
+{#          tiem: [hour, minut] #}
+{% macro datetimeArrayToString(datetime) %}
+    {% set datetimeString = (datetime.date.year ?? '00')~":"~(datetime.date.month ?? '00')~":"~(datetime.date.day ?? '00') %}
+    {% set datetimeString = datetimeString~" "~(datetime.time.hour ?? '00')~":"~(datetime.time.minut ?? 'àà') %}
+    {{ datetimeString }}
 {% endmacro %}
