@@ -200,17 +200,6 @@
 	</div>
 {% endmacro %}
 
-{% macro timepicker(field, label="", args= {}) %}
-    <div class="col-12 row timepicker"></div>
-{% endmacro %}
-
-{% macro timepickerRange(field_start, field_end, args={}) %}
-    <div class="col-12 row timepicker">
-        <div class="col-12 row start"></div>
-        <div class="col-12 row end"></div>
-    </div>
-{% endmacro %}
-
 {# macro dragNDrop zone de déposer-glisser pour chargement de fichier #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
