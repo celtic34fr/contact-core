@@ -13,6 +13,7 @@
 {# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
 {# - date_date      : valeur initiale du choix de la date #}
 {% macro datepickerForm(name, label="", args={}) %}
+    {% set class = args.class ?? '' %}
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
     {% set il_class = args.il_class is defined ? args.il_class : {} %}
     {% set label_class = (il_class is defined and il_class.label is defined) ? il_class.label : '' %}
@@ -22,12 +23,10 @@
     {% endif %}
     {% set date_min = args.date_min is defined and args.date_min is not empty ? args.date_min : "" %}
     {% set title = args.title is defined ? args.title : label %}
-    {% set name = args.name ?? field.vars.id %}
+    {% set name = args.name ?? name %}
     {% set disabled = args.disabeled is defined ? (args.disabled ? true : false) : false %}
 
-    {% import _self as datepickerBlocks %}
-    {% set field_value = datepickerBlocks.datetimeArrayToString(field.vars.value, true, false) %}
-    {% set date_date = args.date_date is defined ? args.date_date : field_value %}
+    {% set date_date = args.date_date is defined ? args.date_date : "" %}
     {% if date_date is not empty %}
         {% if date_date is typeOf('array') %}
             {% set date = date_date %}
@@ -39,14 +38,14 @@
         <label for="{{ name }}" {% if label_class|length %} class="{{ label_class }}" {% endif %}>
             {{ label|raw }}
         </label>
-        <input id="{{ name }}" name="{{ name }}" type="text" class="datepicker-input date input {{ input_class }}"
+        <input id="{{ name }}" name="{{ name }}" type="text" class="datepicker-input {{ input_class }}"
             {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
             {% if date_date != "0000-00-00" and date_date is not empty %} data-date="{{ date_date }}" {% endif %}
             {% if title|length %} title="{{ title }}" data-title="{{ title }}" {% endif %}
             {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
             {% if disabled %} disabled="disabled" {% endif %}
         >
-        <input type="hidden" id="{{field.vars.id}}Hidden"
+        <input type="hidden" id="{{ name }}Hidden" class="hidden"
             {% if date_date is not empty %} value="{{ date_date }}" {% endif %}
         >
     </div>
@@ -142,7 +141,7 @@
                 class="datepicker-input start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }}
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
-            <input type="hidden" id="{{ form_start }}HiddenStart" class="hidden_start"
+            <input type="hidden" id="{{ form_start }}HiddenStart" class="hidden_start hidden"
                 {% if svalue != "00:00:00" %} value={{ svalue }} {% endif %}
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
@@ -154,7 +153,7 @@
             <input type="text" name="end_{{ form_end }}" id="{{ form_end }}"
                 class="datepicker-input end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }}
             >
-            <input type="hidden" id="{{ form_end }}HiddenEnd" class="hidden_end"
+            <input type="hidden" id="{{ form_end }}HiddenEnd" class="hidden_end hidden"
                 {% if evalue != "00:00:00" %} value={{ evalue }} {% endif %}
             >
         </div>
@@ -178,6 +177,7 @@
 {% macro datepickerField(field, label='', args={}) %}
     {% set class = args.class ?? "" %}
     {% set label = label is not empty ? label : field.vars.label %}
+    {% set title = args.title is defined ? args.title : label %}
     {% set label = label ~ (field.vars.required ? ' <abbr class="required" title="required">*</abbr>' : '') %}
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
     {% set il_class = args.il_class is defined ? args.il_class : {} %}
@@ -187,7 +187,6 @@
         {% set class = class ~ ' row' %}
     {% endif %}
     {% set date_min = args.date_min is defined and args.date_min is not empty ? args.date_min : "" %}
-    {% set title = args.title is defined ? args.title : label %}
     {% set name = args.name ?? field.vars.id %}
     {% set disabled = args.disabeled is defined ? (args.disabled ? true : false) : false %}
 
@@ -212,7 +211,7 @@
             {% if name|length %} name="{{ name }}" {% endif %}
             {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
             {% if disabled %} disabled="disabled" {% endif %}>
-        <input type="hidden" id="{{field.vars.id}}Hidden">
+        <input type="hidden" id="{{field.vars.id}}Hidden" class="hidden">
     </div>
 {% endmacro %}
 
@@ -313,7 +312,7 @@
     </div>
 {% endmacro %}
 
-{# macro datepickerqJSinit : script JavaScript de déclaration et création des objets Datepicker #}
+{# macro datepickerJSinit : script JavaScript de déclaration et création des objets Datepicker #}
 {# dans le tableau args paramètres de la création d'objet Datepicker #}
 {# - format     : chaîne de caractères précisant le format de sortie (type format de DateTime) #}
 {# - autohide #}
@@ -419,8 +418,10 @@
 {# - disabled #}
 {# - pickLevel #}
 {# - startView #}
+{#
 {% macro datepickerRangeJSinit(args={}) %}
     {# ensemble de code JS visant à gérer laes datepickerRange #}
+    {#
     {% set format = (args.format is defined and args.format is not empty) ? args.format : "y-m-d" %}
     {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
     {% set language = args.language is defined ? args.language : config.get('general/locale') %}
@@ -502,6 +503,7 @@
         });
     </script>
 {% endmacro %}
+#}
 
 {# macro datetimeArrayToString : transporfomation de form DateTimeType value en chaîne de carectères #}
 {# - datetime       : valeur proprement dite du datetime : #}
