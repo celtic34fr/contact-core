@@ -1,0 +1,70 @@
+
+{# macro timepickerForm zone de sélection d'une heure #}
+{# - name           : identifiant et name déclaré pour le formulaire #}
+{# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - title          : infobulle affiché au surval de la zone avec la souris #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{# - label_ico      : si présent, icône à mettre à la place du label #}
+{# - time           : heure et minute valeur de base #}
+{% macro timepickerForm(name, label="", args={}) %}
+    {% set class = args.class ?? '' %}
+    {% set title = args.title is defined ? args.title : label %}
+    {% set disabled = args.disabeled is defined ? (args.disabled ? true : false) : false %}
+    {% set label_ico = args.label_ico ?? "" %}
+
+    <div {% if class is not empty %} class="datepicker-group {{ class }}" {% else %} style="display: contents" {% endif %}>
+        <label for="{{ name }}">
+            {% if label_ico is not empty %}
+                <i class="{{ label_ico }}"></i>
+            {% else %}
+                {{ label|raw }}
+            {% endif %}
+        </label>
+        <div class="timepicker-ui">
+            <input type="text" class="timepicker-ui-input" value=""/>
+        </div>
+    </div>
+{% endmacro %}
+
+{# macro datepickerField zone de sélection d(une date #}
+{# - field          : champ date déclaré dans le formulaure Symfony Form #}
+{# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - title          : infobulle affiché au surval de la zone avec la souris #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{# - label_ico      : si présent, icône à mettre à la place du label #}
+{# - time           : heure et minute valeur de base #}
+{% macro timepickerField(field, label="", args={}) %}
+    {% set class = args.class ?? "" %}
+    {% set label = label is not empty ? label : field.vars.label %}
+    {% set title = args.title is defined ? args.title : label %}
+    {% set label = label ~ (field.vars.required ? ' <abbr class="required" title="required">*</abbr>' : '') %}
+    {% set disabled = args.disabeled is defined ? (args.disabled ? true : false) : false %}
+    {% set label_ico = args.label_ico ?? "" %}
+
+    <div {% if class is not empty %} class="datepicker-group {{ class }}" {% else %} style="display: contents" {% endif %}>
+        <label for="{{ field.vars.id }}">
+            {% if label_ico is not empty %}
+                <i class="{{ label_ico }}"></i>
+            {% else %}
+                {{ label|raw }}
+            {% endif %}
+        </label>
+        <div class="timepicker-ui">
+            <input type="text" class="timepicker-ui-input" value=""/>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro timepickerJSinit() %}
+    <script>
+        const timepickers = document.querySelectorAll(".timepicker-ui");
+        timepickers.forEach(timepicker => {
+            const options = {};
+            const newTimepicker = new TimepickerUI(timepicker, options);
+        });
+    </script>
+{% endmacro %}

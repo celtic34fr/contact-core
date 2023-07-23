@@ -1,31 +1,23 @@
-{# macro datepicker zone de sélection d'une date #}
+{# macro datepickerForm zone de sélection d'une date #}
 {# - name           : identifiant et name déclaré pour le formulaire #}
 {# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
 {# dans le tableau args #}
 {# - class          : classe CSS à appliquer #}
 {# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
-{# - il_class       : classe à appliquer au label et à INPUT du datepicker #}
-{#      - label_class : #}
-{#      - input_class : #}
 {# - date_min       : date minimale pouuvant être choisie #}
 {# - title          : infobulle affiché au surval de la zone avec la souris #}
-{# - name           : nom DOM de l'objet datepicker #}
 {# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
 {# - date_date      : valeur initiale du choix de la date #}
+{# - label_ico      : si présent, icône à mettre à la place du label #}
 {% macro datepickerForm(name, label="", args={}) %}
     {% set class = args.class ?? '' %}
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
-    {% set il_class = args.il_class is defined ? args.il_class : {} %}
-    {% set label_class = (il_class is defined and il_class.label is defined) ? il_class.label : '' %}
-    {% set input_class = (il_class is defined and il_class.input is defined) ? il_class.input : '' %}
-    {% if input_class is not empty or label_class is not empty %}
-        {% set class = class ~ ' row' %}
-    {% endif %}
     {% set date_min = args.date_min is defined and args.date_min is not empty ? args.date_min : "" %}
     {% set title = args.title is defined ? args.title : label %}
     {% set name = args.name ?? name %}
     {% set disabled = args.disabeled is defined ? (args.disabled ? true : false) : false %}
-
+    {% set label_ico = args.label_ico ?? "" %}
+    
     {% set date_date = args.date_date is defined ? args.date_date : "" %}
     {% if date_date is not empty %}
         {% if date_date is typeOf('array') %}
@@ -34,11 +26,15 @@
         {% endif %}
     {% endif %}
     
-    <div {% if class is not empty %} class="datepicker {{ class }}" {% else %} style="display: contents" {% endif %}>
-        <label for="{{ name }}" {% if label_class|length %} class="{{ label_class }}" {% endif %}>
-            {{ label|raw }}
+    <div {% if class is not empty %} class="datepicker-group {{ class }}" {% else %} style="display: contents" {% endif %}>
+        <label for="{{ name }}">
+            {% if label_ico is not empty %}
+                <i class="{{ label_ico }}"></i>
+            {% else %}
+                {{ label|raw }}
+            {% endif %}
         </label>
-        <input id="{{ name }}" name="{{ name }}" type="text" class="datepicker-input {{ input_class }}"
+        <input id="{{ name }}" name="{{ name }}" type="text" class="datepicker-input"
             {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
             {% if date_date != "0000-00-00" and date_date is not empty %} data-date="{{ date_date }}" {% endif %}
             {% if title|length %} title="{{ title }}" data-title="{{ title }}" {% endif %}
@@ -60,18 +56,15 @@
 {# - slabel         : label affiché pour la valeur de début de période #}
 {# - stitle         : infobulle affiché au surval de valeur de début de période avec la souris #}
 {# - svalue         : valeur initiale du début de période (STRING ou ARRAY: [year, month, day, hour, minute]) #}
-{# - sil_class : classe à appliquer au label et à INPUT du datepicker de début#}
-{#      - slabel_class #}
-{#      - sinput_class #}
 {# - elabel         : label affiché pour la valeur de fin de période #}
 {# - etitle         : infobulle affiché au surval de valeur de fin de période avec la souris #}
 {# - svalue         : valeur initiale du fin de période (STRING ou ARRAY: [year, month, day, hour, minute]) #}
-{# - eil_class : classe à appliquer au label et à INPUT du datepicker de fin #}
-{#      - elabel_class #}
-{#      - einput_class #}
 {# - disabled #}
 {#      - sdisabled #}
 {#      - edisabled #}
+{# - label_ico #}
+{#      - sico #}
+{#      - eico #}
 {% macro datepickerRangeForm(form_start, form_end, args={}) %}
     {% set class = args.class ?? "" %}
     {% set date_min = args.date_min ?? "" %}
@@ -85,26 +78,12 @@
         {% set sclass = (sclass ~ " p-1")|trim %}
     {% endif %}
 
-    {% set sil_class = args.sil_class ?? {} %}
-    {% set slabel_class = (sil_class is defined and sil_class.label is defined) ? sil_class.label : '' %}
-    {% set sinput_class = (sil_class is defined and sil_class.input is defined) ? sil_class.input : '' %}
-    {% if sinput_class is not empty or slabel_class is not empty %}
-        {% set sclass = sclass ~ ' row' %}
-    {% endif %}
-
     {% set elabel = args.elabel ?? field_end.vars.label %}
     {% set eclass = args.eclass ?? "" %}
     {% set etitle = args.etitle ?? elabel %}
     {% set evalue = args.evalue ?? "" %}
     {% if elabel is not empty %}
         {% set eclass = (eclass ~ " p-1")|trim %}
-    {% endif %}
-
-    {% set eil_class = args.eil_class ?? {} %}
-    {% set elabel_class = (eil_class is defined and eil_class.label is defined) ? eil_class.label : '' %}
-    {% set einput_class = (eil_class is defined and eil_class.input is defined) ? eil_class.input : '' %}
-    {% if einput_class is not empty or elabel_class is not empty %}
-        {% set eclass = eclass ~ ' row' %}
     {% endif %}
 
     {% set disabled = args.disabled ? args.disabled : {} %}
@@ -116,6 +95,10 @@
     {% endif %}
     {% set sdisabled = sdisabled ? 'disabled="disabled"' : '' %}
     {% set edisabled = edisabled ? 'disabled="disabled"' : '' %}
+
+    {% set lanel_ico = args.label_ico ?? {} %}
+    {% set sico = (label_ico.sico is defined and label_ico.seco is not empty) ? label_ico.sico : "" %}
+    {% set eico = (lzbrl_ico.eico is defined and lanel_ico.eico is not empty) ? label_ico.eico : "" %}
 
     {% import "@contact-core/macros/form_type.html.twig" as fields %}
     {% import _self as datepickerBlocks %}
@@ -133,12 +116,16 @@
         {% if svalue|trim != "00:00:00" %} data-start="{{ svalue }}" {% endif %}
         {% if evalue|trim != "00:00:00" %} data-end="{{ evalue }}" {% endif %}
     >
-        <div {% if sclass|length %} class="{{ sclass }}" {% endif %}>
-            <label for="{{ field_start.vars.id }}" {% if slabel_class|length %} class="{{ slabel_class }}" {% endif %}>
-                {{ slabel|raw }}
+        <div {% if sclass|length %} class="datempicker-group {{ sclass }}" {% endif %}>
+            <label for="{{ field_start.vars.id }}">
+                {% if sico is not empty %}
+                    <i class="{{ sico }}"></i>
+                {% else %}
+                    {{ slabel|raw }}
+                {% endif %}
             </label>
             <input type="text" name="start_{{ form_start }}" id="{{ form_start }}"
-                class="datepicker-input start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }}
+                class="datepicker-input start" {{ sdisabled }}
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
             <input type="hidden" id="{{ form_start }}HiddenStart" class="hidden_start hidden"
@@ -146,12 +133,16 @@
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
         </div>
-        <div {% if eclass|length %} class="{{ eclass }}" {% endif %}>
-            <label for="{{ form_end }}" {% if elabel_class|length %} class="{{ elabel_class }}" {% endif %}>
-                {{ elabel }}
+        <div {% if eclass|length %} class="datepicker-group {{ eclass }}" {% endif %}>
+            <label for="{{ form_end }}">
+                {% if eico is not empty %}
+                    <i class="{{ eico }}"></i>
+                {% else %}
+                    {{ elabel|raw }}
+                {% endif %}
             </label>
             <input type="text" name="end_{{ form_end }}" id="{{ form_end }}"
-                class="datepicker-input end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }}
+                class="datepicker-input end" {{ edisabled }}
             >
             <input type="hidden" id="{{ form_end }}HiddenEnd" class="hidden_end hidden"
                 {% if evalue != "00:00:00" %} value={{ evalue }} {% endif %}
@@ -166,30 +157,23 @@
 {# dans le tableau args #}
 {# - class          : classe CSS à appliquer #}
 {# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
-{# - il_class       : classe à appliquer au label et à INPUT du datepicker #}
-{#      - label_class : #}
-{#      - input_class : #}
 {# - date_min       : date minimale pouuvant être choisie #}
 {# - title          : infobulle affiché au surval de la zone avec la souris #}
 {# - name           : nom DOM de l'objet datepicker #}
 {# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
 {# - date_date      : valeur initiale du choix de la date #}
+{# - label_ico      : si présent, icône à mettre à la place du label #}
 {% macro datepickerField(field, label='', args={}) %}
     {% set class = args.class ?? "" %}
     {% set label = label is not empty ? label : field.vars.label %}
     {% set title = args.title is defined ? args.title : label %}
     {% set label = label ~ (field.vars.required ? ' <abbr class="required" title="required">*</abbr>' : '') %}
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
-    {% set il_class = args.il_class is defined ? args.il_class : {} %}
-    {% set label_class = (il_class is defined and il_class.label is defined) ? il_class.label : '' %}
-    {% set input_class = (il_class is defined and il_class.input is defined) ? il_class.input : '' %}
-    {% if input_class is not empty or label_class is not empty %}
-        {% set class = class ~ ' row' %}
-    {% endif %}
     {% set date_min = args.date_min is defined and args.date_min is not empty ? args.date_min : "" %}
     {% set name = args.name ?? field.vars.id %}
     {% set disabled = args.disabeled is defined ? (args.disabled ? true : false) : false %}
-
+    {% set label_ico = args.label_ico ?? "" %}
+    
     {% import _self as datepickerBlocks %}
     {% set field_value = datepickerBlocks.datetimeArrayToString(field.vars.value, true, false) %}
     {% set date_date = args.date_date is defined ? args.date_date : field_value %}
@@ -200,11 +184,15 @@
         {% endif %}
     {% endif %}
 
-    <div {% if class is not empty %} class="datepicker {{ class }}" {% else %} style="display: contents" {% endif %}>
-        <label for="{{ field.vars.id }}" {% if label_class|length %} class="{{ label_class }}" {% endif %}>
-            {{ label|raw }}
+    <div {% if class is not empty %} class="datepicker-group {{ class }}" {% else %} style="display: contents" {% endif %}>
+        <label for="{{ field.vars.id }}">
+            {% if label_ico is not empty %}
+                <i class="{{ label_ico }}"></i>
+            {% else %}
+                {{ label|raw }}
+            {% endif %}
         </label>
-        <input id="{{ field.vars.id }}" type="text" class="datepicker-input {{ input_class }}"
+        <input id="{{ field.vars.id }}" type="text" class="datepicker-input"
             {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
             {% if date_date != "0000-00-00" and date_date is not empty %} data-date="{{ date_date }}" {% endif %}
             {% if title|length %} title="{{ title }}" data-title="{{ title }}" {% endif %}
@@ -223,17 +211,14 @@
 {# - date_max       : date maximale pouuvant être choisie, par défaut vide #}
 {# - slabel         : label affiché pour la valeur de début de période #}
 {# - stitle         : infobulle affiché au surval de valeur de début de période avec la souris #}
-{# - sil_class : classe à appliquer au label et à INPUT du datepicker de début#}
-{#      - slabel_class #}
-{#      - sinput_class #}
 {# - elabel         : label affiché pour la valeur de fin de période #}
 {# - etitle         : infobulle affiché au surval de valeur de fin de période avec la souris #}
-{# - eil_class : classe à appliquer au label et à INPUT du datepicker de fin #}
-{#      - elabel_class #}
-{#      - einput_class #}
 {# - disabled #}
 {#      - sdisabled #}
 {#      - edisabled #}
+{# - label_ico #}
+{#      - sico #}
+{#      - eico #}
 {% macro datepickerRangeField(field_start, field_end, args={}) %}
     {% set class = args.class ?? "" %}
     {% set date_min = args.date_min ?? "" %}
@@ -244,24 +229,10 @@
     {% set stitle = agrs.stitle ?? slabel %}
     {% if slabel is not empty %}{% set sclass = (sclass ~ " p-1")|trim %}{% endif %}
 
-    {% set sil_class = args.sil_class ?? {} %}
-    {% set slabel_class = (sil_class is defined and sil_class.label is defined) ? sil_class.label : '' %}
-    {% set sinput_class = (sil_class is defined and sil_class.input is defined) ? sil_class.input : '' %}
-    {% if sinput_class is not empty or slabel_class is not empty %}
-        {% set sclass = sclass ~ ' row' %}
-    {% endif %}
-
     {% set elabel = args.elabel ?? field_end.vars.label %}
     {% set eclass = args.eclass ?? "" %}
     {% set etitle = args.etitle ?? elabel %}
     {% if elabel is not empty %}{% set eclass = (eclass ~ " p-1")|trim %}{% endif %}
-    
-    {% set eil_class = args.eil_class ?? {} %}
-    {% set elabel_class = (eil_class is defined and eil_class.label is defined) ? eil_class.label : '' %}
-    {% set einput_class = (eil_class is defined and eil_class.input is defined) ? eil_class.input : '' %}
-    {% if einput_class is not empty or elabel_class is not empty %}
-        {% set eclass = eclass ~ ' row' %}
-    {% endif %}
 
     {% set disabled = args.disabled ? args.disabled : {} %}
     {% set sdisabled = false %}
@@ -272,6 +243,10 @@
     {% endif %}
     {% set sdisabled = sdisabled ? 'disabled="disabled"' : '' %}
     {% set edisabled = edisabled ? 'disabled="disabled"' : '' %}
+
+    {% set lanel_ico = args.label_ico ?? {} %}
+    {% set sico = (label_ico.sico is defined and label_ico.seco is not empty) ? label_ico.sico : "" %}
+    {% set eico = (lzbrl_ico.eico is defined and lanel_ico.eico is not empty) ? label_ico.eico : "" %}
 
     {% import _self as datepickerBlocks %}
     {% set field_start_value = datepickerBlocks.datetimeArrayToString(field_start.vars.value, true, false) %}
@@ -284,28 +259,36 @@
         {% if field_start_value|trim != "00:00:00" %} data-start="{{ field_start_value }}" {% endif %}
         {% if field_end_value|trim != "00:00:00" %} data-end="{{ field_end_value }}" {% endif %}
     >
-        <div {% if sclass|length %} class="{{ sclass }}" {% endif %}>
-            <label for="{{ field_start.vars.id }}" {% if slabel_class|length %} class="{{ slabel_class }}" {% endif %}>
-                {{ slabel|raw }}
+        <div {% if sclass|length %} class="datepicker-group {{ sclass }}" {% endif %}>
+            <label for="{{ field_start.vars.id }}">
+                {% if sico is not empty %}
+                    <i class="{{ sico }}"></i>
+                {% else %}
+                    {{ slabel|raw }}
+                {% endif %}
             </label>
             <input type="text" name="start_{{ field_start.vars.id }}" id="{{ field_start.vars.id }}"
-                class="datepicker-input start{% if sinput_class|length %} {{ sinput_class }}{% endif %}" {{ sdisabled }}
+                class="datepicker-input start" {{ sdisabled }}
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
-            <input type="hidden" id="{{field_start.vars.id}}HiddenStart" class="hidden_start"
+            <input type="hidden" id="{{field_start.vars.id}}HiddenStart" class="hidden_start hidden"
                 {% if field_start_value != "00:00:00" %}value={{ field_start_value }}{% endif %}
                 {% if etitle is not empty %} title="{{ etitle }}" data-title="{{ etitle }}" {% endif %}
                 
             >
         </div>
-        <div {% if eclass|length %} class="{{ eclass }}" {% endif %}>
-            <label for="{{ field_end.vars.id }}" {% if elabel_class|length %} class="{{ elabel_class }}" {% endif %}>
-                {{ elabel }}
+        <div {% if eclass|length %} class="datepicker-group {{ eclass }}" {% endif %}>
+            <label for="{{ field_end.vars.id }}">
+                {% if eico is not empty %}
+                    <i class="{{ eico }}"></i>
+                {% else %}
+                    {{ elabel|raw }}
+                {% endif %}
             </label>
             <input type="text" name="end_{{ field_end.vars.id }}" id="{{ field_end.vars.id }}"
-                class="datepicker-input end{% if einput_class|length %} {{ einput_class }}{% endif %}" {{ edisabled }}
+                class="datepicker-input end" {{ edisabled }}
             >
-            <input type="hidden" id="{{field_end.vars.id}}HiddenEnd" class="hidden_end"
+            <input type="hidden" id="{{field_end.vars.id}}HiddenEnd" class="hidden_end hidden"
                 {% if field_end_value != "00:00:00" %}value={{ field_end_value }}{% endif %}
             >
         </div>
@@ -391,9 +374,11 @@
             });
         }
 
-        let datepickerFields = document.querySelectorAll('input.datepicker-input');
-        datepickerFields.forEach(datepickerField => {
-            build_datepicker(datepickerField);
+        document.addEventListener("DOMContentLoaded", function() {
+            let datepickerFields = document.querySelectorAll('input.datepicker-input');
+            datepickerFields.forEach(datepickerField => {
+                build_datepicker(datepickerField);
+            });
         });
     </script>
 {% endmacro %}
@@ -418,10 +403,8 @@
 {# - disabled #}
 {# - pickLevel #}
 {# - startView #}
-{#
 {% macro datepickerRangeJSinit(args={}) %}
     {# ensemble de code JS visant à gérer laes datepickerRange #}
-    {#
     {% set format = (args.format is defined and args.format is not empty) ? args.format : "y-m-d" %}
     {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
     {% set language = args.language is defined ? args.language : config.get('general/locale') %}
@@ -503,7 +486,6 @@
         });
     </script>
 {% endmacro %}
-#}
 
 {# macro datetimeArrayToString : transporfomation de form DateTimeType value en chaîne de carectères #}
 {# - datetime       : valeur proprement dite du datetime : #}
