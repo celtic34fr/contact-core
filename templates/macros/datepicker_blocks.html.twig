@@ -29,7 +29,8 @@
         {% endif %}
     {% endif %}
     
-    <div {% if class is not empty %} class="datepicker-group {{ class }}" {% else %} style="display: contents" {% endif %}>
+    <div class="datepicker-group{% if class is not empty %} {{ class }}{% endif %}"
+        {% if class is empty %} style="display: contents" {% endif %}>
         <label for="{{ name }}Input">
             {% if label_ico is not empty %}
                 <i class="{{ label_ico }}"></i>
@@ -45,7 +46,6 @@
             {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
             {% if disabled %} disabled="disabled" {% endif %}
         >
-
         <div class="hidden datepicker" id="{{ name }}">
             {% import "@templates/macros/form_classic.html.twig" as forms %}
             {{ forms.hidden(name ~ "_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
@@ -113,7 +113,7 @@
 
     {% set lanel_ico = args.label_ico ?? {} %}
     {% set sico = (label_ico.sico is defined and label_ico.seco is not empty) ? label_ico.sico : "" %}
-    {% set eico = (lzbrl_ico.eico is defined and lanel_ico.eico is not empty) ? label_ico.eico : "" %}
+    {% set eico = (label_ico.eico is defined and label_ico.eico is not empty) ? label_ico.eico : "" %}
 
     {% import _self as fields %}
     {% if svalue is typeOf('array') %}
@@ -142,7 +142,6 @@
                 class="datepicker-input start" {{ sdisabled }}
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
-
             <div class="hidden datepicker" id="{{ form_start }}">
                 {% import "@templates/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(form_start ~ "_day", (svalue is not empty ? svalue|slice(8, 2) : ""), {
@@ -167,7 +166,6 @@
             <input type="text" name="{{ form_end }}Input" id="{{ form_end }}Input"
                 class="datepicker-input end" {{ edisabled }}
             >
-
             <div class="hidden datepicker" id="{{ form_end }}">
                 {% import "@templates/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(form_end ~ "_day", (evalue is not empty ? evalue|slice(8, 2) : ""), {
@@ -231,7 +229,7 @@
         <input id="{{ field_id }}Input" name="{{ form_id }}Input" type="text" class="datepicker-input"
             {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
             {% if date_max|length %} data-date-max="{{ date_max }}" {% endif %}
-            {% if day_date != "0000-00-00" and day_date is not empty %} data-date="{{ day_date }}" {% endif %}
+            {% if day_date is not empty and day_date != "0000-00-00" %} data-date="{{ day_date }}" {% endif %}
             {% if title|length %} title="{{ title }}" data-title="{{ title }}" {% endif %}
             {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
             {% if disabled %} disabled="disabled" {% endif %}>
@@ -294,7 +292,7 @@
 
     {% set lanel_ico = args.label_ico ?? {} %}
     {% set sico = (label_ico.sico is defined and label_ico.seco is not empty) ? label_ico.sico : "" %}
-    {% set eico = (lzbrl_ico.eico is defined and lanel_ico.eico is not empty) ? label_ico.eico : "" %}
+    {% set eico = (label_ico.eico is defined and label_ico.eico is not empty) ? label_ico.eico : "" %}
 
     {% import _self as fields %}
     {% set field_start_value = fields.datetimeArrayToString(field_start.vars.value, true, false) %}
