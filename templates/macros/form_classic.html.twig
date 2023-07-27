@@ -100,6 +100,7 @@
 	{% set class = args.class is defined ? args.class : "" %}
 	{% set ref = args.ref is defined ? args.ref : "" %}
 	{% set form = args.form is defined ? args.form : '' %}
+    {% set custom_name = args.custom_name is defined ? args.custom_name : name %}
 
 	{% set attributes = '' %}
     {% if ref|length %}
@@ -112,7 +113,7 @@
         {% set attributes = attributes ~ 'form="' ~ form ~ '" ' %}
     {% endif %}
 
-    <input type="hidden" name="{{ name }}" id="{{ name }}" value="{{ value }}"
+    <input type="hidden" name="{{ custom_name|raw }}" id="{{ name }}" value="{{ value }}"
         {{ attributes|raw }}
     />
 {% endmacro %}

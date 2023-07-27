@@ -1,0 +1,12 @@
+
+{% macro datetimepickerStylesheets() %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('contact-assets/css/datepickerVanilla/datepicker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('contact-assets/css/datepickerVanilla/datepicker-bs5.css') }}">
+    <link rel="stylesheet" href="{{ asset('contact-assets/css/datetimepicker.css') }}">
+{% endmacro %}
+
+{% macro datetimepickerJavaScripts() %}
+    <script src="{{ asset('contact-assets/js/datepickerVanilla/datepicker-full.js') }}"></script>
+    <script src="{{ asset('contact-assets/js/datepickerVanilla/locales/fr.js') }}"></script>
+    <script src="{{ asset('contact-assets/js/timepicker-ui/timepicker-ui.umd.js') }}"></script>
+{% endmacro %}
