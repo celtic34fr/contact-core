@@ -444,7 +444,7 @@
                 minDate: date_min,
                 maxDate: date_max,
                 maxNumberOfDates: {{ maxNumberOfDates }}
-                format: "{{ format }}",
+                format: '{{ format }}',
                 language: '{{ language }}',
                 nextArrow: '{{ nextArrow }}',
                 prevArrow: '{{ prevArrow }}',
@@ -464,7 +464,7 @@
                 {% if datesDisabled is not empty %}
                 datesDisabled: [{{ datesDisabled|toString }}],
                 {% endif %}
-            });
+            } );
             if (date_start) {
                 let date_init = new Date(date_start);
                 date.setDate(date_init);
@@ -479,15 +479,15 @@
                 inputdate.value = date_to_input_str(date);
                 let {detail} = e;
                 inputdate.dispatchEvent(new CustomEvent("changeDate", {detail, bubbles: true, cancelable: true}));
-            });
+            } );
         }
 
         document.addEventListener("DOMContentLoaded", function() {
             let datepickerFields = document.querySelectorAll('input.datepicker-input');
             datepickerFields.forEach(datepickerField => {
                 build_datepicker(datepickerField);
-            });
-        });
+            } );
+        } );
     </script>
 {% endmacro %}
 
