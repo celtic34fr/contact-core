@@ -405,7 +405,7 @@
     {% set todayButton = args.todayButton is defined ? ( args.todayButton ? 'true' : 'false') : 'false' %}
     {% set todayButtonMode = args.todayButtonMode is defined ? args.todayButtonMode : 0 %}
     {% set dateDelimiter = args.dateDelimiter is defined ? args.dateDelimiter : '/' %}
-    {% set daysOfWeekHighlighted = args.daysOfWeekHighlighted is defined ? args.daysOfWeekHighlighted : {} %}
+    {% set daysOfWeekHighlighted = args.daysOfWeekHighlighted is defined ? args.daysOfWeekHighlighted : '' %}
     {% set pickLevel = args.pickLevel ?? 0 %}
     {% set startView = args.startView ?? 0 %}
     {% set weekNumbers = args.weekNumbers is defined ? args.weekNumbers : 1 %}
@@ -454,8 +454,8 @@
                 todayButton: {{ todayButton }},
                 todayButtonMode: {{ todayButtonMode }},
                 dateDelimiter: '{{ dateDelimiter }}',
-                daysOfWeekHighlighted: [{{ daysOfWeekHighlighted }}],
-                daysOfWeekDisabled: {{ daysOfWeekDisabled is not empty ? daysOfWeekDisabled : '[]' }}
+                daysOfWeekHighlighted: [ {{ daysOfWeekHighlighted }} ],
+                daysOfWeekDisabled: [ {{ daysOfWeekDisabled }} ]
                 weekNumbers: {{ weekNumbers }},
                 orientation: '{{ orientation }}',
                 pickLevel: {{ pickLevel }},
