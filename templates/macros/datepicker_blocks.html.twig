@@ -413,7 +413,7 @@
         {% else %}
             {% set arrayDatesDisable = "" %}
             {% for dateDisabled in datesDisabled %}
-                {% if dateDisabled is typeOf('date' %}
+                {% if dateDisabled is typeOf('date') %}
                     {% import _self as fields %}
                     {% set dateDisabled = fields.datetimeArrayToString(dateDisabled, true, false) %}
                 {% endif %}

@@ -38,7 +38,8 @@
         {# datepicker : name+'Datepicker' #}
         <label for="{{ name }}DatepickerInput">
             {% if label_ico %}
-<i class="fa fa-calendar" l-date-max="{{ date_max }}" {% endif %}
+            <i class="fa fa-calendar" l-date-max="{{ date_max }}"
+            {% endif %}
 
             {% if day_date != "0000-00-00" and day_date is not empty %} data-date="{{ day_date }}" {% endif %}
             {% if title|length %} title="{{ title }}" data-title="{{ title }}" {% endif %}
