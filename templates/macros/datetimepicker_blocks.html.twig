@@ -36,23 +36,31 @@
 
     <div class="datetimepicker-group{% if class is not empty %} {{ class }}{% endif %}">
         {# datepicker : name+'Datepicker' #}
+        {% if label is not empty or label_ico is not empty %}
         <label for="{{ name }}DatepickerInput">
             {% if label_ico %}
             <i class="fa fa-calendar" l-date-max="{{ date_max }}"
+            {% else %}
+            {{ label|raw }}
             {% endif %}
-
+        </label>
+        {% endif %}
+        <input type="text" id="{{ name }}DatepickerInput" name="{{ name }}DatepickerInput" class="datepicker-input"
+            {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
+            {% if date_max|length %} data-date-max="{{ date_max }}" {% endif %}
             {% if day_date != "0000-00-00" and day_date is not empty %} data-date="{{ day_date }}" {% endif %}
             {% if title|length %} title="{{ title }}" data-title="{{ title }}" {% endif %}
             {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
-            {% if disabled %} disabled="disabled" {% endif %}>
-        <input type="hidden" id="{{ name }}Datepicker" name="{{ name }}Datepicker" class="hidden" 
-            {% if day_date is not empty %} value="{{ day_date }}" {% endif %}>
+            {% if disabled %} disabled="disabled" {% endif %}
+        >
         {# timepicker : name+'Timepicker' #}
+        {% if label_ico is not empty %}       
         <label for="{{ name }}TimepickerInput">
             {% if label_ico %}
                 <i class="fa fa-clock"></i>
             {% endif %}
         </label>
+        {% endif %}
         <div class="timepicker-ui">
             <input id="{{ name }}TimepickerInput" name="{{ name }}TimepickerInput" type="text"
                 class="timepicker-ui-input"
@@ -120,7 +128,7 @@
                 ~"-"~ "%02d"|format(field_value.date.day) ) %}
         {% set field_time = "%02d"|format(field_value.time.hour) ~":"~ "%02d"|format(field_value.time.minute) %}
     {% endif %}
-{   {% set day_date = day_date is not empty ? day_date : field_date %}
+    {% set day_date = day_date is not empty ? day_date : field_date %}
     {% set day_time = day_time is not empty ? day_time : field_time %}
 
     {% if day_date is not empty %}
@@ -138,11 +146,15 @@
 
     <div class="datetimepicker-group{% if class is not empty %} {{ class }}{% endif %}">
         {# datepicker : field.vars.id+'Datepicker' #}
+        {% if label is not empty or label_ico is not empty %}        
         <label for="{{ field_id }}DatepickerInput">
             {% if label_ico %}
-                <i class="fa fa-calendar"></i>
+            <i class="fa fa-calendar"></i>
+            {% else %}
+            {{ label|raw }}
             {% endif %}
         </label>
+        {% endif %}
         <input id="{{ field_id }}DatepickerInput" name="{{ field_id }}DatepickerInput"
             type="text" class="datepicker-input"
             {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
@@ -154,11 +166,13 @@
         <input type="hidden" id="{{ field_id }}Datepicker" class="hidden"
             {% if day_date is not empty %} value="{{ day_date }}" {% endif %}>
         {# timepicker : field.vars.id+'Timepicker' #}
+        {% if label_ico is not empty %}
         <label for="{{ field_id }}TimepickerInput">  
             {% if label_ico %}
                 <i class="fa fa-clock"></i>
             {% endif %}
         </label>
+        {% endif %}
         <div class="timepicker-ui">
             <input id="{{ field_id }}TimepickerInput" name="{{ field_id }}TimepickerInput"
                 type="text" class="timepicker-ui-input"
