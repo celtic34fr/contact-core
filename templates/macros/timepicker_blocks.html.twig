@@ -25,7 +25,7 @@
         </label>
         <div class="timepicker-ui">
             <input type="text" class="timepicker-ui-input" id="{{ name }}Input" name="{{ name }}Input"
-                {% if time is not empty %} value="{{ time }}" {% endif %}
+                {% if time is not empty %} data-time="{{ time }}" {% endif %}
             />
         </div>
         <div class="timepicker hidden" id="{{ name }}">
@@ -80,7 +80,7 @@
             <div class="timepicker-ui">
                 <input type="text" class="timepicker-ui-input" 
                     id="{{ form_start }}Input" name="{{ form_start }}Input"
-                    {% if stime is not empty %} value="{{ stime }}" {% endif %}/>
+                    {% if stime is not empty %} data-time="{{ stime }}" {% endif %}/>
             </div>
             <div class="timepicker hidden" id="{{ form_start }}">
                 {% import "@templates/macros/form_classic.html.twig" as forms %}
@@ -102,7 +102,7 @@
             </label>
             <div class="timepicker-ui">
                 <input type="text" class="timepicker-ui-input" id="{{ form_end }}Input" name="{{ form_end }}Input"
-                    {% if etime is not empty %} value="{{ etime }}" {% endif %}/>
+                    {% if etime is not empty %} data-time="{{ etime }}" {% endif %}/>
             </div>
             <div class="timepicker hidden" id="{{ form_end }}">
                 {% import "@templates/macros/form_classic.html.twig" as forms %}
@@ -147,7 +147,7 @@
         </label>
         <div class="timepicker-ui">
             <input type="text" class="timepicker-ui-input" id="{{ field_id }}" name="{{ field_name }}"
-                {% if time is not empty %} value="{{ time }}" {% endif %}
+                {% if time is not empty %} data-time="{{ time }}" {% endif %}
             />
         </div>
         <div class="timepicker hidden" id="{{ field_id }}">
@@ -197,7 +197,7 @@
             <div class="timepicker-ui">
                 <input type="text" class="timepicker-ui-input"
                     id="{{ field_start_id }}Input" name="{{ field_start_id }}Input"
-                    {% if stime is not empty %} value="{{ stime }}" {% endif %}/>
+                    {% if stime is not empty %} data-time="{{ stime }}" {% endif %}/>
             </div>
             <div class="timepicker hidden" id="{{ field_start_id }}">
                 {% import "@templates/macros/form_classic.html.twig" as forms %}
@@ -220,7 +220,7 @@
             <div class="timepicker-ui">
                 <input type="text" class="timepicker-ui-input"
                     id="{{ field_end_id }}Input" name="{{ field_end_id }}Input"
-                    {% if stime is not empty %} value="{{ stime }}" {% endif %}/>
+                    {% if stime is not empty %} data-time="{{ stime }}" {% endif %}/>
             </div>
             <div class="timepicker hidden" id="{{ field_end_id }}">
                 {% import "@templates/macros/form_classic.html.twig" as forms %}
@@ -283,6 +283,14 @@
                 {% endif %}
             };
             const newTimepicker = new window.tui.TimepickerUI(timepicker, options);
+
+            const defaultTime = timepicker.querySelector("input").dataset('time');
+            let datetime = new Date();
+            if (defaultTime.length > 0) {
+                datetime.setHours(defaultTime.subStr(0,2), defaultTime.substr(3,2), 0);
+                newTimepicker.update({options: { currentTime: defaultTime } });
+            }
+
             newTimepicker.create();
         });
     </script>
