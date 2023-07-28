@@ -220,11 +220,13 @@
         }
 
         function build_datetimeTimepicker(timepicker) {
-            let parentElt = e.target.parentElement;
-            let inputtime = timepicker.querySelector("input").value;
-            let divDatetimepicker = parentElt.querySelector("div.hidden.datetimepicker");
-            divDatetimepicker.querySelector(".time_hour").value = inputtime.substr(0, 2);
-            divDatetimepicker.querySelector(".time_minute").value = inputtime.substr(3, 2);
+            timepicker.querySelector("input").addEventListener('change', function(e) {
+                let parentElt = e.target.parentElement;
+                let inputtime = timepicker.querySelector("input").value;
+                let divDatetimepicker = parentElt.querySelector("div.hidden.datetimepicker");
+                divDatetimepicker.querySelector(".time_hour").value = inputtime.substr(0, 2);
+                divDatetimepicker.querySelector(".time_minute").value = inputtime.substr(3, 2);
+            });
         }
 
         document.addEventListener("DOMContentLoaded", function() {
