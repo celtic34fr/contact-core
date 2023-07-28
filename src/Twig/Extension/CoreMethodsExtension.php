@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Twig\Extension;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 use Celtic34fr\ContactCore\Twig\Runtime\CoreMethodsRuntime;
+use Twig\TwigFilter;
 
 /** ensemble d'extensions TWIG spécifiques au projet */
 class CoreMethodsExtension extends AbstractExtension
@@ -19,5 +20,12 @@ class CoreMethodsExtension extends AbstractExtension
             new TwigFunction('template_exist', [CoreMethodsRuntime::class, 'twigFunction_template_exist', self::SAFE]),
             new TwigFunction('extConfig_get', [CoreMethodsRuntime::class, 'twigFunction_extConfig_get', self::SAFE]),
         ];
+    }
+
+    public function getFilters()
+    {
+        return [
+            new TwigFilter('toSring', [CoreMethodsRuntime::class, 'twigFilter_toString', self::SAFE]),
+        ];    
     }
 }

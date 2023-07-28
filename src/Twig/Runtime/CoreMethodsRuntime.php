@@ -35,4 +35,16 @@ class CoreMethodsRuntime implements RuntimeExtensionInterface
     {
         return $this->extensionConfig->get($path);
     }
+
+    public function twigFilter_toString($value): string
+    {
+        $rtrStr = "";
+        switch(gettype($value)) {
+            case 'array':
+                $rtrStr = implode(', ', $value);
+                break;
+        }
+
+        return $rtrStr;
+    }
 }
