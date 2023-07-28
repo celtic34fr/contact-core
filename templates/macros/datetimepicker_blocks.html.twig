@@ -221,7 +221,7 @@
 
         function build_datetimeTimepicker(timepicker) {
             let parent = this.parentElement;
-            let inputtime = timeIpicker.querySelector("input").value;
+            let inputtime = timepicker.querySelector("input").value;
             let divDatetimepicker = parent.querySelector("div.hidden.datetimepicker");
             divDatetimepicker.querySelector(".time_hour").value = inputtime.substr(0, 2);
             divDatetimepicker.querySelector(".time_minute").value = inputtime.substr(3, 2);
