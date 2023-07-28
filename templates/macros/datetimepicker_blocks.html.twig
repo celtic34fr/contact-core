@@ -38,12 +38,8 @@
         {# datepicker : name+'Datepicker' #}
         <label for="{{ name }}DatepickerInput">
             {% if label_ico %}
-                <i class="fa fa-calendar"></i>
-            {% endif %}
-        </label>
-        <input id="{{ name }}DatepickerInput" name="{{ name }}DatepickerInput" type="text" class="datepicker-input"
-            {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
-            {% if date_max|length %} data-date-max="{{ date_max }}" {% endif %}
+<i class="fa fa-calendar" l-date-max="{{ date_max }}" {% endif %}
+
             {% if day_date != "0000-00-00" and day_date is not empty %} data-date="{{ day_date }}" {% endif %}
             {% if title|length %} title="{{ title }}" data-title="{{ title }}" {% endif %}
             {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
@@ -63,7 +59,7 @@
             />
         </div>
         <div class="hidden datetimepicker" id="{{ name }}">
-            {% import "@templates/macros/form_classic.html.twig" as forms %}
+            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
             {{ forms.hidden(name ~ "_date_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
                 'custom_name': name ~ "[date][day]", "class": "date_day",
             }) }}
@@ -169,7 +165,7 @@
             />
         </div>
         <div class="hidden datetimepicker" id="{{ field_id }}">
-            {% import "@templates/macros/form_classic.html.twig" as forms %}
+            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
             {% set field_name = field.vars.name %}
             {{ forms.hidden(field_id ~ "_date_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
                 'custom_name': field_name ~ "[date][day]", "class": "date_day",
@@ -204,8 +200,8 @@
     {% set datepicker = args.datepicker ?? {} %}
     {% set timepicjer = args.timePicker ?? {} %}
 
-    {% import "@templates/macros/datepicker_blocls.html.twig" as datepickerBlk %}
-    {% import "@templates/macros/timeprcker_blocks.html.twig" as timepickerBlk %}
+    {% import "@contact-core/macros/datepicker_blocks.html.twig" as datepickerBlk %}
+    {% import "@contact-core/macros/timeprcker_blocks.html.twig" as timepickerBlk %}
     {{ datepickerBlk.datepickerJSinit(datepicker) }}
     {{ timepickerBlk.timepickerJSinit(timepicker) }}
     
