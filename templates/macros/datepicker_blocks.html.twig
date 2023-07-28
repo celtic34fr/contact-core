@@ -47,7 +47,7 @@
             {% if disabled %} disabled="disabled" {% endif %}
         >
         <div class="hidden datepicker" id="{{ name }}">
-            {% import "@templates/macros/form_classic.html.twig" as forms %}
+            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
             {{ forms.hidden(name ~ "_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
                 'custom_name': name ~ "[day]", "class": "date_day",
             }) }}
@@ -127,8 +127,8 @@
         class="row datepickerRange{% if class|length %} {{ class }}{% endif %}"
         {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
         {% if date_max|length %} data-date-max="{{ date_max }}" {% endif %}
-        {% if svalue|trim != "00:00:00" %} data-start="{{ svalue }}" {% endif %}
-        {% if evalue|trim != "00:00:00" %} data-end="{{ evalue }}" {% endif %}
+        {% if svalue|trim != "0000:00:00" %} data-start="{{ svalue }}" {% endif %}
+        {% if evalue|trim != "0000:00:00" %} data-end="{{ evalue }}" {% endif %}
     >
         <div {% if sclass|length %} class="datepicker-group {{ sclass }}" {% endif %}>
             <label for="{{ form_start }}Input">
@@ -142,8 +142,8 @@
                 class="datepicker-input start" {{ sdisabled }}
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
-            <div class="hidden datepicker" id="{{ form_start }}">
-                {% import "@templates/macros/form_classic.html.twig" as forms %}
+            <div class="hidden hidden_start datepicker" id="{{ form_start }}">
+                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(form_start ~ "_day", (svalue is not empty ? svalue|slice(8, 2) : ""), {
                     'custom_name': form_start ~ "[day]", "class": "date_day",
                 }) }}
@@ -166,8 +166,8 @@
             <input type="text" name="{{ form_end }}Input" id="{{ form_end }}Input"
                 class="datepicker-input end" {{ edisabled }}
             >
-            <div class="hidden datepicker" id="{{ form_end }}">
-                {% import "@templates/macros/form_classic.html.twig" as forms %}
+            <div class="hidden hidden_end datepicker" id="{{ form_end }}">
+                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(form_end ~ "_day", (evalue is not empty ? evalue|slice(8, 2) : ""), {
                     'custom_name': form_end ~ "[day]", "class": "date_day",
                 }) }}
@@ -235,7 +235,7 @@
             {% if disabled %} disabled="disabled" {% endif %}>
 
         <div class="hidden datepicker" id="{{ field_id }}">
-            {% import "@templates/macros/form_classic.html.twig" as forms %}
+            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
             {{ forms.hidden(field_id ~ "_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
                 'custom_name': field_name ~ "[day]", "class": "date_day",
             }) }}
@@ -322,8 +322,8 @@
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
             
-            <div class="hidden datepicker" id="{{ field_start_id }}">
-                {% import "@templates/macros/form_classic.html.twig" as forms %}
+            <div class="hidden hidden_start datepicker" id="{{ field_start_id }}">
+                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(field_start_id ~ "_day",
                     (field_start_value is not empty ? field_start_value|slice(8, 2) : ""), {
                     'custom_name': field_start_name ~ "[day]", "class": "date_day",
@@ -350,8 +350,8 @@
                 class="datepicker-input end" {{ edisabled }}
             >
 
-            <div class="hidden datepicker" id="{{ field_end_id }}">
-                {% import "@templates/macros/form_classic.html.twig" as forms %}
+            <div class="hidden hidden_end datepicker" id="{{ field_end_id }}">
+                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(field_end_id ~ "_day",
                     (field_end_value is not empty ? field_end_value|slice(8, 2) : ""), {
                     'custom_name': field_end_name ~ "[day]", "class": "date_day",
@@ -394,7 +394,7 @@
 {% macro datepickerJSinit(args={}) %}
     {% set format = (args.format is defined and args.format is not empty) ? args.format : "dd/mm/yyyy" %}
     {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
-    {% set language = args.language is defined ? args.language : config.get('general/locale') %}
+    {% set language = args.language is defined ? args.language : app.request.locale %}
 
     {% set orientation = args.orientation is defined ? args.orientation : 'auto' %}
     {% set nextArrow = args.nextArrow is defined ? args.nextArrow : "»" %}
@@ -516,7 +516,7 @@
     {# ensemble de code JS visant à gérer laes datepickerRange #}
     {% set format = (args.format is defined and args.format is not empty) ? args.format : "y-m-d" %}
     {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
-    {% set language = args.language is defined ? args.language : config.get('general/locale') %}
+    {% set language = args.language is defined ? args.language : app.reques.locale %}
 
     {% set orientation = args.orientation is defined ? args.orientation : 'auto' %}
     {% set nextArrow = args.nextArrow is defined ? args.nextArrow : "»" %}

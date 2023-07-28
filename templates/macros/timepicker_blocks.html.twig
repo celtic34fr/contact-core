@@ -284,9 +284,9 @@
             };
             const newTimepicker = new window.tui.TimepickerUI(timepicker, options);
 
-            const defaultTime = timepicker.querySelector("input").dataset('time');
+            const defaultTime = timepicker.querySelector("input").dataset.time;
             let datetime = new Date();
-            if (defaultTime.length > 0) {
+            if (defaultTime != undefined && defaultTime.length > 0) {
                 datetime.setHours(defaultTime.subStr(0,2), defaultTime.substr(3,2), 0);
                 newTimepicker.update({options: { currentTime: defaultTime } });
             }
