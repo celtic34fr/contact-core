@@ -1,0 +1,16 @@
+.datetimepicker-group label {
+    float: left;
+    width: 1em !important;
+    text-align: center;
+    margin: 0.25em 0.25em 0;
+}
+
+.datetimepicker-group .datepicker-input {
+    float: left;
+    width: 10em !important;
+}
+
+.datetimepicker-group .timepicker-ui-input {
+    float: left;
+    width: 5em !important;
+}
