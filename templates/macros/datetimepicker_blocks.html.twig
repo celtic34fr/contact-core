@@ -229,15 +229,15 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             let datepickerFields = document.querySelectorAll('input.datepicker-input');
-            let timepickers = document.querySelectorAll(".timepicker-ui");
+            let timepickerFields = document.querySelectorAll(".timepicker-ui");
 
             datepickerFields.forEach(datepickerField => {
-                if (datepicker.parentElement.classList.contains("datetimepicker-group")) {
+                if (datepickerField.parentElement.classList.contains("datetimepicker-group")) {
                     build_datetimeDatepicker(datepickerField);
                 }
             });
-            timepickerFields.forEach(timepicker => {
-                if (timepicker.parentElement.classList.contains("datetimepicker-group")) {
+            timepickerFields.forEach(timepickerField => {
+                if (timepickerField.parentElement.classList.contains("datetimepicker-group")) {
                     build_datetimeTimepicker(datepickerField);
                 }
             });
