@@ -209,8 +209,8 @@
     <script>
         function build_datetimeDatepicker(datepicker) {
             datepicker.addEventListener('changeDate', function (e) {
-                let parent = this.parentElement;
-                let divDatetimepicker = parent.querySelector("div.hidden.datetimepicker");
+                let parentElt = e.target.parentElement;
+                let divDatetimepicker = parentElt.querySelector("div.hidden.datetimepicker");
                 let date = e.detail.date;
                 let inputdate = date_to_input_str(date);
                 divDatetimepicker.querySelector(".date_year").value = inputdate.substr(0,4);
