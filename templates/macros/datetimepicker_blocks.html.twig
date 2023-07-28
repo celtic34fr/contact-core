@@ -204,7 +204,7 @@
     {% set datepicker = args.datepicker ?? {} %}
     {% set timepicjer = args.timePicker ?? {} %}
 
-    {% import "@templates/macroq/datepicker_blocls.html.twig" as datepickerBlk %}
+    {% import "@templates/macros/datepicker_blocls.html.twig" as datepickerBlk %}
     {% import "@templates/macros/timeprcker_blocks.html.twig" as timepickerBlk %}
     {{ datepickerBlk.datepickerJSinit(datepicker) }}
     {{ timepickerBlk.timepickerJSinit(timepicker) }}
