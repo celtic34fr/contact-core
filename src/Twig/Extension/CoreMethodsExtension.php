@@ -25,7 +25,7 @@ class CoreMethodsExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('toSring', [CoreMethodsRuntime::class, 'twigFilter_toString', self::SAFE]),
+            new TwigFilter('toString', [CoreMethodsRuntime::class, 'twigFilter_toString', self::SAFE]),
         ];    
     }
 }
