@@ -199,7 +199,7 @@
 {# - timepicker     : tableau des paramètres à appliquer aux objets timepicker-ui#}
 {% macro datetimepickerJSinit(args={}) %}
     {% set datepicker = args.datepicker ?? {} %}
-    {% set timepicjer = args.timePicker ?? {} %}
+    {% set timepicker = args.timepicker ?? {} %}
 
     {% import "@contact-core/macros/datepicker_blocks.html.twig" as datepickerBlk %}
     {% import "@contact-core/macros/timepicker_blocks.html.twig" as timepickerBlk %}
