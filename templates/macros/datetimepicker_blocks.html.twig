@@ -12,7 +12,7 @@
 {# - label_ico      : booléen précisant la présence d'icône (true) ou non (false) devant la date et l'heure #}
 {# - title          : infobulle affiché au surval de la zone avec la souris #}
 {% macro datetimepickerForm(name, label="", args={}) %}
-    {% set class = args.class ?? '' %}
+    {% set class = args.class ?? 'col-12 row' %}
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
     {% set date_min = args.date_min is defined and args.date_min is not empty ? args.date_min : "" %}
     {% set date_max = args.date_max is defined and args.date_max is not empty ? args.date_max : "" %}
@@ -34,7 +34,7 @@
         {% endif %}
     {% endif %}
 
-    <div class="datetimepicker-group{% if class is not empty %} {{ class }}{% endif %}">
+    <div class="datetimepicker-group {{ class }}">
         {# datepicker : name+'Datepicker' #}
         {% if label is not empty or label_ico is not empty %}
         <label for="{{ name }}DatepickerInput">
@@ -110,7 +110,7 @@
 {# - title          : infobulle affiché au surval de la zone avec la souris #}
 {% macro datetimepickerField(field, label="", args={}) %}
     {% set field_id = field.vars.id %}
-    {% set class = args.class ?? '' %}
+    {% set class = args.class ?? 'col-12 row' %}
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
     {% set date_min = args.date_min is defined and args.date_min is not empty ? args.date_min : "" %}
     {% set date_max = args.date_max is defined and args.date_max is not empty ? args.date_max : "" %}
@@ -144,7 +144,7 @@
         {% endif %}
     {% endif %}    
 
-    <div class="datetimepicker-group{% if class is not empty %} {{ class }}{% endif %}">
+    <div class="datetimepicker-group {{ class }}">
         {# datepicker : field.vars.id+'Datepicker' #}
         {% if label is not empty or label_ico is not empty %}        
         <label for="{{ field_id }}DatepickerInput">
