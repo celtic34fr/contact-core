@@ -1,0 +1,235 @@
+{# ensemble des macros de gestion et affichage des blocs de pagination #}
+{# -> page      : numéro de la page courrante débutant à 1 #}
+{# -> pages     : nombre maximal de pages affichables #}
+{# -> route     : route Symfony pour aller chercher les pages #}
+{# -> préfix    : préfixe d'intentification du bloc de pagination si plusieurs dans la page #}
+{% macro paginate_navbar(args={}) %}
+    {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+    {% set page = args.page ?? 1 %}
+    {% set page = page|parseInt %}
+    {% if page < 1 %}{% set page = 1 %}{% endif %}
+    
+    {% set pages = args.pages ?? "" %}
+    {% set pages = pages|parseInt %}
+
+    {% set routes = args.rooute ?? "" %}
+    {% set prefix = args.prefix ?? "" %}
+
+    {# création su bloc de paginations
+        si 'pages' est renseigné et > 0
+        si 'route' non vide #}
+    {% if pages is not 0 and route is not empty %}
+        <style>
+            .btn-rounded {
+                border-radius: 12rem;
+            }
+
+            ul li.page-item {
+                display: inline-block;
+            }
+        </style>
+
+        <div class="form-nav col-12 row{{ " " ~ classes }}">
+            {% if pages > 1 %}
+                {% set lcase = 100 / (pages + 3) - 0.4 %}
+                {% set urlPage = (currentPage > 1) ? path(route, {page: (currentPage - 1)}) : "" %}
+                {% set disabled = (currentPage == 1) %}
+                {% set li_item_class = "page-item" ~ (disabled ? " disabled" : "") %}
+                <ul class="pagination p-0 width100">
+                    <li class="{{ li_item_class }}" style="width: {{ lcase }}%;">
+                        <button class="page-link btn-rounded" type="button" onclick="paginate('{{ prefix }}', -1);"
+                            {% if disabled %} disabled="disabled" {% endif %}
+                        >
+                            &lt;
+                        </button>
+                    </li>
+                    {% set itemclass = "page-item"~(currentPage == 1 ? ' active' : "") %}
+                    <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                        <button class="page-link btn-rounded" type="button" onclick="goPage('{{ prefix }}', 1);">
+                            1
+                        </button>
+                    </li>
+                    {% if pages > 7 %}
+                        {% if currentPage == 1 or currentPage > pages - 3 %}
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button" onclick="goPage('{{ prefix }}', 2);">
+                                    2
+                                </button>
+                            </li>
+                        {% elseif currentPage < 4 %}
+                            {% set itemclass = "page-item"~(currentPage == 2 ? ' active' : "") %}
+                            <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button" onclick="goPage('{{ prefix }}', 2);">
+                                    2
+                                </button>
+                            </li>
+                            {% set itemclass = "page-item"~(currentPage == 3 ? ' active' : "") %}
+                            <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button" onclick="goPage('{{ prefix }}', 3);">
+                                    3
+                                </button>
+                            </li>
+                            {% if currentPage == 3 %}
+                                {% set itemclass = "page-item" %}
+                                <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                    <button class="page-link btn-rounded" type="button" onclick="goPage('{{ prefix }}', 4);">
+                                        4
+                                    </button>
+                                </li>
+                            {% endif %}
+                        {% elseif currentPage > 3 and currentPage < pages %}
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded">.</button>
+                            </li>
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button" 
+                                    onclick="goPage('{{ prefix }}', {{ currentPage - 1 }});"
+                                >
+                                    {{ currentPage - 1 }}
+                                </button>
+                            </li>
+                            <li class="page-item active" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button"
+                                    onclick="goPage('{{ prefix }}', {{ currentPage }});"
+                                >
+                                    {{ currentPage }}
+                                </button>
+                            </li>
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button"
+                                    onclick="goPage('{{ prefix }}', {{ currentPage + 1 }});"
+                                >
+                                    {{ currentPage + 1 }}
+                                </button>
+                            </li>
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded">.</button>
+                            </li>
+                        {% endif %}
+
+                        {% if currentPage == pages or currentPage == 1 %}
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded">.</button>
+                            </li>
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button"
+                                    onclick="goPage('{{ prefix }}', {{ (pages/2)|round }});"
+                                >
+                                    {{ (pages/2)|round }}
+                                </button>
+                            </li>
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded">.</button>
+                            </li>
+                            {% set itemclass = "page-item"~(currentPage == pages - 1 ? ' active' : "") %}
+                            <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button"
+                                    onclick="goPage('{{ prefix }}', {{ pages - 1 }});"
+                                >
+                                    {{ pages - 1 }}
+                                </button>
+                            </li>
+                        {% elseif currentPage > pages - 3 or currentPage < 4 %}
+                            <li class="page-item" style="width: {{ lcase }}%;">
+                                <a class="page-link btn-rounded">.</a>
+                            </li>
+                            {% if currentPage > pages - 3 %}
+                                <li class="page-item" style="width: {{ lcase }}%;">
+                                    <button class="page-link btn-rounded" type="button"
+                                        onclick="goPage('{{ prefix }}', {{ pages - 3 }});"
+                                    >
+                                        {{ pages - 3 }}
+                                    </button>
+                                </li>
+                            {% endif %}
+                            {% if currentPage < 3 or currentPage > pages - 3 %}
+                                {% set itemclass = "page-item"~(currentPage == pages - 2 ? ' active' : "") %}
+                                <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                    <button class="page-link btn-rounded" type="button"
+                                        onclick="goPage('{{ prefix }}', {{ pages - 2 }});"
+                                    >
+                                        {{ pages - 2 }}
+                                    </button>
+                                </li>
+                            {% endif %}
+                            {% set itemclass = "page-item"~(currentPage == pages - 1 ? ' active' : "") %}
+                            <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button"
+                                    onclick="goPage('{{ prefix }}', {{ pages - 1 }});"
+                                >
+                                    {{ pages - 1 }}
+                                </button>
+                            </li>
+                        {% endif %}
+                    {% elseif pages > 2 %}
+                        {% for i in 2..(pages - 1) %}
+                            {% set itemclass = "page-item"~(currentPage == i ? ' active' : "") %}
+                            <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                                <button class="page-link btn-rounded" type="button"
+                                    onclick="goPage('{{ prefix }}', {{ i }});"
+                                >
+                                    {{ i }}
+                                </button>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% set itemclass = "page-item"~(currentPage == pages ? ' active' : "") %}
+                    <li class="{{ itemclass }}" style="width: {{ lcase }}%;">
+                        <button class="page-link btn-rounded" type="button" onclick="goPage('{{ prefix }}', {{ pages }});">
+                            {{ pages }}
+                        </button>
+                    </li>
+                    {% set urlPage = (currentPage < pages) ? path(route, {'page': (currentPage + 1)~prefix}) : "" %}
+                    {% set disabled = (currentPage == pages) %}
+                    {% set li_item_class = "page-item" ~ (disabled ? " disabled" : "") %}
+                    <li class="{{ li_item_class }}" style="width: {{ lcase }}%;">
+                        <button class="page-link btn-rounded" type="button" onclick="paginate('{{ prefix }}', 1);"
+                            {% if disabled %} disabled="disabled" {% endif %}
+                        >
+                            &gt;
+                        </button>
+                    </li>
+                </ul>
+                {{ forms.hidden(prefix~"Page", currentPage) }}
+                {{ forms.hidden(prefix~"MaxPage", pages) }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{# -> route     : route Symfony pour aller chercher les pages #}
+{% macro goPageJS(route) %}
+<script>
+	function goPage(prefix, noPage) {
+        const parameters = prefix + "Page=" + parseInt(noPage);
+        location.href = "{{ path(route)|raw }}?" + parameters;
+    }
+</script>
+{% endmacro %}
+
+{# -> route     : route Symfony pour aller chercher les pages #}
+{# -> préfix    : préfixe d'intentification du bloc de pagination si plusieurs dans la page #}
+{% macro paginateJS(route, prefixes={}) %}
+<script>
+	function paginate(prefix, direct) {
+        let parameters = "";
+        let page = null;
+        let prefixe = null;
+        {% for prefixe in prefixes %}
+        prefixe = '{{ prefixe }}';
+        page = document.querySelector("#" + prefixe + "Page");
+        if (page) {
+            if (prefix != prefixe) {
+                parameters = parameters + prefixe + "Page=" + page.value
+            } else {
+                let new_page = parseInt(page.value) + direct;
+                parameters = parameters + prefix + "Page=" + new_page;
+            }
+            {% if loop.last == false %}parameters = parameters + "&";{% endif %}
+        }
+        {% endfor %}
+        location.href = "{{ path(route)|raw }}?" + parameters;
+    }
+</script>
+{% endmacro %}
