@@ -21,9 +21,13 @@ class ToolsController extends AbstractController
     const raw_doc = __CLASS__ . '::raw_doc';
     const print_doc = __CLASS__ . '::print_doc';
 
-    public function __construct(private EntityManagerInterface $entityManager,
-                private PieceJointeRepository $pieceJointeRepo)
+    private PieceJointeRepository $pieceJointeRepo;
+
+    public function __construct(private EntityManagerInterface $entityManager)
     {
+        /** @var PieceJointeRepository $pieceJointeRepo */
+        $pieceJointeRepo = $this->entityManager->getRepository(PieceJointe::class);
+        $this->pieceJointeRepo = $pieceJointeRepo;
     }
 
     #[Route('/view_doc/{id}', name: 'view_doc')]
