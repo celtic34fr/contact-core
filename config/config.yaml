@@ -30,3 +30,12 @@ entreprise:
   courriel: 'your.email@provider.com'
   telephone: 'your phone number'
   courriel_reponse: 'no-reply@example.com'
+
+ouverture:
+  lundi: -
+  mardi: -
+  mercredi: -
+  jeudi: -
+  vendredi: -
+  samedi: -
+  dimanche: -
