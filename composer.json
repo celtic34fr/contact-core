@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=8.1",
+    "php": ">=8.0",
     "bolt/core": "~5.1.0",
     "twig/twig": "^2.12 | ^3.0",
     "nucleos/dompdf-bundle": "^3.1",
