@@ -1,10 +1,10 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Repository;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Repository;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Celtic34fr\ContactCore\Entity\Parameter;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Parameter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Parameter>

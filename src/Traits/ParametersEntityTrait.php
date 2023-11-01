@@ -1,9 +1,9 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Traits;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Traits;
 
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Parameter;
 use DateTimeImmutable;
-use Celtic34fr\ContactCore\Entity\Parameter;
 
 trait ParametersEntityTrait
 {

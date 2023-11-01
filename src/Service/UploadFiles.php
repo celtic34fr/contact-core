@@ -1,18 +1,18 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Service;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
 
-use DateTime;
 use Bolt\Entity\User;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\PieceJointe;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use DateTime;
 use DateTimeImmutable;
-use Symfony\Component\Asset\Packages;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UploadFiles
 {

@@ -1,18 +1,18 @@
 <?php
 
-namespace App\DataFixtures\ContactCore;
+namespace Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore;
 
+use Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore\ClientelesFixtures;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Clientele;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\CliInfos;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\CourrielEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use DateTimeImmutable;
-use Doctrine\Persistence\ObjectManager;
-use Celtic34fr\ContactCore\Entity\CliInfos;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Celtic34fr\ContactCore\Entity\Clientele;
-use Celtic34fr\ContactCore\Entity\Courriel;
-use App\DataFixtures\ContactCore\ClientelesFixtures;
-use Celtic34fr\ContactCore\Enum\CourrielEnums;
-use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class CourielsFixtures  extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {

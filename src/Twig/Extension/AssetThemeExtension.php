@@ -1,10 +1,10 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Twig\Extension;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Twig\Extension;
 
-use Twig\TwigFunction;
+use Bolt\Extension\Celtic34fr\ContactCore\Twig\Runtime\AssetThemeRuntime;
 use Twig\Extension\AbstractExtension;
-use Celtic34fr\ContactCore\Twig\Runtime\AssetThemeRuntime;
+use Twig\TwigFunction;
 
 /** classe complément à la fonction TWIG asset() pour prise en charge des thème hors package */
 class AssetThemeExtension extends AbstractExtension

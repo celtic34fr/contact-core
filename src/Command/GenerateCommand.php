@@ -1,8 +1,8 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Command;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Command;
 
-use Celtic34fr\ContactCore\Service\IndexGenerator;
+use Bolt\Extension\Celtic34fr\ContactCore\Service\IndexGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

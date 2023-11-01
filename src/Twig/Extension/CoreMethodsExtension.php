@@ -1,11 +1,11 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Twig\Extension;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Twig\Extension;
 
-use Twig\TwigFunction;
+use Bolt\Extension\Celtic34fr\ContactCore\Twig\Runtime\CoreMethodsRuntime;
 use Twig\Extension\AbstractExtension;
-use Celtic34fr\ContactCore\Twig\Runtime\CoreMethodsRuntime;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /** ensemble d'extensions TWIG spécifiques au projet */
 class CoreMethodsExtension extends AbstractExtension

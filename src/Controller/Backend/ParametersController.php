@@ -1,33 +1,33 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Controller\Backend;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Controller\Backend;
 
-use Exception;
-use Twig\Environment;
-use DateTimeImmutable;
 use Bolt\Configuration\Config;
-use Symfony\Component\Yaml\Yaml;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Parameter;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\PieceJointe;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Form\EntrepriseInfosType;
+use Bolt\Extension\Celtic34fr\ContactCore\Form\ParameterType;
+use Bolt\Extension\Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
+use Bolt\Extension\Celtic34fr\ContactCore\FormEntity\ParameterFE;
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\ParameterRepository;
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\PieceJointeRepository;
+use Bolt\Extension\Celtic34fr\ContactCore\Service\ExtensionConfig;
+use Bolt\Extension\Celtic34fr\ContactCore\Service\UploadFiles;
+use Bolt\Extension\Celtic34fr\ContactCore\Traits\UtilitiesTrait;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Celtic34fr\ContactCore\Entity\Parameter;
-use Symfony\Component\HttpFoundation\Request;
-use Celtic34fr\ContactCore\Entity\PieceJointe;
-use Celtic34fr\ContactCore\Form\ParameterType;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
-use Celtic34fr\ContactCore\Service\UploadFiles;
-use Symfony\Component\Routing\Annotation\Route;
-use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Celtic34fr\ContactCore\FormEntity\ParameterFE;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Celtic34fr\ContactCore\Service\ExtensionConfig;
-use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
-use Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
-use Celtic34fr\ContactCore\Repository\ParameterRepository;
-use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
-use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Yaml\Yaml;
+use Twig\Environment;
 
 #[Route('parameters', name: 'parameters-')]
 class ParametersController extends AbstractController

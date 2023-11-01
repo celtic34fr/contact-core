@@ -1,15 +1,15 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Entity;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
 
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\CourrielEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\CourrielRepository;
+use Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 use DateTimeImmutable;
-use Doctrine\ORM\Mapping as ORM;
-use Celtic34fr\ContactCore\Enum\CourrielEnums;
-use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
-use Celtic34fr\ContactCore\Repository\CourrielRepository;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 
 #[ORM\Entity(repositoryClass: CourrielRepository::class)]
 #[ORM\Table(name:'courriels')]

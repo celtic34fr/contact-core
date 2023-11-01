@@ -1,12 +1,12 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Service;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
 
-use Celtic34fr\ContactCore\Entity\CliInfos;
-use Celtic34fr\ContactCore\Entity\Courriel;
-use Celtic34fr\ContactCore\Entity\PieceJointe;
-use Celtic34fr\ContactCore\Enum\CourrielEnums;
-use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\CliInfos;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\PieceJointe;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\CourrielEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Envelope;

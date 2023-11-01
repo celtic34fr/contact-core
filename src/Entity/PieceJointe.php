@@ -1,12 +1,12 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Entity;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
 
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PieceJointeRepository::class)]

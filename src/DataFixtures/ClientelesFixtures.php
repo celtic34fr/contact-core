@@ -1,14 +1,14 @@
 <?php
 
-namespace App\DataFixtures\ContactCore;
+namespace Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore;
 
-use Doctrine\Persistence\ObjectManager;
-use Celtic34fr\ContactCore\Entity\CliInfos;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Clientele;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\CliInfos;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\CustomerEnums;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Celtic34fr\ContactCore\Entity\Clientele;
-use Celtic34fr\ContactCore\Enum\CustomerEnums;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 /** Création d'utilisateur : internautes (prospects) et/ou client */
 /** tables inpactées Clientele & CliInfos */

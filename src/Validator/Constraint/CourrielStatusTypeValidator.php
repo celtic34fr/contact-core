@@ -1,12 +1,12 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Validator\Constraint;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint;
 
-use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 
 class CourrielStatusTypeValidator extends ConstraintValidator
 {

@@ -17,11 +17,18 @@
     "teamtnt/tntsearch": "^3.1"
   },
   "require-dev": {
-    "symplify/easy-coding-standard": "^8.3"
+    "symplify/easy-coding-standard": "^8.3",
+    "phpunit/phpunit": "^9.6"
   },
   "autoload": {
     "psr-4": {
-      "Celtic34fr\\ContactCore\\": "src/"
+      "Bolt\\Extension\\Celtic34fr\\ContactCore\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+        "Bolt\\Extension\\Celtic34fr\\ContactCore\\Tests\\": "tests",
+        "Bolt\\Tests\\": "vendor/bolt/bolt/tests/phpunit/unit/"
     }
   },
   "minimum-stability": "dev",

@@ -1,11 +1,11 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Entity;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
 
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\SuiviRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Celtic34fr\ContactCore\Repository\SuiviRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SuiviRepository::class)]

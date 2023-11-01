@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Traits;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Traits;
 
 trait EnumToArray
 {

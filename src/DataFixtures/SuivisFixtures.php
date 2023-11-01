@@ -1,13 +1,13 @@
 <?php
 
-namespace App\DataFixtures\ContactCore;
+namespace Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore;
 
-use Celtic34fr\ContactCore\Entity\Courriel;
-use Celtic34fr\ContactCore\Entity\Suivi;
-use Doctrine\Persistence\ObjectManager;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Suivi;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class SuivisFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {

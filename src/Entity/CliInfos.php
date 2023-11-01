@@ -1,12 +1,12 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Entity;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Celtic34fr\ContactCore\Repository\CliInfosRepository;
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\CliInfosRepository;
+use Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 
 #[ORM\Entity(repositoryClass: CliInfosRepository::class)]
 class CliInfos

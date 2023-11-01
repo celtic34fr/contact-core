@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore\FormEntity;
+namespace Bolt\Extension\Celtic34fr\ContactCore\FormEntity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

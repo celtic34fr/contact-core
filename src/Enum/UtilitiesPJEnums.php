@@ -1,8 +1,8 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Enum;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Enum;
 
-use Celtic34fr\ContactCore\Traits\EnumToArray;
+use Bolt\Extension\Celtic34fr\ContactCore\Traits\EnumToArray;
 
 enum UtilitiesPJEnums: string
 {

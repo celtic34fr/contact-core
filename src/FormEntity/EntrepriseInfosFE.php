@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore\FormEntity;
+namespace Bolt\Extension\Celtic34fr\ContactCore\FormEntity;
 
 class EntrepriseInfosFE
 {

@@ -18,11 +18,11 @@ services:
     autowire: true
     autoconfigure: true
 
-  Celtic34fr\ContactCore\AdminMenu:
-    class: Celtic34fr\ContactCore\AdminMenu
+  Bolt\Extension\Celtic34fr\ContactCore\AdminMenu:
+    class: Bolt\Extension\Celtic34fr\ContactCore\AdminMenu
     arguments: [ '@Symfony\Component\Routing\Generator\UrlGeneratorInterface' ]
     tags: [ 'bolt.extension_backend_menu' ]
 
-  Celtic34fr\ContactCore\Controller\Backend\:
+  Bolt\Extension\Celtic34fr\ContactCore\Controller\Backend\:
     resource: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Controller/Backend/'
     tags: ['controller.service_arguments']

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Celtic34fr\ContactCore\Service;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
 
-use Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
-use Celtic34fr\ContactCore\Service\ExtensionConfig;
+use Bolt\Extension\Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
+use Bolt\Extension\Celtic34fr\ContactCore\Service\ExtensionConfig;
 use TeamTNT\TNTSearch\TNTSearch;
 
 /** classe permettant l'utilisation et la mise en oeuvre de l'outil TNTSearch */

@@ -1,15 +1,15 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Entity;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Celtic34fr\ContactCore\Enum\CustomerEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\CustomerEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\ClienteleRepository;
+use Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 use Doctrine\Common\Collections\ArrayCollection;
-use Celtic34fr\ContactCore\Repository\ClienteleRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 
 #[ORM\Entity(repositoryClass: ClienteleRepository::class)]
 #[ORM\Table(name:'clienteles')]

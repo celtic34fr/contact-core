@@ -2,11 +2,11 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
-use Celtic34fr\ContactCore\Entity\Courriel;
-use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
-use Celtic34fr\ContactCore\Repository\CourrielRepository;
-use Celtic34fr\ContactCore\Service\SendMailer;
-use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
+use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
+use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Bolt\Extension\Celtic34fr\ContactCore\Repository\CourrielRepository;
+use Bolt\Extension\Celtic34fr\ContactCore\Service\SendMailer;
+use Bolt\Extension\Celtic34fr\ContactCore\Traits\UtilitiesTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

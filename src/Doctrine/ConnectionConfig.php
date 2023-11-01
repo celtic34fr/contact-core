@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Celtic34fr\ContactCore\Doctrine;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use TeamTNT\TNTSearch\Stemmer\PorterStemmer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use TeamTNT\TNTSearch\Stemmer\PorterStemmer;
 
 class ConnectionConfig
 {

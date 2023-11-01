@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Service;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
 
 use Bolt\Configuration\Config;
 use Symfony\Component\HttpKernel\KernelInterface;
