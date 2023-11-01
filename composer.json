@@ -34,7 +34,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
-    "entrypoint": "Celtic34fr\\ContactCore\\Extension"
+    "entrypoint": "Bolt\\Extension\\Celtic34fr\\ContactCore\\Extension"
   },
   "config": {
     "allow-plugins": {
