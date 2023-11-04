@@ -10,7 +10,7 @@ doctrine:
         is_bundle: false
         type: attribute
         dir: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Entity'
-        prefix: 'Celtic34fr\ContactCore'
+        prefix: 'Bolt\Extension\Celtic34fr\ContactCore'
         alias: ContactCore
 
 services:

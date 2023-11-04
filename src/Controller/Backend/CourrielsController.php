@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Controller\Backend;
+namespace Bolt\Extension\Celtic34fr\ContactCore\Controller\Backend;
 
 use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
 use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
