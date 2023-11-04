@@ -1,13 +1,13 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore;
+namespace Celtic34fr\ContactCore\DataFixtures\ContactCore;
 
-use Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore\ClientelesFixtures;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Clientele;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\CliInfos;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\CourrielEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\DataFixtures\ContactCore\ClientelesFixtures;
+use Celtic34fr\ContactCore\Entity\Clientele;
+use Celtic34fr\ContactCore\Entity\CliInfos;
+use Celtic34fr\ContactCore\Entity\Courriel;
+use Celtic34fr\ContactCore\Enum\CourrielEnums;
+use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;

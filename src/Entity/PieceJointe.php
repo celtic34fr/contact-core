@@ -1,9 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
+namespace Celtic34fr\ContactCore\Entity;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\PieceJointeRepository;
+use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

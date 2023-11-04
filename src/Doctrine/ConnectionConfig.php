@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Doctrine;
+namespace Celtic34fr\ContactCore\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;

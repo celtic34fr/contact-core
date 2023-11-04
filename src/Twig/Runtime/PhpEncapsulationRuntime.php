@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Twig\Runtime;
+namespace Celtic34fr\ContactCore\Twig\Runtime;
 
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\RuntimeExtensionInterface;

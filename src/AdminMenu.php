@@ -1,10 +1,10 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore;
+namespace Celtic34fr\ContactCore;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Menu\MenuItem as MenuItemContacts;
-use Bolt\Extension\Celtic34fr\ContactCore\Traits\AdminMenuTrait;
 use Bolt\Menu\ExtensionBackendMenuInterface;
+use Celtic34fr\ContactCore\Menu\MenuItem as MenuItemContacts;
+use Celtic34fr\ContactCore\Traits\AdminMenuTrait;
 use Knp\Menu\MenuItem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

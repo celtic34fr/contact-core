@@ -10,7 +10,7 @@ doctrine:
         is_bundle: false
         type: attribute
         dir: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Entity'
-        prefix: 'Bolt\Extension\Celtic34fr\ContactCore'
+        prefix: 'Celtic34fr\ContactCore'
         alias: ContactCore
 
 services:
@@ -18,11 +18,11 @@ services:
     autowire: true
     autoconfigure: true
 
-  Bolt\Extension\Celtic34fr\ContactCore\AdminMenu:
-    class: Bolt\Extension\Celtic34fr\ContactCore\AdminMenu
+  Celtic34fr\ContactCore\AdminMenu:
+    class: Celtic34fr\ContactCore\AdminMenu
     arguments: [ '@Symfony\Component\Routing\Generator\UrlGeneratorInterface' ]
     tags: [ 'bolt.extension_backend_menu' ]
 
-  Bolt\Extension\Celtic34fr\ContactCore\Controller\Backend\:
+  Celtic34fr\ContactCore\Controller\Backend\:
     resource: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Controller/Backend/'
     tags: ['controller.service_arguments']

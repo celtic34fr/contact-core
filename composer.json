@@ -25,19 +25,19 @@
   },
   "autoload": {
     "psr-4": {
-      "Bolt\\Extension\\Celtic34fr\\ContactCore\\": "src/"
+      "Celtic34fr\\ContactCore\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-        "Bolt\\Extension\\Celtic34fr\\ContactCore\\Tests\\": "tests/",
+        "Celtic34fr\\ContactCore\\Tests\\": "tests/",
         "Bolt\\Tests\\": "vendor/bolt/common/tests/phpunit/unit/"
     }
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
-    "entrypoint": "Bolt\\Extension\\Celtic34fr\\ContactCore\\Extension"
+    "entrypoint": "Celtic34fr\\ContactCore\\Extension"
   },
   "config": {
     "allow-plugins": {

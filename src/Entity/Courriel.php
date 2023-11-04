@@ -1,11 +1,11 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
+namespace Celtic34fr\ContactCore\Entity;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\CourrielEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\CourrielRepository;
-use Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
+use Celtic34fr\ContactCore\Enum\CourrielEnums;
+use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\Repository\CourrielRepository;
+use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

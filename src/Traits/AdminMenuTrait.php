@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Traits;
+namespace Celtic34fr\ContactCore\Traits;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Menu\MenuItem;
+use Celtic34fr\ContactCore\Menu\MenuItem;
 use Exception;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem as KnpMenuItem;

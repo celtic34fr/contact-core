@@ -1,20 +1,20 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Controller\Backend;
+namespace Celtic34fr\ContactCore\Controller\Backend;
 
 use Bolt\Configuration\Config;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Parameter;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\PieceJointe;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Form\EntrepriseInfosType;
-use Bolt\Extension\Celtic34fr\ContactCore\Form\ParameterType;
-use Bolt\Extension\Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
-use Bolt\Extension\Celtic34fr\ContactCore\FormEntity\ParameterFE;
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\ParameterRepository;
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\PieceJointeRepository;
-use Bolt\Extension\Celtic34fr\ContactCore\Service\ExtensionConfig;
-use Bolt\Extension\Celtic34fr\ContactCore\Service\UploadFiles;
-use Bolt\Extension\Celtic34fr\ContactCore\Traits\UtilitiesTrait;
+use Celtic34fr\ContactCore\Entity\Parameter;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
+use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Celtic34fr\ContactCore\Form\EntrepriseInfosType;
+use Celtic34fr\ContactCore\Form\ParameterType;
+use Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
+use Celtic34fr\ContactCore\FormEntity\ParameterFE;
+use Celtic34fr\ContactCore\Repository\ParameterRepository;
+use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
+use Celtic34fr\ContactCore\Service\ExtensionConfig;
+use Celtic34fr\ContactCore\Service\UploadFiles;
+use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;

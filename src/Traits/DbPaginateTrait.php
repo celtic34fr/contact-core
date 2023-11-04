@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Traits;
+namespace Celtic34fr\ContactCore\Traits;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;

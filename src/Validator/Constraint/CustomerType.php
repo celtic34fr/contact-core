@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint;
+namespace Celtic34fr\ContactCore\Validator\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Widget;
+namespace Celtic34fr\ContactCore\Widget;
 
 use Bolt\Widget\BaseWidget;
 use Bolt\Widget\CacheAwareInterface;

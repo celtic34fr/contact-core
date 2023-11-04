@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Form;
+namespace Celtic34fr\ContactCore\Form;
 
-use Bolt\Extension\Celtic34fr\ContactCore\FormEntity\ParameterFE;
+use Celtic34fr\ContactCore\FormEntity\ParameterFE;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Menu;
+namespace Celtic34fr\ContactCore\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Knp\menu\MenuItem as MenuItemBase;

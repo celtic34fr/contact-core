@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
+namespace Celtic34fr\ContactCore\Service;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;

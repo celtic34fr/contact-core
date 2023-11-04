@@ -1,9 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Twig\Runtime;
+namespace Celtic34fr\ContactCore\Twig\Runtime;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Service\CourrielsDbInfos;
-use Bolt\Extension\Celtic34fr\ContactCore\Service\ExtensionConfig;
+use Celtic34fr\ContactCore\Service\CourrielsDbInfos;
+use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Twig\Environment;
 use Twig\Extension\RuntimeExtensionInterface;
 

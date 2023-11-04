@@ -1,10 +1,10 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore;
+namespace Celtic34fr\ContactCore\DataFixtures\ContactCore;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Clientele;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\CliInfos;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\CustomerEnums;
+use Celtic34fr\ContactCore\Entity\Clientele;
+use Celtic34fr\ContactCore\Entity\CliInfos;
+use Celtic34fr\ContactCore\Enum\CustomerEnums;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

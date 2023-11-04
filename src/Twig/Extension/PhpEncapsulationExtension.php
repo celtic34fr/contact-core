@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Twig\Extension;
+namespace Celtic34fr\ContactCore\Twig\Extension;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Twig\Runtime\PhpEncapsulationRuntime;
+use Celtic34fr\ContactCore\Twig\Runtime\PhpEncapsulationRuntime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint;
+namespace Celtic34fr\ContactCore\Validator\Constraint;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

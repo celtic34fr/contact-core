@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
+namespace Celtic34fr\ContactCore\Entity;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\SuiviRepository;
+use Celtic34fr\ContactCore\Repository\SuiviRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

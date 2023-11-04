@@ -1,10 +1,10 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Repository;
+namespace Celtic34fr\ContactCore\Repository;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Traits\DbPaginateTrait;
+use Celtic34fr\ContactCore\Entity\Courriel;
+use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
+use Celtic34fr\ContactCore\Traits\DbPaginateTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

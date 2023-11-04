@@ -1,10 +1,10 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Controller\Backend;
+namespace Celtic34fr\ContactCore\Controller\Backend;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\PieceJointe;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\PieceJointeRepository;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
+use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Celtic34fr\ContactCore\Repository\PieceJointeRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

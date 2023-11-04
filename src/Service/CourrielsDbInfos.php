@@ -1,9 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
+namespace Celtic34fr\ContactCore\Service;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\CourrielRepository;
-use Bolt\Extension\Celtic34fr\ContactCore\Traits\DbPaginateTrait;
+use Celtic34fr\ContactCore\Repository\CourrielRepository;
+use Celtic34fr\ContactCore\Traits\DbPaginateTrait;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CourrielsDbInfos

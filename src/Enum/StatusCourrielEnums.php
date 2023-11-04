@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Enum;
+namespace Celtic34fr\ContactCore\Enum;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Traits\EnumToArray;
+use Celtic34fr\ContactCore\Traits\EnumToArray;
 
 enum StatusCourrielEnums: string
 {

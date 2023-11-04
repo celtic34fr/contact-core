@@ -1,9 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\DataFixtures\ContactCore;
+namespace Celtic34fr\ContactCore\DataFixtures\ContactCore;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Courriel;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Suivi;
+use Celtic34fr\ContactCore\Entity\Courriel;
+use Celtic34fr\ContactCore\Entity\Suivi;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

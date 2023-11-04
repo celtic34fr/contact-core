@@ -1,10 +1,10 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
+namespace Celtic34fr\ContactCore\Service;
 
 use Bolt\Entity\User;
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\PieceJointe;
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
+use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;

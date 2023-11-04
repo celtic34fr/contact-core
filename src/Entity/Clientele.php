@@ -1,10 +1,10 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
+namespace Celtic34fr\ContactCore\Entity;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Enum\CustomerEnums;
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\ClienteleRepository;
-use Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
+use Celtic34fr\ContactCore\Enum\CustomerEnums;
+use Celtic34fr\ContactCore\Repository\ClienteleRepository;
+use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

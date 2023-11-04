@@ -1,9 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Service;
+namespace Celtic34fr\ContactCore\Service;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
-use Bolt\Extension\Celtic34fr\ContactCore\Service\TntEngine;
+use Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
+use Celtic34fr\ContactCore\Service\TntEngine;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;

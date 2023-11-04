@@ -1,9 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Entity;
+namespace Celtic34fr\ContactCore\Entity;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Repository\CliInfosRepository;
-use Bolt\Extension\Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
+use Celtic34fr\ContactCore\Repository\CliInfosRepository;
+use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Repository;
+namespace Celtic34fr\ContactCore\Repository;
 
-use Bolt\Extension\Celtic34fr\ContactCore\Entity\Parameter;
+use Celtic34fr\ContactCore\Entity\Parameter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

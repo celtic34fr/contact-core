@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Celtic34fr\ContactCore\Form;
+namespace Celtic34fr\ContactCore\Form;
 
-use Bolt\Extension\Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
+use Celtic34fr\ContactCore\FormEntity\EntrepriseInfosFE;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
