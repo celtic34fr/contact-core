@@ -14,7 +14,7 @@ class VitrineRuntime implements RuntimeExtensionInterface
     {
     }
 
-    public function twigFunction_buildBreadcrumbs(string $menuName = null, Request $request = null)
+    public function twigFunction_buildBreadcrumbs(string $menuName = null, Request $request = null, bool $bs5 = false)
     {
         $menu = [];
         $uri = "";
@@ -28,7 +28,7 @@ class VitrineRuntime implements RuntimeExtensionInterface
             $baseUrl = $request->getBaseUrl();
         }
 
-        return $this->tools->generateBreadcrumbsFromMenu($menu, $uri, $baseUrl);
+        return $this->tools->generateBreadcrumbsFromMenu($menu, $uri, $baseUrl, $bs5);
     }
 
 }

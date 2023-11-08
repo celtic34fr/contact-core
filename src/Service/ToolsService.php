@@ -28,7 +28,7 @@ class ToolsService
      * @return string
      */
     public function generateBreadcrumbsFromMenu(DeepCollection $menu = null, string $uri = null, 
-        string $baseUrl)
+        string $baseUrl, bool $bs5 = false)
     : string
     {
         if (!$menu || !$uri) return [];
@@ -77,27 +77,9 @@ class ToolsService
         }
 
         if ($breadcrumbs) {
-            $breadcrumbs = array_reverse($breadcrumbs, true);
-            $strBreadcrumbs = "";
-            foreach ($breadcrumbs as $key => $item) {
-                $label = $item['label'];
-                $link = $item['link'];
-                if ($link == "homepage") {
-                    $link = $this->urlGenerator->generate("homepage");
-                }
-                $link = (!empty($link)) ? $baseUrl  . '/' . $link : "";
-
-                if (!empty($link)) {
-                    $strBreadcrumbs .= '<a href="' . $link . '">' . $label . '</a>';
-                } else {
-                    $strBreadcrumbs .= $label;
-                }
-
-                if ($key !== array_key_last($breadcrumbs)) {
-                    $strBreadcrumbs .= '/';
-                }
-            }
+            $strBreadcrumbs = $this->formatBreadcrumbs($breadcrumbs, $baseUrl, $bs5);
         }
+
 
         return $strBreadcrumbs;
     }
@@ -158,5 +140,57 @@ class ToolsService
             ];
         }
         return $item;
+    }
+
+    /**
+     * Format breadcrumbs as string or BootStrap 5 object
+     *
+     * @param array $breadcrumbs
+     * @param string $baseUrl
+     * @param boolean $bs5
+     * @return string
+     */
+    private function formatBreadcrumbs(array $breadcrumbs, string $baseUrl, bool $bs5 = false): string
+    {
+        $breadcrumbs = array_reverse($breadcrumbs, true);
+        $strBreadcrumbs = $bs5 ? '<nav aria-label="breadcrumb"><ol class="breadcrumb">' : "";
+        if (empty($baseUrl)) $baseUrl = $this->urlGenerator->generate("homepage", [], UrlGenerator::ABSOLUTE_URL);
+        foreach ($breadcrumbs as $key => $item) {
+            $label = $item['label'];
+            $link = $item['link'];
+            if ($link == "homepage") {
+                $link = $this->urlGenerator->generate("homepage", [], UrlGenerator::ABSOLUTE_URL);
+            } else {
+                $link = (!empty($link)) ? $baseUrl  . '/' . $link : "";
+            }
+
+            if ($bs5) { // format as Bootstrap 5 Breadcrumbs
+
+                if ($key !== array_key_last($breadcrumbs)) {
+                    if (!empty($link)) {
+                        $strBreadcrumbs .= '<li class="breadcrumb-item"><a href="' . $link .'">' . $label .'</a></li>';
+                    } else {
+                        $strBreadcrumbs .= '<li class="breadcrumb-item">' . $label .'</li>';
+                    }
+                } else {
+                    $strBreadcrumbs .= '<li class="breadcrumb-item active" aria-current="page">'. $label .'</li>';
+                }
+
+                                    
+            } else { // format as string
+                if (!empty($link)) {
+                    $strBreadcrumbs .= '<a href="' . $link . '">' . $label . '</a>';
+                } else {
+                    $strBreadcrumbs .= $label;
+                }
+
+                if ($key !== array_key_last($breadcrumbs)) {
+                    $strBreadcrumbs .= '/';
+                }
+            }
+        }
+        if ($bs5) $strBreadcrumbs .= '</ol></nav>';
+
+        return $strBreadcrumbs;
     }
 }
