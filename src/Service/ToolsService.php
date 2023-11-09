@@ -4,6 +4,7 @@ namespace Celtic34fr\ContactCore\Service;
 
 use Bolt\Collection\DeepCollection;
 use Bolt\Configuration\Config;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ToolsService
