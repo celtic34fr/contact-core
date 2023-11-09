@@ -33,6 +33,7 @@ class ToolsService
     {
         if (!$menu || !$uri) return [];
         $breadcrumbs = [];
+        $strBreadcrumbs = "";
 
         /**
          * -> le menu est un arbre à parcourir
@@ -97,8 +98,9 @@ class ToolsService
 
             $nItem = $this->extractInfos($label, $link, $uri, $bItem);
             if ($nItem) $breadcrumbs[] = $nItem;
-            return ['breadcrumbs' => $breadcrumbs, 'find' => $nItem['find'] ?? false];
+            if (array_key_exists('find', $nItem) && $nItem['find']) break;
         }
+        return ['breadcrumbs' => $breadcrumbs, 'find' => $nItem['find'] ?? false];
     }
 
     /**
@@ -153,7 +155,7 @@ class ToolsService
     private function formatBreadcrumbs(array $breadcrumbs, string $baseUrl, bool $bs5 = false): string
     {
         $breadcrumbs = array_reverse($breadcrumbs, true);
-        $strBreadcrumbs = $bs5 ? '<nav aria-label="breadcrumb"><ol class="breadcrumb">' : "";
+        $strBreadcrumbs = $bs5 ? '<ul class="breadcrumb-nav">' : "";
         if (empty($baseUrl)) $baseUrl = $this->urlGenerator->generate("homepage", [], UrlGenerator::ABSOLUTE_URL);
         foreach ($breadcrumbs as $key => $item) {
             $label = $item['label'];
@@ -189,7 +191,7 @@ class ToolsService
                 }
             }
         }
-        if ($bs5) $strBreadcrumbs .= '</ol></nav>';
+        if ($bs5) $strBreadcrumbs .= '</ul>';
 
         return $strBreadcrumbs;
     }
