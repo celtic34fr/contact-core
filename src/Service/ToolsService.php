@@ -185,10 +185,6 @@ class ToolsService
                 } else {
                     $strBreadcrumbs .= $label;
                 }
-
-                if ($key !== array_key_last($breadcrumbs)) {
-                    $strBreadcrumbs .= '/';
-                }
             }
         }
         if ($bs5) $strBreadcrumbs .= '</ul>';
