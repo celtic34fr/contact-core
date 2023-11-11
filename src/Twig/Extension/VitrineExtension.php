@@ -14,6 +14,7 @@ class VitrineExtension extends AbstractExtension
     {
         return [
             new TwigFunction('buildBreadcrumbs', [VitrineRuntime::class, 'twigFunction_buildBreadcrumbs']),
+            new TwigFunction('buildArrayBreadcrumbs', [VitrineRuntime::class, 'twigFunction_buildArrayBreadcrumbs']),
         ];
     }
 }

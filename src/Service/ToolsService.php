@@ -26,12 +26,13 @@ class ToolsService
      * @param DeepCollection|null $menu
      * @param string|null $uri
      * @param string $baseUrl
-     * @return string
+     * @return array
      */
-    public function generateBreadcrumbsFromMenu(DeepCollection $menu = null, string $uri = null, 
+    public function generateBreadcrumbsFromMenuArray(DeepCollection $menu = null, string $uri = null, 
         string $baseUrl, bool $bs5 = false)
-    : string
+    : array
     {
+        
         if (!$menu || !$uri) return [];
         $breadcrumbs = [];
         $strBreadcrumbs = "";
@@ -77,12 +78,25 @@ class ToolsService
             $breadcrumbs = array_merge($bItem['breadcrumbs'], $breadcrumbs);
             $breadcrumbs[] = $this->getHomepage($menu);
         }
+        return $breadcrumbs;
+    }
 
+    /**
+     * generateBreadcrumbsFromMenu : generate breadscrumbs string according BoltCMS menu and current URI
+     *
+     * @param DeepCollection|null $menu
+     * @param string|null $uri
+     * @param string $baseUrl
+     * @return string
+     */
+    public function generateBreadcrumbsFromMenu(DeepCollection $menu = null, string $uri = null, 
+        string $baseUrl, bool $bs5 = false)
+    : string
+    {
+        $breadcrumbs = $this->generateBreadcrumbsFromMenuArray($menu, $uri, $baseUrl, $bs5);
         if ($breadcrumbs) {
             $strBreadcrumbs = $this->formatBreadcrumbs($breadcrumbs, $baseUrl, $bs5);
         }
-
-
         return $strBreadcrumbs;
     }
 
