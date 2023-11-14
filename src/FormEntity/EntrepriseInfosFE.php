@@ -21,9 +21,27 @@ class EntrepriseInfosFE
     }
 
     /**
-     * Set EntrepriseInfos attributes by array
+     * Return all informations contains in object in an array
+     *
+     * @return array
+     */
+    public function getInfosArray(): array
+    {
+        return [
+            'designation' => $this->designation,
+            'siren' => $this->siren,
+            'siret' => $this->siret,
+            'courriel' => $this->courriel,
+            'telephone' => $this->telephone,
+            'reponse' => $this->reponse,
+            'logoID' => $this->logoID,
+        ];
+    }
+
+    /**
+     * Set EntrepriseInfosFE attributes by array
      * @param array $parameters
-     * @return EntrepriseInfos
+     * @return EntrepriseInfosFE
      */
     public function setByArray(array $parameters): self
     {
@@ -34,6 +52,15 @@ class EntrepriseInfosFE
         $this->telephone = $parameters['telephone'] ?? "";
         $this->reponse = $parameters['reponse'] ?? "";
         $this->logoID = $parameters['logoID'] ?? null;
+
+        /** 
+         * if siren is empty && siret not empty :
+         *      siren = 9 first number of siret
+         */
+        if (!empty($this->siret) && empty($this->siren)) {
+            $this->siren = substr($this->siret, 0, 9);
+        }
+
         return $this;
     }
 
@@ -49,7 +76,7 @@ class EntrepriseInfosFE
     /**
      * Set the value of designation
      *
-     * @return  EntrepriseInfos
+     * @return  EntrepriseInfosFE
      */ 
     public function setDesignation($designation): self
     {
@@ -69,13 +96,15 @@ class EntrepriseInfosFE
     /**
      * Set the value of siren
      *
-     * @return  EntrepriseInfos
+     * @return  EntrepriseInfosFE|false
      */ 
-    public function setSiren($siren): self
+    public function setSiren($siren): mixed
     {
-        $this->siren = $siren;
-
-        return $this;
+        if (strlen($siren) == 9 && is_numeric($siren)) {
+            $this->siren = $siren;
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -89,13 +118,15 @@ class EntrepriseInfosFE
     /**
      * Set the value of siret
      *
-     * @return  EntrepriseInfos
+     * @return  EntrepriseInfosFE|null
      */ 
-    public function setSiret($siret): self
+    public function setSiret($siret): mixed
     {
-        $this->siret = $siret;
-
-        return $this;
+        if (strLen($siret) == 14 && is_numeric($siret)) {
+            $this->siret = $siret;
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -109,7 +140,7 @@ class EntrepriseInfosFE
     /**
      * Set the value of courriel
      *
-     * @return  EntrepriseInfos
+     * @return  EntrepriseInfosFE
      */ 
     public function setCourriel($courriel): self
     {
@@ -129,10 +160,19 @@ class EntrepriseInfosFE
     /**
      * Set the value of telephone
      *
-     * @return  EntrepriseInfos
+     * @return  EntrepriseInfosFE|false
      */ 
-    public function setTelephone($telephone): self
+    public function setTelephone($telephone): mixed
     {
+        /** string is numeric but too long or to short */
+        if (is_numeric($telephone) && strlen($telephone) != 10) return false;
+
+        /** string must contains numbers, space, dot and plus character */
+        $tempo = str_replace('+', '', $telephone);
+        $tempo = str_replace('.', '', $tempo);
+        $tempo = str_replace(' ', '', $tempo);
+        if (!is_numeric($tempo) || strlen($tempo) != 10) return false;
+
         $this->telephone = $telephone;
 
         return $this;
@@ -149,7 +189,7 @@ class EntrepriseInfosFE
     /**
      * Set the value of reponse
      *
-     * @return  EntrepriseInfos
+     * @return  EntrepriseInfosFE
      */ 
     public function setReponse($reponse): self
     {
@@ -169,10 +209,12 @@ class EntrepriseInfosFE
     /**
      * Set the value of logoID
      *
-     * @return  self
+     * @return  EntrepriseInfosFE|false
      */ 
-    public function setLogoID(int $logoID)
+    public function setLogoID(int $logoID): mixed
     {
+        if (!is_numeric($logoID) || $logoID < 0) return false;
+        
         $this->logoID = $logoID;
         return $this;
     }
