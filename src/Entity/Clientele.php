@@ -128,4 +128,50 @@ class Clientele
         }
         return $this;
     }
+
+    /**
+     * Search Contact Identity on criteria
+     * @param array $criteria
+     * @return boolean
+     */
+    public function isCliInfo(array $criteria):bool
+    {
+        $cliInfos = $this->getCliInfos();
+        $name = [];
+        foreach ($criteria as $key => $value) {
+            switch($key) {
+                case 'fullname':
+                    $names = explode(" ", $value);
+                    break;
+                case 'firstname':
+                    $name[1] = $value;
+                    break;
+                case 'lastname':
+                    $name[0] = $value;
+                    break;
+            }
+        }
+        $found = false;
+
+        if (!array_key_exists(0, $name) || empty($name[0])) return false;
+        $onlyNom = !array_key_exists(1, $name) || empty($name[1]);
+
+        foreach ($cliInfos as $cliInfo) {
+            /** @var CliInfo $cliInfo */
+            switch($onlyNom) {
+                case true:
+                    if ($name[0] == $cliInfo->getNom()) {
+                        $found = true;
+                    }
+                    break;
+                case false:
+                    if ($name == [$cliInfo->getNom(), $cliInfo->getPrenom()]) {
+                        $found = true;
+                    }
+                    break;
+            }
+            if ($found) break;
+        }
+        return $found;
+    }
 }
