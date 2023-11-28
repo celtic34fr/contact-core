@@ -37,6 +37,20 @@ class CliInfosRepository extends ServiceEntityRepository
         }
     }
 
+    public function findFullname(string $fullname) :mixed
+    {
+        $found = false;
+        $allUSer = $this->getEntityManager()->getRepository(CliInfos::class)->findAll();
+        /** @var CliInfos $user */
+        foreach ($allUSer as $user) {
+            if ($fullname == $user->getFullname()) {
+                $found = true;
+                break;
+            }
+        }
+        return $found;
+    }
+
 //    /**
 //     * @return CliInfosCRM[] Returns an array of CliInfosCRM objects
 //     */
