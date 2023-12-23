@@ -1,4 +1,4 @@
-# Bolt CMS 6 Celtic34fr Contact Extension Core v0.0.1-dev
+# Bolt CMS 5 Celtic34fr Contact Extension Core v0.0.1-dev
 
 Author: Gilbert ARMENGAUD
 
@@ -7,6 +7,13 @@ This module give the base functionalities and need other module to give all its 
 celtic34fr/contact-gestion that give real contact formular et anwser system management.
 
 Installation:
+
+First, we need to install nodeJS componant for compiling MJML mail templates to HTML before sending.
+
+```bash
+npm install — global mjml
+```
+Second, we install the extension itself.
 
 ```bash
 composer require celtic34fr/contact-core

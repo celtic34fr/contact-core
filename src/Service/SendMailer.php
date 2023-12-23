@@ -16,6 +16,7 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\RawMessage;
+use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment as TwigEnvironment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -29,6 +30,12 @@ class SendMailer
     private TwigEnvironment $twig;
     private ExtensionConfig $extConfig;
 
+    /**
+     * @param EntityManagerInterface $em
+     * @param TwigEnvironment $twig
+     * @param ExtensionConfig $extConfig
+     * @return void
+     */
     public function initialize(EntityManagerInterface $em, TwigEnvironment $twig, ExtensionConfig $extConfig)
     {
         $mailerParms = $extConfig->get("celtic34fr-ContactCore/mailer");
@@ -42,6 +49,11 @@ class SendMailer
         $this->extConfig = $extConfig;
     }
 
+    /**
+     * @param RawMessage $message
+     * @param Envelope|null $envelope
+     * @return boolean
+     */
     private function send(RawMessage $message, Envelope $envelope = null): bool
     {
         try {
@@ -100,6 +112,10 @@ class SendMailer
         return $res;
     }
 
+    /**
+     * @param Courriel $mail
+     * @return void
+     */
     public function resendMail(Courriel $mail)
     {
         $destinataire = $mail->getDestinataire();
