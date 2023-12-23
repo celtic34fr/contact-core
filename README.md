@@ -8,13 +8,6 @@ celtic34fr/contact-gestion that give real contact formular et anwser system mana
 
 Installation:
 
-First, we need to install nodeJS componant for compiling MJML mail templates to HTML before sending.
-
-```bash
-npm install — global mjml
-```
-Second, we install the extension itself.
-
 ```bash
 composer require celtic34fr/contact-core
 ```
