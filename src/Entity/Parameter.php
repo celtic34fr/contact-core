@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Entity;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,11 +48,15 @@ class Parameter
     #[Assert\DateTime]
     protected ?DateTimeImmutable $updated_at;
 
-    public function __construct()
+
+    #[ORM\PrePersist]
+    public function beforPersist(PrePersistEventArgs $eventArgs)
     {
+        $entity = $eventArgs->getObject();
         $this->created_at = new DateTimeImmutable('now');
     }
 
+    
     /**
      * Get the value of id
      */

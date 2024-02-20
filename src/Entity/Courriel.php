@@ -8,11 +8,13 @@ use Celtic34fr\ContactCore\Repository\CourrielRepository;
 use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CourrielRepository::class)]
 #[ORM\Table(name:'courriels')]
+#[ORM\HasLifecycleCallbacks]
 class Courriel
 {
     #[ORM\Id]
@@ -65,6 +67,15 @@ class Courriel
     #[CustomAssert\CourrielType]
     private ?string $nature = null;                     // nature, type de courriel, cf Enum\CourrielEnumes
 
+
+    #[ORM\PrePersist]
+    public function beforPersist(PrePersistEventArgs $eventArgs)
+    {
+        $entity = $eventArgs->getObject();
+        $this->created_at = new DateTimeImmutable('now');
+    }
+
+    
     public function getId(): ?int
     {
         return $this->id;
