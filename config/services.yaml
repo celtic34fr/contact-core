@@ -28,7 +28,7 @@ services:
     tags: ['controller.service_arguments']
 
   contactcore.twig.extension.loader:
-    class: Twig_Extension_StringLoader
+    class: Twig\Extension\StringLoaderExtension
     tags:
         - { name: 'twig.extension' }
   contactcore.twig.assettheme_extension:
