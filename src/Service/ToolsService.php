@@ -93,6 +93,8 @@ class ToolsService
         string $baseUrl, bool $bs5 = false)
     : string
     {
+        $strBreadcrumbs = ""; 
+        
         $breadcrumbs = $this->generateBreadcrumbsFromMenuArray($menu, $uri, $baseUrl, $bs5);
         if ($breadcrumbs) {
             $strBreadcrumbs = $this->formatBreadcrumbs($breadcrumbs, $baseUrl, $bs5);
