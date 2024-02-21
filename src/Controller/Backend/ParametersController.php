@@ -55,7 +55,6 @@ class ParametersController extends AbstractController
         $this->pieceJointeRepo = $entityManager->getRepository(PieceJointe::class);
         $this->parameterRepo = $entityManager->getRepository(Parameter::class);
         $this->uploadFiles = new UploadFiles($entityManager, $router, $assetManager);
-        $this->get('twig.loader')->addPath('../app');
     }
 
     /**
