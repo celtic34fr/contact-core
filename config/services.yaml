@@ -26,3 +26,24 @@ services:
   Celtic34fr\ContactCore\Controller\Backend\:
     resource: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Controller/Backend/'
     tags: ['controller.service_arguments']
+
+  contactcore.twig.extension.loader:
+    class: Twig_Extension_StringLoader
+    tags:
+        - { name: 'twig.extension' }
+  contactcore.twig.assettheme_extension:
+    class: Celtic34fr\ContactCore\AssetThemeExtension
+    tags:
+      - { name: 'twig.extension' }
+  contactcore.twig.coremethod_extension:
+    class: Celtic34fr\ContactCore\CoreMethodExtension
+    tags:
+      - { name: 'twig.extension' }
+  contactcore.twig.phpencapsulation_extension:
+    class: Celtic34fr\ContactCore\PhpEncapsulationExtension
+    tags:
+      - { name: 'twig.extension' }
+  contactcore.twig.vitrine_extension:
+    class: Celtic34fr\ContactCore\VitrineExtension
+    tags:
+      - { name: 'twig.extension' }

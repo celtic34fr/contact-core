@@ -28,6 +28,7 @@ class ToolsController extends AbstractController
         /** @var PieceJointeRepository $pieceJointeRepo */
         $pieceJointeRepo = $this->entityManager->getRepository(PieceJointe::class);
         $this->pieceJointeRepo = $pieceJointeRepo;
+        $this->get('twig.loader')->addPath('../app');
     }
 
     #[Route('/view_doc/{id}', name: 'view_doc')]

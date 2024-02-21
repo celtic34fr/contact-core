@@ -27,6 +27,7 @@ class CourrielsController extends AbstractController
     {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
         $this->courrielRepository = $entityManager->getRepository(Courriel::class);
+        $this->get('twig.loader')->addPath('../app');
     }
 
     #[Route('/list/{currentPage}', name: 'courriel_list')]
