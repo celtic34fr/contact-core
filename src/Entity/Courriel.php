@@ -26,46 +26,92 @@ class Courriel
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\Type('string')]
-    private ?string $sujet = null;                      // sujet donné par l'internaute
+    /**
+     * sujet donné au courriel envoyé à l'internaute, champ obligatoire
+     * @var string
+     */
+    private string $sujet;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\Type(CliInfos::class)]
-    private ?CliInfos $destinataire = null;             // lien à l'internaute (info non fixe)
+    #[Assert\Type(type: CliInfos::class)]
+    /**
+     * lien à l'internaute (info non fixe), champ facultatif
+     * @var CliInfos|null
+     */
+    private ?CliInfos $destinataire = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $context_courriel = [];               // variables pour génération du courriel
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[Assert\Type(type: 'array')]
+    /**
+     * variables pour génération du courriel, champ facultatif
+     * @var array
+     */
+    private array $context_courriel = [];
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
     #[Assert\Type('string')]
-    private ?string $template_courriel = null;          // modèle de rendu à utiliser
+    /**
+     * modèle de rendu (TWIG principalement) à utiliser, champ facultatif
+     * @var string|null
+     */
+    private ?string $template_courriel = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\DateTime]
-    private ?DateTimeImmutable $created_at = null;     // date de création
+    /**
+     * date de création de l'enregitrement, champ obligatoire
+     * @var DateTimeImmutable
+     */
+    private DateTimeImmutable $created_at;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     #[Assert\DateTime]
-    private ?DateTimeImmutable $send_at = null;        // date d'envoi
+    /**
+     * date d'envoi du courriel à l'internaute, champ facultatif
+     * @var DateTimeImmutable|null
+     */
+    private ?DateTimeImmutable $send_at = null;
 
-    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     #[Assert\Type('integer')]
-    private ?int $send_times = null;                    // nombre d'envoi total
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    /**
+     * nombre d'envoi total du courriel, champ obligatoire, valorisé à 0 en base
+     * @var integer
+     */
+    private int $send_times = 0;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[CustomAssert\CourrielStatusType]
-    private ?string $send_status = null;                // statut d'envoi du courriel, cf Enum\StatusCourrielEnums
+    /**
+     * statut d'envoi du courriel, cf Enum\StatusCourrielEnums, champ obligatoire
+     * @var string|null
+     */
+    private string $send_status;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private array $pieces_jointes = [];                 // ensble des pièces jointes (table PiecesJointes)
+    /**
+     * ensble des pièces jointes (table PiecesJointes) [tableau], champ facultatif
+     * @var array|null
+     */
+    private ?array $pieces_jointes = null;
 
-    #[ORM\Column(type: TypeS::TEXT, nullable: false)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
     #[Assert\Type('string')]
     #[CustomAssert\CourrielType]
-    private ?string $nature = null;                     // nature, type de courriel, cf Enum\CourrielEnumes
+    /**
+     * nature, type de courriel, cf Enum\CourrielEnumes, champ obligatoire
+     * @var string
+     */
+    private string $nature;
+
 
 
     #[ORM\PrePersist]
@@ -74,6 +120,7 @@ class Courriel
         $entity = $eventArgs->getObject();
         $this->created_at = new DateTimeImmutable('now');
     }
+    
 
     
     public function getId(): ?int

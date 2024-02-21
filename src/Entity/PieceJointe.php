@@ -22,33 +22,70 @@ class PieceJointe
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\Type('string')]
-    private string $file_name;                      // nom du fichier origine
+    /**
+     * nom du fichier origine, champ obligatoire
+     * @var string
+     */
+    private string $file_name;
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\Type('string')]
-    private string $file_mime;                      // type de fichier
+    /**
+     * type de fichier, chmap obligatoire
+     * @var string
+     */
+    private string $file_mime;
 
     #[ORM\Column(type: Types::BLOB)]
-    private $file_content = null;                   // contenu proprement dit du fichier
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
+    /**
+     * contenu proprement dit du fichier, champ obligatoire
+     * @var string
+     */
+    private string $file_content;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\DateTime]
-    private ?DateTimeImmutable $created_at = null; // date de création
+    /**
+     * date de création, champ facultatif
+     * @var DateTimeImmutable
+     */
+    private DateTimeImmutable $created_at;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     #[Assert\Type('boolean')]
-    private ?bool $tempo = null;                    // flag indiquant si le fichier est à garder (false) ou non (true)
+    /**
+     * flag indiquant si le fichier est à garder (false) ou non (true), champ obligatoire initialisé à FAUX
+     * @var boolean
+     */
+    private bool $tempo = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Type('string')]
-    private ?string $utility = null;                // utilité de la pièce jointe : logo entreprise, image pour courriel ....
+    /**
+     * utilité de la pièce jointe : logo entreprise, image pour courriel ...., champ facultatif
+     * @var string|null
+     */
+    private ?string $utility = null;
 
-    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\Type('string')]
-    private ?string $file_size = null;                   // taille de la pièce jointe format normalisé
+    /**
+     * taille de la pièce jointe format normalisé, champ facultatif
+     * @var string
+     */
+    private string $file_size;
 
+
+    
     /** 
      * @return int|null
      */
@@ -118,9 +155,9 @@ class PieceJointe
     }
 
     /** 
-     * @return DateTimeImmutable|null
+     * @return DateTimeImmutable
      */
-    public function getDateCreated(): ?DateTimeImmutable
+    public function getDateCreated(): DateTimeImmutable
     {
         return $this->created_at;
     }
@@ -136,9 +173,9 @@ class PieceJointe
     }
 
     /**
-     * @return bool|null
+     * @return bool
      */
-    public function getTempo(): ?bool
+    public function getTempo(): bool
     {
         return $this->tempo;
     }
@@ -177,7 +214,7 @@ class PieceJointe
     /**
      * Get the value of size
      */ 
-    public function getFileSize(): ?string
+    public function getFileSize(): string
     {
         return $this->file_size;
     }

@@ -25,33 +25,57 @@ class Clientele
     #[Assert\NotNull]
     #[Assert\Type('string')]
     #[Assert\Email(message: "L'adresse courriel {{ value }} est invalide")]
-    private ?string $courriel = null;
+    /**
+     * afresse courriel de l'internaute, champ obligatoire
+     * @var string
+     */
+    private string $courriel;
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\Type('string')]
     #[CustomAssert\CustomerType]
-    private ?string $type = null;   // Cf. Enum^CustomerEnums
+    /**
+     * type de l'internaute, Cf. Enum CustomerEnums, champ obligatoire
+     * @var string
+     */
+    private string $type;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: CliInfos::class)]
-    private Collection $cliInfos;   // information nom, prénom, tél. pouvant être multiple
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull()]
+    /**
+     * informations sur l'internaute (nom, prénom, tél.) pouvant être multiple, au moins un occurance obligatoire
+     * @var Collection
+     */
+    private Collection $cliInfos;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Suivi::class, orphanRemoval: true)]
-    private Collection $events;     // lien avec la table Suivi : évènement sur l'entity internaute (client/prospect)
+    #[ORM\JoinColumn(nullable: true)]
+    /**
+     * lien avec la table Suivi : évènement sur l'entity internaute (client/prospect), champ facultatif
+     * @var Collection|null
+     */
+    private ?Collection $events = null;
 
+
+    
     public function __construct()
     {
         $this->events = new ArrayCollection();
         $this->cliInfos = new ArrayCollection();
     }
 
+
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCourriel(): ?string
+    public function getCourriel(): string
     {
         return $this->courriel;
     }
@@ -62,7 +86,7 @@ class Clientele
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -92,7 +116,9 @@ class Clientele
 
     public function removeCliInfos(CliInfos $cliInfos): self
     {
-        if ($this->cliInfos->removeElement($cliInfos)) {
+        $allCliInfos = $this->getCliInfos();
+
+        if ($this->cliInfos->removeElement($cliInfos) && sizeof($allCliInfos) > 1) {
             // set the owning side to null (unless already changed)
             if ($cliInfos->getClient() === $this) {
                 $cliInfos->setClient(null);

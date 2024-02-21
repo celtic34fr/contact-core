@@ -16,31 +16,52 @@ class CliInfos
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\Type('string')]
-    private ?string $nom = null;        // nom de l'internaute
+    /**
+     * nom de l'internaute, champ obligatoire
+     * @var string
+     */
+    private string $nom;
 
     #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
     #[Assert\Type('string')]
-    private ?string $prenom = null;     // pénom de l'internaute
+    /**
+     * prénom de l'internaute, champ facultatif
+     * @var string|null
+     */
+    private ?string $prenom = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Type('string')]
     #[CustomAssert\PhoneNumber]
-    private ?string $telephone;  // numéro de téléphone
+    /**
+     * numéro de téléphone, champ facultatif
+     * @var string|null
+     */
+    private ?string $telephone = null;
 
     #[ORM\ManyToOne(inversedBy: 'cliInfos')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull()]
     #[Assert\Type(Clientele::class)]
-    private ?Clientele $client;         // lien avec la table des information fixes : courriel
+    /**
+     * lien avec la table des information fixes : courriel, champ obligatoire
+     * @var Clientele
+     */
+    private Clientele $client;
+
+    
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getNom(): string
     {
         return $this->nom;
     }
@@ -87,7 +108,7 @@ class CliInfos
         return $this->client;
     }
 
-    public function setClient(?Clientele $client = null): self
+    public function setClient(Clientele $client): self
     {
         $this->client = $client;
         return $this;
