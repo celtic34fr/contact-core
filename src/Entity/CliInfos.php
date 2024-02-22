@@ -9,6 +9,21 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CliInfosRepository::class)]
+/**
+ * classe CliInfos : table de tail d'informations pour une relation 
+ * 
+ * - nom        : nom de la relation
+ * - prenom     : prénom de la relation
+ * - telephone  : numéro de télephone de la relation
+ *      TODO : question de la gestion de plusieurs téléphones associés au même couple nom/prénom dont FAX
+ * - client     : lien vers les informations de base de la relation, table Clientele, ManyToOne
+ * 
+ * TODO :
+ * - fonction et/ou service de la relation décrite ici (pour fournisseur et/ou partenaire)
+ * - commentaire, annotation sur la relation (condition de contact direct, limite dépôt commande, ...)
+ * - alerte ?? => calendrier à tenir pour avoir des alertes rappel action à faire en rapport avec la relation
+ *      -> gestion de planning d'activité / action en parallèle directement ou par module complémentaire
+ */
 class CliInfos
 {
     #[ORM\Id]

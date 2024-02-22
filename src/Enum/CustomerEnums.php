@@ -8,8 +8,10 @@ enum CustomerEnums: string
 {
     use EnumToArray;
 
-    case Client     = 'CL';  // client
-    case Prospect   = 'PP';  // prospect
+    case Client         = 'CL';
+    case Prospect       = 'PP';
+    case Fournisseur    = 'FR';
+    case Partner        = 'PR';
 
     public function _toString(): string
     {
