@@ -130,6 +130,9 @@
 {# dans le tableau args #}
 {# - inline         : booléen indiquant l'affichage en 1 ligne (true) ou en 2 ligne standard (false) #}
 {# - checked        : booléen indiquant si la case à cocher est cochée ou non #}
+{# - cl_class       : classe à appliquer au label et à la case à cocher pour présentation #}
+{#      - labelClass    : classe à applique sur le label #}
+{#      - checkClass    : classe à aplliquer à la case à cocher #}
 {% macro checkbox(field, label="", args={}) %}
 	{% set label = label is empty ? field.vars.label : label %}
 	{% set inline = args.inline ?? false %}
