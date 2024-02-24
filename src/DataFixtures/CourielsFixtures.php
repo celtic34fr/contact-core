@@ -1,8 +1,8 @@
 <?php
 
-namespace Celtic34fr\ContactCore\DataFixtures\ContactCore;
+namespace Celtic34fr\ContactCore\DataFixtures;
 
-use Celtic34fr\ContactCore\DataFixtures\ContactCore\ClientelesFixtures;
+use Celtic34fr\ContactCore\DataFixtures\ClientelesFixtures;
 use Celtic34fr\ContactCore\Entity\Clientele;
 use Celtic34fr\ContactCore\Entity\CliInfos;
 use Celtic34fr\ContactCore\Entity\Courriel;
