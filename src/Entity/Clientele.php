@@ -2,6 +2,9 @@
 
 namespace Celtic34fr\ContactCore\Entity;
 
+use Celtic34fr\ContactCore\Entity\CliInfos;
+use Celtic34fr\ContactCore\Entity\CliSocialNetwork;
+use Celtic34fr\ContactCore\Entity\Suivi;
 use Celtic34fr\ContactCore\Enum\CustomerEnums;
 use Celtic34fr\ContactCore\Repository\ClienteleRepository;
 use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
@@ -15,8 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClienteleRepository::class)]
-#[ORM\Table(name:'clienteles')]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\Table(name:'clienteles')]
 /**
  * classe Clientele : informations de base avec la relation Client/prospect/fournisseur/partenaire 
  * 
@@ -24,11 +27,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * - updated_at : date de dernière modification d'information / ajout de suivi sur la fiche relation
  * - closed_at  : date de clôture de la fiche relation
  * - courriel   : adresse courriel (@mail) de la relation
- * - type       : type de relation Client /Prospect / Fournisseur / Partenaire
- * - cliInfos   : lien vers l'ensemble des informations détails de la relation, table CliInfos, OneToMAny
- * - events     : lien vers l'ensemble des événements relatifs à la relation, table Suivi, OneToMany
+ * - type       : type de relation Client / Prospect / Fournisseur / Partenaire
+ * - cliInfos   : lien vers l'ensemble des informations détails de la relation, table CliInfos, OneToMany bidirectionnal
+ * - events     : lien vers l'ensemble des événements relatifs à la relation, table Suivi, OneToMany bidirectionnal
+ * - networks   : lien vers l'ensemble des pages sur les réseaux sociaux, table CliSocialNetwork, OneToMany bidirectionnal
+ * - website    : URL site internet associé à la relation
  * 
  * TODO :
+ * - commentaire, annotation sur la relation (condition de contact direct, limite dépôt commande, ...)
  * - site web associé
  * - date de clôture TODO
  *      cette denière informations pourra faire l'objet de consultation particulière, historisation/purge de la base
@@ -40,12 +46,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      - Syndic
  *      - Collectivités
  * - secteur d'activité de la relation
- * - page facebook, instagran ou autre réseaux sociaux
  * 
- * => voir l'impact sur l'outils d'extraction pour publipostage, campagne d'informaztion / publicité
+ * => voir l'impact sur l'outils d'extraction pour publipostage, campagne d'information / publicité
  * => voir comment intégrer le filtrage des informations de suivi de relation dans les filtre de l'extraction
  */
-#[ORM\Table(name:'clienteles')]
 class Clientele
 {
     #[ORM\Id]
@@ -90,7 +94,7 @@ class Clientele
      */
     private string $courriel;
 
-    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\Type('string')]
@@ -119,6 +123,22 @@ class Clientele
      */
     private ?Collection $events = null;
 
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: CliSocialNetwork::class, orphanRemoval: true)]
+    #[ORM\JoinColumn(nullable: true)]
+    /**
+     * lien avec la table CliSocialNetwork : ensemble des pages sur les réseaux sociaux
+     * @var Collection|null
+     */
+    private ?Collection $networks = null;
+
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[Assert\Type('string')]
+    #[CustomAssert\CustomerType]
+    /**
+     * type de l'internaute, Cf. Enum CustomerEnums, champ obligatoire
+     * @var string
+     */
+    private ?string $website = null;
 
 
     #[ORM\PrePersist]
@@ -138,6 +158,7 @@ class Clientele
 
     public function __construct()
     {
+        $this->networks = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->cliInfos = new ArrayCollection();
     }
@@ -227,9 +248,9 @@ class Clientele
 
         if ($this->cliInfos->removeElement($cliInfos) && sizeof($allCliInfos) > 1) {
             // set the owning side to null (unless already changed)
-            if ($cliInfos->getClient() === $this) {
-                $cliInfos->setClient(null);
-            }
+            //if ($cliInfos->getClient() === $this) {
+            //    $cliInfos->setClient(null);
+            //}
         }
         return $this;
     }
@@ -255,9 +276,9 @@ class Clientele
     {
         if ($this->events->removeElement($event)) {
             // set the owning side to null (unless already changed)
-            if ($event->getClient() === $this) {
-                $event->setClient(null);
-            }
+            //if ($event->getClient() === $this) {
+            //    $event->setClient(null);
+            //}
         }
         return $this;
     }
@@ -306,5 +327,45 @@ class Clientele
             if ($found) break;
         }
         return $found;
+    }
+
+    /**
+    * @return Collection<int, CliSocialNetwork>
+    */
+    public function getNetworks(): Collection
+    {
+        return $this->networks;
+    }
+
+    public function addNetwork(CliSocialNetwork $network): self
+    {
+        if (!$this->networks->contains($network)) {
+            $this->networks->add($network);
+            $network->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeNetwork(CliSocialNetwork $network): self
+    {
+        $this->networks->removeElement($network);
+        return $this;
+    }
+
+    /**
+     * Get the value of website
+     */
+    public function getWebsite(): ?string
+    {
+        return $this->website;
+    }
+
+    /**
+     * Set the value of website
+     */
+    public function setWebsite(string $website): self
+    {
+        $this->website = $website;
+        return $this;
     }
 }

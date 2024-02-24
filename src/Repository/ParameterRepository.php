@@ -3,6 +3,8 @@
 namespace Celtic34fr\ContactCore\Repository;
 
 use Celtic34fr\ContactCore\Entity\Parameter;
+use Celtic34fr\ContactCore\EntityRedefine\RelationCategory;
+use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -145,6 +147,60 @@ class ParameterRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    /**
+     * retrieve list of Social Networks with URL of favicon
+     * @return array
+     */
+    public function findSocialNetworks():  array
+    {
+        $socialNetworks = [];
+        $values = $this->findItemsByCle(SocialNetwork::CLE);
+        if ($values) {
+            foreach ($values as $value) {
+                $socialNetwork = new SocialNetwork($value);
+                $socialNetworks[$socialNetwork->getName()] = $socialNetwork->getUrlFavicon();
+            }
+        }
+        return $socialNetworks;
+    }
+
+    /**
+     * retrieve icon for 1 social network by name
+     *
+     * @param string $name
+     * @return string|bool
+     */
+    public function findSocialNetworkIcon(string $name): mixed
+    {
+        $socialNetworks = $this->findSocialNetworks();
+        if ($socialNetworks) {
+            foreach ($socialNetworks as $socialNetwork) {
+                /** @var SocialNetwork $socialNetwork */
+                if ($name == $socialNetwork->getName()) {
+                    return $socialNetwork->getUrlFavicon();
+                }
+            }
+        }
+        return false;
+    }
+
+    public function findRelationCatefories(): array
+    {
+        $relationCategorties = [];
+        $valeurs = $this->findItemsByCle(RelationCategory::CLE);
+        if ($valeurs) {
+            foreach ($valeurs as $valeur) {
+                $relationCategory = new RelationCategory($valeur);
+                $relationCategorties[$relationCategory->getCategory()] = [
+                    'description' => $relationCategory->getDescription(),
+                    'parent_id' => $relationCategory->getParentId(),
+                ];
+            }
+        }
+        return $relationCategorties;
+    }
+    
     //    /**
     //     * @return Parameter[] Returns an array of Parameter objects
     //     */

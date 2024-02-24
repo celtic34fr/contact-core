@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * 
  * TODO :
  * - fonction et/ou service de la relation décrite ici (pour fournisseur et/ou partenaire)
- * - commentaire, annotation sur la relation (condition de contact direct, limite dépôt commande, ...)
  * - alerte ?? => calendrier à tenir pour avoir des alertes rappel action à faire en rapport avec la relation
  *      -> gestion de planning d'activité / action en parallèle directement ou par module complémentaire
  */
