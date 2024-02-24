@@ -19,4 +19,9 @@ trait EnumToArray
     {
         return array_combine(self::values(), self::names());
     }
+
+    public static function reflexArray(): array
+    {
+        return array_combine(self::names(), self::values());
+    }
 }
