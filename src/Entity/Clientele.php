@@ -35,7 +35,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * 
  * TODO :
  * - commentaire, annotation sur la relation (condition de contact direct, limite dépôt commande, ...)
- * - site web associé
  * - date de clôture TODO
  *      cette denière informations pourra faire l'objet de consultation particulière, historisation/purge de la base
  *      comme de donner la possibilité de restaurer une historisation d'information pour une relation

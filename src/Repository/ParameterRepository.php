@@ -185,7 +185,7 @@ class ParameterRepository extends ServiceEntityRepository
         return false;
     }
 
-    public function findRelationCatefories(): array
+    public function findRelationCategories(): array
     {
         $relationCategorties = [];
         $valeurs = $this->findItemsByCle(RelationCategory::CLE);
