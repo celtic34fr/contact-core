@@ -129,6 +129,7 @@
 {# - label          : label ou libellé à afficher dans le bouton #}
 {# dans le tableau args #}
 {# - inline         : booléen indiquant l'affichage en 1 ligne (true) ou en 2 ligne standard (false) #}
+{# - side           : coté de présention de la case à cacher : droite (right) ou gauche (left, valeur par défaut) #}
 {# - checked        : booléen indiquant si la case à cocher est cochée ou non #}
 {# - cl_class       : classe à appliquer au label et à la case à cocher pour présentation #}
 {#      - labelClass    : classe à applique sur le label #}
@@ -136,6 +137,10 @@
 {% macro checkbox(field, label="", args={}) %}
 	{% set label = label is empty ? field.vars.label : label %}
 	{% set inline = args.inline ?? false %}
+    {% set side = args.side %}
+    {% if side != "right" or side != "left" %}
+        {% set side = "left" %}
+    {% endif %}
 	{% set checked = args.checked ?? false %}
 	{% set class = args.class ?? "" %}
 	{% set cl_class = args.cl_class ?? {} %}
@@ -151,7 +156,24 @@
 	{% set labelClass = labelClass ~ " form-check-label" ~ inline ~ (field.vars.required ? ' required' : '') %}
 	{% set inputClass = inputClass ~ " form-check-input" ~ inline %}
 
-    <div class="{{ class }}">
+    <div class="{{ class }}" id="{{ field.vars.id }}">
+        {% if inline %}
+            {% set checkClass = "checkbox col-12 row mx-0 px-0" %}
+        {% else %}
+            {% set checkClass = "checkbox col-12 mx-0 px-0" %}
+        {% endif %}
+        <div class="{{ checkClass }}">
+            {% if side == "left" %}
+            <label for="{{ field.vars.id }}Input" class="{{ labelClass }}">{{ label }}</label>
+            {% endif %}
+            <input type="checkbox" id="{{ field.vars.id }}" name="field.vars.name" required="required"
+                class="{% if inputClass is not empty %}{{ inputClass }} {% endif %}form-check-input"
+                value="{{ field.vars.value}}"{% if checked %} checked="checked"{% endif %}>
+            {% if side == "right" %}
+            <label for="{{ field.vars.id }}Input" class="{{ labelClass }}">{{ label }}</label>
+            {% endif %}
+        </div>
+        {#        
         {% if checked %}
             {{ form_widget(field, {
                 'attr': {'class': inputClass, 'checked': true}, 'label': label, 'label_class': labelClass,
@@ -161,6 +183,7 @@
                 'attr': {'class': inputClass}, 'label': label, 'label_class': labelClass,
             }) }}
         {% endif %}
+        #}
 	</div>
 {% endmacro %}
 
