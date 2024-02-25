@@ -187,18 +187,19 @@ class ParameterRepository extends ServiceEntityRepository
 
     public function findRelationCategories(): array
     {
-        $relationCategorties = [];
+        $relationCategories = [];
         $valeurs = $this->findItemsByCle(RelationCategory::CLE);
         if ($valeurs) {
             foreach ($valeurs as $valeur) {
                 $relationCategory = new RelationCategory($valeur);
-                $relationCategorties[$relationCategory->getCategory()] = [
-                    'description' => $relationCategory->getDescription(),
-                    'parent_id' => $relationCategory->getParentId(),
+                $relationCategories[$relationCategory->getCategory()] = [
+                    'relation_type' => $relationCategory->getRelationType(),
+                    'description'   => $relationCategory->getDescription(),
+                    'parent_id'     => $relationCategory->getParentId(),
                 ];
             }
         }
-        return $relationCategorties;
+        return $relationCategories;
     }
     
     //    /**

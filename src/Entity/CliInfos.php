@@ -4,6 +4,8 @@ namespace Celtic34fr\ContactCore\Entity;
 
 use Celtic34fr\ContactCore\Repository\CliInfosRepository;
 use Celtic34fr\ContactCore\Validator\Constraint as CustomAssert;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * 
  * - nom        : nom de la relation
  * - prenom     : prénom de la relation
+ * - birthdate  : date de naissance de la personne, champ facultatif
  * - telephone  : numéro de télephone de la relation
  *      TODO : question de la gestion de plusieurs téléphones associés au même couple nom/prénom dont FAX
  * - client     : lien vers les informations de base de la relation, table Clientele, ManyToOne
@@ -47,6 +50,14 @@ class CliInfos
      * @var string|null
      */
     private ?string $prenom = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Assert\DateTime]
+    /**
+     * date de naissance de l'internaute, champ facultatif
+     * @var DateTimeImmutable|null
+     */
+    private ?DateTimeImmutable $birthdate = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Type('string')]
@@ -104,6 +115,26 @@ class CliInfos
             $fullname .= ' ' . $this->prenom;
         }
         return $fullname;
+    }
+
+    /**
+     * Get the value of birthdate
+     * @return DateTimeImmutable|null
+     */
+    public function getBirthdate(): ?DateTimeImmutable
+    {
+        return $this->birthdate;
+    }
+
+    /**
+     * Set the value of birthdate
+     * @param DateTimeImmutable $birthdate
+     * @return self
+     */
+    public function setBirthdate(DateTimeImmutable $birthdate): self
+    {
+        $this->birthdate = $birthdate;
+        return $this;
     }
 
     public function getTelephone(): ?string

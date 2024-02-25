@@ -4,6 +4,7 @@ namespace Celtic34fr\ContactCore\Entity;
 
 use Celtic34fr\ContactCore\Entity\CliInfos;
 use Celtic34fr\ContactCore\Entity\CliSocialNetwork;
+use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\Entity\Suivi;
 use Celtic34fr\ContactCore\Enum\CustomerEnums;
 use Celtic34fr\ContactCore\Repository\ClienteleRepository;
@@ -26,8 +27,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  * - created_at : date de création de la fiche relation
  * - updated_at : date de dernière modification d'information / ajout de suivi sur la fiche relation
  * - closed_at  : date de clôture de la fiche relation
+ *      TODO : cette denière informations pourra faire l'objet de consultation particulière, historisation/purge de la base
+ *      comme de donner la possibilité de restaurer une historisation d'information pour une relation
  * - courriel   : adresse courriel (@mail) de la relation
  * - type       : type de relation Client / Prospect / Fournisseur / Partenaire
+ * - category   : catégorie associée au type de relation, lien vers la table Parameter, ManyToOne, structure RelationCategory
+ *      TODO : à créer pour le type de relation 'CL' (Client) :
+ *      - Particuliers
+ *      - Organismes publics
+ *      - Entreprises privées
+ *      - Syndic
+ *      - Collectivités
  * - cliInfos   : lien vers l'ensemble des informations détails de la relation, table CliInfos, OneToMany bidirectionnal
  * - events     : lien vers l'ensemble des événements relatifs à la relation, table Suivi, OneToMany bidirectionnal
  * - networks   : lien vers l'ensemble des pages sur les réseaux sociaux, table CliSocialNetwork, OneToMany bidirectionnal
@@ -35,15 +45,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * 
  * TODO :
  * - commentaire, annotation sur la relation (condition de contact direct, limite dépôt commande, ...)
- * - date de clôture TODO
- *      cette denière informations pourra faire l'objet de consultation particulière, historisation/purge de la base
- *      comme de donner la possibilité de restaurer une historisation d'information pour une relation
- * - catégoriser de manière plus fine la relation en plus du type, ex. pour un client, il peut être :
- *      - Particuliers
- *      - Organismes publics
- *      - Entreprises privées
- *      - Syndic
- *      - Collectivités
  * - secteur d'activité de la relation
  * 
  * => voir l'impact sur l'outils d'extraction pour publipostage, campagne d'information / publicité
@@ -103,6 +104,14 @@ class Clientele
      * @var string
      */
     private string $type;
+
+    #[ORM\ManyToOne(targetEntity: Parameter::class)]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true)]
+    /**
+     * categorie associée, Cf. RelationCategory
+     * @var Parameter|null
+     */
+    private Parameter|null $category = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: CliInfos::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -225,6 +234,24 @@ class Clientele
             return $this;
         }
         return false;
+    }
+
+    /**
+     * Get the value of category
+     */
+    public function getCategory(): ?Parameter
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set the value of category
+     */
+    public function setCategory(?Parameter $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 
     public function getCliInfos(): ArrayCollection|Collection
