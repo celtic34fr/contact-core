@@ -3,6 +3,7 @@
 namespace Celtic34fr\ContactCore\Repository;
 
 use Celtic34fr\ContactCore\Entity\Parameter;
+use Celtic34fr\ContactCore\EntityRedefine\ActivitySector;
 use Celtic34fr\ContactCore\EntityRedefine\RelationCategory;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -200,6 +201,22 @@ class ParameterRepository extends ServiceEntityRepository
             }
         }
         return $relationCategories;
+    }
+
+    public function findActivitiesSectors(): array
+    {
+        $activitiesSectors = [];
+        $valeurs = $this->findItemsByCle(ActivitySector::CLE);
+        if ($valeurs) {
+            foreach ($valeurs as $valeur) {
+                $activitySector = new ActivitySector($valeur);
+                $activitiesSectors[$activitySector->getName()] = [
+                    'name' => $activitySector->getName(),
+                    'description'   => $activitySector->getDescription(),
+                ];
+            }
+        }
+        return $activitiesSectors;
     }
     
     //    /**

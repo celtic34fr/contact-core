@@ -6,7 +6,7 @@ use Celtic34fr\ContactCore\Entity\Parameter;
 
 class SocialNetwork extends Parameter
 {
-    const CLE = "socialNetwork";
+    const CLE = "SysSocialNetwork"; // table de définition des réseaux sociaux utilisés dans l'application 'contact'
 
     private string $name;
     private string $urlFavicon;

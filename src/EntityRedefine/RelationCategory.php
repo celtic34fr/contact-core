@@ -6,7 +6,7 @@ use Celtic34fr\ContactCore\Entity\Parameter;
 
 class RelationCategory extends Parameter
 {
-    const CLE = "relationCategory";
+    const CLE = "SysRCategory"; // table des catégories relativement à un type de relation (Clientele::type)
 
     /**
      * description du champ 'valeur'

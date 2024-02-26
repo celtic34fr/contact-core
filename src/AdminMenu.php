@@ -72,6 +72,39 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
+        $configurationItems['Les catégories de contact par type d\'internaute'] = [
+            'type' => 'smenu',
+            'parent' => "Paramètres",
+            'item' => [
+                'uri' => $this->urlGenerator->generate('sys-params-rcategories-list'),
+                'extras' => [
+                    'icon' => 'fa-building',
+                    'group' => 'Contact',
+                ]
+            ]
+        ];
+        $configurationItems['Les Secteurs d\'activité'] = [
+            'type' => 'smenu',
+            'parent' => "Paramètres",
+            'item' => [
+                'uri' => $this->urlGenerator->generate('sys-params-activities-list'),
+                'extras' => [
+                    'icon' => 'fa-building',
+                    'group' => 'Contact',
+                ]
+            ]
+        ];
+        $configurationItems['Les Réseaux Sociaux utilisés'] = [
+            'type' => 'smenu',
+            'parent' => "Paramètres",
+            'item' => [
+                'uri' => $this->urlGenerator->generate('sys-params-socialnetworks-list'),
+                'extras' => [
+                    'icon' => 'fa-building',
+                    'group' => 'Contact',
+                ]
+            ]
+        ];
         $menuContacts = $this->addMenu($configurationItems, $menuContacts);
 
         $utilitairesItems = [];
