@@ -14,7 +14,7 @@ class RelationCategory extends Parameter
      * relation_type|category|description|parent_id
      * relation_type    : type de relation à qualifier cf entité Clientele, champ 'type'
      * category         : nom de la catégorie de la relation
-     * description      : déscription de la catégorie
+     * description      : description de la catégorie
      * parent_id        : identifiant de la catégorie parente (null pour le parent origine)
      */
     

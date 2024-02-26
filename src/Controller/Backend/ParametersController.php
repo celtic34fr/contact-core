@@ -38,8 +38,6 @@ class ParametersController extends AbstractController
 
     private $schemaManager;
     private ExtensionConfig $extConfig;
-    private PieceJointeRepository $pieceJointeRepo;
-    private ParameterRepository $parameterRepo;
     private UploadFiles $uploadFiles;
 
     public function __construct(
@@ -48,12 +46,12 @@ class ParametersController extends AbstractController
         private Packages $assetManager,
         private Environment $twigEnvironment,
         private KernelInterface $kernel,
-        private Config $config
+        private Config $config,
+        private PieceJointeRepository $pieceJointeRepo,
+        private ParameterRepository $parameterRepo,
     ) {
         $this->schemaManager = $entityManager->getConnection()->getSchemaManager();
         $this->extConfig = new ExtensionConfig($this->kernel, $this->config);
-        $this->pieceJointeRepo = $entityManager->getRepository(PieceJointe::class);
-        $this->parameterRepo = $entityManager->getRepository(Parameter::class);
         $this->uploadFiles = new UploadFiles($entityManager, $router, $assetManager);
     }
 
