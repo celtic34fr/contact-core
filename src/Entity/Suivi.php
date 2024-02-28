@@ -12,6 +12,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: SuiviRepository::class)]
 #[ORM\Table(name:'suivis')]
 #[ORM\HasLifecycleCallbacks]
+/**
+ * classe Suivi
+ * 
+ * - evt_at : date de l'événement
+ * - event  : texte de description de l'événement
+ * - client : lien vers la relation concernée par l'événement : table clientele, relation ManyToOne
+ * 
+ * TODO
+ * - ajout lien vers table CliInfos en tant que 'demandeur'
+ * - typage de l'événement : info, warning, error, action
+ * - déclencheur de l'événement : au moins le nom du fichier ou méthode demandant l'historisation d'un événement
+ */
 class Suivi
 {
     #[ORM\Id]

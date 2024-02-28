@@ -22,6 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * - client     : lien vers les informations de base de la relation, table Clientele, ManyToOne
  * 
  * TODO :
+ * - lien vers les demandes émise par cette relation qualifiée (table Contact - contact-gestion ??)
+ *      ?? question rappatriement de la table contact de contact-gestion ici dans contact-core ??
  * - fonction et/ou service de la relation décrite ici (pour fournisseur et/ou partenaire)
  * - alerte ?? => calendrier à tenir pour avoir des alertes rappel action à faire en rapport avec la relation
  *      -> gestion de planning d'activité / action en parallèle directement ou par module complémentaire

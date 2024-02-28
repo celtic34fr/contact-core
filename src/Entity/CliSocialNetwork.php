@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * - closed_at  : date de clôture de la référence à un reseau social
  * - network    : réseau social cible
  * - url        : lien HTTP d'accès à la page sur le réseau social
- * - client     : lien vers l'netité relation table clientele ManyToOne bidirectional
+ * - client     : lien vers l'entité relation table clientele ManyToOne bidirectional
  */
 class CliSocialNetwork
 {
@@ -46,16 +46,20 @@ class CliSocialNetwork
     private ?DateTimeImmutable $closed_at = null;
 
     #[ORM\ManyToOne(targetEntity: Parameter::class)]
-    #[ORM\JoinColumn(name: 'network_id', referencedColumnName: 'id', nullable: true)]
-    private ?Parameter $network = null;
+    #[ORM\JoinColumn(name: 'network_id', referencedColumnName: 'id')]
+    /**
+     * Réseau social cible
+     * @var Parameter
+     */
+    private Parameter $network;
 
-    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     #[Assert\Type('string')]
     /**
-     * prénom de l'internaute, champ facultatif
-     * @var string|null
+     * URL d’accès à la page du Réseau Social
+     * @var string
      */
-    private ?string $url = null;
+    private string $url;
 
     #[ORM\ManyToOne(targetEntity: Clientele::class, inversedBy: 'networks')]
     #[ORM\JoinColumn(name: 'network_id', referencedColumnName: 'id')]
@@ -107,9 +111,9 @@ class CliSocialNetwork
     }
 
     /**
-     * @return Parameter|null
+     * @return Parameter
      */
-    public function getNetwork(): mixed
+    public function getNetwork(): Parameter
     {
         return $this->network;
     }
@@ -125,9 +129,9 @@ class CliSocialNetwork
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getUrl(): ?string
+    public function getUrl(): string
     {
         return $this->url;
     }

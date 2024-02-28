@@ -143,7 +143,7 @@ class Clientele
     #[Assert\Type('string')]
     #[CustomAssert\CustomerType]
     /**
-     * type de l'internaute, Cf. Enum CustomerEnums, champ obligatoire
+     * URL site internet associé à la, champ facultatif
      * @var string
      */
     private ?string $website = null;

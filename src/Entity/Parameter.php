@@ -36,7 +36,7 @@ class Parameter
     #[ORM\Column(type: Types::JSON, length: 255, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    protected ?string $valeur = null;
+    protected string $valeur;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     #[Assert\NotBlank]

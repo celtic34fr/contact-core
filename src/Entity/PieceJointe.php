@@ -48,7 +48,7 @@ class PieceJointe
      */
     private string $file_content;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\DateTime]
