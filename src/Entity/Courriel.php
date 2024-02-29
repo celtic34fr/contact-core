@@ -15,6 +15,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CourrielRepository::class)]
 #[ORM\Table(name:'courriels')]
 #[ORM\HasLifecycleCallbacks]
+/**
+ * classe Courriel
+ * 
+ * - sujet              : sujet du courriel
+ * - destinataire       : le destinataire de l'envoi, relation ManyToOne vers la table CliInfos
+ * * context_courriel   : tableau des variables nécessaire au courriel
+ * - template_courriel  : modèle pour génération du courriel
+ * - created_at         : date de création
+ * - send_at            : date du dernier envoi
+ * - send_times         : nombre de fois ou le courriel a été envoyé
+ * - send_status        : statut de l'envoi du courriel
+ * - pieces_jointes     : ensemble des fichiers à joindre à l'envoi du courriel,
+ *                          relation OneToMany vers la table PiceJointe
+ * - nature             : type ou nature du courriel envoyé, Cf. énumeration CourrielEnums
+ * 
+ * TODO
+ * - passer pieces_jointes en relation OneToMany unidirectionnelle nullable
+ */
 class Courriel
 {
     #[ORM\Id]

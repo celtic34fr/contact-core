@@ -11,6 +11,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PieceJointeRepository::class)]
 #[ORM\Table(name:'pieces_jointes')]
+/**
+ * classe PieceJointe
+ * 
+ * - file_name      : Nom du fichier origine
+ * - file_mime      : Type de fichier
+ * - file_content   : Contenu proprement dit du fichier
+ * - created_at     : Date de création de l’enregistrement
+ * - tempo          : flag indiquant si le fichier est à garder (false) ou non (true)
+ * - utility        : utilité de la pièce jointe : logo d’entreprise, image pour courriel …
+ * - file_size      : taille du fichier format normalisé taille+unité
+ */
 class PieceJointe
 {
     #[ORM\Id]
