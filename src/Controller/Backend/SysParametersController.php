@@ -2,6 +2,8 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
+use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
+use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,10 +44,13 @@ class SysParametersController extends AbstractController
     public function socialnetworks_list()
     {
         $paramsList = $this->parameterRepo->findSocialNetworks();
+        $socialNetwork = new SysSocialNetwork();
+        $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
 
         return $this->render('@contact-core/sys-params/socialnetworks_list.html.twig', [
             'paramsList' => $paramsList,
             'title' => "Liste des réseaux sociaux utilisés",
+            'form' => $form->createView(),
         ]);
     }
 }
