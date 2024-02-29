@@ -44,4 +44,9 @@ class SysSocialNetwork
 
         return $this;
     }
+
+    public function getValeur(): string
+    {
+        return $this->name.'|'.$this->urlFavicon;
+    }
 }

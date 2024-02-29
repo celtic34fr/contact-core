@@ -2,11 +2,15 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
+use Celtic34fr\ContactCore\Entity\Parameter;
+use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
 use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('sys_params', name: 'sys-params-')]
@@ -41,11 +45,22 @@ class SysParametersController extends AbstractController
     }
 
     #[Route('/socialnetworks_list', name: 'socialnetworks-list')]
-    public function socialnetworks_list()
+    public function socialnetworks_list(Request $request)
     {
         $paramsList = $this->parameterRepo->findSocialNetworks();
         $socialNetwork = new SysSocialNetwork();
         $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $parameter = new Parameter();
+            $parameter->setCle(SocialNetwork::CLE);
+            $parameter->setOrd(sizeof($paramsList));
+            $parameter->setValeur($socialNetwork->getValeur());
+            $parameter->setUpdatedAt(new DateTimeImmutable('now'));
+            $this->parameterRepo->save($parameter, true);
+        }
 
         return $this->render('@contact-core/sys-params/socialnetworks_list.html.twig', [
             'paramsList' => $paramsList,
