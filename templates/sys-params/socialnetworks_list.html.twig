@@ -16,8 +16,12 @@
 
 {% block main %}
 	{% set urlForm = path('sys-params-socialnetworks-list') %}
-	<div class="container">
-		<div class="col-7 list"></div>
+	<div class="container col-12 row">
+		<div class="col-7 list">
+			<pre>
+				{{ dump(paramsList) }}
+			</pre>
+		</div>
 		<div class="col-5 form row">
 			{{ form_start(form, {'action': urlForm, 'method': 'POST'}) }}
 			{{ form_row(form._token) }}
