@@ -112,7 +112,7 @@ class Parameter
 
     /**
      * Set the value of valeur
-     * @param string|array $valeyur
+     * @param string|array $valeur
      * @return  self
      */
     public function setValeur(mixed $valeur): self

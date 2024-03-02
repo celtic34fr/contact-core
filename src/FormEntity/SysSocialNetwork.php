@@ -45,8 +45,13 @@ class SysSocialNetwork
         return $this;
     }
 
-    public function getValeur(): string
+    /**
+     * get the valeur from name & urlFavicon to serve string formated
+     * @return string|null
+     */
+    public function getValeur(): mixed
     {
-        return $this->name.'|'.$this->urlFavicon;
+        if (!$this->name && !$this->urlFavicon) return null;
+        return ($this->name ?? "").'|'.($this->urlFavicon ?? "");
     }
 }
