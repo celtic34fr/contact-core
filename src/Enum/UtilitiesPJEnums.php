@@ -10,6 +10,7 @@ enum UtilitiesPJEnums: string
 
     case Logo = 'LG';       // logo d'entreprise
     case Courriel = 'CR';   // pour un courriel
+    case Network = 'LN';    // logo de réseau social
 
 
     public function _toString(): string

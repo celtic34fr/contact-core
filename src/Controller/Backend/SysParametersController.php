@@ -4,22 +4,36 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 
 use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
+use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
 use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
+use Celtic34fr\ContactCore\Service\UploadFiles;
 use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 #[Route('sys_params', name: 'sys-params-')]
 class SysParametersController extends AbstractController
 {
     use UtilitiesTrait;
 
-    public function __construct(private ParameterRepository $parameterRepo)
+    private UploadFiles $uploadFiles;
+
+    public function __construct(
+        private ParameterRepository $parameterRepo,
+        private EntityManagerInterface $entityManager,
+        private RouterInterface $router,
+        private Packages $assetManager,
+    )
     {
+        $this->uploadFiles = new UploadFiles($entityManager, $router, $assetManager);
     }
 
     #[Route('/activities_list', name: 'activities-list')]
@@ -66,6 +80,23 @@ class SysParametersController extends AbstractController
             'paramsList' => $paramsList,
             'title' => "Liste des réseaux sociaux utilisés",
             'form' => $form->createView(),
+            'social_logo_upload' => 'sys-params-socialnetworks-upload',
+            'social_logo_id' => 'network_logo',
+            'social_progressBar' => false,
+            'social_preview' => true,
         ]);
+    }
+
+    #[Route('/socialnetworks_upload', name: 'socialnetworks-upload', methods: ['POST'])]
+    public function socialnetworks_upload(Request $request): JsonResponse
+    {
+        $operator = $this->getUser();
+        return $this->uploadFiles->uploadFile(
+            $request,
+            [".png", ".gif", ".jpg", ".jpeg", ".svg"],
+            [],
+            UtilitiesPJEnums::Network->_toString(),
+            $operator
+        );
     }
 }

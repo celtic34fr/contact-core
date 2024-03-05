@@ -1,0 +1,20 @@
+{#
+  DropArea : drag'n drop file(s) uploading module - HTML presentation
+  - drop_id     : identifier to sigulize the DropArea and give reference for manage
+  - progressBar : boolean to present or not a progress bar during uploading file(s)
+  - preview     : boolean to set preview zone (gallery) or not
+#}
+
+<div id="{{ drop_id }}" class ="drop-area">
+    <form class="my-form">
+        <p>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</p>
+        <input type="file" class="fileElem" id="fileElem{{ drop_id }}" multiple accept="image/*" onchange="handleFiles(this.files)">
+        <label class="button" for="fileElem{{ drop_id }}">Select some files</label>
+    </form>
+    {% if progressBar %}
+    <progress class="progress-bar" id="progress-bar{{ drop_id }}" max=100 value=0></progress>
+    {% endif %}
+    {% if preview %}
+    <div class="gallery"id="gallery{{ drop_id }}" /></div>
+    {% endif %}
+</div>
