@@ -41,7 +41,7 @@
 
     {% if progress_bar %}
     function initializeProgress(numFiles, dropzone) {
-        var progressBar = dropzone.querySelector('.progress-bar')
+        var progressBar = dropzone.querySelector('progress')
         progressBar.value = 0
         uploadProgress[dropzone.id] = []
 
@@ -51,7 +51,7 @@
     }
 
     function updateProgress(fileNumber, percent, dropzone) {
-        var progressBar = dropzone.querySelector('.progress-bar')
+        var progressBar = dropzone.querySelector('progress')
         uploadProgress[dropzone.id][fileNumber] = percent
         var total = uploadProgress[dropzone.id].reduce((tot, curr) => tot + curr, 0) / uploadProgress[dropzone.id].length
         progressBar.value = total
