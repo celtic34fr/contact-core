@@ -1,11 +1,11 @@
 {# macro jsFunc_dropzone : initialisation JavaScript des fonction gérant la zone de Drag'N Drop #}
 {# dans le tableau args #}
-{# - route         : route Symfony d'appel AJAX de la fonction de téléchargement de fichiers  #}
-{# - progress_bar  : booléen indiquant la présence (true) ou non (false) d'une barre de progression #}
-{# - preview       : booléen indiquent la présence (true) ou non (false) d'une zone de prévisualisation #}
-{# - handleFuntion : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - routeController    : route Symfony d'appel AJAX de la fonction de téléchargement de fichiers  #}
+{# - progress_bar       : booléen indiquant la présence (true) ou non (false) d'une barre de progression #}
+{# - preview            : booléen indiquent la présence (true) ou non (false) d'une zone de prévisualisation #}
+{# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
 {% macro jsFunc_dropzone(args={}) %}
-    {% set route = args.route ?? "" %}
+    {% set routeController = args.routeController ?? "" %}
     {% set progress_bar = args.progress_bar ?? false %}
     {% set preview = args.preview ?? false %}
     {% set myPreset = args.myPreset ?? 'myPreset' %}
@@ -101,7 +101,7 @@
     function uploadFile(file, i, dropzone) {
         var xhr = new XMLHttpRequest()
         var formData = new FormData()
-        xhr.open('POST', "{{ path(route) }}", true)
+        xhr.open('POST', "{{ path(routeController) }}", true)
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
 
         // Update progress (can be used to show progress indicator)

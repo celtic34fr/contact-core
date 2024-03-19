@@ -103,7 +103,7 @@
 	<script src="{{ asset('contact-assets/js/dropzone.js') }}"></script>
 	<script src="{{ asset('contact-assets/js/dragNDrop.js') }}"></script>
 	{{ updFiles.jsFunc_dropzone({
-		'url': path("parameters-upload-logo"),
+		'routeController': "parameters-upload-logo",
 		'dropArea': form.logo.vars.id,
 		'preview': true,
 	}) }}
