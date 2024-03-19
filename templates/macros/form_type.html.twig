@@ -302,7 +302,7 @@
 
     <div id="{{ field.vars.id }}" class="dragdrop drop-area">
         {% if placeholder is not empty %}<p>{{ placeholder }}</p>{% endif %}
-        <input {{ input_attribute }}>
+        <input {{ input_attributes }}>
         <label class="button" for="{{ field.vars.id }}-fileElem">{{ label }}</label>
         {% if progress_bar %}
         <progress id="{{ field.vars.id }}-progress-bar" class="progress-bar" max=100 value=0></progress>
