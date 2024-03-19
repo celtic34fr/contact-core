@@ -332,7 +332,7 @@
         {% if placeholder is not empty %}<p>{{ placeholder }}</p>{% endif %}
         <input {{ input_attributes }}>
         <label class="button" for="{{name }}-fileElem">{{ label }}</label>
-        {% if progress_bar %}
+        {% if progressbar %}
         <progress id="{{ name }}-progress-bar" class="progress-bar" max=100 value=0></progress>
         {% endif %}
         <div id="{{ name }}-gallery" class="gallery{% if not preview %} hidden{% endif %}" data-nb-upd="0"></div>
