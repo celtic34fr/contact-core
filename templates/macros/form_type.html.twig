@@ -227,27 +227,27 @@
 {% endmacro %}
 
 {# macro dragNDrop rewrite zone de déposer-glisser pour chargement de fichier #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - field              : champ déclaré dans le formulaure Symfony Form #}
 {# dans le tableau args #}
-{# - label          : label ou libellé à afficher dans le bouton #}
-{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
-{# - label_class    : classe CSS à appliquer au label ou libellé à afficher #}
-{# - class          : classe CSS à appliquer à toute la zone #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone #}
-{# - accept         : #}
-{# - multiple       : booléen d'indication si l'on télécharge plusieurs fichiers (true) ou qu'un seul (false) #}
-{# - progressBar    : booléen indiquant si l'on doit présenter (true) ou non (false) une barre de progression du téléchargement #}
-{# - preview        : booléen permettant la mise en place d'une zone de prévisualisation (true) ou non (false) des fichiers chargés #}
-{# - url            : #}
-{# - maxSize        : taille maximale du fichier, 0 = pas de limite #}
-{# - maxWidth       : largeur maximale du fichier image, 0 = pas de limite #}
-{# - maxHeight      : hauteur maximale du fichier image; 0 = pas de limite #}
-{# - maxFiles       : nombre maximal de fichiers à télécharger - 1, 0 = un seulr fichier à télécharger, d'ou multiple:= false #}
-{# - removeBtn      : indicateur de présence du bouton de suppression du fichier téléchargé #}
-{# - viewBtn        : indicateur de présence du bouton de visualisation du fichier téléchargé (ds autre onglet / fenêtre #}
-{# - initial_datas  : #}
-{# - hidden_name    : #}
-{# - handleFuntion  : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - label              : label ou libellé à afficher dans le bouton #}
+{# - placeholder        : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - label_class        : classe CSS à appliquer au label ou libellé à afficher #}
+{# - class              : classe CSS à appliquer à toute la zone #}
+{# - disabled           : booléen d'activation (false) ou désactivation (true) de la zone #}
+{# - accept             : #}
+{# - multiple           : booléen d'indication si l'on télécharge plusieurs fichiers (true) ou qu'un seul (false) #}
+{# - progressBar        : booléen indiquant si l'on doit présenter (true) ou non (false) une barre de progression du téléchargement #}
+{# - preview            : booléen permettant la mise en place d'une zone de prévisualisation (true) ou non (false) des fichiers chargés #}
+{# - routeController    : #}
+{# - maxSize            : taille maximale du fichier, 0 = pas de limite #}
+{# - maxWidth           : largeur maximale du fichier image, 0 = pas de limite #}
+{# - maxHeight          : hauteur maximale du fichier image; 0 = pas de limite #}
+{# - maxFiles           : nombre maximal de fichiers à télécharger - 1, 0 = un seulr fichier à télécharger, d'ou multiple:= false #}
+{# - removeBtn          : indicateur de présence du bouton de suppression du fichier téléchargé #}
+{# - viewBtn            : indicateur de présence du bouton de visualisation du fichier téléchargé (ds autre onglet / fenêtre #}
+{# - initial_datas      : #}
+{# - hidden_name        : #}
+{# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
 {% macro dragNDrop2(field, args={}) %}
 	{% set label = args.label is defined ? args.label : field.vars.label %}
 	{% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
@@ -263,8 +263,7 @@
 	{% set progressbar = field.vars.attr.progressbar is defined ? field.vars.attr.progressbar : false %}
 	{% set progressbar = args.progressbar is defined ? args.progressbar : progressbar %}
 	{% set preview = field.vars.attr.preview is defined ? field.vars.attr.preview : false %}
-	{% set url = field.vars.attr.url is defined ? field.vars.attr.url : '' %}
-	{% set url = args.url is defined ? args.url : url %}
+	{% set routeController = args.routeController is defined ? args.routeController : "" %}
 
 	{% set maxSize = field.vars.attr.maxSize is defined ? field.vars.attr.maxSize : "" %}
 	{% set maxSize = args.maxSize is defined ? args.maxSize : maxSize %}
@@ -290,7 +289,7 @@
         onchange="{{ handleFunction }}(this.files, '', '{{ name }}')"
         {% if multiple %} multiple {% endif %}
         {% if accept is not empty %} accept="{{ accept }}" {% endif %}
-        {% if url is not empty %} data-url="{{ url }}" {% endif %}
+        {% if routeController is not empty %} data-url="{{ path(routeController) }}" {% endif %}
         {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
         {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
         {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}

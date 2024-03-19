@@ -272,23 +272,23 @@
 {# macro dragNDrop rewrite Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
 {# - name           : nom et identifiant #}
 {# dans le tableau args #}
-{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
-{# - label_class    : classe CSS à appliquer sur le label #}
-{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
-{# - class          : classe CSS à appliquer sur input type:file #}
-{# - multiple       : booléen (via strin) indiquant la possibilité ou non de charger plusieurs fichiers en 1 fois #}
-{# - accept         : extension ou type de fichiers accepté au chargement #}
-{# - url            : URL pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
-{# - maxSize        : poids maximum des fichiers autorisés au chargement #}
-{# - maxWidth       : largeur en points maximale autorisée pour une image à charger #}
-{# - maxHeight      : hauteur en points maximale autorisée pour une image à charger #}
-{# - maxFiles       : nombre maximum de fichiers à charger #}
-{# - removeBtn      : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
-{# - viewBtn        : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
-{# - progressbar    : booléen indiquant la présence ou non d'une barre de progression des chargement de fichiers #}
-{# - preview        : booléen indiquant la présence ou non d'une zone de visualisation des fichiers chargés #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
-{# - handleFuntion  : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - label              : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# - label_class        : classe CSS à appliquer sur le label #}
+{# - placeholder        : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - class              : classe CSS à appliquer sur input type:file #}
+{# - multiple           : booléen (via strin) indiquant la possibilité ou non de charger plusieurs fichiers en 1 fois #}
+{# - accept             : extension ou type de fichiers accepté au chargement #}
+{# - routeController    : route Symfony pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
+{# - maxSize            : poids maximum des fichiers autorisés au chargement #}
+{# - maxWidth           : largeur en points maximale autorisée pour une image à charger #}
+{# - maxHeight          : hauteur en points maximale autorisée pour une image à charger #}
+{# - maxFiles           : nombre maximum de fichiers à charger #}
+{# - removeBtn          : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
+{# - viewBtn            : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
+{# - progressbar        : booléen indiquant la présence ou non d'une barre de progression des chargement de fichiers #}
+{# - preview            : booléen indiquant la présence ou non d'une zone de visualisation des fichiers chargés #}
+{# - disabled           : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
+{# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
 {% macro dragNDrop2(name, args={}) %}
     {% set label = args.label is defined ? args.label : "" %}
     {% set label_class = args.label_class is defined ? args.label_class : "" %}
@@ -298,7 +298,7 @@
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
 	{% set placeholder = args.placeholder ?? "" %}
 
-    {% set url = args.url is defined ? args.url : "" %}
+    {% set routeController = args.routeController is defined ? args.routeController : "" %}
     {% set maxSize = args.maxSize is defined ? args.maxSize : "" %}
     {% set maxWidth = args.maxWidth is defined ? args.maxWidth : "" %}
     {% set maxHeight = args.maxHeight is defined ? args.maxHeight : "" %}
@@ -317,7 +317,7 @@
         onchange="{{ handleFunction }}(this.files, '', '{{ name }}')"
         {% if multiple %} multiple {% endif %}
         {% if accept is not empty %} accept="{{ accept }}" {% endif %}
-        {% if url is not empty %} data-url="{{ url }}" {% endif %}
+        {% if routeController is not empty %} data-url="{{ path(routeController) }}" {% endif %}
         {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
         {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
         {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}
