@@ -123,10 +123,15 @@ class ParametersController extends AbstractController
                 $this->redirectToRoute('bolt_dashboard');
             }
 
+            $myPreset = uniqid();
+            $request->getSession()->set("myPreset", $myPreset);
             $response =
                 $this->render('@contact-core/parameters/information.html.twig', [
                     'form' => $form->createView(),
                     'logoDB' => $logoDB,
+                    'acceptFiles' => ".png,.gif,.jpg,.jpeg,.svg",
+                    'route' => "parameters-upload-logo",
+                    'myPreset' => $myPreset,
                 ]);
         } else {
             throw new Exception("L'extension contact-core semble ne pas être installée, vérifiez votre configuration");
@@ -324,6 +329,10 @@ class ParametersController extends AbstractController
         return $form;
     }
 
+    /**
+     * @param array $paramsValues
+     * @return array
+     */
     private function extractValues(array $paramsValues): array
     {
         $values = [];

@@ -39,3 +39,7 @@ ouverture:
   vendredi: -
   samedi: -
   dimanche: -
+
+upl-cible:
+  folder: 'uploads'
+  entity: 'FilesStorage'

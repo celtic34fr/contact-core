@@ -63,18 +63,19 @@
 				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre Téléphone',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
+			{#
 			{{ fields.dragNDrop(form.logo, {
 				'label': 'Déposez-Glissez votre logo','maxFiles': 1,
-				'accept': ".png,.gif,.jpg,.jpeg,.svg",'url': path("parameters-upload-logo"),
+				'accept': acceptFiles,'url': path("parameters-upload-logo"),
 				'maxSize': '4096k', 'removeBtn': true, 'viewxBtn': true, 'hidden_name': 'logoID',
 				'initial_data': logoDB
 			}) }}
+			#}
 
 			{{ fields.dragNDrop2(form.logo, {
-				'label': 'Déposez-Glissez votre logo','maxFiles': 1,
-				'accept': ".png,.gif,.jpg,.jpeg,.svg",'url': '{{ path("parameters-upload-logo") }}',
-				'maxSize': '4096k', 'removeBtn': true, 'viewxBtn': true, 'hidden_name': form.logo.vars.id~'logo',
-				'preview': true,
+				placeholder: 'Déposez-Glissez votre logo',maxFiles: 1,
+				accept: acceptFiles,route: 'parameters-upload-logo', progress-bar: true,
+				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true,
 			}) }}
 
 			{# 'initial_data': logoDB,
