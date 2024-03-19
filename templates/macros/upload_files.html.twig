@@ -1,12 +1,12 @@
 {# macro jsFunc_dropzone : initialisation JavaScript des fonction gérant la zone de Drag'N Drop #}
 {# dans le tableau args #}
 {# - routeController    : route Symfony d'appel AJAX de la fonction de téléchargement de fichiers  #}
-{# - progress_bar       : booléen indiquant la présence (true) ou non (false) d'une barre de progression #}
+{# - progressbar        : booléen indiquant la présence (true) ou non (false) d'une barre de progression #}
 {# - preview            : booléen indiquent la présence (true) ou non (false) d'une zone de prévisualisation #}
 {# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
 {% macro jsFunc_dropzone(args={}) %}
     {% set routeController = args.routeController ?? "" %}
-    {% set progress_bar = args.progress_bar ?? false %}
+    {% set progressbar = args.progressbar ?? false %}
     {% set preview = args.preview ?? false %}
     {% set myPreset = args.myPreset ?? 'myPreset' %}
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
@@ -39,7 +39,7 @@
         {{ handleFunction }}(files, e, dropzone)
     }
 
-    {% if progress_bar %}
+    {% if progressbar %}
     function initializeProgress(numFiles, dropzone) {
         var progressBar = dropzone.querySelector('progress')
         progressBar.value = 0
@@ -86,7 +86,7 @@
         } else if (rest == 0) { // le nombre maximum de fichier(s) à télécharger est atteint
             alert("You have "+maxFile+" file(s) uploaded, you can't upload any more")
         } else { // téléchargement proprement dit de fichier(s)
-            {% if progress_bar %}
+            {% if progressbar %}
             initializeProgress(files.length, divDragdrop)
             {% endif %}
             files.forEach((file, i) => uploadFile(file, i, divDragdrop))
@@ -106,12 +106,16 @@
 
         // Update progress (can be used to show progress indicator)
         xhr.upload.addEventListener("progress", function(e) {
+            {% if progressbar %}
             updateProgress(i, (e.loaded * 100.0 / e.total) || 100, dropzone)
+            {% endif %}
         })
 
         xhr.addEventListener('readystatechange', function(e) {
             if (xhr.readyState == 4 && xhr.status == 200) {
+            {% if progressbar %}
                 updateProgress(i, 100, dropzone) // <- Add this
+            {% endif %}
             }
             else if (xhr.readyState == 4 && xhr.status != 200) {
             // Error. Inform the user
