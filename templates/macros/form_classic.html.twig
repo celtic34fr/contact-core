@@ -331,7 +331,9 @@
     <div id="{{ name }}" class="{{ class }}">
         {% if placeholder is not empty %}<p>{{ placeholder }}</p>{% endif %}
         <input {{ input_attributes }}>
+        {% if label is not empty %}
         <label class="button" for="{{name }}-fileElem">{{ label }}</label>
+        {% endif %}
         {% if progressbar %}
         <progress id="{{ name }}-progress-bar" class="progress-bar" max=100 value=0></progress>
         {% endif %}
