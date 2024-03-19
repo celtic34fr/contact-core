@@ -286,7 +286,7 @@
     {% set input_attributes %}
         type="file"
         id="{{ field.vars.id }}-fileElem"
-        onchange="{{ handleFunction }}(this.files, '', '{{ name }}')"
+        onchange="{{ handleFunction }}(this.files, '', '{{ field.vars.id }}')"
         {% if multiple %} multiple {% endif %}
         {% if accept is not empty %} accept="{{ accept }}" {% endif %}
         {% if routeController is not empty %} data-url="{{ path(routeController) }}" {% endif %}
