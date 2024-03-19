@@ -2,6 +2,7 @@
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
 {% import '@contact-core/macros/generals.html.twig' as generals %}
 {% import '@contact-core/macros/form.js.twig' as formJS %}
+{% import "@contact-core/macros/upload_files.html.twig" as updFiles %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -69,13 +70,12 @@
 				'initial_data': logoDB
 			}) }}
 
-			{#
-			{{ fields.dragNDrop(form.logo, {
+			{{ fields.dragNDrop2(form.logo, {
 				'label': 'Déposez-Glissez votre logo','maxFiles': 1,
 				'accept': ".png,.gif,.jpg,.jpeg,.svg",'url': '{{ path("parameters-upload-logo") }}',
 				'maxSize': '4096k', 'removeBtn': true, 'viewxBtn': true, 'hidden_name': form.logo.vars.id~'logo',
+				'preview': true,
 			}) }}
-			#}
 
 			{# 'initial_data': logoDB,
 				'label_class': 'col-4 px-2 text-sm', 
@@ -101,4 +101,10 @@
 	{{ parent() }}
 	<script src="{{ asset('contact-assets/js/dropzone.js') }}"></script>
 	<script src="{{ asset('contact-assets/js/dragNDrop.js') }}"></script>
-{% endblock %}
+	{{ updFiles.jsFunc_dropzone({
+		'url': '{{ path("parameters-upload-logo") }}',
+		'dropArea': form.logo.vars.id,
+		'preview': true,
+	}) }}
+	{{ updFiles.jsInit_dropzone() }}
+% endblock %}

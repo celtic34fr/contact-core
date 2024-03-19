@@ -269,6 +269,76 @@
     </div>
 {% endmacro %}
 
+{# macro dragNDrop rewrite Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
+{# - name           : nom et identifiant #}
+{# dans le tableau args #}
+{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# - label_class    : classe CSS à appliquer sur le label #}
+{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - class          : classe CSS à appliquer sur input type:file #}
+{# - multiple       : booléen (via strin) indiquant la possibilité ou non de charger plusieurs fichiers en 1 fois #}
+{# - accept         : extension ou type de fichiers accepté au chargement #}
+{# - url            : URL pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
+{# - maxSize        : poids maximum des fichiers autorisés au chargement #}
+{# - maxWidth       : largeur en points maximale autorisée pour une image à charger #}
+{# - maxHeight      : hauteur en points maximale autorisée pour une image à charger #}
+{# - maxFiles       : nombre maximum de fichiers à charger #}
+{# - removeBtn      : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
+{# - viewBtn        : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
+{# - progressbar    : booléen indiquant la présence ou non d'une barre de progression des chargement de fichiers #}
+{# - preview        : booléen indiquant la présence ou non d'une zone de visualisation des fichiers chargés #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
+{# - handleFuntion  : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{% macro dragNDrop2(name, args={}) %}
+    {% set label = args.label is defined ? args.label : "" %}
+    {% set label_class = args.label_class is defined ? args.label_class : "" %}
+	{% set class = (args.class is defined ? args.class : "") ~ " drop-area" %}
+    {% set accept = args.accept is defined ? args.accept : "*" %}
+    {% set multiple = args.multiple is defined ? args.multiple : "" %}
+    {% set handleFunction = args.handleFunction ?? "handleFiles" %}
+	{% set placeholder = args.placeholder ?? "" %}
+
+    {% set url = args.url is defined ? args.url : "" %}
+    {% set maxSize = args.maxSize is defined ? args.maxSize : "" %}
+    {% set maxWidth = args.maxWidth is defined ? args.maxWidth : "" %}
+    {% set maxHeight = args.maxHeight is defined ? args.maxHeight : "" %}
+    {% set maxFiles = args.maxFiles is defined ? args.maxFiles : "" %}
+    {% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
+
+    {% set removeBtn = args.removeBtn is defined ? args.removeBtn : false %}
+    {% set viewBtn = args.viewBtn is defined ? args.viewBtn : false %}
+    {% set progressbar = args.progressbar is defined ? args.progressbar : false %}
+    {% set preview = args.preview is defined ? args.preview : false %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% set input_attributes %}
+        type="file"
+        id="{{ name }}-fileElem"
+        onchange="{{ handleFunction }}(this.files, '', '{{ name }}')"
+        {% if multiple %} multiple {% endif %}
+        {% if accept is not empty %} accept="{{ accept }}" {% endif %}
+        {% if url is not empty %} data-url="{{ url }}" {% endif %}
+        {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
+        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
+        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}
+        {% if maxFiles > 0 %} data-nb-files="{{ maxFiles }}" {% endif %}
+        {% if removeBtn > 0 and not disabled %} data-remove-btn="{{ removeBtn }}" {% endif %}
+        {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
+        {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+    <div id="{{ name }}" class="{{ class }}">
+        {% if placeholder is not empty %}<p>{{ placeholder }}</p>{% endif %}
+        <input {{ input_attribute }}>
+        <label class="button" for="{{name }}-fileElem">{{ label }}</label>
+        {% if progress_bar %}
+        <progress id="{{ name }}-progress-bar" class="progress-bar" max=100 value=0></progress>
+        {% endif %}
+        <div id="{{ name }}-gallery" class="gallery{% if not preview %} hidden{% endif %}" data-nb-upd="0"></div>
+    </div>
+{% endmacro %}
+
 {# macro dragNDrop Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
 {# - name           : nom et identifiant #}
 {# dans le tableau args #}

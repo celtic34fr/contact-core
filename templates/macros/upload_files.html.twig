@@ -1,0 +1,163 @@
+{# macro jsFunc_dropzone : initialisation JavaScript des fonction gérant la zone de Drag'N Drop #}
+{# dans le tableau args #}
+{# - url           : URL d'appel AJAX de la fonction de téléchargement de fichiers  #}
+{# - progress_bar  : booléen indiquant la présence (true) ou non (false) d'une barre de progression #}
+{# - preview       : booléen indiquent la présence (true) ou non (false) d'une zone de prévisualisation #}
+{# - handleFuntion : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{% macro jsFunc_dropzone(args={}) %}
+    {% set url = args.url ?? "" %}
+    {% set progress_bar = args.progress_bar ?? false %}
+    {% set preview = args.preview ?? false %}
+    {% set myPreset = args.myPreset ?? 'myPreset' %}
+    {% set handleFunction = args.handleFunction ?? "handleFiles" %}
+<script>
+    var uploadProgress = []
+
+    function preventDefaults (e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+
+    function highlight(e) {
+        console.log(e);
+        var dropArea = e.target.closest(".dragdrop")
+        dropArea.classList.add('highlight')
+    }
+
+    function unhighlight(e) {
+        console.log(e);
+        var dropArea = e.target.closest(".dragdrop")
+        dropArea.classList.remove('active')
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        var dt = e.dataTransfer
+        var files = dt.files
+        var dropzone = e.target.closest(".dragdrop")
+
+        {{ handleFunction }}(files, e, dropzone)
+    }
+
+    {% if progress_bar %}
+    function initializeProgress(numFiles, dropzone) {
+        var progressBar = dropzone.querySelector('.progress-bar')
+        progressBar.value = 0
+        uploadProgress[dropzone.id] = []
+
+        for(var i = numFiles; i > 0; i--) {
+            uploadProgress[dropzone.id].push(0)
+        }
+    }
+
+    function updateProgress(fileNumber, percent, dropzone) {
+        var progressBar = dropzone.querySelector('.progress-bar')
+        uploadProgress[dropzone.id][fileNumber] = percent
+        var total = uploadProgress[dropzone.id].reduce((tot, curr) => tot + curr, 0) / uploadProgress[dropzone.id].length
+        progressBar.value = total
+    }
+    {% endif %}
+
+    {% if preview %}
+    function previewFile(file, previewDiv) {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = function() {
+            var img = document.createElement('img')
+            img.src = reader.result
+            previewDiv.appendChild(img)
+        }
+    }
+    {% endif %}
+
+    function handleFiles(files, e, dropzone) {
+        if (typeof e === "string") {
+            var divDragdrop = document.getElementById(dropzone)
+        } else {
+            var divDragdrop = e.target.closest(".dragdrop")
+        }
+        var maxFile = parseInt(divDragdrop.querySelector("input").dataset.nbFiles)
+        var divPreview = divDragdrop.querySelector(".gallery")
+        var updFile = parseInt(divPreview.dataset.nbUpd)
+        var rest = maxFile - updFile
+        files = [...files]
+        if (rest > 0 && files.length > rest) { // téléchargé un nombre partiel de fichier(s)
+            alert("Too much files, you can only now upload "+rest+" file(s)")
+        } else if (rest == 0) { // le nombre maximum de fichier(s) à télécharger est atteint
+            alert("You have "+maxFile+" file(s) uploaded, you can't upload any more")
+        } else { // téléchargement proprement dit de fichier(s)
+            {% if progress_bar %}
+            initializeProgress(files.length, divDragdrop)
+            {% endif %}
+            files.forEach((file, i) => uploadFile(file, i, divDragdrop))
+            {% if preview %}
+            files.forEach((file) => previewFile(file, divPreview))
+            {% endif %}
+            // mise à jour du nombre de fichier(s) téléchargé(s)
+            divPreview.setAttribute("data-nb-upd", updFile + files.length)
+        }
+    }
+
+    function uploadFile(file, i, dropzone) {
+        var xhr = new XMLHttpRequest()
+        var formData = new FormData()
+        xhr.open('POST', "{{ url }}", true)
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+
+        // Update progress (can be used to show progress indicator)
+        xhr.upload.addEventListener("progress", function(e) {
+            updateProgress(i, (e.loaded * 100.0 / e.total) || 100, dropzone)
+        })
+
+        xhr.addEventListener('readystatechange', function(e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                updateProgress(i, 100, dropzone) // <- Add this
+            }
+            else if (xhr.readyState == 4 && xhr.status != 200) {
+            // Error. Inform the user
+            }
+        })
+
+        formData.append('upload_preset', '{{ myPreset }}')
+        formData.append('file', file)
+        xhr.send(formData)
+    }
+</script>
+{% endmacro %}
+
+{% macro jsInit_dropzone(args={}) %}
+<script>
+    var dropzones = document.querySelectorAll(".dragdrop");
+    dropzones.forEach(dropzone => {
+        // Prevent default drag behaviors
+        ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            //dropzone.addEventListener(eventName, preventDefaults, false)
+            dropzone.addEventListener(eventName, (e) => {
+                preventDefaults(e);
+            });
+            //document.body.addEventListener(eventName, preventDefaults, false)
+        })
+
+        // Highlight drop area when item is dragged over it
+        ;['dragenter', 'dragover'].forEach(eventName => {
+            //dropzone.addEventListener(eventName, highlight, false)
+            dropzone.addEventListener(eventName, (e) => {
+                highlight(e);
+            });
+        })
+
+        ;['dragleave', 'drop'].forEach(eventName => {
+            //dropzone.addEventListener(eventName, unhighlight, false)
+            dropzone.addEventListener(eventName, (e) => {
+                unhighlight(e);
+            });
+        })
+
+        // Handle dropped files
+        //dropzone.addEventListener('drop', handleDrop, false)
+        dropzone.addEventListener("drop", (e) => {
+            handleDrop(e);
+        });
+    });
+</script>
+{% endmacro %}
