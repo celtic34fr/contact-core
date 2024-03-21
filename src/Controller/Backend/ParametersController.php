@@ -67,7 +67,7 @@ class ParametersController extends AbstractController
             $logosTempo = $this->pieceJointeRepo
                 ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
             if ($logosTempo) {
-                foreach ($$logosTempo as $logoTempo) {
+                foreach ($logosTempo as $logoTempo) {
                     $this->entityManager->remove($logoTempo);
                 }
                 $this->entityManager->flush();
