@@ -119,7 +119,7 @@ class UploadFiles
                             $item['preview_url'] = $url;
                             break;
                         case 'thumbnail':
-                            $item['preview_url'] = $this->router->generate('raw_doc', ['id' => $pj_id]);
+                            $item['preview_url'] = $this->router->generate('tools_raw_doc', ['id' => $pj_id]);
                             break;
                     }
                     $initial_datas[] = $item;
