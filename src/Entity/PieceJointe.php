@@ -52,12 +52,10 @@ class PieceJointe
     #[ORM\Column(type: Types::BLOB)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Type('string')]
     /**
      * contenu proprement dit du fichier, champ obligatoire
-     * @var string
      */
-    private string $file_content;
+    private $file_content;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Assert\NotBlank]
