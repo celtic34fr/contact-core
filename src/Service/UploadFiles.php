@@ -58,8 +58,7 @@ class UploadFiles
                     $errMsg[] = "Image chargé trop lourde, maximum $siz octets";
                 }
             }
-            $utilitiesEnums = new UtilitiesPJEnums();
-            if (!$utilitiesEnums->isValid($cible)) {
+            if (!UtilitiesPJEnums::isValid($cible)) {
                 $errMsg[] = "cible $cible invalide";
             }
 

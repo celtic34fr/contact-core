@@ -65,7 +65,7 @@
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = function() {
-            var divPeview = document.createElement('div')
+            var divPreview = document.createElement('div')
             var img = document.createElement('img')
             img.src = reader.result
             divPreview.classList.append('img_preview')
