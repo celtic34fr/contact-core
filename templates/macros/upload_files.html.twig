@@ -12,6 +12,8 @@
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
 <script>
     var uploadProgress = []
+    var viewIcon = "<i class=\"bi-eye\" style=\"font-size: 1rem; color: blue;\"></i>"
+    var deltIcon = "<i class=\"bi-trash\" style=\"font-size: 1rem; color: red;\"></i>"
 
     function preventDefaults (e) {
         e.preventDefault()
@@ -63,9 +65,14 @@
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = function() {
+            var divPeview = document.createElement('div')
             var img = document.createElement('img')
             img.src = reader.result
-            previewDiv.appendChild(img)
+            divPreview.classList.append('img_preview')
+            divPreview.appendChild(img)
+            divPreview.appendChild(viewIcon)
+            divPreview.appendChild(deltIcon)
+            previewDiv.appendChild(divPreview)
         }
     }
     {% endif %}
