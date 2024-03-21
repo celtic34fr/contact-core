@@ -104,7 +104,7 @@ class UploadFiles
 
                     $item = [];
                     $item['id'] = $pj_id;
-                    $item['view_url'] = $this->router->generate('view_doc', ['id' => $pj_id]);
+                    $item['view_url'] = $this->router->generate('tools_view_doc', ['id' => $pj_id]);
 
                     switch ($mode) {
                         case 'icon':
