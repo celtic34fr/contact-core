@@ -42,7 +42,7 @@ p {
     width: 150px;
 }
 
-.gallery .img_preview i {
+.gallery_icon {
     font-size: 1rem;
     background-color: white;
     float: left;
@@ -50,7 +50,7 @@ p {
     padding: 1px;
 }
 
-.gallery .img_preview img {
+.gallery_img {
     width: 100%;
     margin-bottom: 10px;
     margin-right: 10px;
