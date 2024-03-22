@@ -38,11 +38,28 @@ p {
     margin-top: 10px;
 }
 
-.gallery img {
+.gallery .img_preview {
     width: 150px;
+}
+
+.gallery .img_preview i {
+    font-size: 1rem;
+    background-color: white;
+    float: left;
+    border: 1px solid black;
+    padding: 1px;
+}
+
+.gallery .img_preview img {
+    width: 100%;
     margin-bottom: 10px;
     margin-right: 10px;
     vertical-align: middle;
+    float: left;
+    position: relative;
+    top: 0rem;
+    left: -2rem;
+    z-index: -100;
 }
 
 .button {

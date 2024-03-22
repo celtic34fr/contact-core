@@ -4,31 +4,41 @@
 {# - progressbar        : booléen indiquant la présence (true) ou non (false) d'une barre de progression #}
 {# - preview            : booléen indiquent la présence (true) ou non (false) d'une zone de prévisualisation #}
 {# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - iconSide           : coté de l'image ou sont présenté les icone vue et suppression #}
+{#                        - TL : Top Left #}
+{#                        - TR : Top Right #}
+{#                        - BL : Botton Left #}
+{#                        - BR : Botton Right #}
 {% macro jsFunc_dropzone(args={}) %}
     {% set routeController = args.routeController ?? "" %}
     {% set progressbar = args.progressbar ?? false %}
     {% set preview = args.preview ?? false %}
     {% set myPreset = args.myPreset ?? 'myPreset' %}
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
+    {% set iconSide = args.iconSide ?? "TL" %}
 <script>
     var uploadProgress = []
     var viewIcon = document.createElement("i")
     viewIcon.classList.add("bi-eye")
-    viewIcon.style.fontSize="1rem"
     viewIcon.style.color="blue"
+{#
+    viewIcon.style.fontSize="1rem"
     viewIcon.style.backgroundColor="white"
     viewIcon.style.float="left"
     viewIcon.style.border="1px solid black"
     viewIcon.style.padding="1px"
+#}
 
     var deltIcon = document.createElement("i")
     deltIcon.classList.add("bi-trash")
-    deltIcon.style.fontSize="1rem"
     deltIcon.style.color="red"
+{#
+    deltIcon.style.fontSize="1rem"
     deltIcon.style.backgroundColor="white"
     deltIcon.style.float="left"
     deltIcon.style.border="1px solid black"
     deltIcon.style.padding="1px"
+#}
 
     function preventDefaults (e) {
         e.preventDefault()
@@ -162,30 +172,25 @@
     dropzones.forEach(dropzone => {
         // Prevent default drag behaviors
         ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            //dropzone.addEventListener(eventName, preventDefaults, false)
             dropzone.addEventListener(eventName, (e) => {
                 preventDefaults(e);
             });
-            //document.body.addEventListener(eventName, preventDefaults, false)
         })
 
         // Highlight drop area when item is dragged over it
         ;['dragenter', 'dragover'].forEach(eventName => {
-            //dropzone.addEventListener(eventName, highlight, false)
             dropzone.addEventListener(eventName, (e) => {
                 highlight(e);
             });
         })
 
         ;['dragleave', 'drop'].forEach(eventName => {
-            //dropzone.addEventListener(eventName, unhighlight, false)
             dropzone.addEventListener(eventName, (e) => {
                 unhighlight(e);
             });
         })
 
         // Handle dropped files
-        //dropzone.addEventListener('drop', handleDrop, false)
         dropzone.addEventListener("drop", (e) => {
             handleDrop(e);
         });
