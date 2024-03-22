@@ -93,7 +93,7 @@
             var img = document.createElement('img')
             img.src = reader.result
             img.classList.add("gallery_img")
-            img.height="{{ maxHeightImg }}px"
+            img.style.height="{{ maxHeightImg }}px"
             {% if iconSide == "TL" or iconSide == "TR" %}
             img.style.top = '-1.76rem'
             {% endif %}
