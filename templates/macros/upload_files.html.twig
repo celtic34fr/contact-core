@@ -94,13 +94,17 @@
             divPreview.classList.add('img_preview')
             {# ajout icônes avant pour top left & right #}
             {% if iconSide == "TL" or iconSide == "TR" %}
+            {% if preview %}
             divPreview.appendChild(viewIcon)
+            {% endif %}
             divPreview.appendChild(deltIcon)
             {% endif %}
             divPreview.appendChild(img)
             {# ajout icônes après pour bottom left & right #}
             {% if iconSide != "TL" and iconSide != "TR" %}
+            {% if preview %}
             divPreview.appendChild(viewIcon)
+            {% endif %}
             divPreview.appendChild(deltIcon)
             {% endif %}
             previewDiv.appendChild(divPreview)
