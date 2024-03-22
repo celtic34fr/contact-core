@@ -19,16 +19,23 @@
 <script>
     var uploadProgress = []
     var viewIcon = document.createElement("i")
+    var deltIcon = document.createElement("i")
+    var divIcons = document.createElement("div")
+
     viewIcon.classList.add("bi-eye")
     viewIcon.classList.add("gallery_icon")
     viewIcon.classList.add("gallery_icon_{{ iconSide }}")
     viewIcon.style.color="blue"
 
-    var deltIcon = document.createElement("i")
     deltIcon.classList.add("bi-trash")
     deltIcon.classList.add("gallery_icon")
     deltIcon.classList.add("gallery_icon_{{ iconSide }}")
     deltIcon.style.color="red"
+
+    divIcons.classList.add("col-12")
+    divIcons.classList.add("row")
+    divIcons.appendChild(viewIcon)
+    divIcons.appendChild(deltIcon)
 
     function preventDefaults (e) {
         e.preventDefault()
@@ -85,8 +92,7 @@
             img.src = reader.result
             img.classList.add("gallery_img")
             divPreview.classList.add('img_preview')
-            divPreview.appendChild(viewIcon)
-            divPreview.appendChild(deltIcon)
+            divPreview.appendChild(divIcons)
             divPreview.appendChild(img)
             previewDiv.appendChild(divPreview)
         }
