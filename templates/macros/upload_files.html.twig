@@ -21,13 +21,13 @@
     var viewIcon = document.createElement("i")
     viewIcon.classList.add("bi-eye")
     viewIcon.classList.add("gallery_icon")
-    viewIcon.classList.add("gallery_icon_"~iconSide)
+    viewIcon.classList.add("gallery_icon_{{ iconSide }}")
     viewIcon.style.color="blue"
 
     var deltIcon = document.createElement("i")
     deltIcon.classList.add("bi-trash")
     deltIcon.classList.add("gallery_icon")
-    deltIcon.classList.add("gallery_icon_"~iconSide)
+    deltIcon.classList.add("gallery_icon_{{ iconSide }}")
     deltIcon.style.color="red"
 
     function preventDefaults (e) {
