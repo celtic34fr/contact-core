@@ -9,7 +9,7 @@
 {#                        - TR : Top Right #}
 {#                        - BL : Botton Left #}
 {#                        - BR : Botton Right #}
-{# - maxHeightImg       : hauteur maximale (entier) en point de l'image, par défault 150 #}
+{# - maxWidthImg       : largeur maximale (entier) en point de l'image, par défault 150 #}
 {% macro jsFunc_dropzone(args={}) %}
     {% set routeController = args.routeController ?? "" %}
     {% set progressbar = args.progressbar ?? false %}
@@ -17,7 +17,7 @@
     {% set myPreset = args.myPreset ?? 'myPreset' %}
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
     {% set iconSide = args.iconSide ?? "TL" %}
-    {% set maxHeightImg = args.maxHeightImg ?? "150" %}
+    {% set maxWidthImg = args.maxWidthImg ?? "150" %}
 <script>
     var uploadProgress = []
     var viewIcon = document.createElement("i")
@@ -87,7 +87,7 @@
             var img = document.createElement('img')
             img.src = reader.result
             img.classList.add("gallery_img")
-            img.style.height="{{ maxHeightImg }}px"
+            img.style.width="{{ maxWidthImg }}px"
             {% if iconSide == "TL" or iconSide == "TR" %}
             img.style.top = '-1.76rem'
             {% endif %}
