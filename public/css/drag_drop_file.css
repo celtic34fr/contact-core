@@ -45,9 +45,16 @@ p {
 .gallery_icon {
     font-size: 1rem;
     background-color: white;
-    float: left;
     border: 1px solid black;
     padding: 1px;
+}
+
+.gallery_icon_TL {
+    float: left;
+}
+
+.gallery_icon_TR {
+    float: right;
 }
 
 .gallery_img {
