@@ -22,7 +22,6 @@
     var uploadProgress = []
     var viewIcon = document.createElement("i")
     var deltIcon = document.createElement("i")
-    var divIcons = document.createElement("div")
 
     viewIcon.classList.add("bi-eye")
     viewIcon.classList.add("gallery_icon")
@@ -33,11 +32,6 @@
     deltIcon.classList.add("gallery_icon")
     deltIcon.classList.add("gallery_icon_{{ iconSide }}")
     deltIcon.style.color="red"
-
-    divIcons.classList.add("col-12")
-    divIcons.classList.add("row")
-    divIcons.appendChild(viewIcon)
-    divIcons.appendChild(deltIcon)
 
     function preventDefaults (e) {
         e.preventDefault()
@@ -98,8 +92,17 @@
             img.style.top = '-1.76rem'
             {% endif %}
             divPreview.classList.add('img_preview')
-            divPreview.appendChild(divIcons)
+            {# ajout icônes avant pour top left & right #}
+            {% if iconSide == "TL" or iconSide == "TR" %}
+            divPreview.appendChild(viewIcon)
+            divPreview.appendChild(deltIcon)
+            {% endif %}
             divPreview.appendChild(img)
+            {# ajout icônes après pour bottom left & right #}
+            {% if iconSide != "TL" and iconSide != "TR" %}
+            divPreview.appendChild(viewIcon)
+            divPreview.appendChild(deltIcon)
+            {% endif %}
             previewDiv.appendChild(divPreview)
         }
     }
