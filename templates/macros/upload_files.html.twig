@@ -12,8 +12,10 @@
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
 <script>
     var uploadProgress = []
-    var viewIcon = "<i class=\"bi-eye\" style=\"font-size: 1rem; color: blue;\"></i>"
-    var deltIcon = "<i class=\"bi-trash\" style=\"font-size: 1rem; color: red;\"></i>"
+    var viewIcon = document.createElement("i").classList.add("bi-eye").css("font-size: 1rem; color: blue;")
+    {# var viewIcon = "<i class=\"bi-eye\" style=\"font-size: 1rem; color: blue;\"></i>" #}
+    var deltIcon = document.createElement("i").classList.add("bi-trash").css("font-size: 1rem; color: red;")
+    {# var deltIcon = "<i class=\"bi-trash\" style=\"font-size: 1rem; color: red;\"></i>" #}
 
     function preventDefaults (e) {
         e.preventDefault()
