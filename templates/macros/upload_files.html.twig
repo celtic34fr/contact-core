@@ -9,7 +9,7 @@
 {#                        - TR : Top Right #}
 {#                        - BL : Botton Left #}
 {#                        - BR : Botton Right #}
-{# - maxWidthImg       : largeur maximale (entier) en point de l'image, par défault 150 #}
+{# - maxWidthImg       : largeur maximale (entier) en point de l'image, fixée à 150 #}
 {% macro jsFunc_dropzone(args={}) %}
     {% set routeController = args.routeController ?? "" %}
     {% set progressbar = args.progressbar ?? false %}
@@ -17,7 +17,7 @@
     {% set myPreset = args.myPreset ?? 'myPreset' %}
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
     {% set iconSide = args.iconSide ?? "TL" %}
-    {% set maxWidthImg = args.maxWidthImg ?? "150" %}
+    {% set maxWidthImg = "150" %}
 <script>
     var uploadProgress = []
     var viewIcon = document.createElement("i")

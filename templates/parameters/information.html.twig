@@ -69,7 +69,6 @@
 				label: 'Déposez-Glissez votre logo', maxFiles: 1,
 				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: true,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, iconSide: 'TR',
-				maxWidthImg: 200,
 			}) }}
 			{# 'initial_data': logoDB,
 				'label_class': 'col-4 px-2 text-sm', 
@@ -94,7 +93,7 @@
 	{{ parent() }}
 	{{ updFiles.jsFunc_dropzone({
 		routeController: "parameters-upload-logo", dropArea: form.logo.vars.id,
-		preview: true, progressbar: true, iconSide: 'TR', maxWidthImg: 200,
+		preview: true, progressbar: true, iconSide: 'TR',
 	}) }}
 	{{ updFiles.jsInit_dropzone() }}
 {% endblock %}
