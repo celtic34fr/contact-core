@@ -55,7 +55,19 @@ p {
 }
 
 .gallery_icon_TR {
+    float: right;   
+}
+
+.gallery_icon_BL {
+    float: left;
+    position: relative;
+    top: -2.35rem;
+}
+
+.gallery_icon_BR {
     float: right;
+    position: relative;
+    top: -2.35rem;
 }
 
 .gallery_img {
@@ -63,7 +75,6 @@ p {
     margin-right: 10px;
     vertical-align: middle;
     position: relative;
-    top: -1.76rem;
     left: 0rem;
     z-index: -100;
 }
