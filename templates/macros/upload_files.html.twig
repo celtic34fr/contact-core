@@ -132,15 +132,50 @@
             initializeProgress(files.length, divDragdrop)
             {% endif %}
             files.forEach((file, i) => uploadFile(file, i, divDragdrop))
+            /*
             {% if preview %}
             files.forEach((file) => previewFile(file, divPreview))
             {% endif %}
             // mise à jour du nombre de fichier(s) téléchargé(s)
             divPreview.setAttribute("data-nb-upd", updFile + files.length)
+            */
         }
     }
 
     function uploadFile(file, i, dropzone) {
+        var headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Origin": "*"
+        }
+        var divPreview = dropzone.querySelector(".gallery")
+        var formData = new FormData()
+        formData.append('upload_preset', '{{ myPreset }}')
+        formData.append('file', file)
+
+        fetch("{{ path(routeController) }}", {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(formData)
+        })
+        .then(function(response){ 
+            return response.json(); 
+        })
+        .then(function(data){ 
+            console.log(data)
+            {% if progressbar %}
+            updateProgress(i, 100, dropzone) // <- Add this
+            {% endif %}
+            {% if preview %}
+            previewFile(file, divPreview)
+            var updFile = parseInt(divPreview.dataset.nbUpd)
+            divPreview.setAttribute("data-nb-upd", updFile + 1)
+            {% endif %}
+        });
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        /*
         var xhr = new XMLHttpRequest()
         var formData = new FormData()
         xhr.open('POST', "{{ path(routeController) }}", true)
@@ -167,6 +202,7 @@
         formData.append('upload_preset', '{{ myPreset }}')
         formData.append('file', file)
         xhr.send(formData)
+        */
     }
 </script>
 {% endmacro %}
