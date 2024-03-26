@@ -40,7 +40,7 @@ class ToolsController extends AbstractController
             'route' => 'tools_view_doc',
         ];
         $contexte['contenu'] = $pieceJointe->getFileContentBase64();
-        return $this->render("@contact-core/main/view_doc.html.twig", $contexte);
+        return $this->render("@contact-core/main/visu_doc.html.twig", $contexte);
     }
 
     #[Route('/raw_doc/{id}', name: 'raw_doc')]
