@@ -171,13 +171,6 @@
             initializeProgress(files.length, divDragdrop)
             {% endif %}
             files.forEach((file, i) => uploadFile(file, i, divDragdrop))
-            /*
-            {% if preview %}
-            files.forEach((file) => previewFile(file, divPreview))
-            {% endif %}
-            // mise à jour du nombre de fichier(s) téléchargé(s)
-            divPreview.setAttribute("data-nb-upd", updFile + files.length)
-            */
         }
     }
 
@@ -236,10 +229,11 @@
         if (bool) {
             /** exécute la suppression de l'image */
             let imgID = e.target.parentNode.dataset.fileId
-            /**
-             * TODO
-             * -> appel AJAX de la suppression de l'image en base
-             * */
+            url = '/bcknd/tools/delt_doc/'+imgID
+            fetch(url, { method: "DELETE", }).then(function (response) {
+                console.log(response);
+            });
+ 
             let imgPreview = document.querySelector(".img-"+imgID)
             imgPreview.remove()
         }

@@ -69,8 +69,8 @@ class ToolsController extends AbstractController
         return $this->render('@contact-core/main/print_doc.html.twig', $context);
     }
 
-    #[Route('/delt_doc/{id}', name: 'delt_doc')]
-    public function delt_pj(PieceJointe $pieceJointe)
+    #[Route('/delt_doc/{id}', name: 'delt_doc', methods: ['DELETE'])]
+    public function delt_pj(PieceJointe $pieceJointe): JsonResponse
     {
         $this->pieceJointeRepo->remove($pieceJointe, true);
         return new JsonResponse(array('type' => 'success', "message" => "Suppression de documents terminée OK"));
