@@ -42,7 +42,10 @@
     var viewIcon = document.createElement("i")
     var deltIcon = document.createElement("i")
     var modalElem = document.querySelector("#modal-confirm")
-    let myModal = null
+    let myModal = new bootstrap.Modal(modalElem, {
+        keyboard: false,
+        backdrop: 'static'
+    })
 
     viewIcon.classList.add("bi-eye")
     viewIcon.classList.add("gallery_icon")
@@ -223,7 +226,7 @@
         else return
 
         myModal.hide();
-        myModal.dispose();
+        //myModal.dispose();
         modalElem.removeEventListener('click', responseModal)
 
         if (bool) {
@@ -245,10 +248,7 @@
 
         modalElem.querySelector('.modal-body-content').innerHTML = msg
         modalElem.querySelector(".modal-footer").setAttribute("data-file-id", file_id)
-        myModal = new bootstrap.Modal(modalElem, {
-            keyboard: false,
-            backdrop: 'static'
-        })
+        
         myModal.show()
         modalElem.addEventListener('click', responseModal)
     }
