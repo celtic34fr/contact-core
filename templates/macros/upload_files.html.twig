@@ -70,7 +70,7 @@
     function deltFile(evt) {
         let file = evt.target
         fileID = file.dataset.fileId
-        const result = await d_confirm("Voulez-vous supprimer le logo ?", fileID)
+        const result = d_confirm("Voulez-vous supprimer le logo ?", fileID)
     }
 
     {% if progressbar %}
@@ -199,15 +199,20 @@
         xhr.send(formData)
     }
 
-    function response(e) {
+    function responseModal(e) {
         let bool = false
-        if (e.target.id == 'modal-btn-descartar') bool = false
-        else if (e.target.id == 'modal-btn-aceptar') bool = true
+        if (e.target.id == 'modal-btn-KO') bool = false
+        else if (e.target.id == 'modal-btn-OK') bool = true
         else return
 
         modalElem.removeEventListener('click', response)
         document.body.querySelector('.modal-backdrop').remove()
         modalElem.remove()
+
+        if (bool) {
+            /** exécute la suppression de l'image */
+            let imgID = e.target.parentNode.dataset.fileId
+        }
         return bool
     }
 
@@ -221,7 +226,7 @@
                     <div class="modal-body fs-6">
                         <p>${msg}</p>
                     </div>    <!-- modal-body -->
-                    <div class="modal-footer" style="border-top:0px">             
+                    <div class="modal-footer" data-file-id="${file_id}" style="border-top:0px">             
                         <button id="modal-btn-KO" type="button" class="btn btn-secondary">Non</button>
                         <button id="modal-btn-OK" type="button" class="btn btn-primary">Oui</button>
                     </div>
