@@ -201,6 +201,9 @@
     }
 
     function responseModal(e) {
+        e.preventDefault();
+        e.stopPropagation
+
         let bool = false
         if (e.target.id == 'modal-btn-KO') bool = false
         else if (e.target.id == 'modal-btn-OK') bool = true
