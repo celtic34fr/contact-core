@@ -70,7 +70,7 @@
     function deltFile(evt) {
         let file = evt.target
         fileID = file.dataset.fileId
-        const result = await d_confirm("Voulez-vous supprimer le logo ?", fileID)
+        const result = d_confirm("Voulez-vous supprimer le logo ?", fileID)
         alert(result)
     }
 
