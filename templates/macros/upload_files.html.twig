@@ -70,8 +70,7 @@
     function deltFile(evt) {
         let file = evt.target
         fileID = file.dataset.fileId
-        const result = d_confirm("Voulez-vous supprimer le logo ?", fileID)
-        alert(result)
+        const result = await d_confirm("Voulez-vous supprimer le logo ?", fileID)
     }
 
     {% if progressbar %}
@@ -200,6 +199,18 @@
         xhr.send(formData)
     }
 
+    function response(e) {
+        let bool = false
+        if (e.target.id == 'modal-btn-descartar') bool = false
+        else if (e.target.id == 'modal-btn-aceptar') bool = true
+        else return
+
+        modalElem.removeEventListener('click', response)
+        document.body.querySelector('.modal-backdrop').remove()
+        modalElem.remove()
+        return bool
+    }
+
     function d_confirm(msg, file_id) {
         const modalElem = document.createElement('div')
         modalElem.id = "modal-confirm"
@@ -211,8 +222,8 @@
                         <p>${msg}</p>
                     </div>    <!-- modal-body -->
                     <div class="modal-footer" style="border-top:0px">             
-                        <button id="modal-btn-descartar" type="button" class="btn btn-secondary">Non</button>
-                        <button id="modal-btn-aceptar" type="button" class="btn btn-primary">Oui</button>
+                        <button id="modal-btn-KO" type="button" class="btn btn-secondary">Non</button>
+                        <button id="modal-btn-OK" type="button" class="btn btn-primary">Oui</button>
                     </div>
                 </div>
             </div>
@@ -222,19 +233,7 @@
             backdrop: 'static'
         })
         myModal.show()
-        modalElem.addEventListener('click', response)
-
-        function response(e) {
-            let bool = false
-            if (e.target.id == 'modal-btn-descartar') bool = false
-            else if (e.target.id == 'modal-btn-aceptar') bool = true
-            else return
-
-            modalElem.removeEventListener('click', response)
-            document.body.querySelector('.modal-backdrop').remove()
-            modalElem.remove()
-            return bool
-        }
+        modalElem.addEventListener('click', responseModal)
     }
 </script>
 {% endmacro %}
