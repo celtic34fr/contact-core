@@ -217,8 +217,8 @@
     }
 
     function responseModal(e) {
-        e.preventDefault();
-        e.stopPropagation
+        e.preventDefault()
+        e.stopPropagation()
 
         let bool = false
         if (e.target.id == 'modal-btn-KO') bool = false
@@ -234,17 +234,17 @@
             let imgID = e.target.parentNode.dataset.fileId
             url = '/bcknd/tools/delt_doc/'+imgID
             fetch(url, { method: "DELETE", }).then(function (response) {
+                /** TODO : afficher retour méthode : response en tooltip ou alert */
                 console.log(response);
+                let imgPreview = document.querySelector(".img-"+imgID)
+                imgPreview.remove()
             });
- 
-            let imgPreview = document.querySelector(".img-"+imgID)
-            imgPreview.remove()
         }
     }
 
     function d_confirm(msg, file_id, e) {
-        e.preventDefault();
-        e.stopPropagation
+        e.preventDefault()
+        e.stopPropagation()
 
         modalElem.querySelector('.modal-body-content').innerHTML = msg
         modalElem.querySelector(".modal-footer").setAttribute("data-file-id", file_id)
