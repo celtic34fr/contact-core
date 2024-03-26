@@ -90,7 +90,7 @@
     function deltFile(evt) {
         let file = evt.target
         fileID = file.dataset.fileId
-        d_confirm("Voulez-vous supprimer le logo ?", fileID)
+        d_confirm("Voulez-vous supprimer le logo ?", fileID, evt)
     }
 
     {% if progressbar %}
@@ -245,7 +245,10 @@
         }
     }
 
-    function d_confirm(msg, file_id) {
+    function d_confirm(msg, file_id, e) {
+        e.preventDefault();
+        e.stopPropagation
+
         modalElem.querySelector('.modal-body-content').innerHTML = msg
         modalElem.querySelector(".modal-footer").setAttribute("data-file-id", file_id)
         myModal = new bootstrap.Modal(modalElem, {
