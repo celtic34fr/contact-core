@@ -34,10 +34,11 @@ class ToolsController extends AbstractController
     public function view_pj(PieceJointe $pieceJointe): Response
     {
         $contexte = [
-            'mime'  => $pieceJointe->getFileMime(),
-            'width' => '80%',
-            'title' => "Fichier {$pieceJointe->getFileName()}",
-            'route' => 'tools_view_doc',
+            'mime'    => $pieceJointe->getFileMime(),
+            'width'   => '80%',
+            'title'   => "Fichier {$pieceJointe->getFileName()}",
+            'route'   => 'tools_view_doc',
+            'content' => base64_encode($pieceJointe->getFileContent()),
         ];
         $contexte['contenu'] = $pieceJointe->getFileContentBase64();
         return $this->render("@contact-core/main/visu_doc.html.twig", $contexte);
