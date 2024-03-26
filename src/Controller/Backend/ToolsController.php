@@ -38,9 +38,8 @@ class ToolsController extends AbstractController
             'width'   => '80%',
             'title'   => "Fichier {$pieceJointe->getFileName()}",
             'route'   => 'tools_view_doc',
-            'content' => base64_encode($pieceJointe->getFileContent()),
         ];
-        $contexte['contenu'] = $pieceJointe->getFileContentBase64();
+        $contexte['content'] = $pieceJointe->getFileContentBase64();
         return $this->render("@contact-core/main/visu_doc.html.twig", $contexte);
     }
 
