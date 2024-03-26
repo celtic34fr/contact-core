@@ -19,10 +19,30 @@
     {% set iconSide = args.iconSide ?? "TL" %}
     {% set maxWidthImg = "150" %}
 
+<div class="modal" id="modal-confirm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmer votre action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-body-content"></p>
+            </div>
+            <div class="modal-footer" style="border-top:0px">
+                <button id="modal-btn-KO" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                <button id="modal-btn-OK" type="button" class="btn btn-primary">Oui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var uploadProgress = []
     var viewIcon = document.createElement("i")
     var deltIcon = document.createElement("i")
+    var modalElem = document.querySelector("#modal-confirm")
+    let myModal = null
 
     viewIcon.classList.add("bi-eye")
     viewIcon.classList.add("gallery_icon")
@@ -227,23 +247,9 @@
     }
 
     function d_confirm(msg, file_id) {
-        const modalElem = document.createElement('div')
-        modalElem.id = "modal-confirm"
-        modalElem.className = "modal"
-        modalElem.innerHTML = `
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">             
-                    <div class="modal-body fs-6">
-                        <p>${msg}</p>
-                    </div>    <!-- modal-body -->
-                    <div class="modal-footer" data-file-id="${file_id}" style="border-top:0px">             
-                        <button id="modal-btn-KO" type="button" class="btn btn-secondary">Non</button>
-                        <button id="modal-btn-OK" type="button" class="btn btn-primary">Oui</button>
-                    </div>
-                </div>
-            </div>
-            `
-        const myModal = new bootstrap.Modal(modalElem, {
+        modalElem.querySelector('.modal-body-content').innerHTML(msg)
+        modalElem.querySelector(".modal-footer").setAttribute("data-file-id", file_id)
+        myModal = new bootstrap.Modal(modalElem, {
             keyboard: false,
             backdrop: 'static'
         })
