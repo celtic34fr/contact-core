@@ -222,22 +222,19 @@
             backdrop: 'static'
         })
         myModal.show()
+        modalElem.addEventListener('click', response)
 
-        return new Promise((resolve, reject) => {
-            document.body.addEventListener('click', response)
+        function response(e) {
+            let bool = false
+            if (e.target.id == 'modal-btn-descartar') bool = false
+            else if (e.target.id == 'modal-btn-aceptar') bool = true
+            else return
 
-            function response(e) {
-                let bool = false
-                if (e.target.id == 'modal-btn-descartar') bool = false
-                else if (e.target.id == 'modal-btn-aceptar') bool = true
-                else return
-
-                document.body.removeEventListener('click', response)
-                document.body.querySelector('.modal-backdrop').remove()
-                modalElem.remove()
-                resolve(bool)
-            }
-        })
+            modalElem.removeEventListener('click', response)
+            document.body.querySelector('.modal-backdrop').remove()
+            modalElem.remove()
+            return bool
+        }
     }
 </script>
 {% endmacro %}
