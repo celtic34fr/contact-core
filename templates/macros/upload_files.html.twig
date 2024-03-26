@@ -206,6 +206,7 @@
         else if (e.target.id == 'modal-btn-OK') bool = true
         else return
 
+        let modalElem = document.body.querySelector('.modal-backdrop')
         modalElem.removeEventListener('click', response)
         document.body.querySelector('.modal-backdrop').remove()
         modalElem.remove()
