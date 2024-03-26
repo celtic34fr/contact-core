@@ -207,7 +207,7 @@
         else return
 
         let modalElem = document.body.querySelector('.modal-backdrop')
-        modalElem.removeEventListener('click', response)
+        modalElem.removeEventListener('click', responseModal)
         document.body.querySelector('.modal-backdrop').remove()
         modalElem.remove()
 
