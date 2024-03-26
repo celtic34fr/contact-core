@@ -18,6 +18,7 @@
     {% set handleFunction = args.handleFunction ?? "handleFiles" %}
     {% set iconSide = args.iconSide ?? "TL" %}
     {% set maxWidthImg = "150" %}
+
 <script>
     var uploadProgress = []
     var viewIcon = document.createElement("i")
@@ -59,6 +60,20 @@
         {{ handleFunction }}(files, e, dropzone)
     }
 
+    function viewFile(evt) {
+        let file = evt.target
+        fileID = file.dataset.fileId
+        const wprint = window.open('bcknd/view_doc' + id )
+        return false
+    }
+
+    function deltFile(evt) {
+        let file = evt.target
+        fileID = file.dataset.fileId
+        const result = await d_confirm("Voulez-vous supprimer le logo ?", fileID)
+        alert(result)
+    }
+
     {% if progressbar %}
     function initializeProgress(numFiles, dropzone) {
         var progressBar = dropzone.querySelector('progress')
@@ -79,7 +94,7 @@
     {% endif %}
 
     {% if preview %}
-    function previewFile(file, previewDiv) {
+    function previewFile(file, previewDiv, fileID) {
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = function() {
@@ -94,17 +109,21 @@
             divPreview.classList.add('img_preview')
             {# ajout icônes avant pour top left & right #}
             {% if iconSide == "TL" or iconSide == "TR" %}
-            {% if preview %}
+            viewIcon.setAttribute("data-file-id", fileID)
+            viewIcon.addEventListener('click', (e) => viewFile(e))
             divPreview.appendChild(viewIcon)
-            {% endif %}
+            deltIcon.setAttribute("data-file-id", fileID)
+            deltIcon.addEventListener('click', (e) => deltFile(e))
             divPreview.appendChild(deltIcon)
             {% endif %}
             divPreview.appendChild(img)
             {# ajout icônes après pour bottom left & right #}
             {% if iconSide != "TL" and iconSide != "TR" %}
-            {% if preview %}
+            viewIcon.setAttribute("data-file-id", fileID)
+            viewIcon.addEventListener('click', (e) => viewFile(e))
             divPreview.appendChild(viewIcon)
-            {% endif %}
+            deltIcon.setAttribute("data-file-id", fileID)
+            deltIcon.addEventListener('click', (e) => deltFile(e))
             divPreview.appendChild(deltIcon)
             {% endif %}
             previewDiv.appendChild(divPreview)
@@ -143,66 +162,82 @@
     }
 
     function uploadFile(file, i, dropzone) {
-        var headers = {
-            "Content-Type": "application/json",
-            "Access-Control-Origin": "*"
-        }
         var divPreview = dropzone.querySelector(".gallery")
         var formData = new FormData()
         formData.append('upload_preset', '{{ myPreset }}')
         formData.append('file', file)
 
-        fetch("{{ path(routeController) }}", {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(formData)
-        })
-        .then(function(response){ 
-            return response.json(); 
-        })
-        .then(function(data){ 
-            console.log(data)
-            {% if progressbar %}
-            updateProgress(i, 100, dropzone) // <- Add this
-            {% endif %}
-            {% if preview %}
-            previewFile(file, divPreview)
-            var updFile = parseInt(divPreview.dataset.nbUpd)
-            divPreview.setAttribute("data-nb-upd", updFile + 1)
-            {% endif %}
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-        /*
         var xhr = new XMLHttpRequest()
         var formData = new FormData()
         xhr.open('POST', "{{ path(routeController) }}", true)
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
 
+        {% if progressbar %}
         // Update progress (can be used to show progress indicator)
         xhr.upload.addEventListener("progress", function(e) {
-            {% if progressbar %}
             updateProgress(i, (e.loaded * 100.0 / e.total) || 100, dropzone)
-            {% endif %}
         })
+        {% endif %}
 
         xhr.addEventListener('readystatechange', function(e) {
             if (xhr.readyState == 4 && xhr.status == 200) {
             {% if progressbar %}
                 updateProgress(i, 100, dropzone) // <- Add this
             {% endif %}
+                xhrFile = JSON.parse(xhr.responseText)
+            {% if preview %}
+                previewFile(file, divPreview, xhrFile.id)
+            {% endif %}
             }
             else if (xhr.readyState == 4 && xhr.status != 200) {
-            // Error. Inform the user
+                errors =  JSON.parse(xhr.responseText)
+                errors = errors.error
             }
         })
 
         formData.append('upload_preset', '{{ myPreset }}')
         formData.append('file', file)
         xhr.send(formData)
-        */
+    }
+
+    async function d_confirm(msg, file_id) {
+        const modalElem = document.createElement('div')
+        modalElem.id = "modal-confirm"
+        modalElem.className = "modal"
+        modalElem.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">             
+                    <div class="modal-body fs-6">
+                        <p>${msg}</p>
+                    </div>    <!-- modal-body -->
+                    <div class="modal-footer" style="border-top:0px">             
+                        <button id="modal-btn-descartar" type="button" class="btn btn-secondary">Non</button>
+                        <button id="modal-btn-aceptar" type="button" class="btn btn-primary">Oui</button>
+                    </div>
+                </div>
+            </div>
+            `
+        const myModal = new bootstrap.Modal(modalElem, {
+            keyboard: false,
+            backdrop: 'static'
+        })
+        myModal.show()
+
+        return new Promise((resolve, reject) => {
+            document.body.addEventListener('click', response)
+
+            function response(e) {
+                let bool = false
+                if (e.target.id == 'modal-btn-descartar') bool = false
+                else if (e.target.id == 'modal-btn-aceptar') bool = true
+                else return
+
+                document.body.removeEventListener('click', response)
+                document.body.querySelector('.modal-backdrop').remove()
+                modalElem.remove()
+                resolve(bool)
+            }
+        })
     }
 </script>
 {% endmacro %}

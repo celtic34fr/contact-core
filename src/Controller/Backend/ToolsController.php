@@ -31,14 +31,12 @@ class ToolsController extends AbstractController
     }
 
     #[Route('/view_doc/{id}', name: 'view_doc')]
-    public function view_pj(int $id): Response
+    public function view_pj(PieceJointe $pieceJointe): Response
     {
-        /** @var PieceJointe $pieceJointe */
-        $pieceJointe = $this->pieceJointeRepo->find($id);
         $contexte = [
-            'mime' => $pieceJointe->getFileMime(),
+            'mime'  => $pieceJointe->getFileMime(),
             'width' => '80%',
-            'title' => "Pièce jointe {$pieceJointe->getFileName()}",
+            'title' => "Fichier {$pieceJointe->getFileName()}",
             'route' => 'tools_view_doc',
         ];
         $contexte['contenu'] = $pieceJointe->getFileContentBase64();
@@ -46,11 +44,8 @@ class ToolsController extends AbstractController
     }
 
     #[Route('/raw_doc/{id}', name: 'raw_doc')]
-    public function raw_doc(int $id): Response
+    public function raw_doc(PieceJointe $pieceJointe): Response
     {
-        /** @var PieceJointe $pieceJointe */
-        $pieceJointe = $this->pieceJointeRepo->find($id);
-
         $response = new Response();
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $pieceJointe->getFileName());
         $response->headers->set('Content-Disposition', $disposition);
@@ -74,6 +69,13 @@ class ToolsController extends AbstractController
         return $this->render('@contact-core/main/print_doc.html.twig', $context);
     }
 
+    #[Route('/delt_doc/{id}', name: 'delt_doc')]
+    public function delt_pj(PieceJointe $pieceJointe)
+    {
+        $this->pieceJointeRepo->remove($pieceJointe, true);
+        return new JsonResponse(array('type' => 'success', "message" => "Suppression de documents terminée OK"));
+    }
+
     #[Route('/upload_doc', name: 'upload_doc', methods: ['POST'])]
     public function uploadDoc(Request $request)
     {
@@ -91,7 +93,7 @@ class ToolsController extends AbstractController
             $this->entityManager->persist($document);
         }
         $this->entityManager->flush();
-        return new JsonResponse(array('type' => 'success', "message" => "Téléchargement des documents terminés OK"));
+        return new JsonResponse(array('type' => 'success', "message" => "Téléchargement de documents terminé OK"));
     }
 
     private function filesize_formated(int $size)
