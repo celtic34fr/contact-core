@@ -229,10 +229,9 @@
         else if (e.target.id == 'modal-btn-OK') bool = true
         else return
 
-        let modalElem = document.body.querySelector('.modal-backdrop')
+        myModal.hide();
+        myModal.dispose();
         modalElem.removeEventListener('click', responseModal)
-        document.body.querySelector('.modal-backdrop').remove()
-        modalElem.remove()
 
         if (bool) {
             /** exécute la suppression de l'image */
@@ -247,7 +246,7 @@
     }
 
     function d_confirm(msg, file_id) {
-        modalElem.querySelector('.modal-body-content').innerHTML(msg)
+        modalElem.querySelector('.modal-body-content').innerHTML = msg
         modalElem.querySelector(".modal-footer").setAttribute("data-file-id", file_id)
         myModal = new bootstrap.Modal(modalElem, {
             keyboard: false,
