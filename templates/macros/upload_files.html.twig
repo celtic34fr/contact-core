@@ -257,6 +257,9 @@
 {% endmacro %}
 
 {% macro jsInit_dropzone(args={}) %}
+    {% set iconSide = args.iconSide ?? "TL" %}
+    {% set maxWidthImg = "150" %}
+    {% set preview = args.preview ?? false %}
 <script>
     var dropzones = document.querySelectorAll(".dragdrop");
     dropzones.forEach(dropzone => {
@@ -284,6 +287,42 @@
         dropzone.addEventListener("drop", (e) => {
             handleDrop(e);
         });
+
+        // remplissage de la galerie de prévisualisation si data-initial non vide
+        let initial_datas = JSON.parse(dropzone.querySelector("input").dataset.initial)
+        let previewDiv = dropzone.querySelector(".gallery")
+        initial_datas.forEach((data) => {
+            var divPreview = document.createElement('div')
+            var img = document.createElement('img')
+            img.src = data.preview_url
+            img.classList.add("gallery_img")
+            img.style.width="{{ maxWidthImg }}px"
+            {% if iconSide == "TL" or iconSide == "TR" %}
+            img.style.top = '-1.76rem'
+            {% endif %}
+            divPreview.classList.add('img_preview')
+            divPreview.classList.add('img-'+fileID)
+            {# ajout icônes avant pour top left & right #}
+            {% if iconSide == "TL" or iconSide == "TR" %}
+            viewIcon.setAttribute("data-file-id", fileID)
+            viewIcon.addEventListener('click', (e) => viewFile(e))
+            divPreview.appendChild(viewIcon)
+            deltIcon.setAttribute("data-file-id", fileID)
+            deltIcon.addEventListener('click', (e) => deltFile(e))
+            divPreview.appendChild(deltIcon)
+            {% endif %}
+            divPreview.appendChild(img)
+            {# ajout icônes après pour bottom left & right #}
+            {% if iconSide != "TL" and iconSide != "TR" %}
+            viewIcon.setAttribute("data-file-id", fileID)
+            viewIcon.addEventListener('click', (e) => viewFile(e))
+            divPreview.appendChild(viewIcon)
+            deltIcon.setAttribute("data-file-id", fileID)
+            deltIcon.addEventListener('click', (e) => deltFile(e))
+            divPreview.appendChild(deltIcon)
+            {% endif %}
+            previewDiv.appendChild(divPreview)
+        })
     });
 </script>
 {% endmacro %}

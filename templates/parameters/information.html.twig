@@ -97,6 +97,8 @@
 		routeController: "parameters-upload-logo", dropArea: form.logo.vars.id,
 		preview: true, progressbar: true, iconSide: 'BR',
 	}) }}
-	{{ updFiles.jsInit_dropzone() }}
+	{{ updFiles.jsInit_dropzone({
+		preview: true, iconSide: 'BR',
+	}) }}
 	{% include "@contact-core/includes/_show_toast.html.twig" %}
 {% endblock %}
