@@ -62,14 +62,16 @@ class ParametersController extends AbstractController
     public function index(Request $request): Response
     {
         if ($this->extConfig->isExtnsionInstall("contactcore")) {
-            /* recherche des logo en temporaire (tempo: true) pour suppression de la base */
-            $logosTempo = $this->pieceJointeRepo
-                ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
-            if ($logosTempo) {
-                foreach ($logosTempo as $logoTempo) {
-                    $this->entityManager->remove($logoTempo);
+            if ($request->getMethod() == "GET") {
+                /* recherche des logo en temporaire (tempo: true) pour suppression de la base */
+                $logosTempo = $this->pieceJointeRepo
+                    ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
+                if ($logosTempo) {
+                    foreach ($logosTempo as $logoTempo) {
+                        $this->entityManager->remove($logoTempo);
+                    }
+                    $this->entityManager->flush();
                 }
-                $this->entityManager->flush();
             }
 
             $entreprise = $this->extConfig->get('contact-core/entreprise');
@@ -84,7 +86,7 @@ class ParametersController extends AbstractController
                 ];
             }
             /** @var PieceJointe $logo */
-            $logo = $this->pieceJointeRepo->findOneBy(['utility' => UtilitiesPJEnums::Logo->_toString()]);
+            $logo = $this->pieceJointeRepo->findOneBy(['tempo' => false, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
             $item = [];
             if ($logo) {
                 list($errors, $item) = $this->uploadFiles->prepare_initial_datas([$logo->getId()], 'thumbnail');
@@ -99,7 +101,7 @@ class ParametersController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //traitement du formulaire
-                $configFile = $this->getParameter('kernel.project_dir') . 'config/extensions/celtic34fr-contactcore.yaml';
+                $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contactcore.yaml';
                 $yaml = Yaml::parse(file_get_contents($configFile));
                 $yaml['entreprise']['designation'] = $entrepriseInfos->getDesignation() ?? "";
                 $yaml['entreprise']['siren'] = $entrepriseInfos->getSiren() ?? "";

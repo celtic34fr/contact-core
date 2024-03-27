@@ -70,6 +70,9 @@
 				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: true,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true,
 			}) }}
+			<pre>
+				{{ dump(logoDB) }}
+			</pre>
 			{# 'initial_data': logoDB,
 				'label_class': 'col-4 px-2 text-sm', 
                 'multiple': false, 'progressbar': true, 'gallery': true,
