@@ -56,7 +56,6 @@ class ParametersController extends AbstractController
     }
 
     /**
-     * interface pour afficher les requêtes adressées par les internautes
      * @throws Exception
      */
     #[Route('/informations', name: 'info-structure')]

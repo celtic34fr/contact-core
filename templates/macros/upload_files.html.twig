@@ -235,6 +235,7 @@
             url = '/bcknd/tools/delt_doc/'+imgID
             fetch(url, { method: "DELETE", }).then(function (response) {
                 /** TODO : afficher retour méthode : response en tooltip ou alert */
+                show_toast(response.type, response.message)
                 console.log(response);
                 let imgPreview = document.querySelector(".img-"+imgID)
                 imgPreview.remove()

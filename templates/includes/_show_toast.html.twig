@@ -1,0 +1,58 @@
+<script>
+    function show_toast(type, message) {
+        let toast_message = document.createElement('div')
+        toast_message.classList.add('toast')
+        toast_message.setAttribute('role', 'alert')
+        toast_message.setAttribute('aria-live', 'assertive')
+        toast_message.setAttribute('aria-atomic', 'true')
+        toast_message.setAttribute('data-delay', '6000')
+
+        let toast_header =document.createElement('div')
+        toast_header.classList.add('alert-'+type)
+        toast_header.classList.add('toast-header')
+
+        let toast_strong = document.createElement('strong')
+        toast_strong.classList.add('mt-auto')
+        switch (type) {
+            case 'info':
+                toast_strong.innerHTML = 'Information'
+                break;
+            case 'warning':
+                toast_strong.innerHTML = 'Avertissement'
+                break;
+            case 'error':
+                toast_strong.innerHTML = 'Erreur'
+                break;
+            case 'success':
+                toast_strong.innerHTML = 'Opération réussie'
+                break;
+        
+            default:
+                toast_strong.innerHTML = 'Un événement est survenu'
+                break;
+        }
+        toast_header.appendChild(toast_strong)
+
+        let toast_small = document.createElement('small')
+        toast_small.innerHTML = type
+        toast_header.appendChild(toast_small)
+
+        let toast_button = document.createElement('button')
+        toast_button.classList.Add('ml-2')
+        toast_button.classList.Add('mb-1')
+        toast_button.classList.Add('close')
+        toast_button.setAttribute('aria-label', 'Close')
+        toast_button.setAttribute('data-dismiss', 'toast')
+        toast_button.setAttribute('type', 'button')
+        toast_button.innerHTML = '<span aria-hidden="true">&times;</span>'
+        toast_header.appendChild(toast_button)
+
+        toast_message.appendChild(toast_header)
+
+        let toast_body =document.createElement('div')
+        toast_body.classList.add('toast-body')
+        toast_body.innerHTML = message
+        toast_message.appendChild(toast_body)
+
+        document.body.appendChild(toast_message)
+    }
