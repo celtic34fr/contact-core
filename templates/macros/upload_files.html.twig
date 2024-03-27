@@ -301,23 +301,23 @@
             img.style.top = '-1.76rem'
             {% endif %}
             divPreview.classList.add('img_preview')
-            divPreview.classList.add('img-'+fileID)
+            divPreview.classList.add('img-'+data.id)
             {# ajout icônes avant pour top left & right #}
             {% if iconSide == "TL" or iconSide == "TR" %}
-            viewIcon.setAttribute("data-file-id", fileID)
+            viewIcon.setAttribute("data-file-id", data.id)
             viewIcon.addEventListener('click', (e) => viewFile(e))
             divPreview.appendChild(viewIcon)
-            deltIcon.setAttribute("data-file-id", fileID)
+            deltIcon.setAttribute("data-file-id", data.id)
             deltIcon.addEventListener('click', (e) => deltFile(e))
             divPreview.appendChild(deltIcon)
             {% endif %}
             divPreview.appendChild(img)
             {# ajout icônes après pour bottom left & right #}
             {% if iconSide != "TL" and iconSide != "TR" %}
-            viewIcon.setAttribute("data-file-id", fileID)
+            viewIcon.setAttribute("data-file-id", data.id)
             viewIcon.addEventListener('click', (e) => viewFile(e))
             divPreview.appendChild(viewIcon)
-            deltIcon.setAttribute("data-file-id", fileID)
+            deltIcon.setAttribute("data-file-id", data.id)
             deltIcon.addEventListener('click', (e) => deltFile(e))
             divPreview.appendChild(deltIcon)
             {% endif %}
