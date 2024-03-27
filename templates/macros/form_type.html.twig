@@ -248,6 +248,7 @@
 {# - initial_datas      : #}
 {# - hidden_name        : #}
 {# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - initial_datas  : ensemble de fichiers présents à afficher #}
 {% macro dragNDrop2(field, args={}) %}
 	{% set label = args.label is defined ? args.label : field.vars.label %}
 	{% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
@@ -332,7 +333,7 @@
 {# - maxFiles       : nombre maximal de fichiers à télécharger - 1, 0 = un seulr fichier à télécharger, d'ou multiple:= false #}
 {# - removeBtn      : indicateur de présence du bouton de suppression du fichier téléchargé #}
 {# - viewBtn        : indicateur de présence du bouton de visualisation du fichier téléchargé (ds autre onglet / fenêtre #}
-{# - initial_datas  : #}
+{# - initial_datas  : ensemble de fichiers présents à afficher #}
 {# - hidden_name    : #}
 {% macro dragNDrop(field, args={}) %}
 	{% set label = args.label is defined ? args.label : field.vars.label %}

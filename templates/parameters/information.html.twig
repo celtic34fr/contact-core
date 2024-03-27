@@ -68,13 +68,12 @@
 			{{ fields.dragNDrop2(form.logo, {
 				label: 'Déposez-Glissez votre logo', maxFiles: 1,
 				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: true,
-				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true,
+				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, 'initial_data': logoDB,
 			}) }}
 			<pre>
 				{{ dump(logoDB) }}
 			</pre>
-			{# 'initial_data': logoDB,
-				'label_class': 'col-4 px-2 text-sm', 
+			{# 'label_class': 'col-4 px-2 text-sm', 
                 'multiple': false, 'progressbar': true, 'gallery': true,
 			!#}
 		</div>

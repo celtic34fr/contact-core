@@ -289,6 +289,7 @@
 {# - preview            : booléen indiquant la présence ou non d'une zone de visualisation des fichiers chargés #}
 {# - disabled           : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
 {# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - initial_datas      : ensemble de fichiers présents à afficher #}
 {% macro dragNDrop2(name, args={}) %}
     {% set label = args.label is defined ? args.label : "" %}
     {% set label_class = args.label_class is defined ? args.label_class : "" %}
