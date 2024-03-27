@@ -70,12 +70,6 @@
 				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: true,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, 'initial_datas': logoDB,
 			}) }}
-			<pre>
-				{{ dump(logoDB) }}
-			</pre>
-			{# 'label_class': 'col-4 px-2 text-sm', 
-                'multiple': false, 'progressbar': true, 'gallery': true,
-			!#}
 		</div>
 		<div class="col-12 row mt-2 px-0 mx-0">
 			{{ fields.submitbtn(form.record, "", {
