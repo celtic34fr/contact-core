@@ -99,7 +99,7 @@ class ParametersController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //traitement du formulaire
-                $configFile = $this->container->get('kernel')->getRootDir() . 'config/extensions/celtic34fr-contactcore.yaml';
+                $configFile = $this->getParameter('kernel.project_dir') . 'config/extensions/celtic34fr-contactcore.yaml';
                 $yaml = Yaml::parse(file_get_contents($configFile));
                 $yaml['entreprise']['designation'] = $entrepriseInfos->getDesignation() ?? "";
                 $yaml['entreprise']['siren'] = $entrepriseInfos->getSiren() ?? "";
