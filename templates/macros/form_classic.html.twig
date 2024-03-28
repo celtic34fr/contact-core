@@ -265,7 +265,9 @@
                 {{ label|raw }}
             </label>
         {% endif %}
-        <input id="{{ id }}" name="{{ name }}" class="{{ iclass ?: '' }}" {{ attributes|raw }}>
+        <div class="input_classic {{ iclass ?: '' }}"
+            <input id="{{ id }}" name="{{ name }}" class="col-12 mx-0 px-0" {{ attributes|raw }}>
+        </div>
     </div>
 {% endmacro %}
 
