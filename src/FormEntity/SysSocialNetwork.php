@@ -5,8 +5,7 @@ namespace Celtic34fr\ContactCore\FormEntity;
 class SysSocialNetwork
 {
     private string $name;
-
-    private string $urlFavicon;
+    private ?int $logoID = null;
     
 
     /**
@@ -28,20 +27,23 @@ class SysSocialNetwork
     }
 
     /**
-     * Get the value of urlFavicon
-     */
-    public function getUrlFavicon(): string
+     * Get the value of logoID
+     */ 
+    public function getLogoID(): ?int
     {
-        return $this->urlFavicon;
+        return $this->logoID;
     }
 
     /**
-     * Set the value of urlFavicon
-     */
-    public function setUrlFavicon(string $urlFavicon): self
+     * Set the value of logoID
+     *
+     * @return  EntrepriseInfosFE|false
+     */ 
+    public function setLogoID(int $logoID): mixed
     {
-        $this->urlFavicon = $urlFavicon;
-
+        if (!is_numeric($logoID) || $logoID < 0) return false;
+        
+        $this->logoID = $logoID;
         return $this;
     }
 
@@ -51,7 +53,7 @@ class SysSocialNetwork
      */
     public function getValeur(): mixed
     {
-        if (!$this->name && !$this->urlFavicon) return null;
-        return ($this->name ?? "").'|'.($this->urlFavicon ?? "");
+        if (!$this->name && !$this->logoID) return null;
+        return ($this->name ?? "").'|'.($this->logoID ?? "");
     }
 }

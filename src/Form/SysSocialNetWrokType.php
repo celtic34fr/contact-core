@@ -4,6 +4,8 @@ namespace Celtic34fr\ContactCore\Form;
 
 use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,13 +26,11 @@ class SysSocialNetworkType extends AbstractType
                 new NotNull(),
             ],
         ])
-        ->add('urlFavicon', TextType::class, [
-            'label' => "URL complète de l'icône",
-            'required' => true,
-            'constraints' => [
-                new NotBlank(),
-                new NotNull(),
-            ],
+        ->add('logoID', FileType::class, [
+            'required' => false,
+            'label' => '',
+            'multiple' => false,
+            'mapped' => false,
         ])
         ->add('record', SubmitType::class, [
             'label' => 'Enregistrer',

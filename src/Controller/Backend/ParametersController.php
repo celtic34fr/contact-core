@@ -118,7 +118,7 @@ class ParametersController extends AbstractController
                     $yaml['entreprise']['LogoID'] = $logo->getId();
                 } else { // supression du logo si présent en fichier et non dans le formulaire
                     if (array_key_exists('logoID', $yaml['entreprise'])) {
-                        unset($yaml['netreprise']['logoID']);
+                        unset($yaml['entreprise']['logoID']);
                     }
                 }
 

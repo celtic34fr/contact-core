@@ -80,10 +80,6 @@ class SysParametersController extends AbstractController
             'paramsList' => $paramsList,
             'title' => "Liste des réseaux sociaux utilisés",
             'form' => $form->createView(),
-            'social_logo_upload' => 'sys-params-socialnetworks-upload',
-            'social_logo_id' => 'network_logo',
-            'social_progressBar' => false,
-            'social_preview' => true,
         ]);
     }
 

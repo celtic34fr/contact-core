@@ -62,12 +62,9 @@
 				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre Téléphone',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
-			{# TODO #}
-			{# ---- #}
-			{# -> question du pré-affectation de fichier #}
 			{{ fields.dragNDrop2(form.logo, {
 				label: 'Déposez-Glissez votre logo', maxFiles: 1,
-				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: true,
+				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: false,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, 'initial_datas': logoDB,
 			}) }}
 		</div>
@@ -89,7 +86,7 @@
 	{{ parent() }}
 	{{ updFiles.jsFunc_dropzone({
 		routeController: "parameters-upload-logo", dropArea: form.logo.vars.id,
-		preview: true, progressbar: true, iconSide: 'BR',
+		preview: true, progressbar: false, iconSide: 'BR',
 	}) }}
 	{{ updFiles.jsInit_dropzone({
 		preview: true, iconSide: 'BR',
