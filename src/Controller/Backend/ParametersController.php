@@ -111,11 +111,15 @@ class ParametersController extends AbstractController
                 $yaml['entreprise']['courriel_reponse'] = $entrepriseInfos->getReponse();
 
                 $logo = $this->pieceJointeRepo->findOneBy(['utility' => UtilitiesPJEnums::Logo->_toString()]);
-                if ($logo) {
+                if ($logo) { // ajout ou mise à jour si present dans le formulaire
                     /** @var PieceJointe $logo */
                     $logo->setTempo(false);
                     $this->pieceJointeRepo->save($logo, true);
                     $yaml['entreprise']['LogoID'] = $logo->getId();
+                } else { // supression du logo si présent en fichier et non dans le formulaire
+                    if (array_key_exists('logoID', $yaml['entreprise'])) {
+                        unset($yaml['netreprise']['logoID']);
+                    }
                 }
 
                 $new_yaml = Yaml::dump($yaml, 2);
