@@ -76,11 +76,15 @@ class SysParametersController extends AbstractController
             $this->parameterRepo->save($parameter, true);
         }
 
+        $myPreset = uniqid();
+        $request->getSession()->set("myPreset", $myPreset);
         return $this->render('@contact-core/sys-params/socialnetworks_list.html.twig', [
             'paramsList' => $paramsList,
             'title' => "Liste des réseaux sociaux utilisés",
             'form' => $form->createView(),
             'logoDB' => [],
+            'acceptFiles' => ".png,.gif,.jpg,.jpeg,.svg",
+            'myPreset' => $myPreset,
         ]);
     }
 
