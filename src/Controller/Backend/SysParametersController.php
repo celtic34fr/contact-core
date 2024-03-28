@@ -80,6 +80,7 @@ class SysParametersController extends AbstractController
             'paramsList' => $paramsList,
             'title' => "Liste des réseaux sociaux utilisés",
             'form' => $form->createView(),
+            'logoDB' => [],
         ]);
     }
 
