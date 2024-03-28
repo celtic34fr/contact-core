@@ -68,7 +68,7 @@
 {% block javascripts %}
 	{{ parent() }}
 	{{ updFiles.jsFunc_dropzone({
-		routeController: "parameters-upload-logo", dropArea: form.logo.vars.id,
+		routeController: "parameters-upload-logo", dropArea: form.logoID.vars.id,
 		preview: true, progressbar: false, iconSide: 'BR',
 	}) }}
 	{{ updFiles.jsInit_dropzone({
