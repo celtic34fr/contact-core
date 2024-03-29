@@ -265,6 +265,7 @@
 	{% set progressbar = field.vars.attr.progressbar is defined ? field.vars.attr.progressbar : false %}
 	{% set progressbar = args.progressbar is defined ? args.progressbar : progressbar %}
 	{% set preview = field.vars.attr.preview is defined ? field.vars.attr.preview : false %}
+	{% set preview = args.preview is defined ? args.preview : preview %}
 	{% set routeController = args.routeController is defined ? args.routeController : "" %}
 
 	{% set maxSize = field.vars.attr.maxSize is defined ? field.vars.attr.maxSize : "" %}
