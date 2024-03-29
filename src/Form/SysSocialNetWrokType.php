@@ -2,10 +2,9 @@
 
 namespace Celtic34fr\ContactCore\Form;
 
-use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
+use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,6 +25,10 @@ class SysSocialNetworkType extends AbstractType
                 new NotNull(),
             ],
         ])
+        ->add('urlPage', TextType::class, [
+            'label' => "Lien vers la page du réseau social",
+            'required' => false,
+        ])
         ->add('logoID', FileType::class, [
             'required' => false,
             'label' => '',
@@ -41,7 +44,7 @@ class SysSocialNetworkType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => SysSocialNetwork::class,
+            'data_class' => SocialNetwork::class,
         ]);
     }
 }

@@ -230,13 +230,11 @@
         modalElem.removeEventListener('click', responseModal)
 
         if (bool) {
-            /** exécute la suppression de l'image */
             let imgID = e.target.parentNode.dataset.fileId
             url = '/bcknd/tools/delt_doc/'+imgID
             fetch(url, { method: "DELETE", }).then(function (response) {
                 /** TODO : afficher retour méthode : response en tooltip ou alert */
                 show_toast(response.type, response.message)
-                console.log(response);
                 let imgPreview = document.querySelector(".img-"+imgID)
                 imgPreview.remove()
             });

@@ -6,6 +6,7 @@ use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\EntityRedefine\ActivitySector;
 use Celtic34fr\ContactCore\EntityRedefine\RelationCategory;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,6 +39,16 @@ class ParameterRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function updateParameter(Parameter $entity, bool $flush = false): void
+    {
+        $previous = $this->getEntityManager()->getRepository(Parameter::class)
+            ->findOneBy(['cle' => $entity->getCle(), 'ord' => $entity->getOrd(), 'created_at' => $entity->getCreatedAt()]);
+        $previous->setUpdatedAt(new DateTimeImmutable('now'));
+        $this->save($previous, $flush);
+        $entity->setCreatedAt(new DateTimeImmutable('now'));
+        $this->save($entity, $flush);
     }
 
     public function getNameParametersList(): mixed
@@ -138,7 +149,7 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p');
         foreach ($criteria as $cle => $partial) {
-            $qb->andWhere("p.$cle LIKE '%$partial%'");
+            $qb->andWhere("p.$cle LIKE '$partial'");
         }
         if ($orderBy) {
             foreach ($orderBy as $cle => $order) {
@@ -147,7 +158,6 @@ class ParameterRepository extends ServiceEntityRepository
         }
         return $qb->getQuery()->getResult();
     }
-
 
     /**
      * retrieve list of Social Networks with URL of favicon
@@ -160,7 +170,7 @@ class ParameterRepository extends ServiceEntityRepository
         if ($values) {
             foreach ($values as $value) {
                 $socialNetwork = new SocialNetwork($value);
-                $socialNetworks[$socialNetwork->getName()] = $socialNetwork->getUrlFavicon();
+                $socialNetworks[$socialNetwork->getName()] = $socialNetwork->getSLogo();
             }
         }
         return $socialNetworks;
@@ -179,7 +189,7 @@ class ParameterRepository extends ServiceEntityRepository
             foreach ($socialNetworks as $socialNetwork) {
                 /** @var SocialNetwork $socialNetwork */
                 if ($name == $socialNetwork->getName()) {
-                    return $socialNetwork->getUrlFavicon();
+                    return $socialNetwork->getlo();
                 }
             }
         }

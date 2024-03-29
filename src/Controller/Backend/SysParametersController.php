@@ -2,12 +2,13 @@
 
 namespace Celtic34fr\ContactCore\Controller\Backend;
 
+use Bolt\Configuration\Config;
 use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
-use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
+use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Service\UploadFiles;
 use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
 use DateTimeImmutable;
@@ -16,8 +17,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Yaml\Yaml;
 
 #[Route('sys_params', name: 'sys-params-')]
 class SysParametersController extends AbstractController
@@ -25,15 +28,19 @@ class SysParametersController extends AbstractController
     use UtilitiesTrait;
 
     private UploadFiles $uploadFiles;
+    private ExtensionConfig $extConfig;
 
     public function __construct(
         private ParameterRepository $parameterRepo,
         private EntityManagerInterface $entityManager,
         private RouterInterface $router,
         private Packages $assetManager,
+        private KernelInterface $kernel,
+        private Config $config,
     )
     {
         $this->uploadFiles = new UploadFiles($entityManager, $router, $assetManager);
+        $this->extConfig = new ExtensionConfig($this->kernel, $this->config);
     }
 
     #[Route('/activities_list', name: 'activities-list')]
@@ -61,20 +68,22 @@ class SysParametersController extends AbstractController
     #[Route('/socialnetworks_list', name: 'socialnetworks-list')]
     public function socialnetworks_list(Request $request)
     {
-        $paramsList = $this->parameterRepo->findSocialNetworks();
-        $socialNetwork = new SysSocialNetwork();
-        $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $parameter = new Parameter();
-            $parameter->setCle(SocialNetwork::CLE);
-            $parameter->setOrd(sizeof($paramsList));
-            $parameter->setValeur($socialNetwork->getValeur());
-            $parameter->setUpdatedAt(new DateTimeImmutable('now'));
-            $this->parameterRepo->save($parameter, true);
+        $paramsList = [];
+        $entreprise = $this->extConfig->get('contact-core/entreprise');
+        $socialNetworkList = $this->parameterRepo->findSocialNetworks();
+        if ($socialNetworkList) {
+            foreach ($socialNetworkList as $name => $logoId) {
+                $item = [
+                    'name' => $name,
+                    'logo' => $logoId,
+                    'pUrl' => ($entreprise[$name] ?? ""),
+                ];
+                $paramsList[] = $item;
+            }
         }
+
+        $socialNetwork = new SocialNetwork();
+        $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
 
         $myPreset = uniqid();
         $request->getSession()->set("myPreset", $myPreset);
@@ -86,6 +95,77 @@ class SysParametersController extends AbstractController
             'acceptFiles' => ".png,.gif,.jpg,.jpeg,.svg",
             'myPreset' => $myPreset,
         ]);
+    }
+
+    #[Route('/socialnetworks_form', name: 'socialnetworks-form', methods: ['POST'])]
+    public function socialnetworks_form(Request $request): JsonResponse
+    {
+        $response = "";
+
+        if ($request->getMethod() == "GET" ) {
+            // récupération des informations pour alimentation du formulaire
+            $paramId = $request->query->get('paramId');
+            $parameter = $this->parameterRepo->find($paramId);
+            $socialNetwork = new SocialNetwork($parameter);
+            $entreprise = $this->extConfig->get('contact-core/entreprise');
+
+            $response = [
+                'type'      => 'success',
+                'message'   => 'informations récupérées',
+                'name'      => $socialNetwork->getName(),
+                'urlPage'   => ($entreprise[$socialNetwork->getName()] ?? ""),
+                'logoID'    => $this->uploadFiles->prepare_initial_datas([$socialNetwork->getLogoID(), "thumbnail"]),
+            ]
+        } elseif ($request->getMethod() == "POST") {
+            // traitement du formulaire de saisie d'informations réseaux sociaux
+            $myPreset = $request->getSession()->get("myPreset");
+
+            $socialNetwork = new SocialNetwork();
+            $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                // traitement de l'icone du réseau social
+                $socialNetworkName = $socialNetwork->getName();
+                if ($socialNetworkName) {
+                    $parameter = $this->parameterRepo->findSocialNetworksByName($socialNetworkName);
+                }
+                /** @var Parameter $parameter */
+                if (!$parameter) {
+                    $parameterList = $this->parameterRepo->findSocialNetworks();
+                    $parameter = new Parameter();
+                    $parameter->setCle(SocialNetwork::CLE);
+                    $parameter->setOrd(sizeof($parameterList));
+                    $parameter->setValeur($socialNetwork->getValeur());
+                    $this->parameterRepo->save($parameter, true);
+                } else {
+                    if ($parameter->getValeur() != $socialNetwork->getValeur()) {
+                        $parameter->setValeur($socialNetwork->getValeur());
+                        $this->parameterRepo->updateParameter($parameter, true);    
+                    }
+                }
+                // traitement de la référence à la page du réseau social
+                $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contactcore.yaml';
+                $yaml = Yaml::parse(file_get_contents($configFile));
+                $entreprise = $yaml['entreprise'];
+
+                $socialNetworkUrlPage = $socialNetwork->getUrlPage();
+                if ($socialNetworkUrlPage && $entreprise[$socialNetworkName] != $socialNetworkUrlPage) {
+                    $entreprise[$socialNetworkName] = $socialNetworkUrlPage;
+                    $yaml['entreprise'] = $entreprise;
+                    $new_yaml = Yaml::dump($yaml, 2);
+                    file_put_contents($configFile, $new_yaml);
+                }
+            }    
+        } else {
+            $response = [
+                'type' => "error",
+                'message' => "Type de traitement non pris en charge (".$request->getMethod().")",
+            ];
+        }
+
+        return new JsonResponse($response);
     }
 
     #[Route('/socialnetworks_upload', name: 'socialnetworks-upload', methods: ['POST'])]
