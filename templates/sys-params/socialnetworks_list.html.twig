@@ -134,13 +134,13 @@
 			let url = "/bcknd/sys_params/socialnetworks_delt/"+id
 		}
 
-		function submitFormRef(evt, data, id) {
+		function submitFormRef(evt) {
 			evt.preventDefault
 			evt.stopPropagation
 
 			let url = "/bcknd/sys_params/socialnetworks_form"
-			let formDatas = new FormData(data)
-			let previewDiv = event.target.parentNode.querySelector(".gallery .img_preview i:first")
+			let formDatas = new FormData(evt.target)
+			let previewDiv = evt.target.parentNode.querySelector(".gallery .img_preview i:first")
 			let logoId = previewDiv.dataset.fileId
 			formDatas.append('logoId', logoId)
             fetch(url, { 
@@ -150,10 +150,11 @@
             })
 		}
 
-		document.addEventListener('DOMContentLoaded', function() {
-			document.querySelector('form').addEventListener('submit', function (event) {
-				submitFormRef(event, this, id)
-			})
+		document.addEventListener('submit', function (event) {
+			event.preventDefault()
+			event.stopPropagation
+
+			submitFormRef(event)
 		})
 
 	</script>
