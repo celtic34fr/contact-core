@@ -141,8 +141,8 @@
 			let url = "/bcknd/sys_params/socialnetworks_form"
 			let formDatas = new FormData(data)
 			let previewDiv = event.target.parentNode.querySelector(".gallery .img_preview i:first")
-			let id = previewDiv.dataset.fileId
-			formDatas.append('id', id)
+			let logoId = previewDiv.dataset.fileId
+			formDatas.append('logoId', logoId)
             fetch(url, { 
 				method: "POST",
 				body: formDatas
