@@ -115,7 +115,7 @@ class SysParametersController extends AbstractController
                 'name'      => $socialNetwork->getName(),
                 'urlPage'   => ($entreprise[$socialNetwork->getName()] ?? ""),
                 'logoID'    => $this->uploadFiles->prepare_initial_datas([$socialNetwork->getLogoID(), "thumbnail"]),
-            ]
+            ];
         } elseif ($request->getMethod() == "POST") {
             // traitement du formulaire de saisie d'informations réseaux sociaux
             $myPreset = $request->getSession()->get("myPreset");
