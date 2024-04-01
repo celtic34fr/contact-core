@@ -121,6 +121,7 @@ class SysParametersController extends AbstractController
             $myPreset = $request->getSession()->get("myPreset");
 
             $socialNetwork = new SocialNetwork();
+            $socialNetwork->setLogoID($request->request->get('logoId'));
             $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
 
             $form->handleRequest($request);
