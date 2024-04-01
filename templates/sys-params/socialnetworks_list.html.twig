@@ -145,6 +145,7 @@
 			formDatas.append('logoId', logoId)
             fetch(url, { 
 				method: "POST",
+				headers: {'X-Requested-With': 'XMLHttpRequest'},
 				body: formDatas
 	  		}).then(function (response) {
             })
