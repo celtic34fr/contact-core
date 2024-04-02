@@ -158,6 +158,10 @@ class SysParametersController extends AbstractController
                     $new_yaml = Yaml::dump($yaml, 2);
                     file_put_contents($configFile, $new_yaml);
                 }
+                $response = [
+                    'type' => "success",
+                    'message' => "Enregistrement du réseau social ".$socialNetwork->getName()." réalisé avec succés",
+                ];
             }    
         } else {
             $response = [
