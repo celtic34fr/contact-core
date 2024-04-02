@@ -7,6 +7,7 @@ use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
+use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Service\UploadFiles;
@@ -82,7 +83,7 @@ class SysParametersController extends AbstractController
             }
         }
 
-        $socialNetwork = new SocialNetwork();
+        $socialNetwork = new SysSocialNetwork();
         $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
 
         $myPreset = uniqid();
@@ -120,7 +121,7 @@ class SysParametersController extends AbstractController
             // traitement du formulaire de saisie d'informations réseaux sociaux
             $myPreset = $request->getSession()->get("myPreset");
 
-            $socialNetwork = new SocialNetwork();
+            $socialNetwork = new SysSocialNetwork();
             $socialNetwork->setLogoID($request->request->get('logoId'));
             $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
 
