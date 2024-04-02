@@ -71,6 +71,6 @@ class SysSocialNetwork
     public function getValeur(): mixed
     {
         if (!$this->name && !$this->logoID) return null;
-        return ($this->name ?? "").'|'($this->logoID ?? "");
+        return ($this->name ?? "").'|'.($this->logoID ?? "");
     }
 }

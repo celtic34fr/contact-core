@@ -4,6 +4,7 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 
 use Bolt\Configuration\Config;
 use Celtic34fr\ContactCore\Entity\Parameter;
+use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
@@ -131,7 +132,7 @@ class SysParametersController extends AbstractController
                 // traitement de l'icone du réseau social
                 $socialNetworkName = $socialNetwork->getName();
                 if ($socialNetworkName) {
-                    $parameter = $this->parameterRepo->findSocialNetworksByName($socialNetworkName);
+                    $parameter = $this->parameterRepo->findSocialNetworkByName($socialNetworkName);
                 }
                 /** @var Parameter $parameter */
                 if (!$parameter) {
@@ -139,8 +140,11 @@ class SysParametersController extends AbstractController
                     $parameter = new Parameter();
                     $parameter->setCle(SocialNetwork::CLE);
                     $parameter->setOrd(sizeof($parameterList));
-                    $parameter->setValeur($socialNetwork->getValeur());
+                    $parameter->setValeur($socialNetwork->getValeur() + 1);
                     $this->parameterRepo->save($parameter, true);
+                    $logo = $this->entityManager->getRepository(PieceJointe::class)->find($socialNetwork->getLogoID());
+                    $logo->setTempo(false);
+                    $this->entityManager->flush();
                 } else {
                     if ($parameter->getValeur() != $socialNetwork->getValeur()) {
                         $parameter->setValeur($socialNetwork->getValeur());
