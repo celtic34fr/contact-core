@@ -2,7 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Form;
 
-use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
+use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -44,7 +44,7 @@ class SysSocialNetworkType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => SocialNetwork::class,
+            'data_class' => SysSocialNetwork::class,
         ]);
     }
 }
