@@ -170,7 +170,10 @@ class ParameterRepository extends ServiceEntityRepository
         if ($values) {
             foreach ($values as $value) {
                 $socialNetwork = new SocialNetwork($value);
-                $socialNetworks[$socialNetwork->getName()] = $socialNetwork->getLogoID();
+                $socialNetworks[$socialNetwork->getId()] = [
+                    'name' => $socialNetwork->getName(),
+                    'logoID' => $socialNetwork->getLogoID()
+                ];
             }
         }
         return $socialNetworks;

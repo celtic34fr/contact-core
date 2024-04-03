@@ -74,11 +74,12 @@ class SysParametersController extends AbstractController
         $entreprise = $this->extConfig->get('contact-core/entreprise');
         $socialNetworkList = $this->parameterRepo->findSocialNetworks();
         if ($socialNetworkList) {
-            foreach ($socialNetworkList as $name => $logoId) {
+            foreach ($socialNetworkList as $id => $infos) {
                 $item = [
-                    'name' => $name,
-                    'logo' => $logoId,
-                    'pUrl' => ($entreprise[$name] ?? ""),
+                    'id'   => $id,
+                    'name' => $infos['name'],
+                    'logo' => $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail"),
+                    'pUrl' => ($entreprise[$infos['name']] ?? ""),
                 ];
                 $paramsList[] = $item;
             }
@@ -99,7 +100,7 @@ class SysParametersController extends AbstractController
         ]);
     }
 
-    #[Route('/socialnetworks_form', name: 'socialnetworks-form', methods: ['POST'])]
+    #[Route('/socialnetworks_form', name: 'socialnetworks-form')]
     public function socialnetworks_form(Request $request): JsonResponse
     {
         $response = "";
@@ -189,5 +190,13 @@ class SysParametersController extends AbstractController
             UtilitiesPJEnums::Network->_toString(),
             $operator
         );
+    }
+
+    #[Route('/socialnetworks_del/{id}', name: 'socialnetworks-del')]
+    public function socialnetworks_del(Parameter $social, Request $request): JsonResponse
+    {
+        $response = [];
+
+        return new JsonResponse($response);
     }
 }
