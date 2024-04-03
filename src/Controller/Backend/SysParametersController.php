@@ -79,7 +79,7 @@ class SysParametersController extends AbstractController
                 $item = [
                     'id'   => $id,
                     'name' => $infos['name'],
-                    'logo' => $logo,
+                    'logo' => $logo[0],
                     'pUrl' => ($entreprise[$infos['name']] ?? ""),
                 ];
                 $paramsList[] = $item;
