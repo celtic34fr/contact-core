@@ -18,11 +18,13 @@ class SocialNetwork extends Parameter
             $valeur = $parameter->getValeur();
             if ($valeur) { // if sommething is in valeur
                 $first  = strpos($valeur, '|');
-                $second = strpos($valeur, '|', $first);
                 $this->name = substr($valeur, 0, $first);
-                $this->logoID = (int) substr($valeur, $second + 1);
+                $this->logoID = (int) substr($valeur, $first + 1);
                 $this->urlPage = null;
             }
+            $this->id = $parameter->getId();
+            $this->setCle($parameter->getCle());
+            $this->setOrd($parameter->getOrd());
         }
         // if empty valeur : not is initialize
     }

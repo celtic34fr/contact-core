@@ -90,25 +90,30 @@
 {# dans le tableau args #}
 {# - class          : calsse(s) CSS à appliquer au bouton (externe div container) #}
 {# - title          : tooltip - popovrt à afficher au survazl du bouton #}
-{# - data_url       : URL pour paramétrage niveau dataset, URL #}
 {# - event, codeJS  : #}
 {#          définition de l'événement et du code Javascript à exécuter #}
 {#          - event     : événement sous la forme 'on'+event ex Click #}
 {#          - codeJS    : code ou fonction JavaScript à exécuter #}
+{# - datasets       : tableau de clé -> valeur pour génération des attributs data-* #}
 {% macro btn(name, label="", args={}) %}
     {% set class = args.class is defined ? args.class : "" %}
     {% set title = args.title is defined ? args.title : "" %}
-    {% set data_url = args.data_url is defined ? args.data_url : "" %}
+    {% set datasets = args.datasets is defined ? args.datadates : {} %}
     {% set event = args.event is defined ? args.event : "" %}
     {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
 
-    {% set attributes = '' %}
-    {% if class|length %}{% set attributes = attributes ~ 'class="' ~ class ~ '" ' %}{% endif %}
-    {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
-        {% set attributes = attributes ~ event ~ '="' ~ codeJS ~'" ' %}
-    {% endif %}
-    {% if title|length %}{% set attributes = attributes ~ 'title="' ~title ~ '" ' %}{% endif %}
-    {% if data_url|length %}{% set attributes = attributes ~ 'data-url="' ~ data_url ~ '" ' %}{% endif %}
+    {% set attributes %}
+        {% if class|length %} class="{{ class }} {% endif %}
+        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+        {{ event }}="{{ codeJS }}"
+        {% endif %}
+        {% if title|length %} title="{{ title }} {% endif %}
+        {% if datasets is defined and datasets is not empty %}
+        {% for cle, val in datasets %}
+        data-{{ cle }}="{{ val }}"
+        {% endfor %}
+        {% endif %}
+    {% endset %}
 
     <button id="{{ name }}" {{ attributes|raw }}>{{ label|raw }}</button>
 {% endmacro %}

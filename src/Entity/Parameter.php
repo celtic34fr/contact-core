@@ -156,7 +156,7 @@ class Parameter
      * Set the value of updated_at
      * @return  self
      */
-    public function setUpdatedAt(DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(?DateTimeImmutable $updated_at): self
     {
         $this->updated_at = $updated_at;
         return $this;

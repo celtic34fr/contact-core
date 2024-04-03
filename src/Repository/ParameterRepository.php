@@ -48,6 +48,7 @@ class ParameterRepository extends ServiceEntityRepository
         $previous->setUpdatedAt(new DateTimeImmutable('now'));
         $this->save($previous, $flush);
         $entity->setCreatedAt(new DateTimeImmutable('now'));
+        $entity->setUpdatedAt(null);
         $this->save($entity, $flush);
     }
 
@@ -140,6 +141,7 @@ class ParameterRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.cle = :cle')
             ->andWhere('p.ord > 0')
+            ->andWhere('p.update_at IS null')
             ->setParameter('cle', $cle)
             ->getQuery()
             ->getResult();
@@ -196,14 +198,12 @@ class ParameterRepository extends ServiceEntityRepository
      */
     public function findSocialNetworkIcon(string $name): mixed
     {
-        $socialNetworks = $this->findSocialNetworks();
-        if ($socialNetworks) {
-            foreach ($socialNetworks as $socialNetwork) {
-                /** @var SocialNetwork $socialNetwork */
-                if ($name == $socialNetwork->getName()) {
-                    return $socialNetwork->getlo();
-                }
-            }
+        $socialNetwork = $this->findByPartialFields([
+            'cle' => SocialNetwork::CLE,
+            'valeur' => $name.'%'
+        ]);
+        if ($socialNetwork) {
+            return $socialNetwork[0]->getLogoID();
         }
         return false;
     }
