@@ -138,6 +138,11 @@
             {% endif %}
             previewDiv.appendChild(divPreview)
 		}
+		
+		function removeLogo(previewDiv, data) {
+            var divPreview = document.querySelector('div.img-'+data.id)
+			previewDiv.removeChild(dicPreview)
+		}
 
 		function editRef(id) {
 			let url = "/bcknd/sys_params/socialnetworks_form/"+id
@@ -152,6 +157,13 @@
 
 		function deltRef(id) {
 			let url = "/bcknd/sys_params/socialnetworks_delt/"+id
+			fetch(url, { method: "DELETE", }).then(function(response){
+                show_toast(response.type, response.message)
+				let formular = document.querySelector("form")
+				formular.querySelector('.sName input').value = ""
+				formular.querySelector(".sId input").value = 0
+				removeLogo(formular.querySelector(".gallery"), response.sLogo)
+			})
 		}
 
 		function submitFormRef(evt) {

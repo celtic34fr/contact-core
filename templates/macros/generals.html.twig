@@ -103,15 +103,15 @@
     {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
 
     {% set attributes %}
-        {% if class|length %} class="{{ class }} {% endif %}
+        {% if class|length %} class="{{ class }}" {% endif %}
         {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
-        {{ event }}="{{ codeJS }}"
+            {{ event }}="{{ codeJS }}"
         {% endif %}
-        {% if title|length %} title="{{ title }} {% endif %}
+        {% if title|length %} title="{{ title }}" {% endif %}
         {% if datasets is defined and datasets is not empty %}
-        {% for cle, val in datasets %}
-        data-{{ cle }}="{{ val }}"
-        {% endfor %}
+            {% for cle, val in datasets %}
+                data-{{ cle }}="{{ val }}"
+            {% endfor %}
         {% endif %}
     {% endset %}
 

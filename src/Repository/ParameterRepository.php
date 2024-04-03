@@ -138,10 +138,11 @@ class ParameterRepository extends ServiceEntityRepository
 
     public function findItemsByCle(string $cle)
     {
-        return $this->createQueryBuilder('p')
+        $db = $this->createQueryBuilder('p');
+        return $db
             ->where('p.cle = :cle')
             ->andWhere('p.ord > 0')
-            ->andWhere('p.update_at IS null')
+            ->andWhere($db->expr()->isNull('p.updated_at'))
             ->setParameter('cle', $cle)
             ->getQuery()
             ->getResult();
