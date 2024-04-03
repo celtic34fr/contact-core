@@ -75,10 +75,11 @@ class SysParametersController extends AbstractController
         $socialNetworkList = $this->parameterRepo->findSocialNetworks();
         if ($socialNetworkList) {
             foreach ($socialNetworkList as $id => $infos) {
+                list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
                 $item = [
                     'id'   => $id,
                     'name' => $infos['name'],
-                    'logo' => $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail"),
+                    'logo' => $logo,
                     'pUrl' => ($entreprise[$infos['name']] ?? ""),
                 ];
                 $paramsList[] = $item;
