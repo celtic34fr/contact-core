@@ -217,7 +217,6 @@ class ParameterRepository extends ServiceEntityRepository
             foreach ($valeurs as $valeur) {
                 $relationCategory = new RelationCategory($valeur);
                 $relationCategories[$relationCategory->getCategory()] = [
-                    'relation_type' => $relationCategory->getRelationType(),
                     'description'   => $relationCategory->getDescription(),
                     'parent_id'     => $relationCategory->getParentId(),
                 ];
@@ -234,8 +233,8 @@ class ParameterRepository extends ServiceEntityRepository
             foreach ($valeurs as $valeur) {
                 $activitySector = new ActivitySector($valeur);
                 $activitiesSectors[$activitySector->getName()] = [
-                    'name' => $activitySector->getName(),
                     'description'   => $activitySector->getDescription(),
+                    'parent_id'     => $activitySector->getParentId(),
                 ];
             }
         }

@@ -8,8 +8,30 @@ class ActivitySector extends Parameter
 {
     const CLE = "SysActiSector"; // table système des secteur d'activité
     
+    /**
+     * description du champ 'valeur'
+     * 
+     * category|description|parent_id
+     * name             : nom du secteur d'activité - de l'activité
+     * description      : description de la catégorie
+     * parent_id        : identifiant de la catégorie parente (null pour le parent origine)
+     */
+
     private string $name;
     private string $description;
+    private ?int $parent_id = null;
+
+
+    public function __construct(Parameter $parameter)
+    {
+        $valeur = $parameter->getValeur();
+        $firstFieldEnd = strpos($valeur, "|");
+        $this->name = substr($valeur, 0, $firstFieldEnd);
+        $secondFieldEnd = strpos($valeur, "|", $firstFieldEnd + 1);
+        $this->description = substr($valeur, $firstFieldEnd + 1, $secondFieldEnd - $firstFieldEnd - 1);
+        $this->parent_id = (int) substr($valeur, $secondFieldEnd + 1);
+    }
+
 
     /**
      * Get the value of name
@@ -44,6 +66,23 @@ class ActivitySector extends Parameter
     {
         $this->description = $description;
 
+        return $this;
+    }
+
+    /**
+     * Get the value of parent_id
+     */
+    public function getParentId(): ?int
+    {
+        return $this->parent_id;
+    }
+
+    /**
+     * Set the value of parent_id
+     */
+    public function setParentId(?int $parent_id): self
+    {
+        $this->parent_id = $parent_id;
         return $this;
     }
 }
