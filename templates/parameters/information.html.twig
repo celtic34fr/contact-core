@@ -76,9 +76,9 @@
 					<h3 class="col-12 text-center">Horaires d'ouvertures</h3>
 						<div class="jour col-12 mx-0 px-0 row">
 							<div class="col-2">Jour</div>
-							<div class="col-4">Matin</div>
-							<div class="col-4">Ap-Midi</div>
-							<div class="col-2">Fermé</div>
+							<div class="col-4 text-center">Matin</div>
+							<div class="col-4 text-center">Après-Midi</div>
+							<div class="col-2 text-center">Fermé</div>
 						</div>
 					{% for jour, hours in ouverture %}
 						{% set ferme = (hours.md is empty) and (hours.mf is empty) and (hours.sd is empty) and (hours.sf is empty) %}
