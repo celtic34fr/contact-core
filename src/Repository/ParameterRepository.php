@@ -62,7 +62,7 @@ class ParameterRepository extends ServiceEntityRepository
             ->getResult();
         if (!$rslt) return [];
         foreach ($rslt as $item) {
-            /** prise de toutes les lises de para mètres sauf celle préfixée par 'SYS' pour système */
+            /** prise de toutes les listes de paramètres sauf celle préfixée par 'SYS' pour système */
             if (strpos(strtoupper($item->getCle()), 'SYS') === false) {
                 $occur = [
                     'id' => $item->getId(),
@@ -136,13 +136,27 @@ class ParameterRepository extends ServiceEntityRepository
         }
     }
 
-    public function findItemsByCle(string $cle)
+    public function findValidItemsByCle(string $cle)
     {
         $db = $this->createQueryBuilder('p');
         return $db
             ->where('p.cle = :cle')
             ->andWhere('p.ord > 0')
             ->andWhere($db->expr()->isNull('p.updated_at'))
+            ->orderBy('ord', 'ASC')
+            ->setParameter('cle', $cle)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findItemsByCle(string $cle)
+    {
+        $db = $this->createQueryBuilder('p');
+        return $db
+            ->where('p.cle = :cle')
+            ->andWhere('p.ord > 0')
+            ->orderBy('ord', 'ASC')
+            ->addOrderBy('created_at', 'ASC')
             ->setParameter('cle', $cle)
             ->getQuery()
             ->getResult();
@@ -169,11 +183,12 @@ class ParameterRepository extends ServiceEntityRepository
     public function findSocialNetworks():  array
     {
         $socialNetworks = [];
-        $values = $this->findItemsByCle(SocialNetwork::CLE);
+        $values = $this->findValidItemsByCle(SocialNetwork::CLE);
         if ($values) {
             foreach ($values as $value) {
                 $socialNetwork = new SocialNetwork($value);
                 $socialNetworks[$socialNetwork->getId()] = [
+                    'id' => $socialNetwork->getId(),
                     'name' => $socialNetwork->getName(),
                     'logoID' => $socialNetwork->getLogoID()
                 ];
@@ -212,11 +227,12 @@ class ParameterRepository extends ServiceEntityRepository
     public function findRelationCategories(): array
     {
         $relationCategories = [];
-        $valeurs = $this->findItemsByCle(RelationCategory::CLE);
+        $valeurs = $this->findValidItemsByCle(RelationCategory::CLE);
         if ($valeurs) {
             foreach ($valeurs as $valeur) {
                 $relationCategory = new RelationCategory($valeur);
                 $relationCategories[$relationCategory->getCategory()] = [
+                    'id'            => $relationCategory->getId(),
                     'description'   => $relationCategory->getDescription(),
                     'parent_id'     => $relationCategory->getParentId(),
                 ];
@@ -228,11 +244,12 @@ class ParameterRepository extends ServiceEntityRepository
     public function findActivitiesSectors(): array
     {
         $activitiesSectors = [];
-        $valeurs = $this->findItemsByCle(ActivitySector::CLE);
+        $valeurs = $this->findValidItemsByCle(ActivitySector::CLE);
         if ($valeurs) {
             foreach ($valeurs as $valeur) {
                 $activitySector = new ActivitySector($valeur);
                 $activitiesSectors[$activitySector->getName()] = [
+                    'id'            => $activitySector->getId(),
                     'description'   => $activitySector->getDescription(),
                     'parent_id'     => $activitySector->getParentId(),
                 ];

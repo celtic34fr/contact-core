@@ -74,7 +74,7 @@ class ParametersController extends AbstractController
                 }
             }
 
-            $entreprise = $this->extConfig->get('contact-core/entreprise');
+            $entreprise = $this->extConfig->get('celtic34fr-contactcore/entreprise');
             if (!$entreprise) {
                 $entreprise  = [
                     'designation' => null,
