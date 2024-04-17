@@ -85,19 +85,19 @@
 						<div class="jour col-12 mx-0 px-0 row">
 							<div class="col-2">{{ jour }}</div>
 							<div class="hmd col-2 mx-0 px-0 text-center">
-								<input type="time" name="{{ jour }}-md" value="{{ hours.md }}" {% if ferme %}disabled{% endif %}>
+								<input type="time" name="horaires[{{ jour }}][md]" value="{{ hours.md }}" {% if ferme %}disabled{% endif %}>
 							</div>
 							<div class="hmf col-2 mx-0 px-0 text-center">
-								<input type="time" name="{{ jour }}-mf" value="{{ hours.mf }}" {% if ferme %}disabled{% endif %}>
+								<input type="time" name="horaires[{{ jour }}][mf]" value="{{ hours.mf }}" {% if ferme %}disabled{% endif %}>
 							</div>
 							<div class="hsd col-2 mx-0 px-0 text-center">
-								<input type="time" name="{{ jour }}-sd" value="{{ hours.sd }}" {% if ferme %}disabled{% endif %}>
+								<input type="time" name="horaires[{{ jour }}][sd]" value="{{ hours.sd }}" {% if ferme %}disabled{% endif %}>
 							</div>
 							<div class="hsf col-2 mx-0 px-0 text-center">
-								<input type="time" name="{{ jour }}-sf" value="{{ hours.sf }}" {% if ferme %}disabled{% endif %}>
+								<input type="time" name="horaires[{{ jour }}][sf]" value="{{ hours.sf }}" {% if ferme %}disabled{% endif %}>
 							</div>
 							<div class="hf col-2 mx-0 px-0 text-center">
-								<input type="checkbox" name="{{ jour }}-ferme" id="{{ jour }}-ferme" {% if ferme %}checked{% endif %}>
+								<input type="checkbox" name="horaires[{{ jour }}][ferme]" id="{{ jour }}-ferme" {% if ferme %}checked{% endif %}>
 							</div>
 						</div>
 					{% endfor %}
@@ -107,6 +107,10 @@
 				label: 'Déposez-Glissez votre logo', maxFiles: 1,
 				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: false,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, 'initial_datas': logoDB,
+				hidden_name: form.logoID.vars.id
+			}) }}
+			{{ fields.hidden(form.logoID, {
+				'value': logoID,
 			}) }}
 		</div>
 		<div class="col-12 row mt-2 px-0 mx-0">

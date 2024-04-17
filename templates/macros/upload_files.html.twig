@@ -179,6 +179,7 @@
 
     function uploadFile(file, i, dropzone) {
         var divPreview = dropzone.querySelector(".gallery")
+        var hiddenName = dropzone.dataset.hiddenName
         var formData = new FormData()
         formData.append('upload_preset', '{{ myPreset }}')
         formData.append('file', file)
@@ -204,6 +205,8 @@
             {% if preview %}
                 previewFile(file, divPreview, xhrFile.id)
             {% endif %}
+                var hidden = document.querySelector("#"+hiddenName)
+                hidden.value = hidden.value + "-" + xhrFile.id
             }
             else if (xhr.readyState == 4 && xhr.status != 200) {
                 errors =  JSON.parse(xhr.responseText)

@@ -124,6 +124,10 @@ class ParametersController extends AbstractController
                 $yaml['entreprise']['telephone'] = $entrepriseInfos->getTelephone() ?? "";
                 $yaml['entreprise']['courriel_reponse'] = $entrepriseInfos->getReponse();
 
+                //traitement des horraires d'ouveture
+                $horaires = $request->request->get('horaires');
+                
+
                 $logo = $this->pieceJointeRepo->findOneBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
                 if ($logo) { // ajout ou mise à jour si present dans le formulaire
                     /** @var PieceJointe $logo */
@@ -148,6 +152,7 @@ class ParametersController extends AbstractController
                 $this->render('@contact-core/parameters/information.html.twig', [
                     'form' => $form->createView(),
                     'logoDB' => $logoDB,
+                    'logoID' => $entreprise['logoID'] ?? "",
                     'acceptFiles' => ".png,.gif,.jpg,.jpeg,.svg",
                     'route' => "parameters-upload-logo",
                     'myPreset' => $myPreset,
