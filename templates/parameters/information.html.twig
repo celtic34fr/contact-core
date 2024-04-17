@@ -136,7 +136,7 @@
 
 	<script>
 		function toggleCloseOpen(event) {
-			let day = event.target.parentNode;
+			let day = event.target.parentNode.parentNode;
 			let hours = day.querySelectorAll('input[type=time]');
 			hours.forEach((hour) => {
 				if (event.target.checked == 1) {
