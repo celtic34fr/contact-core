@@ -64,10 +64,36 @@
 					'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 				}) }}
 
-				<div class="col-12">
-					<pre>
-						{{ dump(ouverture) }}
-					</pre>
+				<div class="col-12 mx-0 row">
+					{# tableau des horaires d'ouveture - accessibilité #}
+					{#
+						-> tableau ayant pour clé les jours de la semaine
+						-> md, mf, sd, sf heures de début/fin matin/soir 
+						-> si md == mf == sd == sf == vide => cocher case fermé et invalider les champs de saisi
+						-> si décoche fermé => activer la saisie des heures
+						-> question saisie de md et sf seul ? (pour ouverture non stop)
+					#}
+					{% for jour, heures in ouverture %}
+						{% set ferme = (heures.md is empty) and (heures.mf is empty) and (heures.sd is empty) and (heures.sf is empty) %}
+						<div class="jour col-12 mx-0 px-0 row">
+							<div class="col2">{{ jour }}</div>
+							<div class="md col-2 mx-0 px-0 text-center">
+								<input type="time" name="{{ jour }}-md" value="{{ jour.md }}">
+							</div>
+							<div class="md col-2 mx-0 px-0 text-center">
+								<input type="time" name="{{ jour }}-mf" value="{{ jour.mf }}">
+							</div>
+							<div class="md col-2 mx-0 px-0 text-center">
+								<input type="time" name="{{ jour }}-sd" value="{{ jour.sd }}">
+							</div>
+							<div class="md col-2 mx-0 px-0 text-center">
+								<input type="time" name="{{ jour }}-sf" value="{{ jour.sf }}">
+							</div>
+							<div class="md col-2 mx-0 px-0 text-center">
+								<input type="checkbox" name="{{ jour }}-ferme" id="{{ jour }}-ferme">
+							</div>
+						</div>
+					{% endfor %}
 				</div>
 			</div>
 			{{ fields.dragNDrop2(form.logo, {

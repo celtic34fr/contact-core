@@ -377,7 +377,7 @@ class ParametersController extends AbstractController
             'sf' => '',
         ];
 
-        foreach ($$opened as $day => $open) {
+        foreach ($opened as $day => $open) {
             $tempo = explode('/', $open);
             foreach ($tempo as $id => $value) {
                 if ($value == '-') {
