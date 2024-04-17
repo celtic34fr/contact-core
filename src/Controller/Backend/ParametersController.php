@@ -85,6 +85,20 @@ class ParametersController extends AbstractController
                     'courriel_reponse' => null,
                 ];
             }
+            $ouverture = $this->extConfig->get('celtic34fr-contactcore/ouverture');
+            if (!$ouverture) {
+                $ouverture = [
+                    'lundi' => '-',
+                    'mardi' => '-',
+                    'mercredi' => '-',
+                    'jeudi' => '-',
+                    'vendredi' => '-',
+                    'samedi' => '-',
+                    'dimanche' => '-',
+                ];
+            }
+            $ouverture = $this->formatOpened($ouverture);
+
             /** @var PieceJointe $logo */
             $logo = $this->pieceJointeRepo->findOneBy(['tempo' => false, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
             $item = [];
@@ -137,6 +151,7 @@ class ParametersController extends AbstractController
                     'acceptFiles' => ".png,.gif,.jpg,.jpeg,.svg",
                     'route' => "parameters-upload-logo",
                     'myPreset' => $myPreset,
+                    'ouverture' => $ouverture,
                 ]);
         } else {
             throw new Exception("L'extension contact-core semble ne pas être installée, vérifiez votre configuration");
@@ -346,5 +361,41 @@ class ParametersController extends AbstractController
             $values[$paramValue->getId()] = $paramValue->getValeur();
         }
         return $values;
+    }
+
+    /**
+     * @param array $opened
+     * @return array
+     */
+    private function formatOpened(array $opened): array
+    {
+        $formatedOpened = [];
+        $jour = [
+            'md' => '',
+            'mf' => '',
+            'sd' => '',
+            'sf' => '',
+        ];
+
+        foreach ($$opened as $day => $open) {
+            $tempo = explode('/', $open);
+            foreach ($tempo as $id => $value) {
+                if ($value == '-') {
+                    $formatedOpened[$day] = $jour;
+                } else {
+                    $value = explode('-', $value);
+                    if ($id == 0) {
+                        if (!array_key_exists($day, $formatedOpened)) $formatedOpened[$day] = [];
+                        $formatedOpened[$day]['md'] = trim($value[0]);
+                        $formatedOpened[$day]['mf'] = trim($value[1]);
+                    } else {
+                        if (!array_key_exists($day, $formatedOpened)) $formatedOpened[$day] = [];
+                        $formatedOpened[$day]['sd'] = trim($value[0]);
+                        $formatedOpened[$day]['sf'] = trim($value[1]);
+                    }
+                }
+            }
+        }
+        return $formatedOpened;
     }
 }

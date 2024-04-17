@@ -52,16 +52,24 @@
 				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre adresse courriel globale',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
 			}) }}
-			{{ fields.field(form.reponse, '', {
+			{{ fields.field(form.reponse, "Votre adresse Courriel de Réponset", {
 				'class': 'col-6 mb-2 mx-0 pe-0 ps-1', 'placeholder': 'Votre adresse courriel de réponse',
 				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'}
 			}) }}
 		</div>
 		<div class="col-12 mt-2 row px-0 mx-0">
-			{{ fields.field(form.telephone, "", {
-				'class': 'col-6 mb-2 mx-0 ps-0 pe-1', 'placeholder': 'Votre Téléphone',
-				'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
-			}) }}
+			<div class="col-6 row px-0 mx-0 mb-2">
+				{{ fields.field(form.telephone, "", {
+					'class': 'col-12 mx-0 ps-0 pe-1', 'placeholder': 'Votre Téléphone',
+					'il_class': {'label': 'col-4 px-2 text-sm', 'input': 'col-8 text-sm'},
+				}) }}
+
+				<div class="col-12">
+					<pre>
+						{{ dump(ouverture) }}
+					</pre>
+				</div>
+			</div>
 			{{ fields.dragNDrop2(form.logo, {
 				label: 'Déposez-Glissez votre logo', maxFiles: 1,
 				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: false,
