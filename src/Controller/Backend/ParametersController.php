@@ -386,12 +386,12 @@ class ParametersController extends AbstractController
                     $value = explode('-', $value);
                     if ($id == 0) {
                         if (!array_key_exists($day, $formatedOpened)) $formatedOpened[$day] = [];
-                        $formatedOpened[$day]['md'] = trim($value[0]);
-                        $formatedOpened[$day]['mf'] = trim($value[1]);
+                        $formatedOpened[$day]['md'] = str_replace('h', ':', trim($value[0]));
+                        $formatedOpened[$day]['mf'] = str_replace('h', ':', trim($value[1]));
                     } else {
                         if (!array_key_exists($day, $formatedOpened)) $formatedOpened[$day] = [];
-                        $formatedOpened[$day]['sd'] = trim($value[0]);
-                        $formatedOpened[$day]['sf'] = trim($value[1]);
+                        $formatedOpened[$day]['sd'] = str_replace('h', ':', trim($value[0]));
+                        $formatedOpened[$day]['sf'] = str_replace('h', ':', trim($value[1]));
                     }
                 }
             }
