@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * - file_mime      : Type de fichier
  * - file_content   : Contenu proprement dit du fichier
  * - created_at     : Date de création de l’enregistrement
+ * - updated_at     : date de dernière mise à jour - invalidation suivant le cas
  * - tempo          : flag indiquant si le fichier est à garder (false) ou non (true)
  * - utility        : utilité de la pièce jointe : logo d’entreprise, image pour courriel …
  * - file_size      : taille du fichier format normalisé taille+unité
@@ -66,6 +67,10 @@ class PieceJointe
      * @var DateTimeImmutable
      */
     private DateTimeImmutable $created_at;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Assert\DateTime]
+    protected ?DateTimeImmutable $updated_at;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     #[Assert\Type('boolean')]
@@ -178,6 +183,29 @@ class PieceJointe
     public function setDateCreated(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
+        return $this;
+    }
+
+    /**
+     * Get the value of updated_at
+     */
+    public function getUpdatedAt(): DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function isEmptyUpdatedAt()
+    {
+        return empty($this->updated_at);
+    }
+
+    /**
+     * Set the value of updated_at
+     * @return  self
+     */
+    public function setUpdatedAt(?DateTimeImmutable $updated_at): self
+    {
+        $this->updated_at = $updated_at;
         return $this;
     }
 

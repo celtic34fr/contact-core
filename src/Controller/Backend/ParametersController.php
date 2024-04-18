@@ -64,6 +64,7 @@ class ParametersController extends AbstractController
         if ($this->extConfig->isExtnsionInstall("contactcore")) {
             if ($request->getMethod() == "GET") {
                 /* recherche des logo en temporaire (tempo: true) pour suppression de la base */
+                /* mise en commentaire pour remplacement par tache CRON journalière
                 $logosTempo = $this->pieceJointeRepo
                     ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
                 if ($logosTempo) {
@@ -72,6 +73,7 @@ class ParametersController extends AbstractController
                     }
                     $this->entityManager->flush();
                 }
+                */
             }
 
             $entreprise = $this->extConfig->get('celtic34fr-contactcore/entreprise');
@@ -83,6 +85,7 @@ class ParametersController extends AbstractController
                     'courriel' => null,
                     'telephone' => null,
                     'courriel_reponse' => null,
+                    'logoID' => null,
                 ];
             }
             $ouverture = $this->extConfig->get('celtic34fr-contactcore/ouverture');
@@ -99,12 +102,15 @@ class ParametersController extends AbstractController
             }
             $ouverture = $this->formatOpened($ouverture);
 
-            /** @var PieceJointe $logo */
-            $logo = $this->pieceJointeRepo->findOneBy(['tempo' => false, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
+            $logo = null;
+            if ($entreprise['logoID']) {
+                /** récupération du logo de l'entreprise si déjà paramétré */
+                /** @var PieceJointe $logo */
+                $logo = $this->pieceJointeRepo->find((int) $entreprise['logoID']);
+            }
             $item = [];
             if ($logo) {
                 list($errors, $item) = $this->uploadFiles->prepare_initial_datas([$logo->getId()], 'thumbnail');
-                $entreprise['logoID'] = $logo->getId();
             }
             $logoDB = (empty($errors)) ? $item : [];
 
@@ -123,6 +129,48 @@ class ParametersController extends AbstractController
                 $yaml['entreprise']['courriel'] = $entrepriseInfos->getCourriel() ?? "";
                 $yaml['entreprise']['telephone'] = $entrepriseInfos->getTelephone() ?? "";
                 $yaml['entreprise']['courriel_reponse'] = $entrepriseInfos->getReponse();
+
+                /** 
+                 * traitement du logo de l'entreprise
+                 * -> cas 1 : pas de logo au départ, pas de logo à validation du formulaire => ne rien faire
+                 * -> cas 2 : logo au départ et logo à validation du formulaire non changé => ne rien faire
+                 * -> cas 3 : logo au départ et logo à validation du formulaire différent
+                 *              => invalider le logo existant,
+                 *              => basculer de tempo à définitif le logo dans PieceJointe,
+                 *              => initialiser logoID avec ID du logo dans PieceJointe
+                 * -> cas 4 : pas de logo au départ et logo à validation du formulaire
+                 *              => basculer de tempo à définitif le logo dans PieceJointe,
+                 *              => initialiser logoID avec ID du logo dans PieceJointe
+                 * -> cas 5 : logo au départ et pas de logo à validation du formulaire
+                 *              => invalider le logo existant,
+                 */
+                $logoID = "";
+                if ($entrepriseInfos->getLogoID()) {
+                    $logoIDs = $this->extractLogoID($entrepriseInfos->getLogoID());
+
+                    if ($logoIDs['prev']) {
+                        foreach ($logoIDs['prev'] as $prevID) {
+                            // suppression du logo existant => invalidation dans PieceJointe et logoID à vide
+                            /** @var PieceJointe $logoDB */
+                            $logoDB = $this->pieceJointeRepo->find((int) $prevID);
+                            $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
+                            $this->pieceJointeRepo->save($logoDB, false);
+                        }
+                    }
+                    if ($logoIDs['next']) {
+                        foreach ($logoIDs['next'] as $nextID) {
+                            /** @var PieceJointe $logoDB */
+                            $logoDB = $this->pieceJointeRepo->find((int) $nextID);
+                            $logoDB->setTempo(false);
+                            $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
+                            $this->pieceJointeRepo->save($logoDB, false);
+                            $logoID .= $nextID . '-';
+                        }
+                        if ($logoID) $logoID = substr($logoID, 0, strlen($logoID) - 1);
+                    }
+                    $this->pieceJointeRepo->flush();
+                }
+                $yaml['entreprise']['logoID'] = $logoID;
 
                 //traitement des horraires d'ouveture
                 $horaires = $request->request->get('horaires');
@@ -402,5 +450,26 @@ class ParametersController extends AbstractController
             }
         }
         return $formatedOpened;
+    }
+
+    /**
+     * @param string $logoIDs
+     * @return array
+     */
+    private function extractLogoID(string $logoIDs): array
+    {
+        // éclatement de logoIDs en 2, indice 0 => logo(s) avant, indice 1 => logo(s) après
+        $logoIDs = explode('_', $logoIDs);
+        $prevIDs = array_key_exists(0, $logoIDs) ? explode('-', $logoIDs[0]) : [];
+        $nextIDs = array_key_exists(1, $logoIDs) ? explode('-', $logoIDs[1]) : [];
+
+        foreach ($prevIDs as $key => $prevID) {
+            if (!is_numeric($prevID)) unset($prevIDs[$key]);
+        }
+
+        foreach ($nextIDs as $key => $nextID) {
+            if (!is_numeric($nextID)) unset($nextIDs[$key]);
+        }
+        return ['prev' => $prevIDs, 'next' => $nextIDs];
     }
 }
