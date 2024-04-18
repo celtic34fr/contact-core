@@ -10,7 +10,7 @@ class EntrepriseInfosFE
     private ?string $courriel = null;
     private ?string $telephone = null;
     private ?string $reponse = null;
-    private ?int $logoID = null;
+    private ?string $logoID = null;
 
 
     public function __construct(array $parameters = null)
@@ -51,7 +51,7 @@ class EntrepriseInfosFE
         $this->courriel = $parameters['courriel'] ?? "";
         $this->telephone = $parameters['telephone'] ?? "";
         $this->reponse = $parameters['reponse'] ?? "";
-        $this->logoID = $parameters['logoID'] ?? null;
+        $this->logoID = $parameters['logoID'] ?? "";
 
         /** 
          * if siren is empty && siret not empty :
@@ -201,7 +201,7 @@ class EntrepriseInfosFE
     /**
      * Get the value of logoID
      */ 
-    public function getLogoID(): ?int
+    public function getLogoID(): ?string
     {
         return $this->logoID;
     }
@@ -209,9 +209,10 @@ class EntrepriseInfosFE
     /**
      * Set the value of logoID
      *
+     * @param string $logoID
      * @return  EntrepriseInfosFE|false
      */ 
-    public function setLogoID(int $logoID): mixed
+    public function setLogoID(string $logoID): mixed
     {
         if (!is_numeric($logoID) || $logoID < 0) return false;
         
