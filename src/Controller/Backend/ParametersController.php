@@ -150,12 +150,11 @@ class ParametersController extends AbstractController
                     $prevID = $logoIDs['prev'];
                     $nextID = $logoIDs['next'];
 
-                    if ($prevID && $nextID) {
+                    if (!$prevID) {
                         // suppression du logo existant => invalidation dans PieceJointe et logoID à vide
-                        /** @var PieceJointe $logoDB */
-                        $logoDB = $this->pieceJointeRepo->find((int) $prevID);
-                        $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
-                        $this->pieceJointeRepo->save($logoDB, false);
+                        /** @var PieceJointe $logo */
+                        $logo->setUpdatedAt(new DateTimeImmutable('now'));
+                        $this->pieceJointeRepo->save($logo, false);
                     }
                     if ($nextID) {
                         /** @var PieceJointe $logoDB */
