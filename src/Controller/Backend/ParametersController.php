@@ -147,28 +147,25 @@ class ParametersController extends AbstractController
                 $logoID = "";
                 if ($entrepriseInfos->getLogoID()) {
                     $logoIDs = $this->extractLogoID($entrepriseInfos->getLogoID());
+                    $prevID = $logoIDs['prev'];
+                    $nextID = $logoIDs['next'];
 
-                    if ($logoIDs['prev']) {
-                        foreach ($logoIDs['prev'] as $prevID) {
-                            // suppression du logo existant => invalidation dans PieceJointe et logoID à vide
-                            /** @var PieceJointe $logoDB */
-                            $logoDB = $this->pieceJointeRepo->find((int) $prevID);
-                            $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
-                            $this->pieceJointeRepo->save($logoDB, false);
-                        }
+                    if ($prevID && $nextID) {
+                        // suppression du logo existant => invalidation dans PieceJointe et logoID à vide
+                        /** @var PieceJointe $logoDB */
+                        $logoDB = $this->pieceJointeRepo->find((int) $prevID);
+                        $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
+                        $this->pieceJointeRepo->save($logoDB, false);
                     }
-                    if ($logoIDs['next']) {
-                        foreach ($logoIDs['next'] as $nextID) {
-                            /** @var PieceJointe $logoDB */
-                            $logoDB = $this->pieceJointeRepo->find((int) $nextID);
-                            $logoDB->setTempo(false);
-                            $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
-                            $this->pieceJointeRepo->save($logoDB, false);
-                            $logoID .= $nextID . '-';
-                        }
-                        if ($logoID) $logoID = substr($logoID, 0, strlen($logoID) - 1);
+                    if ($nextID) {
+                        /** @var PieceJointe $logoDB */
+                        $logoDB = $this->pieceJointeRepo->find((int) $nextID);
+                        $logoDB->setTempo(false);
+                        $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
+                        $this->pieceJointeRepo->save($logoDB, false);
+                        $logoID .= $nextID;
                     }
-                    $this->pieceJointeRepo->flush();
+                    $this->entityManager->flush();
                 }
                 $yaml['entreprise']['logoID'] = $logoID;
 
