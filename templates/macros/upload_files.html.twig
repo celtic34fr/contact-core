@@ -243,7 +243,7 @@
 
         if (bool) {
             let imgID = e.target.parentNode.dataset.fileId
-            url = '/bcknd/tools/delt_doc/'+imgID
+            url = '/bcknd/tools/inval_doc/'+imgID
             fetch(url, { method: "DELETE", }).then(function (response) {
                 /** TODO : afficher retour méthode : response en tooltip ou alert */
                 show_toast(response.type, response.message)

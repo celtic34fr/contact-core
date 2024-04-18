@@ -69,6 +69,14 @@ class ToolsController extends AbstractController
         return $this->render('@contact-core/main/print_doc.html.twig', $context);
     }
 
+    #[Route('/inval_doc/{id}', name: 'delt_doc', methods: ['DELETE'])]
+    public function inval_pj(PieceJointe $pieceJointe): JsonResponse
+    {
+        $pieceJointe->setUpdatedAt(new DateTimeImmutable('now'));
+        $this->pieceJointeRepo->save($pieceJointe, true);
+        return new JsonResponse(array('type' => 'success', "message" => "Suppression de documents terminée OK"));
+    }
+
     #[Route('/delt_doc/{id}', name: 'delt_doc', methods: ['DELETE'])]
     public function delt_pj(PieceJointe $pieceJointe): JsonResponse
     {
