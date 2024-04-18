@@ -74,6 +74,12 @@
         dropArea.classList.remove('active')
     }
 
+    // from phpjs.org
+    function strpos(haystack, needle, offset) {
+        let i = (haystack+'').indexOf(needle, (offset || 0))
+        return i === -1 ? false : i
+    }
+
     function handleDrop(e) {
         e.preventDefault();
         var dt = e.dataTransfer
@@ -206,6 +212,9 @@
                 previewFile(file, divPreview, xhrFile.id)
             {% endif %}
                 var hidden = document.querySelector("#"+hiddenName)
+                if (!strpos(hidden.value, "N")) {
+                    hidden.value = hidden.value + "_N"
+                }
                 hidden.value = hidden.value + "-" + xhrFile.id
             }
             else if (xhr.readyState == 4 && xhr.status != 200) {
@@ -239,6 +248,15 @@
                 /** TODO : afficher retour méthode : response en tooltip ou alert */
                 show_toast(response.type, response.message)
                 let imgPreview = document.querySelector(".img-"+imgID)
+                let dropArea = imgPreview.parentNode.parentNode
+                let hiddenName = dropArea.querySelector('input').dataset.hiddenName
+                let hiddenInput = document.querySelector("#" + hiddenName)
+                let hiddenRef = hiddenInput.value
+                let pos = strpos(hiddenRef, imgID)
+                if (pos) {
+                    hiddenRef = hiddenRef.substring(pos - 1, imgID.length + 1)
+                    hiddenInput.value = hiddenRef
+                }
                 imgPreview.remove()
             });
         }
@@ -291,6 +309,8 @@
 
         // remplissage de la galerie de prévisualisation si data-initial non vide
         let initial_datas = JSON.parse(dropzone.querySelector("input").dataset.initial)
+        let hiddenName = dropzone.querySelector("input").dataset.hiddenName
+        let hiddenRef = "P"
         let previewDiv = dropzone.querySelector(".gallery")
         initial_datas.forEach((data) => {
             var divPreview = document.createElement('div')
@@ -303,6 +323,7 @@
             {% endif %}
             divPreview.classList.add('img_preview')
             divPreview.classList.add('img-'+data.id)
+            hiddenRef = hiddenRef + "-" + data.id
             {# ajout icônes avant pour top left & right #}
             {% if iconSide == "TL" or iconSide == "TR" %}
             viewIcon.setAttribute("data-file-id", data.id)
@@ -324,6 +345,7 @@
             {% endif %}
             previewDiv.appendChild(divPreview)
         })
+        docuement.querySelector("#" + hiddenName).value = hiddenRef
     });
 </script>
 {% endmacro %}
