@@ -69,7 +69,7 @@ class ToolsController extends AbstractController
         return $this->render('@contact-core/main/print_doc.html.twig', $context);
     }
 
-    #[Route('/inval_doc/{id}', name: 'delt_doc', methods: ['DELETE'])]
+    #[Route('/inval_doc/{id}', name: 'inval_doc', methods: ['DELETE'])]
     public function inval_pj(PieceJointe $pieceJointe): JsonResponse
     {
         $pieceJointe->setUpdatedAt(new DateTimeImmutable('now'));
