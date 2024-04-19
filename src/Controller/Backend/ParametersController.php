@@ -181,8 +181,7 @@ class ParametersController extends AbstractController
                 $new_yaml = Yaml::dump($yaml, 2);
                 file_put_contents($configFile, $new_yaml);
                 $this->addFlash('success', 'Fichier de configuration bien modifié et enregistré');
-                $redirectUrl = $this->generateUrl('bolt_dashboard');
-                return new RedirectResponse($redirectUrl);
+                return $this->redirectToRoute('bolt_dashboard');
             }
 
             $myPreset = uniqid();
