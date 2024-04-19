@@ -103,7 +103,7 @@ class ParametersController extends AbstractController
             $ouverture = $this->formatOpened($ouverture);
 
             $logo = null;
-            if ($entreprise['logoID']) {
+            if (array_key_exists('logoID', $entreprise) && $entreprise['logoID']) {
                 /** récupération du logo de l'entreprise si déjà paramétré */
                 /** @var PieceJointe $logo */
                 $logo = $this->pieceJointeRepo->find((int) $entreprise['logoID']);
@@ -130,20 +130,7 @@ class ParametersController extends AbstractController
                 $yaml['entreprise']['telephone'] = $entrepriseInfos->getTelephone() ?? "";
                 $yaml['entreprise']['courriel_reponse'] = $entrepriseInfos->getReponse();
 
-                /** 
-                 * traitement du logo de l'entreprise
-                 * -> cas 1 : pas de logo au départ, pas de logo à validation du formulaire => ne rien faire
-                 * -> cas 2 : logo au départ et logo à validation du formulaire non changé => ne rien faire
-                 * -> cas 3 : logo au départ et logo à validation du formulaire différent
-                 *              => invalider le logo existant,
-                 *              => basculer de tempo à définitif le logo dans PieceJointe,
-                 *              => initialiser logoID avec ID du logo dans PieceJointe
-                 * -> cas 4 : pas de logo au départ et logo à validation du formulaire
-                 *              => basculer de tempo à définitif le logo dans PieceJointe,
-                 *              => initialiser logoID avec ID du logo dans PieceJointe
-                 * -> cas 5 : logo au départ et pas de logo à validation du formulaire
-                 *              => invalider le logo existant,
-                 */
+                /** traitement du logo de l'entreprise */
                 $logoID = "";
                 if ($entrepriseInfos->getLogoID()) {
                     $logoIDs = $this->extractLogoID($entrepriseInfos->getLogoID());
@@ -152,6 +139,7 @@ class ParametersController extends AbstractController
 
                     if (!$prevID) {
                         // suppression du logo existant => invalidation dans PieceJointe et logoID à vide
+                        /*/ normalement déjà fait par la suppression de l'objet image dans le formulaire
                         /** @var PieceJointe $logo */
                         $logo->setUpdatedAt(new DateTimeImmutable('now'));
                         $this->pieceJointeRepo->save($logo, false);
@@ -169,7 +157,12 @@ class ParametersController extends AbstractController
                 $yaml['entreprise']['logoID'] = $logoID;
 
                 //traitement des horraires d'ouveture
+                // @var array $horaires
                 $horaires = $request->request->get('horaires');
+                $horaires = $this->formatHoraire($horaires);
+                foreach ($horaires as $day => $horaire) {
+                    $yaml['ouverture'][$day] = $horaire;
+                }
                 
 
                 $logo = $this->pieceJointeRepo->findOneBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
@@ -427,20 +420,29 @@ class ParametersController extends AbstractController
         ];
 
         foreach ($opened as $day => $open) {
-            $tempo = explode('/', $open);
-            foreach ($tempo as $id => $value) {
-                if ($value == '-') {
-                    $formatedOpened[$day] = $jour;
-                } else {
+            if (!array_key_exists($day, $formatedOpened)) $formatedOpened[$day] = [];
+            if (trim($open) == '-') {
+                $formatedOpened[$day] = $jour;
+            } else {
+                $tempo = explode('/', $open);
+                foreach ($tempo as $id => $value) {
                     $value = explode('-', $value);
-                    if ($id == 0) {
-                        if (!array_key_exists($day, $formatedOpened)) $formatedOpened[$day] = [];
-                        $formatedOpened[$day]['md'] = str_replace('h', ':', trim($value[0]));
-                        $formatedOpened[$day]['mf'] = str_replace('h', ':', trim($value[1]));
+                    if (sizeof($value) < 2) {
+                        if ($id == 0) {
+                            $formatedOpened[$day]['md'] = "";
+                            $formatedOpened[$day]['mf'] = "";
+                        } elseif ($id == 1) {
+                            $formatedOpened[$day]['sd'] = "";
+                            $formatedOpened[$day]['sf'] = "";
+                        }
                     } else {
-                        if (!array_key_exists($day, $formatedOpened)) $formatedOpened[$day] = [];
-                        $formatedOpened[$day]['sd'] = str_replace('h', ':', trim($value[0]));
-                        $formatedOpened[$day]['sf'] = str_replace('h', ':', trim($value[1]));
+                        if ($id == 0) {
+                            $formatedOpened[$day]['md'] = str_replace('h', ':', trim($value[0]));
+                            $formatedOpened[$day]['mf'] = str_replace('h', ':', trim($value[1]));
+                        } elseif ($id == 1) {
+                            $formatedOpened[$day]['sd'] = str_replace('h', ':', trim($value[0]));
+                            $formatedOpened[$day]['sf'] = str_replace('h', ':', trim($value[1]));
+                        }
                     }
                 }
             }
@@ -467,5 +469,22 @@ class ParametersController extends AbstractController
             if (!is_numeric($nextID)) unset($nextIDs[$key]);
         }
         return ['prev' => $prevIDs, 'next' => $nextIDs];
+    }
+
+    private function formatHoraire($formHoraire): array
+    {
+        $formatHoraire = [];
+
+        if (is_array($formHoraire)) {
+            foreach ($formHoraire as $day => $dHoraire) {
+                $ferme = empty($dHoraire['md']) && empty($dHoraire['mf']) && empty($dHoraire['sd']) && empty($dHoraire['sf']);
+                if ($ferme) {
+                    $formatHoraire[$day] = " - ";
+                } else {
+                    $formatHoraire[$day] = $dHoraire['md'].' - '.$dHoraire['mf'].' / '.$dHoraire['sd'].' - '.$dHoraire['sf'];
+                }
+            }
+        }
+        return $formatHoraire;
     }
 }
