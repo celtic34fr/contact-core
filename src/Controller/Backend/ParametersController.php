@@ -133,12 +133,14 @@ class ParametersController extends AbstractController
 
                 /** traitement du logo de l'entreprise */
                 $logoID = "";
-                if ($entrepriseInfos->getLogoID()) {
-                    $logoIDs = $this->extractLogoID($entrepriseInfos->getLogoID());
+                $rEntreprise = $request->request->get('entreprise_infos');
+
+                if ($rEntreprise['logoID']) {
+                    $logoIDs = $this->extractLogoID($rEntreprise['logoID']);
                     $prevID = $logoIDs['prev'];
                     $nextID = $logoIDs['next'];
 
-                    if (!$prevID) {
+                    if (!$prevID && $logo) {
                         // suppression du logo existant => invalidation dans PieceJointe et logoID à vide
                         /*/ normalement déjà fait par la suppression de l'objet image dans le formulaire
                         /** @var PieceJointe $logo */
@@ -149,7 +151,6 @@ class ParametersController extends AbstractController
                         /** @var PieceJointe $logoDB */
                         $logoDB = $this->pieceJointeRepo->find((int) $nextID);
                         $logoDB->setTempo(false);
-                        $logoDB->setUpdatedAt(new DateTimeImmutable('now'));
                         $this->pieceJointeRepo->save($logoDB, false);
                         $logoID .= $nextID;
                     }
@@ -469,7 +470,7 @@ class ParametersController extends AbstractController
         foreach ($nextIDs as $key => $nextID) {
             if (!is_numeric($nextID)) unset($nextIDs[$key]);
         }
-        return ['prev' => $prevIDs, 'next' => $nextIDs];
+        return ['prev' => array_shift($prevIDs), 'next' => array_shift($nextIDs)];
     }
 
     private function formatHoraire($formHoraire): array

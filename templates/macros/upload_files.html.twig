@@ -254,7 +254,7 @@
                 let hiddenRef = hiddenInput.value
                 let pos = strpos(hiddenRef, imgID)
                 if (pos) {
-                    hiddenRef = hiddenRef.substring(pos - 1, imgID.length + 1)
+                    hiddenRef = hiddenRef.substr(0, pos - 1)+hiddenRef.substr(pos +imgID.length)
                     hiddenInput.value = hiddenRef
                 }
                 imgPreview.remove()
