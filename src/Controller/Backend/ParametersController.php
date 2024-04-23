@@ -533,8 +533,8 @@ class ParametersController extends AbstractController
             if ($hdiff) {
                 $tempoErrors[] = [
                     'type' => 'error',
-                    'message' => "clé invalide dans les valeurs fournies : ".implode(',', $hdiff);
-                ]
+                    'message' => "clé invalide dans les valeurs fournies : ".implode(',', $hdiff)
+                ];
             }
             // validation de la séquence des horaires ouveture / fermeture
             if (!$hdiff) {
