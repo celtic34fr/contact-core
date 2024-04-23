@@ -63,20 +63,6 @@ class ParametersController extends AbstractController
     public function index(Request $request): Response
     {
         if ($this->extConfig->isExtnsionInstall("contactcore")) {
-            if ($request->getMethod() == "GET") {
-                /* recherche des logo en temporaire (tempo: true) pour suppression de la base */
-                /* mise en commentaire pour remplacement par tache CRON journalière
-                $logosTempo = $this->pieceJointeRepo
-                    ->findBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
-                if ($logosTempo) {
-                    foreach ($logosTempo as $logoTempo) {
-                        $this->entityManager->remove($logoTempo);
-                    }
-                    $this->entityManager->flush();
-                }
-                */
-            }
-
             $entreprise = $this->extConfig->get('celtic34fr-contactcore/entreprise');
             if (!$entreprise) {
                 $entreprise  = [
@@ -161,28 +147,34 @@ class ParametersController extends AbstractController
                 //traitement des horraires d'ouveture
                 // @var array $horaires
                 $horaires = $request->request->get('horaires');
-                $horaires = $this->formatHoraire($horaires);
-                foreach ($horaires as $day => $horaire) {
-                    $yaml['ouverture'][$day] = $horaire;
-                }
-                
-
-                $logo = $this->pieceJointeRepo->findOneBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
-                if ($logo) { // ajout ou mise à jour si present dans le formulaire
-                    /** @var PieceJointe $logo */
-                    $logo->setTempo(false);
-                    $this->pieceJointeRepo->save($logo, true);
-                    $yaml['entreprise']['logoID'] = $logo->getId();
-                } else { // supression du logo si présent en fichier et non dans le formulaire
-                    if (array_key_exists('logoID', $yaml['entreprise'])) {
-                        unset($yaml['entreprise']['logoID']);
+                // retravail des valeur du tableau des horaires d'ouverture en vu de contrôle
+                $horaires = $this->computeHoraire($horaires);
+                // contrôle validité des horaires d'ouverture, si OK pour suite, KO on signale les annomalie
+                $isOK = $this->controlHoraires($horaires);
+                if (empty($isOK)) {
+                    $horaires = $this->formatHoraire($horaires);
+                    foreach ($horaires as $day => $horaire) {
+                        $yaml['ouverture'][$day] = $horaire;
                     }
+                    
+    
+                    $logo = $this->pieceJointeRepo->findOneBy(['tempo' => true, 'utility' => UtilitiesPJEnums::Logo->_toString()]);
+                    if ($logo) { // ajout ou mise à jour si present dans le formulaire
+                        /** @var PieceJointe $logo */
+                        $logo->setTempo(false);
+                        $this->pieceJointeRepo->save($logo, true);
+                        $yaml['entreprise']['logoID'] = $logo->getId();
+                    } else { // supression du logo si présent en fichier et non dans le formulaire
+                        if (array_key_exists('logoID', $yaml['entreprise'])) {
+                            unset($yaml['entreprise']['logoID']);
+                        }
+                    }
+    
+                    $new_yaml = Yaml::dump($yaml, 2);
+                    file_put_contents($configFile, $new_yaml);
+                    $this->addFlash('success', 'Fichier de configuration bien modifié et enregistré');
+                    return $this->redirectToRoute('bolt_dashboard');
                 }
-
-                $new_yaml = Yaml::dump($yaml, 2);
-                file_put_contents($configFile, $new_yaml);
-                $this->addFlash('success', 'Fichier de configuration bien modifié et enregistré');
-                return $this->redirectToRoute('bolt_dashboard');
             }
 
             $myPreset = uniqid();
@@ -196,6 +188,7 @@ class ParametersController extends AbstractController
                     'route' => "parameters-upload-logo",
                     'myPreset' => $myPreset,
                     'ouverture' => $ouverture,
+                    'errors' => $isOK,
                 ]);
         } else {
             throw new Exception("L'extension contact-core semble ne pas être installée, vérifiez votre configuration");
@@ -473,20 +466,166 @@ class ParametersController extends AbstractController
         return ['prev' => array_shift($prevIDs), 'next' => array_shift($nextIDs)];
     }
 
-    private function formatHoraire($formHoraire): array
+    /**
+     * @param [type] $horaires
+     * @return array
+     */
+    private function computeHoraire($horaires): array
+    {
+        $computeHoraire = [];
+        if (is_array($horaires)) {
+            foreach ($horaires as $day => $horaire) {
+                foreach ($horaire as $idx => $time) {
+                    if ($time == "00:00") $time = "";
+                    if (!array_key_exists($day, $computeHoraire)) $computeHoraire[$day] = [];
+                    $computeHoraire[$day][$idx] = $time;
+                }
+            }
+        }
+        return $computeHoraire;
+    }
+
+    /**
+     * @param [type] $horaires
+     * @return array
+     */
+    private function formatHoraire($horaires): array
     {
         $formatHoraire = [];
-
-        if (is_array($formHoraire)) {
-            foreach ($formHoraire as $day => $dHoraire) {
-                $ferme = empty($dHoraire['md']) && empty($dHoraire['mf']) && empty($dHoraire['sd']) && empty($dHoraire['sf']);
+        if (is_array($horaires)) {
+            foreach ($horaires as $day => $horaire) {
+                $ferme = empty($horaire['md']) && empty($horaire['mf']) && empty($horaire['sd']) && empty($horaire['sf']);
                 if ($ferme) {
                     $formatHoraire[$day] = " - ";
                 } else {
-                    $formatHoraire[$day] = $dHoraire['md'].' - '.$dHoraire['mf'].' / '.$dHoraire['sd'].' - '.$dHoraire['sf'];
+                    $formatHoraire[$day] = $horaire['md'].' - '.$horaire['mf'].' / '.$horaire['sd'].' - '.$horaire['sf'];
                 }
             }
         }
         return $formatHoraire;
+    }
+
+    /**
+     * @param [type] $horaires
+     * @return array
+     */
+    private function controlHoraires($horaires): array
+    {
+        $isHoraireOK = [];
+        foreach ($horaires as $day => $horaire) {
+            $tempoErrors = [];
+            // contrôle de la taille / nombre de heure début fin : attendu 4 [md, mf, sd, sf]
+            if (sizeof($horaire) != 4) {
+                $tempoErrors[] = [
+                    'type' => 'error',
+                    'message' => "nombre d'heures pour $day incoorect atendu 4 reçu ".sizeof($horaire)
+                ];
+            }
+            // test de présence des bonnes clés dans le tableau
+            $hKeys = array_keys($horaire);
+            if (sizeof($hKeys) == 1) {
+                $hdiff = array_diff(['ferme'], $hKeys);
+            } elseif (sizeof($hKeys) <= 4) {
+                array_diff(['md', 'mf', 'sd', 'sf'], $hKeys);
+            } else {
+                $hdiff = array_diff($hKeys,['md', 'mf', 'sd', 'sf']);
+            }
+            if ($hdiff) {
+                $tempoErrors[] = [
+                    'type' => 'error',
+                    'message' => "clé invalide dans les valeurs fournies : ".implode(',', $hdiff);
+                ]
+            }
+            // validation de la séquence des horaires ouveture / fermeture
+            if (!$hdiff) {
+                if (sizeof($hKeys) == 1 && !$horaire['ferme']) {
+                    $tempoErrors[] = [
+                        'type' => 'error',
+                        'message' => "Pas d'horaires saisi pour $day, est-ce un jour de femeture ?, veuillez corriger"
+                    ];
+                }
+                if (sizeof($hKeys) == 4) {
+                    if (!$horaire['md'] && !$horaire['mf'] && !$horaire['sd'] && !$horaire['sf']) {
+                        $tempoErrors[] = [
+                            'type' => 'error',
+                            'message' => "Pas d'horaires saisi pour $day, est-ce un jour de femeture ?, veuillez corriger"
+                        ];
+                    } else {
+                        if (
+                            (!$horaire['mf'] && !$horaire['sd'] && !$horaire['sf']) ||
+                            (!$horaire['md'] && !$horaire['sd'] && !$horaire['sf']) ||
+                            (!$horaire['md'] && !$horaire['mf'] && !$horaire['sf']) ||
+                            (!$horaire['md'] && !$horaire['mf'] && !$horaire['sd'])
+                        ) {
+                            $tempoErrors[] = [
+                                'type' => 'error',
+                                'message' => "Pour $day, Veuillez saisir toutes les heures ou corriger en conséquence"
+                            ];
+                        } else {
+                            if (!$horaire['sd'] && !$horaire['sf']) {
+                                if ($horaire['md'] >= $horaire['mf']) {
+                                    $tempoErrors[] = [
+                                        'type' => 'error',
+                                        'message' => "Pour $day, Horaires du matin non valide, heure de début inférieure à heure de fin"
+                                    ];
+                                }
+                            }elseif (
+                                (!$horaire['md'] && !$horaire['sd']) ||
+                                (!$horaire['mf'] && !$horaire['sf']) 
+                            ) {
+                                $tempoErrors[] = [
+                                    'type' => 'error',
+                                    'message' => "Pour $day, Veuillez saisir correctement les horaires heure début et heure fin à chaque fois"
+                                ];
+                            } elseif (!$horaire['md'] && !$horaire['mf']) {
+                                if ($horaire['sd'] >= $horaire['sf']) {
+                                    $tempoErrors[] = [
+                                        'type' => 'error',
+                                        'message' => "Pour $day, Horaires de l'après-midi non valide, heure de début inférieure à heure de fin"
+                                    ];
+                                }
+                            } elseif (!$horaire['mf'] && !$horaire['sd']) {
+                                if ($horaire['md'] > $horaire['sf']) {
+                                    $tempoErrors[] = [
+                                        'type' => 'error',
+                                        'message' => "Pour $day, Heure début journée supérieure à l'heure de fin, veuillez corriger"
+                                    ];
+                                }
+                            } elseif (!$horaire['md'] && !$horaire['sf']) {
+                                if ($horaire['mf'] > $horaire['sd']) {
+                                    $tempoErrors[] = [
+                                        'type' => 'error',
+                                        'message' => "Pour $day, Heure début supérieure à l'heure de fin, veuillez corriger"
+                                    ];
+                                }
+                            } else {
+                                if (!$horaire['md'] || !$horaire['mf'] || !$horaire['sd'] || !$horaire['sf']) {
+                                    $tempoErrors[] = [
+                                        'type' => 'error',
+                                        'message' => "Veuillez saisir toutes les valeurs pour $day, veuillez corriger"
+                                    ];
+                                } else {
+                                    if (
+                                        ($horaire['md'] > $horaire['mf']) ||
+                                        ($horaire['md'] > $horaire['sd']) ||
+                                        ($horaire['md'] > $horaire['sf']) ||
+                                        ($horaire['mf'] > $horaire['sd']) ||
+                                        ($horaire['mf'] > $horaire['sf']) ||
+                                        ($horaire['sd'] > $horaire['sf'])
+                                    ) {
+                                        $tempoErrors[] = [
+                                            'type' => 'error',
+                                            'message' => "Pour $day, Saisie des horaires invalide, veuillez vérifier que chaque heure de début est avant chaque heure de fin, et que les heures du matin sont avant les heures du soir"
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if ($tempoErrors) $isHoraireOK = array_merge($isHoraireOK, $tempoErrors);
+        }
+        return $isHoraireOK;       
     }
 }
