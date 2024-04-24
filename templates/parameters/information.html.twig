@@ -79,10 +79,10 @@
 							<div class="col-2 text-center">Fermé</div>
 						</div>
 					{% for jour, hours in ouverture %}
-						{% if hours.length == 4 %}
+						{% if hours|length == 4 %}
 						{% set ferme = (hours.md is empty) and (hours.mf is empty) and (hours.sd is empty) and (hours.sf is empty) %}
 						{% endif %}
-						{% if hours.length == 1 %}
+						{% if hours|length == 1 %}
 						{% set ferme = (hours.ferme == "on") %}
 						{% endif %}
 						
