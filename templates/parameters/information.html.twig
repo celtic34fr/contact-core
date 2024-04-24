@@ -156,7 +156,9 @@
 		});
 
 		{% if (errors is defined and errors is not empty) %}
+		document.addEventListener("DOMContentLoaded", function(event) {
 			{{ toasts.show_toast(errors) }}
+		});
 		{% endif %}
 	</script>
 {% endblock %}
