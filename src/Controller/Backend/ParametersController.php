@@ -526,7 +526,7 @@ class ParametersController extends AbstractController
             if (sizeof($hKeys) == 1) {
                 $hdiff = array_diff(['ferme'], $hKeys);
             } elseif (sizeof($hKeys) <= 4) {
-                array_diff(['md', 'mf', 'sd', 'sf'], $hKeys);
+                $hdiff = array_diff(['md', 'mf', 'sd', 'sf'], $hKeys);
             } else {
                 $hdiff = array_diff($hKeys,['md', 'mf', 'sd', 'sf']);
             }
