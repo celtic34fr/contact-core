@@ -2,7 +2,9 @@
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
 {% import '@contact-core/macros/generals.html.twig' as generals %}
 {% import '@contact-core/macros/form.js.twig' as formJS %}
+{#
 {% import "@contact-core/macros/show_toast.js.twig" as toasts %}
+#}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -157,8 +159,10 @@
 			});
 		});
 
+		{#
 		document.addEventListener("DOMContentLoaded", function(event) {
 			{{ toast.show_toast(errors) }}
 		});
+		#}
 	</script>
 {% endblock %}
