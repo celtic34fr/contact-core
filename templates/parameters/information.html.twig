@@ -84,10 +84,9 @@
 						{% endif %}
 						{% if hours|length == 1 %}
 						{% set ferme = (hours.ferme == "on") %}
-						{% set hours.md = "" %}
-						{% set hours.mf = "" %}
-						{% set hours.sd = "" %}
-						{% set hours.sf = "" %}
+						{% set hours = {
+							md: "", mf: "", sd: "", sf: "" 
+						} %}
 						{% endif %}
 						
 						<div class="jour col-12 mx-0 px-0 row">
