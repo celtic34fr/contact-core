@@ -155,10 +155,8 @@
 			});
 		});
 
-{#
-		document.addEventListener("DOMContentLoaded", function(event) {
+		{% if (errors is defined and errors is not empty) %}
 			{{ toasts.show_toast(errors) }}
-		});
-#}
+		{% endif %}
 	</script>
 {% endblock %}
