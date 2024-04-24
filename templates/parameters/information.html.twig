@@ -2,7 +2,7 @@
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
 {% import '@contact-core/macros/generals.html.twig' as generals %}
 {% import '@contact-core/macros/form.js.twig' as formJS %}
-{% import "@contact-core/macros/upload_files" as updFiles %}
+{% import "@contact-core/macros/upload_files.html.twig" as updFiles %}
 {% import "@contact-core/macros/show_toast.js.twig" as toasts %}
 
 {% block shoulder %}
@@ -127,7 +127,6 @@
 
 {% block javascripts %}
 	{{ parent() }}
-	{#
 	{{ updFiles.jsFunc_dropzone({
 		routeController: "parameters-upload-logo", dropArea: form.logo.vars.id,
 		preview: true, progressbar: false, iconSide: 'BR',
@@ -135,7 +134,6 @@
 	{{ updFiles.jsInit_dropzone({
 		preview: true, iconSide: 'BR',
 	}) }}
-	#}
 	{% include "@contact-core/includes/_show_toast.html.twig" %}
 
 	<script>
