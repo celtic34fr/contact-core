@@ -1,0 +1,5 @@
+{% macro show_toast(toast_array) %}
+    {% for toast in toast_array %}
+         show_toast('{{ toast.type }}', '{{ toast.message }}');
+    {% endfor %}
+{% endmacro %}
