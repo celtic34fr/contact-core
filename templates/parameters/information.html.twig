@@ -2,9 +2,8 @@
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
 {% import '@contact-core/macros/generals.html.twig' as generals %}
 {% import '@contact-core/macros/form.js.twig' as formJS %}
-{#
+{% import "@contact-core/macros/upload_files" as updFiles %}
 {% import "@contact-core/macros/show_toast.js.twig" as toasts %}
-#}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -71,9 +70,6 @@
 					{#
 						-> tableau ayant pour clé les jours de la semaine
 						-> md, mf, sd, sf heures de début/fin matin/soir 
-						-> si md == mf == sd == sf == vide => cocher case fermé et invalider les champs de saisi
-						-> si décoche fermé => activer la saisie des heures
-						-> question saisie de md et sf seul ? (pour ouverture non stop)
 					#}
 					<h3 class="col-12 text-center">Horaires d'ouvertures</h3>
 						<div class="jour col-12 mx-0 px-0 row">
@@ -159,10 +155,8 @@
 			});
 		});
 
-		{#
 		document.addEventListener("DOMContentLoaded", function(event) {
 			{{ toast.show_toast(errors) }}
 		});
-		#}
 	</script>
 {% endblock %}
