@@ -148,12 +148,12 @@ class ParametersController extends AbstractController
                 // @var array $horaires
                 $horaires = $request->request->get('horaires');
                 // retravail des valeur du tableau des horaires d'ouverture en vu de contrôle
-                $horaires = $this->computeHoraire($horaires);
+                $ouverture = $this->computeHoraire($horaires);
                 // contrôle validité des horaires d'ouverture, si OK pour suite, KO on signale les annomalie
-                $isOK = $this->controlHoraires($horaires);
+                $isOK = $this->controlHoraires($ouverture);
                 if (empty($isOK)) {
-                    $horaires = $this->formatHoraire($horaires);
-                    foreach ($horaires as $day => $horaire) {
+                    $ouverture = $this->formatHoraire($ouverture);
+                    foreach ($ouverture as $day => $horaire) {
                         $yaml['ouverture'][$day] = $horaire;
                     }
                     
@@ -515,10 +515,10 @@ class ParametersController extends AbstractController
         foreach ($horaires as $day => $horaire) {
             $tempoErrors = [];
             // contrôle de la taille / nombre de heure début fin : attendu 4 [md, mf, sd, sf]
-            if (sizeof($horaire) != 4) {
+            if (sizeof($horaire) != 4 || sizeof($horaire) != 1) {
                 $tempoErrors[] = [
                     'type' => 'error',
-                    'message' => "nombre d'heures pour $day incoorect atendu 4 reçu ".sizeof($horaire)
+                    'message' => "nombre d'heures pour $day incorrect attendu 4 ou 1 reçu ".sizeof($horaire)
                 ];
             }
             // test de présence des bonnes clés dans le tableau
