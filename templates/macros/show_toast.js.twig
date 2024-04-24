@@ -1,5 +1,7 @@
 {% macro show_toast(toast_array) %}
+    let notif_area = document.querySelector(".admin__notifications")
+
     {% for toast in toast_array %}
-         show_toast('{{ toast.type }}', '{{ toast.message }}');
+    show_toast('{{ toast.type }}', '{{ toast.message }}', notif_area)
     {% endfor %}
 {% endmacro %}

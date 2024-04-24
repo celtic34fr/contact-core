@@ -1,5 +1,5 @@
 <script>
-    function show_toast(type, message) {
+    function show_toast(type, message, notif_area) {
         let toast_message = document.createElement('div')
         toast_message.classList.add('toast')
         toast_message.setAttribute('role', 'alert')
@@ -54,6 +54,6 @@
         toast_body.innerHTML = message
         toast_message.appendChild(toast_body)
 
-        document.body.appendChild(toast_message)
+        notif_area.appendChild(toast_message)
     }
 </script>
