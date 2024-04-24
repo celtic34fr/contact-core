@@ -6,9 +6,11 @@
         toast_message.setAttribute('aria-live', 'assertive')
         toast_message.setAttribute('aria-atomic', 'true')
         toast_message.setAttribute('data-delay', '6000')
+        let toast_type = type
+        if (type == "error") {toast_type = "danger"}
 
         let toast_header =document.createElement('div')
-        toast_header.classList.add('alert-'+type)
+        toast_header.classList.add('alert-'+toast_type)
         toast_header.classList.add('toast-header')
 
         let toast_strong = document.createElement('strong')
