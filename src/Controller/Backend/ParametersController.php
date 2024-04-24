@@ -87,6 +87,7 @@ class ParametersController extends AbstractController
                 ];
             }
             $ouverture = $this->formatOpened($ouverture);
+            $isOK = [];
 
             $logo = null;
             if (array_key_exists('logoID', $entreprise) && $entreprise['logoID']) {
