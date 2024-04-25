@@ -161,8 +161,9 @@
 
 		function editRef(id) {
 			let url = "/bcknd/sys_params/socialnetworks_form/"+id
+			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
-                show_toast(response.type, response.message)
+                show_toast(response.type, response.message, notif_area)
 				let formular = document.querySelector("form")
 				formular.querySelector('.sName input').value = response.name
 				formular.querySelector(".sId input").value = response.sId
@@ -172,8 +173,9 @@
 
 		function deltRef(id) {
 			let url = "/bcknd/sys_params/socialnetworks_delt/"+id
+			let notif_area = document.querySelector(".admin__notifications")
 			fetch(url, { method: "DELETE", }).then(function(response){
-                show_toast(response.type, response.message)
+                show_toast(response.type, response.message, notif_area)
 				let formular = document.querySelector("form")
 				formular.querySelector('.sName input').value = ""
 				formular.querySelector(".sId input").value = 0
