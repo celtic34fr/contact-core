@@ -73,7 +73,7 @@
 			{% endfor %}
 			</div>
 		</div>
-		<div class="col-5 form row">
+		<div class="col-5 sn_form row">
 			<h2 class="col-12 text-center">Ajoute le réseau social</h2>
 			<hr class="col-12">
 			{{ form_start(form, {'action': urlForm, 'method': 'POST'}) }}
@@ -85,7 +85,7 @@
 			}) }}
 
 			{{ fields.field(form.urlPage, '', {
-				'class': 'col-12 mx-0 px-0 mb-2 sName',
+				'class': 'col-12 mx-0 px-0 mb-2 sUrl',
 				'il_class': {'label': 'col-6 mx-0 px-0', 'input': 'col-6 mx-0 px-0'}
 			}) }}
 
@@ -164,7 +164,7 @@
 			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
                 show_toast(response.type, response.message, notif_area)
-				let formular = document.querySelector("form")
+				let formular = document.querySelector(".sn_form")
 				formular.querySelector('.sName input').value = response.name
 				formular.querySelector(".sId input").value = response.sId
 				showLogo(formular.querySelector(".gallery"), response.sLogo)
@@ -176,7 +176,7 @@
 			let notif_area = document.querySelector(".admin__notifications")
 			fetch(url, { method: "DELETE", }).then(function(response){
                 show_toast(response.type, response.message, notif_area)
-				let formular = document.querySelector("form")
+				let formular = document.querySelector(".sn_form")
 				formular.querySelector('.sName input').value = ""
 				formular.querySelector(".sId input").value = 0
 				removeLogo(formular.querySelector(".gallery"), response.sLogo)
