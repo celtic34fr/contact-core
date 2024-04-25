@@ -94,6 +94,7 @@
 				label: 'Déposez-Glissez le logo', maxFiles: 1,
 				accept: acceptFiles, routeController: 'sys-params-socialnetworks-upload', progressbar: false,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, 'initial_datas': logoDB,
+				hidden_name: form.logoID.vars.id
 			}) }}
 			{{ fields.hidden(form.logoID, {
 				'value': logoID,

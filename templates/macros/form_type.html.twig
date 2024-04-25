@@ -1,5 +1,3 @@
-{% import "@contact-core/macros/form_classic.html.twig" as forms %}
-
 {# macro field tratement des champs standards #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
@@ -317,7 +315,6 @@
         <progress id="{{ field.vars.id }}-progress-bar" class="col-12" max=100 value=0></progress>
         {% endif %}
         <div id="{{ field.vars.id }}-gallery" class="gallery{% if not preview %} hidden{% endif %}" data-nb-upd="0"></div>
-        {{ forms.hidden(hidden_name) }}
     </div>
 {% endmacro %}
 
