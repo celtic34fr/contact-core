@@ -163,11 +163,13 @@
 			let url = "/bcknd/sys_params/socialnetworks_form/"+id
 			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
-                show_toast(response.type, response.message, notif_area)
+				return response.json()
+				}}.then(function(reponse){
+                show_toast(reponse.type, reponse.message, notif_area)
 				let formular = document.querySelector(".sn_form")
-				formular.querySelector('.sName input').value = response.name
-				formular.querySelector(".sId input").value = response.sId
-				showLogo(formular.querySelector(".gallery"), response.sLogo)
+				formular.querySelector('.sName input').value = reponse.name
+				formular.querySelector(".sId input").value = reponse.sId
+				showLogo(formular.querySelector(".gallery"), reponse.sLogo)
             })
 		}
 
@@ -175,11 +177,13 @@
 			let url = "/bcknd/sys_params/socialnetworks_delt/"+id
 			let notif_area = document.querySelector(".admin__notifications")
 			fetch(url, { method: "DELETE", }).then(function(response){
-                show_toast(response.type, response.message, notif_area)
+				return response.json()
+			}).then(function(reponse){
+                show_toast(reponse.type, reponse.message, notif_area)
 				let formular = document.querySelector(".sn_form")
 				formular.querySelector('.sName input').value = ""
 				formular.querySelector(".sId input").value = 0
-				removeLogo(formular.querySelector(".gallery"), response.sLogo)
+				removeLogo(formular.querySelector(".gallery"), reponse.sLogo)
 			})
 		}
 
