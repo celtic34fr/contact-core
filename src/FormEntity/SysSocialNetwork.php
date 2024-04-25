@@ -6,7 +6,8 @@ class SysSocialNetwork
 {
     private string $name;
     private ?string $urlPage = null;
-    private ?int $logoID = null;
+    private ?string $logoID = null;
+    private ?int $logoSN = null;
 
     
 
@@ -49,7 +50,7 @@ class SysSocialNetwork
     /**
      * Get the value of logoID
      */
-    public function getLogoID(): ?int
+    public function getLogoID(): ?string
     {
         return $this->logoID;
     }
@@ -57,9 +58,27 @@ class SysSocialNetwork
     /**
      * Set the value of logoID
      */
-    public function setLogoID(?int $logoID): self
+    public function setLogoID(?string $logoID): self
     {
         $this->logoID = $logoID;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of logoSN
+     */
+    public function getLogoSN(): ?int
+    {
+        return $this->logoSN;
+    }
+
+    /**
+     * Set the value of logoSN
+     */
+    public function setLogoSN(?int $logoSN): self
+    {
+        $this->logoSN = $logoSN;
 
         return $this;
     }

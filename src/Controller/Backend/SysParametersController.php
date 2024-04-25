@@ -98,6 +98,7 @@ class SysParametersController extends AbstractController
             'logoDB' => [],
             'acceptFiles' => ".png,.gif,.jpg,.jpeg,.svg",
             'myPreset' => $myPreset,
+            'logoID' => "non",
         ]);
     }
 

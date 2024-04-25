@@ -1,3 +1,5 @@
+{% import "@contact-core/macros/form_classic.html.twig" as forms %}
+
 {# macro field tratement des champs standards #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
@@ -284,7 +286,7 @@
 	{% set removeBtn = args.removeBtn is defined ? args.removeBtn : removeBtn %}
 	{% set viewBtn = field.vars.attr.viewBtn is defined ? field.vars.attr.viewBtn : 0 %}
 	{% set viewBtn = args.viewBtn is defined ? args.viewBtn : viewBtn %}
-{#	{% set hidden_name = args.hidden_name ?? (field.vars.id~"-hidden") %} #}
+	{% set hidden_name = args.hidden_name ?? (field.vars.id~"_hidden") %}
 	{% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
 
     {% set input_attributes %}
@@ -302,7 +304,7 @@
         {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
         {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
-{#        data-hidden-name="{{ hidden_name }}" #}
+        data-hidden-name="{{ hidden_name }}"
     {% endset %}
 
     <div id="{{ field.vars.id }}" class="dragdrop drop-area">
@@ -315,6 +317,7 @@
         <progress id="{{ field.vars.id }}-progress-bar" class="col-12" max=100 value=0></progress>
         {% endif %}
         <div id="{{ field.vars.id }}-gallery" class="gallery{% if not preview %} hidden{% endif %}" data-nb-upd="0"></div>
+        {{ forms.hidden(hidden_name) }}
     </div>
 {% endmacro %}
 
