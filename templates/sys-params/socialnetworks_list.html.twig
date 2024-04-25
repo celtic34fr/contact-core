@@ -41,6 +41,13 @@
 		<div class="col-7 list">
 			<div class="list_tab col-12 row">
 			{% for paramList in paramsList %}
+				{% if loop.first %}
+				<div class="line_tab col-12 row mx-0 px-0 border boder-dark py-1">
+					<div class="logo col-2 mx-0 px-0 text-center"> Réseau</div>
+					<div class="pUrl col-7 mx-0 px-0">Page</div>
+					<div class="actions col-3 mx-0 px-0 text-center">Actions</div>
+				</div>
+				{% endif %}
 				<div class="line_tab col-12 row mx-0 px-0 border boder-dark py-1">
 					<div class="logo col-2 mx-0 px-0 text-center">
 						<img src="{{ paramList.logo.preview_url }}" title="{{ paramList.name }}"> 
@@ -58,6 +65,10 @@
 							event: 'onClick', codeJS:'deltRef(' ~ paramList.id ~')',
 						}) }}
 					</div>
+				</div>
+			{% else %}
+				<div class="line_tab col-12 row mx-0 px-0 border boder-dark py-1 text-center">
+					Pas encore de réseau social enregistré
 				</div>
 			{% endfor %}
 			</div>
