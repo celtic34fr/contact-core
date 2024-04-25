@@ -63,7 +63,7 @@ class SysParametersController extends AbstractController
 
         return $this->render('@contact-core/sys-params/rcategories_list.html.twig', [
             'paramsList' => $paramsList,
-            'title' => "Liste des catégories par type de relation (client / prospect / fournisseur / partenaire)",
+            'title' => "Liste des fontions ou catégories des relations",
         ]);
     }
 
