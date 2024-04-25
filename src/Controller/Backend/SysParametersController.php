@@ -102,11 +102,10 @@ class SysParametersController extends AbstractController
         ]);
     }
 
-    #[Route('/socialnetworks_form', name: 'socialnetworks-form')]
-    public function socialnetworks_form(Request $request): JsonResponse
+    #[Route('/socialnetworks_form/{id}', name: 'socialnetworks-form')]
+    public function socialnetworks_form(Parameter $socialNetwork, Request $request): JsonResponse
     {
         $response = "";
-
         if ($request->getMethod() == "GET" ) {
             // récupération des informations pour alimentation du formulaire
             $paramId = $request->query->get('paramId');
