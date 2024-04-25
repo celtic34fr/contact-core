@@ -121,7 +121,7 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $values = $this->createQueryBuilder('p')
             ->where("p.cle = :cle")
-            ->orderBy("ord", "ASC")
+            ->orderBy("p.ord", "ASC")
             ->setParameter('cle', $cle)
             ->getQuery()
             ->getResult();
@@ -143,7 +143,7 @@ class ParameterRepository extends ServiceEntityRepository
             ->where('p.cle = :cle')
             ->andWhere('p.ord > 0')
             ->andWhere($db->expr()->isNull('p.updated_at'))
-            ->orderBy('ord', 'ASC')
+            ->orderBy('p.ord', 'ASC')
             ->setParameter('cle', $cle)
             ->getQuery()
             ->getResult();
@@ -155,8 +155,8 @@ class ParameterRepository extends ServiceEntityRepository
         return $db
             ->where('p.cle = :cle')
             ->andWhere('p.ord > 0')
-            ->orderBy('ord', 'ASC')
-            ->addOrderBy('created_at', 'ASC')
+            ->orderBy('p.ord', 'ASC')
+            ->addOrderBy('p.created_at', 'ASC')
             ->setParameter('cle', $cle)
             ->getQuery()
             ->getResult();
@@ -170,7 +170,7 @@ class ParameterRepository extends ServiceEntityRepository
         }
         if ($orderBy) {
             foreach ($orderBy as $cle => $order) {
-                $qb->orderBy($cle, $order);
+                $qb->orderBy('p'.$cle, $order);
             }
         }
         return $qb->getQuery()->getResult();
