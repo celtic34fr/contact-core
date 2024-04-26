@@ -164,7 +164,7 @@
 			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
 				return response.json()
-				}}.then(function(reponse){
+				}).then(function(reponse){
                 show_toast(reponse.type, reponse.message, notif_area)
 				let formular = document.querySelector(".sn_form")
 				formular.querySelector('.sName input').value = reponse.name
