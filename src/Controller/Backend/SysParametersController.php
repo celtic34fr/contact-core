@@ -112,14 +112,23 @@ class SysParametersController extends AbstractController
             $parameter = $this->parameterRepo->find($paramId);*/
             $socialNetwork = new SocialNetwork($parameter);
             $entreprise = $this->extConfig->get('contact-core/entreprise');
+            list($error_prepare, $prepare_initial_datas) = $this->uploadFiles->prepare_initial_datas([$socialNetwork->getLogoID()], "thumbnail", "array");
+            if (!$error_prepare) {
+                $prepare_initial_datas = $prepare_initial_datas[0];
 
-            $response = [
-                'type'      => 'success',
-                'message'   => 'informations récupérées',
-                'name'      => $socialNetwork->getName(),
-                'urlPage'   => ($entreprise[$socialNetwork->getName()] ?? ""),
-                'logoID'    => $this->uploadFiles->prepare_initial_datas([$socialNetwork->getLogoID()], "thumbnail"),
-            ];
+                $response = [
+                    'type'      => 'success',
+                    'message'   => 'informations récupérées',
+                    'name'      => $socialNetwork->getName(),
+                    'urlPage'   => ($entreprise[$socialNetwork->getName()] ?? ""),
+                    'logoID'    => $prepare_initial_datas,
+                ];
+            } else {
+                $response = [
+                    'type' => $error_prepare[0]['type'],
+                    'message' => $error_prepare[0]['title']." ".$error_prepare[0]['body'],
+                ];
+            }
         } elseif ($request->getMethod() == "POST") {
             // traitement du formulaire de saisie d'informations réseaux sociaux
             $myPreset = $request->getSession()->get("myPreset");

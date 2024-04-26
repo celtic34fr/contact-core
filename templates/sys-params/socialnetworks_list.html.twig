@@ -168,8 +168,8 @@
                 show_toast(reponse.type, reponse.message, notif_area)
 				let formular = document.querySelector(".sn_form")
 				formular.querySelector('.sName input').value = reponse.name
-				formular.querySelector(".sId input").value = reponse.sId
-				showLogo(formular.querySelector(".gallery"), reponse.sLogo)
+				formular.querySelector('.sUrl input').value = reponse.urlPage
+				showLogo(formular.querySelector(".gallery"), reponse.logoID)
             })
 		}
 
