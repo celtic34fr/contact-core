@@ -546,6 +546,7 @@
 {# - rbckgrd        : couleur de fond à appliquer à l'interrupteur 'coché' #}
 {# - type           : type d'interrupteur : 'round' (valeur par défaut), et 'square' #}
 {# - form           : forme de présentation : 'h' horizontal (1 ligne), 'v' vertival (3 lignes) #}
+{# - between        : espace entre les textes pour le bouton ON/OFF, par défaut 2 (bootstrap) #}
 {% macro switchTextSides(full_name, checked = false, args = {}) %}
     {% set class = args.class ?? "" %}
     {% set ltext = args.ltext ?? "" %}
@@ -556,6 +557,7 @@
     {% set rbckgrd = args.rbckgrd ?? "#2196F3" %}
     {% set type = args.type ?? "" %}
     {% set form = args.form ?? 'h' %}
+    {% set between = args.between|number_format(0) ?? 2 %}
 
     {% set type = type not in ['round', 'square'] ? 'round' : type %}
     {% set checked = checked is empty or not checked ? false : checked %}
@@ -630,9 +632,9 @@
     </style>
 
 	<div id="{{ full_name }}OnOff" class="{{ class }}">
-        <div class="col-1">&nbsp;</div>
+        <div class="col-{{ (2 - (between / 2))|number_format(0) }}">&nbsp;</div>
         <div class="col-4 text-end {{ lclass }}">{{ ltext }}</div>
-        <label class="switch col-2">
+        <label class="switch col-{{ between }}">
             <input type="checkbox" id="{{ full_name }}" name="{{ full_name }}"
                 {% if checked %} checked {% endif %}>
             <span class="slider {{ type }}"></span>
