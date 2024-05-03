@@ -557,7 +557,8 @@
     {% set rbckgrd = args.rbckgrd ?? "#2196F3" %}
     {% set type = args.type ?? "" %}
     {% set form = args.form ?? 'h' %}
-    {% set between = args.between|number_format(0) ?? 2 %}
+    {% set between = args.between ?? 2 %}
+    {% set between = between|number_format(0) %}
 
     {% set type = type not in ['round', 'square'] ? 'round' : type %}
     {% set checked = checked is empty or not checked ? false : checked %}
