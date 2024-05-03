@@ -41,9 +41,12 @@
 {% endblock %}
 
 {% block main %}
-	{{ forms.checkbox('toggle_status', false, {
-		label: 'Voir tous les réseaux', ckclass: "col-4", lbclass: "col-8",
-	})}}
+	{{ 
+		forms.switchTextSides('toggle_status', false, args = {
+			ltext: 'Voir tous les réseaux', rtext: 'Les reseaux poaramétrés',
+			lclass: 'col-4', rclass: 'col-4', class: "offset-4 col-4 text-right",
+		})
+	}}
 	{% set urlForm = path('sys-params-socialnetworks-list') %}
 	<div class="container col-12 row">
 		<div class="col-7 list">
@@ -216,6 +219,10 @@
 			event.preventDefault()
 			event.stopPropagation
 			submitFormRef(event)
+		})
+
+		document.querySelector("#toggle_status").addEventListener('click', function(event){
+			console.log(event.target)
 		})
 
 	</script>

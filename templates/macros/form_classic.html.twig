@@ -532,3 +532,107 @@
         {% endfor %}
     </div>
 {% endmacro %}
+
+{# macro switchTextSides interrupteur avec texte de chaque coté #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - checked        : si l'interrupteur est à 'on' (true) ou non (false par défaut) ref. checkbox #}
+{#                    dans le tableau args #}
+{# - class          : classes à appliquer au DIV HTML englobant l'interrupteur #}
+{# - ltext          : Label à afficher à gauche de l'interrupteur #}
+{# - lclass         : classes CSS à appliquer sur le label à gauche de l'interrupteur #}
+{# - lbckgrd        : couleur de fond à appliquer à l'interrupteur non 'coché' #}
+{# - rtext          : Label à afficher à droite de l'interrupteur #}
+{# - rclass         : classes CSS à appliquer sur le label à droite de l'interrupteur #}
+{# - rbckgrd        : couleur de fond à appliquer à l'interrupteur 'coché' #}
+{# - type           : type d'interrupteur : 'round' (valeur par défaut), et 'square' #}
+{% macro switchTextSides(full_name, checked = false, args = {}) %}
+    {% set class = args.class ?? "" %}
+    {% set ltext = args.ltext ?? "" %}
+    {% set lclass = args.lclass ?? "" %}
+    {% set lbckgrd = args.lbckgrd ?? "#CCCCCC" %}
+    {% set rtext = args.rtext ?? "" %}
+    {% set rclass = args.rclass ?? "" %}
+    {% set rbckgrd = args.rbckgrd ?? "#2196F3" %}
+    {% set type = args.type ?? "" %}
+
+    {% set type = type not in ['round', 'square'] ? 'round' : type %}
+    {% set checked = checked is empty or not checked ? field.vars.checked : checked %}
+    {% set class = class ~ " switchTextSides" %}
+
+	<style>
+        .switchTextSides .col-4 {
+            margin: 0 12px !important;
+        }
+
+        .switchTextSides .switch {
+            height: 32px !important;
+        }
+
+        .switchTextSides label {
+            padding: 0 12px;
+        }
+
+        .switchTextSides .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .switchTextSides .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: {{lbckgrd}};
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+
+        .switchTextSides .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+
+        .switchTextSides input:checked + .slider {
+            background-color: {{rbckgrd}};
+        }
+
+        .switchTextSides input:focus + .slider {
+            box-shadow: 0 0 1px{{rbckgrd}};
+        }
+
+        .switchTextSides input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        .switchTextSides .slider.round {
+            border-radius: 34px;
+        }
+
+        .switchTextSides .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+
+	<div id="{{ name }}" class="{{ class }}">
+        <div class="col-1">&nbsp;</div>
+        <div class="col-4 text-end {{ lclass }}">{{ ltext }}</div>
+        <label class="switch col-2 row">
+            <input type="checkbox" id="{{ field.vars.id }}" name="{{ field.vars.full_name }}"
+                {% if checked %} checked {% endif %}>
+            <span class="slider {{ type }}"></span>
+        </label>
+        <div class="col-4 text-start {{ rclass }}">{{ rtext }}</div>
+    </div>
+{% endmacro %}
