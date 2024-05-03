@@ -556,7 +556,7 @@
     {% set type = args.type ?? "" %}
 
     {% set type = type not in ['round', 'square'] ? 'round' : type %}
-    {% set checked = checked is empty or not checked ? field.vars.checked : checked %}
+    {% set checked = checked is empty or not checked ? false : checked %}
     {% set class = class ~ " switchTextSides" %}
 
 	<style>
