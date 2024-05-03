@@ -43,8 +43,9 @@
 {% block main %}
 	{{ 
 		forms.switchTextSides('toggle_status', false, {
-			ltext: 'Voir tous les réseaux', rtext: 'Les reseaux poaramétrés',
-			lclass: 'col-4', rclass: 'col-4', class: "col-4 text-right",
+			rtext: 'Voir tous les réseaux', ltext: 'Les reseaux paramétrés',
+			lclass: 'col-4', rclass: 'col-4', class: "col-6 offset-6",
+			lbckgrd: "#00CC00", rbckgrd: "#CC0000",
 		})
 	}}
 	{% set urlForm = path('sys-params-socialnetworks-list') %}
