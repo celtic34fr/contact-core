@@ -1,6 +1,7 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
 {% import "@contact-core/macros/generals.html.twig" as generals %}
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
+{% import '@contact-core/macros/form_classic.html.twig' as forms %}
 {% import "@contact-core/macros/upload_files.html.twig" as updFiles %}
 
 {% set preview = true %}
@@ -32,10 +33,17 @@
 		.form-control {
 			width: unset;
 		}
+
+		input[type="file"] {
+			display: none;
+		}
 	</style>
 {% endblock %}
 
 {% block main %}
+	{{ forms.checkbox('toggle_status', false, {
+		label: 'Voir tous les réseaux', ckclass: "col-4", lbclass: "col-8",
+	})}}
 	{% set urlForm = path('sys-params-socialnetworks-list') %}
 	<div class="container col-12 row">
 		<div class="col-7 list">
