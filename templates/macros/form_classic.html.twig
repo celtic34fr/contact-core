@@ -545,6 +545,7 @@
 {# - rclass         : classes CSS à appliquer sur le label à droite de l'interrupteur #}
 {# - rbckgrd        : couleur de fond à appliquer à l'interrupteur 'coché' #}
 {# - type           : type d'interrupteur : 'round' (valeur par défaut), et 'square' #}
+{# - form           : forme de présentation : 'h' horizontal (1 ligne), 'v' vertival (3 lignes) #}
 {% macro switchTextSides(full_name, checked = false, args = {}) %}
     {% set class = args.class ?? "" %}
     {% set ltext = args.ltext ?? "" %}
@@ -554,10 +555,13 @@
     {% set rclass = args.rclass ?? "" %}
     {% set rbckgrd = args.rbckgrd ?? "#2196F3" %}
     {% set type = args.type ?? "" %}
+    {% set form = args.form ?? 'h' %}
 
     {% set type = type not in ['round', 'square'] ? 'round' : type %}
     {% set checked = checked is empty or not checked ? false : checked %}
     {% set class = class ~ " switchTextSides" %}
+    {% if form == "h" %}{% set class = class ~ "row" %}{% endif %}
+    
 
 	<style>
         .switchTextSides .col-4 {
