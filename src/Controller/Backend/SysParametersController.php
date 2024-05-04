@@ -72,7 +72,7 @@ class SysParametersController extends AbstractController
     {
         $paramsList = [];
         $entreprise = $this->extConfig->get('contact-core/entreprise');
-        $socialNetworkList = $this->parameterRepo->findSocialNetworks();
+        $socialNetworkList = $this->parameterRepo->findValidSocialNetworks();
         if ($socialNetworkList) {
             foreach ($socialNetworkList as $id => $infos) {
                 list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
@@ -207,6 +207,35 @@ class SysParametersController extends AbstractController
     {
         $response = [];
 
+        return new JsonResponse($response);
+    }
+
+    #[Route('socialnetworks_toggle/{status}', name:'socialnetworks-toggle')]
+    public function socialnetworks_toggle(bool $status, Request $request): JsonResponse
+    {
+        $paramsList = [];
+        if ($status) {
+            $values = $this->parameterRepo->findAllSocialNetworks();
+        } else {
+            $values = $this->parameterRepo->findValidSocialNetworks();
+        }
+        if ($values) {
+            foreach ($values as $id => $infos) {
+                list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
+                $item = [
+                    'id'   => $id,
+                    'name' => $infos['name'],
+                    'logo' => $logo[0],
+                    'pUrl' => ($entreprise[$infos['name']] ?? ""),
+                ];
+                $paramsList[] = $item;
+            }
+        }
+        $response = [
+            'type' => "success",
+            'message' => "Récupération des informations des réseaux sociaux exécutée avecc succès",
+            'paramsList' =>$paramsList,
+        ];
         return new JsonResponse($response);
     }
 }

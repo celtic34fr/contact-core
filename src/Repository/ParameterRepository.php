@@ -20,11 +20,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ParameterRepository extends ServiceEntityRepository
 {
+    /**
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Parameter::class);
     }
 
+    /**
+     * @param Parameter $entity
+     * @param boolean $flush
+     * @return void
+     */
     public function save(Parameter $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -33,6 +41,11 @@ class ParameterRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param Parameter $entity
+     * @param boolean $flush
+     * @return void
+     */
     public function remove(Parameter $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
@@ -41,6 +54,11 @@ class ParameterRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param Parameter $entity
+     * @param boolean $flush
+     * @return void
+     */
     public function updateParameter(Parameter $entity, bool $flush = false): void
     {
         $previous = $this->getEntityManager()->getRepository(Parameter::class)
@@ -52,7 +70,10 @@ class ParameterRepository extends ServiceEntityRepository
         $this->save($entity, $flush);
     }
 
-    public function getNameParametersList(): mixed
+    /**
+     * @return array
+     */
+    public function getNameParametersList(): array
     {
         $nameList = [];
         $rslt = $this->createQueryBuilder('p')
@@ -60,29 +81,34 @@ class ParameterRepository extends ServiceEntityRepository
             ->orderBy('p.cle', 'ASC')
             ->getQuery()
             ->getResult();
-        if (!$rslt) return [];
-        foreach ($rslt as $item) {
-            /** prise de toutes les listes de paramètres sauf celle préfixée par 'SYS' pour système */
-            if (strpos(strtoupper($item->getCle()), 'SYS') === false) {
-                $occur = [
-                    'id' => $item->getId(),
-                    'name' => $item->getCle(),
-                    'description' => $item->getValeur(),
-                    'created_at' => $item->getCreatedAt(),
-                    'updated_at' => !$item->isEmptyUpdatedAt() ? $item->getUpdatedAt() : null,
-                ];
-                $qb = $this->createQueryBuilder('p')
-                    ->where('p.cle = :name')
-                    ->setParameter('name', $item->getCle())
-                    ->getQuery()
-                    ->getResult();
-                $occur['valeurs'] = $qb ? sizeof($qb) - 1 : 0;
-                $nameList[] = $occur;
+        if ($rslt) {
+            foreach ($rslt as $item) {
+                /** prise de toutes les listes de paramètres sauf celle préfixée par 'SYS' pour système */
+                if (strpos(strtoupper($item->getCle()), 'SYS') === false) {
+                    $occur = [
+                        'id' => $item->getId(),
+                        'name' => $item->getCle(),
+                        'description' => $item->getValeur(),
+                        'created_at' => $item->getCreatedAt(),
+                        'updated_at' => !$item->isEmptyUpdatedAt() ? $item->getUpdatedAt() : null,
+                    ];
+                    $qb = $this->createQueryBuilder('p')
+                        ->where('p.cle = :name')
+                        ->setParameter('name', $item->getCle())
+                        ->getQuery()
+                        ->getResult();
+                    $occur['valeurs'] = $qb ? sizeof($qb) - 1 : 0;
+                    $nameList[] = $occur;
+                }
             }
         }
         return $nameList;
     }
 
+    /**
+     * @param string $name
+     * @return array
+     */
     public function getValuesParamterList(string $name): array
     {
         $paramList = [];
@@ -95,6 +121,12 @@ class ParameterRepository extends ServiceEntityRepository
         return $paramList;
     }
 
+    /**
+     * @param string $name
+     * @param array $valeurs
+     * @param string|null $description
+     * @return void
+     */
     public function recordParamtersList(string $name, array $valeurs, string $description = null): void
     {
         $entity = $this->findOneBy(['cle' => $name, 'ord' => 0]);
@@ -117,6 +149,10 @@ class ParameterRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @param string $cle
+     * @return void
+     */
     public function reorgValues(string $cle): void
     {
         $values = $this->createQueryBuilder('p')
@@ -136,7 +172,11 @@ class ParameterRepository extends ServiceEntityRepository
         }
     }
 
-    public function findValidItemsByCle(string $cle)
+    /**
+     * @param string $cle
+     * @return null|array
+     */
+    public function findValidItemsByCle(string $cle): mixed
     {
         $db = $this->createQueryBuilder('p');
         return $db
@@ -149,6 +189,10 @@ class ParameterRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param string $cle
+     * @return void
+     */
     public function findItemsByCle(string $cle)
     {
         $db = $this->createQueryBuilder('p');
@@ -162,6 +206,11 @@ class ParameterRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @return void
+     */
     public function findByPartialFields(array $criteria, array $orderBy = null)
     {
         $qb = $this->createQueryBuilder('p');
@@ -176,24 +225,36 @@ class ParameterRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * retrieve list of Social Networks with URL of favicon
+    /** ---------------------------------------------------- 
+     * specificans methods according system list managment *
+     * -----------------------------------------------------
+     */
+
+     /**
+      * Social Networks
+      */
+
+      /**
+     * retrieve current declared list of Social Networks with URL of favicon (onluy active)
      * @return array
      */
-    public function findSocialNetworks():  array
+    public function findValidSocialNetworks():  array
     {
         $socialNetworks = [];
         $values = $this->findValidItemsByCle(SocialNetwork::CLE);
-        if ($values) {
-            foreach ($values as $value) {
-                $socialNetwork = new SocialNetwork($value);
-                $socialNetworks[$socialNetwork->getId()] = [
-                    'id' => $socialNetwork->getId(),
-                    'name' => $socialNetwork->getName(),
-                    'logoID' => $socialNetwork->getLogoID()
-                ];
-            }
-        }
+        if ($values) $socialNetwork = $this->formatSocialNetworksList($values);        
+        return $socialNetworks;
+    }
+
+      /**
+     * retrieve global list of Social Networks with URL of favicon (active and disabled)
+     * @return array
+     */
+    public function findAllSocialNetworks(): array
+    {
+        $socialNetworks = [];
+        $values = $this->findItemsByCle(SocialNetwork::CLE);
+        if ($values) $socialNetwork = $this->formatSocialNetworksList($values);        
         return $socialNetworks;
     }
 
@@ -282,4 +343,26 @@ class ParameterRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * Undocumented function
+     * @return array
+     */
+    private function formatSocialNetworksList(array $values) : array
+    {
+        $socialNetworks = [];
+        if ($values) {
+            foreach ($values as $value) {
+                $socialNetwork = new SocialNetwork($value);
+                $socialNetworks[$socialNetwork->getId()] = [
+                    'id' => $socialNetwork->getId(),
+                    'name' => $socialNetwork->getName(),
+                    'logoID' => $socialNetwork->getLogoID(),
+                    'created' => $socialNetwork->getCreatedAt(),
+                    'updated' => $socialNetwork->getUpdatedAt(),
+                ];
+            }
+        }
+        return $socialNetworks;
+    }
 }
