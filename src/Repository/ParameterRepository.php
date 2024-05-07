@@ -191,9 +191,9 @@ class ParameterRepository extends ServiceEntityRepository
 
     /**
      * @param string $cle
-     * @return void
+     * @return null|array
      */
-    public function findItemsByCle(string $cle)
+    public function findItemsByCle(string $cle): mixed
     {
         $db = $this->createQueryBuilder('p');
         return $db
@@ -263,8 +263,10 @@ class ParameterRepository extends ServiceEntityRepository
         $socialNetwork = $this->findByPartialFields([
             'cle' => SocialNetwork::CLE,
             'valeur' => $name.'%'
+        ], [
+            'created_at' => 'DESC',
         ]);
-        return $socialNetwork[0] ?? null;
+        return $socialNetwork[0] ? $this->formatSocialNetworksList($socialNetwork[0]) : null;
     }
 
     /**
@@ -278,6 +280,8 @@ class ParameterRepository extends ServiceEntityRepository
         $socialNetwork = $this->findByPartialFields([
             'cle' => SocialNetwork::CLE,
             'valeur' => $name.'%'
+        ], [
+            'created_at' => 'DESC',
         ]);
         if ($socialNetwork) {
             return $socialNetwork[0]->getLogoID();

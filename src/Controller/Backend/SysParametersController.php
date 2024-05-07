@@ -77,10 +77,12 @@ class SysParametersController extends AbstractController
             foreach ($socialNetworkList as $id => $infos) {
                 list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
                 $item = [
-                    'id'   => $id,
-                    'name' => $infos['name'],
-                    'logo' => $logo[0],
-                    'pUrl' => ($entreprise[$infos['name']] ?? ""),
+                    'id'        => $id,
+                    'name'      => $infos['name'],
+                    'logo'      => $logo[0],
+                    'pUrl'      => ($entreprise[$infos['name']] ?? ""),
+                    'created'   => $infos['created'],
+                    'updated'   => $infos['updated'],
                 ];
                 $paramsList[] = $item;
             }
@@ -206,6 +208,36 @@ class SysParametersController extends AbstractController
     public function socialnetworks_del(Parameter $social, Request $request): JsonResponse
     {
         $response = [];
+        $social->setUpdatedAt(new DateTimeImmutable('now'));
+        $this->parameterRepo->save($social);
+        $socialNetwork = new SocialNetwork($social);
+
+        $response = [
+            'type' => "success",
+            'message' => "Suppressiion / Invalidation du réseau social ".$socialNetwork->getName()." réalisé avec succés",
+        ];
+
+        return new JsonResponse($response);
+    }
+
+    #[Route('/socialnetworks_act/{id}', name: 'socialnetworks-act')]
+    public function socialnetworks_act(Parameter $social, Request $request): JsonResponse
+    {
+        $response = [];
+        $socialNetwork = new SocialNetwork($social);
+        $active = $this->parameterRepo->findSocialNetworkByName($socialNetwork->getName());
+        if ($active  && $active['updated'] != null) {
+            $response = [
+                'type' => "error",
+                'message' => "Réseau social ".$socialNetwork->getName()." déjà actif, veuillez modifier ce dernier plutôt que de demander une réactivation",
+            ];
+        } else {
+            $this->parameterRepo->updateParameter($social, true);
+            $response = [
+                'type' => "success",
+                'message' => "Réactivation du réseau social ".$socialNetwork->getName()." réalisé avec succés",
+            ];
+        }
 
         return new JsonResponse($response);
     }
@@ -223,10 +255,12 @@ class SysParametersController extends AbstractController
             foreach ($values as $id => $infos) {
                 list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
                 $item = [
-                    'id'   => $id,
-                    'name' => $infos['name'],
-                    'logo' => $logo[0],
-                    'pUrl' => ($entreprise[$infos['name']] ?? ""),
+                    'id'        => $id,
+                    'name'      => $infos['name'],
+                    'logo'      => $logo[0],
+                    'pUrl'      => ($entreprise[$infos['name']] ?? ""),
+                    'created'   => $infos['created'],
+                    'updated'   => $infos['updated'],
                 ];
                 $paramsList[] = $item;
             }
