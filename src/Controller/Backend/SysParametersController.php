@@ -48,11 +48,11 @@ class SysParametersController extends AbstractController
     #[Route('/activities_list', name: 'activities-list')]
     public function activity_list()
     {
-        $paramsList = $this->parameterRepo->findActivitiesSectors();
+        $paramsList = $this->parameterRepo->findValidActivitiesSectors();
 
         return $this->render('@contact-core/sys-params/activities_list.html.twig', [
             'paramsList' => $paramsList,
-            'title' => "Liste des secteur d'activité",
+            'title' => "Liste des secteurs d'activités",
         ]);
     }
 

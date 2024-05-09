@@ -306,19 +306,24 @@ class ParameterRepository extends ServiceEntityRepository
         return $relationCategories;
     }
 
-    public function findActivitiesSectors(): array
+    public function findValidActivitiesSectors(): array
     {
         $activitiesSectors = [];
-        $valeurs = $this->findValidItemsByCle(ActivitySector::CLE);
-        if ($valeurs) {
-            foreach ($valeurs as $valeur) {
-                $activitySector = new ActivitySector($valeur);
-                $activitiesSectors[$activitySector->getName()] = [
-                    'id'            => $activitySector->getId(),
-                    'description'   => $activitySector->getDescription(),
-                    'parent_id'     => $activitySector->getParentId(),
-                ];
-            }
+        $values = $this->findValidItemsByCle(ActivitySector::CLE);
+        if ($values) {
+            $activitiesSectors = $this->formatActivitiesList($values);
+            $activitiesSectors = $this->buildActivitiesTree($activitiesSectors);
+        }
+        return $activitiesSectors;
+    }
+
+    public function findAllActivitiesSectors(): array
+    {
+        $activitiesSectors = [];
+        $valeurs = $this->findItemsByCle(ActivitySector::CLE);
+        if ($values) {
+            $activitiesSectors = $this->formatActivitiesList($values);
+            $activitiesSectors = $this->buildActivitiesTree($activitiesSectors);
         }
         return $activitiesSectors;
     }
@@ -349,7 +354,7 @@ class ParameterRepository extends ServiceEntityRepository
     //    }
 
     /**
-     * Undocumented function
+     * @param array $values
      * @return array
      */
     private function formatSocialNetworksList(array $values) : array
@@ -368,5 +373,54 @@ class ParameterRepository extends ServiceEntityRepository
             }
         }
         return $socialNetworks;
+    }
+
+    /**
+     * @param array $values
+     * @return array
+     */
+    private function formatActivitiesList(array $values) : array
+    {
+        $activities = [];
+        if ($values) {
+            foreach ($$values as $value) {
+                $activity = new ActivitySector($value);
+                $activities[$activity->getId()] = [
+                    'id' => $activity->getId(),
+                    'name' => $activity->getName(),
+                    'description' => $activity->getDescription(),
+                    'parentId' => $activity->getParentId(),
+                ]
+            }
+        }
+        return $activities;
+    }
+
+    /**
+     * @param array $activities
+     * @return array
+     */
+    private function buildActivitiesTree(array $activities) : array
+    {
+        $activitiesTree = [];
+        if ($activities) {
+            /**
+             * @var ActivitySector $activity
+             */
+            foreach ($activities as $activity) {
+                if ($activity['parentId']) {
+                    if (!array_key_exists($activity['parentId'], $activitiesTree)) {
+                        $activitiesTree[$activity['parentId']] = [];
+                    }
+                    if (!array_key_exists('children', $activitiesTree[$activity['parentId']])) {
+                        $activitiesTree[$activity['parentId']]['children'] = [];
+                    }
+                    $activitiesTree[$acvtivity['parentId']]['children'][] = $activity; 
+                } else {
+                    $activitiesTree[$activity['id']] = $activity;
+                }
+            }
+        }
+        return $activitiesTree;
     }
 }
