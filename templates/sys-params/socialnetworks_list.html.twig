@@ -254,9 +254,9 @@
 				btn.title = title
 			}
 			if (datasets.length > 0) {
-				Object.entries(datasets).forEach(entry => {
-					const(key, value) = entry
-					btn.setAttribute('data-'+key, value)
+				Object.entries(datasets).forEach((values) => {
+					const(key, value) = values
+					btn.setAttribute('data-'+ key, value)
 				});
 			}
 			if (event.length > 0 and codeJS.length > 0) {
