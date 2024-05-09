@@ -242,7 +242,7 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('socialnetworks_toggle/{status}', name:'socialnetworks-toggle')]
+    #[Route('/socialnetworks_toggle/{status}', name:'socialnetworks-toggle')]
     public function socialnetworks_toggle(bool $status, Request $request): JsonResponse
     {
         $paramsList = [];
