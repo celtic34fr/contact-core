@@ -390,7 +390,7 @@ class ParameterRepository extends ServiceEntityRepository
                     'name' => $activity->getName(),
                     'description' => $activity->getDescription(),
                     'parentId' => $activity->getParentId(),
-                ]
+                ];
             }
         }
         return $activities;
@@ -415,7 +415,7 @@ class ParameterRepository extends ServiceEntityRepository
                     if (!array_key_exists('children', $activitiesTree[$activity['parentId']])) {
                         $activitiesTree[$activity['parentId']]['children'] = [];
                     }
-                    $activitiesTree[$acvtivity['parentId']]['children'][] = $activity; 
+                    $activitiesTree[$activity['parentId']]['children'][] = $activity; 
                 } else {
                     $activitiesTree[$activity['id']] = $activity;
                 }
