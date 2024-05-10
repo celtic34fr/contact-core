@@ -7,7 +7,9 @@ use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Celtic34fr\ContactCore\Form\SysRelationsCategoryType;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
+use Celtic34fr\ContactCore\FormEntity\SysRelationCategory;
 use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
@@ -65,7 +67,7 @@ class SysParametersController extends AbstractController
      */
 
     #[Route('/rcategories_list', name: 'rcategories-list')]
-    public function rcategories_list()
+    public function rcategories_list(Request $request)
     {
         $paramsList = $this->parameterRepo->findValidRelationCategories();
 
@@ -77,11 +79,22 @@ class SysParametersController extends AbstractController
          *      * si il existe déjà une valeur active de cette catégorie => message erreur 'déjà exitante active'
          *      * si il n'existe pas de valeur active de cette catégorie => création d'un nouvel enregistrement
          */
+        $rcategory = new SysRelationCategory();
+        $form = $this->createForm(SysRelationsCategoryType::class, $rcategory);
 
+        $myPreset = uniqid();
+        $request->getSession()->set("myPreset", $myPreset);
         return $this->render('@contact-core/sys-params/rcategories_list.html.twig', [
             'paramsList' => $paramsList,
             'title' => "Liste des fontions ou catégories des relations",
+            'form' => $form->createView(),
+            'myPreset' => $myPreset,
         ]);
+    }
+
+    #[Route('/rcategories_form/{id}', name: 'rcategories-form')]
+    public function rcategories_form(Parameter $parameter, Request $request): JsonResponse
+    {
     }
 
     #[Route('/rcategories_toggle/{status}', name: 'rcategories-toggle')]
