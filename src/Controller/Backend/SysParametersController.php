@@ -45,6 +45,10 @@ class SysParametersController extends AbstractController
         $this->extConfig = new ExtensionConfig($this->kernel, $this->config);
     }
 
+    /**
+     * Activities Sectorsd Management
+     */
+
     #[Route('/activities_list', name: 'activities-list')]
     public function activity_list()
     {
@@ -56,16 +60,62 @@ class SysParametersController extends AbstractController
         ]);
     }
 
+    /**
+     * Contact Categories Management
+     */
+
     #[Route('/rcategories_list', name: 'rcategories-list')]
     public function rcategories_list()
     {
-        $paramsList = $this->parameterRepo->findRelationCategories();
+        $paramsList = $this->parameterRepo->findValidRelationCategories();
+
+        /**
+         * création du formulaire de création de catégorie de contact ou relation
+         * -> formulaire ayant deux champs en saisi : nom, description + bouton validation du formulaire
+         * -> après validation :
+         *   => faire la recherche avec le nom saisi
+         *      * si il existe déjà une valeur active de cette catégorie => message erreur 'déjà exitante active'
+         *      * si il n'existe pas de valeur active de cette catégorie => création d'un nouvel enregistrement
+         */
 
         return $this->render('@contact-core/sys-params/rcategories_list.html.twig', [
             'paramsList' => $paramsList,
             'title' => "Liste des fontions ou catégories des relations",
         ]);
     }
+
+    #[Route('/rcategories_toggle/{status}', name: 'rcategories-toggle')]
+    public function rcategories_toggle(bool $status, Request $request): JsonResponse
+    {
+        $paramsList = [];
+        if ($status) {
+            $values = $this->parameterRepo->findAllRelationCategories();
+        } else {
+            $values = $this->parameterRepo->findValidRelationCategories();
+        }
+        if ($values) {
+            foreach ($values as $id => $infos) {
+                $item = [
+                    'id'            => $id,
+                    'name'          => $infos['name'],
+                    'description'   => $infos['description'],
+                    'created'       => $infos['created'],
+                    'updated'       => $infos['updated'],
+                ];
+                $paramsList[] = $item;
+            }
+        }
+        $response = [
+            'type' => "success",
+            'message' => "Récupération des informations des catégories exécutée avecc succès",
+            'paramsList' =>$paramsList,
+        ];
+        return new JsonResponse($response);
+    }
+
+    /**
+     * Socials Networks Parameter Management
+     */
 
     #[Route('/socialnetworks_list', name: 'socialnetworks-list')]
     public function socialnetworks_list(Request $request)

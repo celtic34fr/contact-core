@@ -258,6 +258,10 @@ class ParameterRepository extends ServiceEntityRepository
         return $socialNetworks;
     }
 
+    /**
+     * @param string $name
+     * @return Parameter|null
+     */
     public function findSocialNetworkByName(string $name): ?Parameter
     {
         $socialNetwork = $this->findByPartialFields([
@@ -271,7 +275,6 @@ class ParameterRepository extends ServiceEntityRepository
 
     /**
      * retrieve icon for 1 social network by name
-     *
      * @param string $name
      * @return string|bool
      */
@@ -289,20 +292,25 @@ class ParameterRepository extends ServiceEntityRepository
         return false;
     }
 
-    public function findRelationCategories(): array
+    /**
+     * @return array
+     */
+    public function findValidRelationCategories(): array
     {
         $relationCategories = [];
-        $valeurs = $this->findValidItemsByCle(RelationCategory::CLE);
-        if ($valeurs) {
-            foreach ($valeurs as $valeur) {
-                $relationCategory = new RelationCategory($valeur);
-                $relationCategories[$relationCategory->getCategory()] = [
-                    'id'            => $relationCategory->getId(),
-                    'description'   => $relationCategory->getDescription(),
-                    'parent_id'     => $relationCategory->getParentId(),
-                ];
-            }
-        }
+        $values = $this->findValidItemsByCle(RelationCategory::CLE);
+        if ($values) $relationCategories = $this->formatRelationCategories($values);
+        return $relationCategories;
+    }
+
+    /**
+     * @return array
+     */
+    public function findAllRelationCategories(): array
+    {
+        $relationCategories = [];
+        $values = $this->findItemsByCle(SocialNetwork::CLE);
+        if ($values) $relationCategories = $this->formatSocialNetworksList($values);        
         return $relationCategories;
     }
 
@@ -422,5 +430,25 @@ class ParameterRepository extends ServiceEntityRepository
             }
         }
         return $activitiesTree;
+    }
+
+    /**
+     * @param array $values
+     * @return array
+     */
+    private function formatRelationCategories(array $values): array
+    {
+        $relationCategories = [];
+        if ($values) {
+            foreach ($values as $value) {
+                $category = new ActivitySector($value);
+                $activities[$category->getId()] = [
+                    'id' => $category->getId(),
+                    'name' => $category->getName(),
+                    'description' => $category->getDescription(),
+                ];
+            }
+        }
+        return $relationCategories;
     }
 }
