@@ -72,7 +72,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
-        $configurationItems['Les catégories de relations'] = [
+        $configurationItems['Les Catégories de Relations'] = [
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
@@ -83,7 +83,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
-        $configurationItems['Les Secteurs d\'activité'] = [
+        $configurationItems['Les Secteurs d\'Activité'] = [
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
