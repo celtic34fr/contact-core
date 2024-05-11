@@ -72,7 +72,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
-        $configurationItems['Les catégories de contact par type d\'internaute'] = [
+        $configurationItems['Les catégories de contact'] = [
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
@@ -94,7 +94,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
-        $configurationItems['Les Réseaux Sociaux utilisés'] = [
+        $configurationItems['Les Réseaux Sociaux'] = [
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
@@ -140,37 +140,5 @@ class AdminMenu implements ExtensionBackendMenuInterface
         $menuContacts = $this->addMenu($utilitairesItems, $menuContacts);
 
         $menu = $this->rebuildMenu($menu, $menuBefore, $menuContacts, $menuAfter);
-
-        /*
-        if (!$menu->getChild("Gestion des Contacts")) {
-            $menu->addChild('Gestion des Contacts', [
-                'extras' => [
-                    'name' => 'Gestion des Contacts',
-                    'type' => 'separator',
-                    'group' => 'Contact',
-                ]
-            ]);
-
-            if (!$menu->getChild("Utilitaires")) {
-                $menu->addChild('Utilitaires', [
-                    'uri' => $this->urlGenerator->generate('bolt_menupage', [
-                        'slug' => 'utilitaires',
-                    ]),
-                    'extras' => [
-                        'group' => 'Contact',
-                        'name' => 'Utilitaires',
-                        'slug' => 'utilitaires',
-                    ]
-                ]);
-                $menu['Utilitaires']->addChild('Gestion des courriels', [
-                    'uri' => $this->urlGenerator->generate('courriel_list'),
-                    'extras' => [
-                        'icon' => 'fa-envelope-circle-check',
-                        'group' => 'Contact',
-                    ]
-                ]);
-            }
-        }
-        */
     }
 }
