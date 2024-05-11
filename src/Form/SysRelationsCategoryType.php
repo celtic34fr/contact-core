@@ -24,7 +24,7 @@ class SysRelationsCategoryType extends AbstractType
                 new NotNull(),
             ],
         ])
-        ->add('name', TextType::class, [
+        ->add('description', TextType::class, [
             'label' => "Description de la catégorie",
             'required' => false,
         ])
