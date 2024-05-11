@@ -72,7 +72,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
                 ]
             ]
         ];
-        $configurationItems['Les catégories de contact'] = [
+        $configurationItems['Les catégories de relations'] = [
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
