@@ -21,16 +21,16 @@
 		gauche : table des catégories actives avec un bouton de bascule pour avoir toutes ou les actives
 		droite : formulaire proprement dit pour la saisie ou modification d'une catégories
 	#}
-	{{ 
-		forms.switchTextSides('toggle_status', false, {
-			rtext: 'Voir tous les catégories', ltext: 'Les catégories paramétrés',
-			lclass: 'col-4', rclass: 'col-4', class: "col-6",
-			lbckgrd: "#00CC00", rbckgrd: "#CC0000", form: 'h', between: 1,
-		})
-	}}
 	{% set urlForm = path('sys-params-rcategories-list') %}
 	<div class="container col-12 row">
 		<div class="col-7 list">
+			{{ 
+				forms.switchTextSides('toggle_status', false, {
+					rtext: 'Voir tous les catégories', ltext: 'Les catégories paramétrés',
+					lclass: 'col-4', rclass: 'col-4', class: "col-6",
+					lbckgrd: "#00CC00", rbckgrd: "#CC0000", form: 'h', between: 1,
+				})
+			}}
 			<div class="list_tab col-12 row">
 			{% for paramList in paramsList %}
 				{% if loop.first %}
