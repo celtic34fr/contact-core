@@ -75,7 +75,7 @@
 			{% endfor %}
 			</div>
 		</div>
-		<div class="col-5 sn_form row">
+		<div class="col-5 rc_form row">
 			<h2 class="col-12 text-center">Ajouter une catégorie</h2>
 			<hr class="col-12">
 			{{ form_start(form, {'action': urlForm, 'method': 'POST'}) }}
@@ -163,12 +163,10 @@
 				return response.json()
 				}).then(function(reponse){
                 show_toast(reponse.type, reponse.message, notif_area)
-				/*
-				let formular = document.querySelector(".sn_form")
+				let formular = document.querySelector('.rc_form').innerHTML
+				formular.querySelector('h2').innerHTML = "Modifier une catégorie"
 				formular.querySelector('.sName input').value = reponse.name
-				formular.querySelector('.sUrl input').value = reponse.urlPage
-				showLogo(formular.querySelector(".gallery"), reponse.logoID)
-				*/
+				formular.querySelector('.sDescription input').value = reponse.description
             })
 		}
 
