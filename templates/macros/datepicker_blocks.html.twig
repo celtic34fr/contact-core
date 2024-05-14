@@ -30,7 +30,7 @@
     
     <div class="datepicker-group{% if class is not empty %} {{ class }}{% endif %}"
         {% if class is empty %} style="display: contents" {% endif %}>
-        <label for="{{ name }}Input" class="pe-2 mx-0 p-0">
+        <label for="{{ name }}Input" class="ps-1 pe-2 mx-0">
             {% if label_ico is not empty %}
                 <i class="{{ label_ico }}"></i>
             {% else %}
@@ -218,14 +218,14 @@
     {% set field_name = field.vars.name %}
 
     <div {% if class is not empty %} class="datepicker-group {{ class }}" {% else %} style="display: contents" {% endif %}>
-        <label for="{{ field_id }}Input">
+        <label for="{{ field_id }}Input" class"ps-1 pe-2 mx-0">
             {% if label_ico is not empty %}
                 <i class="{{ label_ico }}"></i>
             {% else %}
                 {{ label|raw }}
             {% endif %}
         </label>
-        <input id="{{ field_id }}Input" name="{{ field_id }}Input" type="text" class="datepicker-input"
+        <input id="{{ field_id }}Input" name="{{ field_id }}Input" type="text" class="datepicker-input ps-2"
             {% if date_min|length %} data-date-min="{{ date_min }}" {% endif %}
             {% if date_max|length %} data-date-max="{{ date_max }}" {% endif %}
             {% if day_date is not empty and day_date != "0000-00-00" %} data-date="{{ day_date }}" {% endif %}
