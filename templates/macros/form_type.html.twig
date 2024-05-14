@@ -177,7 +177,7 @@
                 class="{% if inputClass is not empty %}{{ inputClass }} {% endif %}form-check-input"
                 value="{{ field.vars.value}}"{% if checked %} checked="checked"{% endif %}>
             {% if side == "right" %}
-            <label for="{{ field.vars.id }}Input" class="{{ labelClass }}">{{ label }}</label>
+            <label for="{{ field.vars.id }}Input" class="{{ labelClass }}">{{ label|raw }}</label>
             {% endif %}
         </div>
         {#        
