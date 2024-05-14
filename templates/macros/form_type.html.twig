@@ -156,12 +156,11 @@
 		{% set labelClass = cl_class.label ?? "" %}
 	    {% set inputClass = cl_class.check ?? "" %}
 	{% endif %}
-	{#% set labelClass = labelClass ~ " form-check-label" ~ inline ~ (field.vars.required ? ' required' : '') %#}
-	{% set labelClass = labelClass ~ " form-check-label" ~ inline %}
+	{% set labelClass = labelClass ~ inline %}
 	{% if field.vars.required and not require_hide %}
         {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
     {% endif %}
-	{% set inputClass = inputClass ~ " form-check-input" ~ inline %}
+	{% set inputClass = inputClass ~ inline %}
 
     <div class="{{ class }}" id="{{ field.vars.id }}">
         {% if inline %}
@@ -171,13 +170,13 @@
         {% endif %}
         <div class="{{ checkClass }}">
             {% if side == "left" %}
-            <label for="{{ field.vars.id }}Input" class="{{ labelClass }}">{{ label }}</label>
+            <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label }}</label>
             {% endif %}
             <input type="checkbox" id="{{ field.vars.id }}" name="field.vars.name"
-                class="{% if inputClass is not empty %}{{ inputClass }} {% endif %}form-check-input"
+                class="col-2{% if inputClass is not empty %} {{ inputClass }}{% endif %}"
                 value="{{ field.vars.value}}"{% if checked %} checked="checked"{% endif %}>
             {% if side == "right" %}
-            <label for="{{ field.vars.id }}Input" class="{{ labelClass }}">{{ label|raw }}</label>
+            <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label|raw }}</label>
             {% endif %}
         </div>
         {#        
