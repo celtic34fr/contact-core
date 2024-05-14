@@ -179,17 +179,6 @@
             <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label|raw }}</label>
             {% endif %}
         </div>
-        {#        
-        {% if checked %}
-            {{ form_widget(field, {
-                'attr': {'class': inputClass, 'checked': true}, 'label': label, 'label_class': labelClass,
-            }) }}
-        {% else %}
-            {{ form_widget(field, {
-                'attr': {'class': inputClass}, 'label': label, 'label_class': labelClass,
-            }) }}
-        {% endif %}
-        #}
 	</div>
 {% endmacro %}
 
