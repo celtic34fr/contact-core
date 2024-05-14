@@ -140,7 +140,7 @@
 	{% set label = label is empty ? field.vars.label : label %}
 	{% set inline = args.inline ?? false %}
     {% set side = args.side ?? "left" %}
-    {% if side != "right" or side != "left" %}
+    {% if side != "right" and side != "left" %}
         {% set side = "left" %}
     {% endif %}
 	{% set checked = args.checked ?? false %}
