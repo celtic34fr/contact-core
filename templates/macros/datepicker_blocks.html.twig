@@ -20,7 +20,6 @@
     {% set title = args.title is defined ? args.title : label %}
     {% set disabled = args.disabeled is defined ? (args.disabled ? true : false) : false %}
     {% set label_ico = args.label_ico ?? "" %}
-    
     {% set day_date = args.day_date is defined ? args.day_date : "" %}
     {% if day_date is not empty %}
         {% if day_date is typeOf('array') %}
