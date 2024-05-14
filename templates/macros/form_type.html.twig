@@ -135,6 +135,7 @@
 {# - cl_class       : classe à appliquer au label et à la case à cocher pour présentation #}
 {#      - labelClass    : classe à applique sur le label #}
 {#      - checkClass    : classe à aplliquer à la case à cocher #}
+{# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
 {% macro checkbox(field, label="", args={}) %}
 	{% set label = label is empty ? field.vars.label : label %}
 	{% set inline = args.inline ?? false %}
@@ -145,6 +146,7 @@
 	{% set checked = args.checked ?? false %}
 	{% set class = args.class ?? "" %}
 	{% set cl_class = args.cl_class ?? {} %}
+    {% set require_hide = args.require_hide ?? false %}
 
 	{% set class = "form-check" ~ (class|length ? " " ~ class : "") %}
 	{% set inline = inline ? " one-line" : "" %}
