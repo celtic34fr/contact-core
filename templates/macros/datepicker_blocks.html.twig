@@ -12,7 +12,7 @@
 {# - day_date       : valeur initiale du choix de la date #}
 {# - label_ico      : si présent, icône à mettre à la place du label #}
 {# - datesDisabled : tableau ou function pour indiquer les dates que l'on ne pourra choisir #}
-{% macro datepickerForm(name, label="", args={}) %}
+{% macro datepickerForm(name, label="", args={}) %} 
     {% set class = args.class ?? '' %}
     {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
     {% set date_min = args.date_min is defined and args.date_min is not empty ? args.date_min : "" %}
