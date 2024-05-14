@@ -138,7 +138,7 @@
 {% macro checkbox(field, label="", args={}) %}
 	{% set label = label is empty ? field.vars.label : label %}
 	{% set inline = args.inline ?? false %}
-    {% set side = args.side %}
+    {% set side = args.side ?? "left" %}
     {% if side != "right" or side != "left" %}
         {% set side = "left" %}
     {% endif %}
