@@ -154,7 +154,11 @@
 		{% set labelClass = cl_class.label ?? "" %}
 	    {% set inputClass = cl_class.check ?? "" %}
 	{% endif %}
-	{% set labelClass = labelClass ~ " form-check-label" ~ inline ~ (field.vars.required ? ' required' : '') %}
+	{#% set labelClass = labelClass ~ " form-check-label" ~ inline ~ (field.vars.required ? ' required' : '') %#}
+	{% set labelClass = labelClass ~ " form-check-label" ~ inline %}
+	{% if field.vars.required and not require_hide %}
+        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
+    {% endif %}
 	{% set inputClass = inputClass ~ " form-check-input" ~ inline %}
 
     <div class="{{ class }}" id="{{ field.vars.id }}">
@@ -167,7 +171,7 @@
             {% if side == "left" %}
             <label for="{{ field.vars.id }}Input" class="{{ labelClass }}">{{ label }}</label>
             {% endif %}
-            <input type="checkbox" id="{{ field.vars.id }}" name="field.vars.name" required="required"
+            <input type="checkbox" id="{{ field.vars.id }}" name="field.vars.name"
                 class="{% if inputClass is not empty %}{{ inputClass }} {% endif %}form-check-input"
                 value="{{ field.vars.value}}"{% if checked %} checked="checked"{% endif %}>
             {% if side == "right" %}
@@ -447,10 +451,10 @@
 	{% if select_cl is not empty or label_cl is not empty %}
         {% set class = class ~ ' row' %}
     {% endif %}
-    {% set required = 'required' in label_cl ? true : field.vars.required ?? false %}
+    {#% set required = 'required' in label_cl ? true : field.vars.required ?? false %}
 	{% if required and 'required' not in label_cl %}
         {% set label_cl = label_cl ~ " required" %}
-    {% endif %}
+    {% endif %#}
 
     {% set sattributes %}
 	    {% if select_cl|length %}class="select {{ select_cl }}"{% endif %}
@@ -458,7 +462,7 @@
 	    {% if disabled %} disabled="disabled"{% endif %}
     {% endset %}
 
-	{% if 'required' in label_cl and not require_hide %}
+	{% if field.vars.required and not require_hide %}
         {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
     {% endif %}
 
@@ -607,9 +611,9 @@
     {% set tl_class = args.tl_class ?? {} %}
     {% set value = args.value ?? field.vars.value ?? '' %}
 
-	{% if required %}
+	{#% if required %}
         {% set label_class = "required" %}
-    {% endif %}
+    {% endif %#}
 	{% if required and label is not empty %}
         {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
     {% endif %}
