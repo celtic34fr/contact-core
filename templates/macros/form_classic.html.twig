@@ -6,12 +6,12 @@
 {# - action     : URL d'appel serveur, par défaut '#' = pas d'appel #}
 {# - classes    : Classe(s) CSS de présentation Bootstrap du formulaire, par défaut 'col-12 row' #}
 {% macro form_start(name= "", args = {}) %}
-	{% set method = args.method is defined ? args.method : 'POST' %}
-	{% set action = args.action is defined ?args.action : "#" %}
-	{% set classes = args.class is defined ? args.class : 'col-12 row' %}
+	{% set method = args.method ?? 'POST' %}
+	{% set action = args.action ?? "#" %}
+	{% set classes = args.class ?? 'col-12 row' %}
 
 	<form action="{{ action }}" method="{{ method }}" class="{{ classes }}"
-    {% if name is not empty %} id="{{ name }}" name="{{ name }}" {% endif %}>
+    {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}>
 {% endmacro %}
 
 {# macro form_end Fermeture de formulaire #}
@@ -95,9 +95,9 @@
     {% set require_hide = args.require_hide ?? false %}
     {% set require = args.require ?? false %}
     {% if inline %}
-        {% set checkClass = "checkbox col-12 row mx-0 px-0" %}
+        {% set checkClass = checkClass|length ? checkClass : "checkbox col-12 row mx-0 px-0" %}
     {% else %}
-        {% set checkClass = "checkbox col-12 mx-0 px-0" %}
+        {% set checkClass = checkClass|length ? checkClass : "checkbox col-12 mx-0 px-0" %}
     {% endif %}
 
 	{% set attributes %}
@@ -156,89 +156,135 @@
 {# - event          : évènement à programmer sur le bouton #}
 {# - codeJS         : code JavaScript à exécuter #}
 {# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{# - title          : popover / tooltips à afficher au surval du bouton #}
 {% macro submitbtn(name, label="", args={}) %}
-	{% set class = args.class is defined ? args.class : "" %}
-	{% set event = args.event is defined ? args.event : "" %}
-	{% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
-	{% set disabled = args.disabled is defined ? args.disabled : false %}
+	{% set class = args.class ?? "" %}
+	{% set event = args.event ?? "" %}
+	{% set codeJS = args.codeJS ?? "" %}
+	{% set disabled = args.disabled ?? false %}
+	{% set title = args.title ?? "" %}
 
 	{% set attributes %}
 		{% if class|length %} class="{{ class }}" {% endif %}
-		{% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
-            {{ event }}="{{ codeJS }}"
-	    {% endif %}
 		{% if disabled %} disabled="disabled" {% endif %}
+        {% if title|length %} title="{{ title }}" {% endif %}
+        {% if label|length %} value="{{ label }}" {% endif %}
+        type="submit"
 	{% endset %}
-
-    <input id="{{ name }}" name="{{ name }}" type="submit" value="{{ label }}"
-        {{ attributes|raw }}
-    >
+    {% if event|length and codeJS|length %}
+        {% set attributes = attributes ~ ' ' ~ event ~':"'~codeJS~'"' %}
+    {% endif %}
+    <input id="{{ name }}" name="{{ name }}" {{ attributes|raw }}>
 {% endmacro %}
 
-{% macro cancelbtn(name, label="", args= {}) %}
-	{% set class = args.class is defined ? args.class : "" %}
-	{% set disabled = args.disabled is defined ? args.disabled : false %}
-	{% set event = args.event is defined ? args.event : "" %}
-	{% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
-
-	{% set attributes %}
-    	{% if class|length %} class="{{ class }}" {% endif %}
-	    {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
-		    {{ event }}="{{ codeJS }}"
-	    {% endif %}
-	    {% if disabled %} disabled="disabled" {% endif %}
-	{% endset %}
-
-	<input id="{{ name }}" name="{{ name }}" type="reset" value="{{ label }}" {{ attributes|raw }}>
-{% endmacro %}
-
-{# macro btn Bouton pouvant avoir un évènement intégré #}
+{# macro cancelbtn Bouton d'annulation de formulaire #}
 {# - name           : nom et identifiant #}
 {# - label          : label ou libellé à afficher dans le bouton #}
 {# dans le tableau args #}
 {# - class          : classe CSS à appliquer (possible : inutile) #}
-{# - bclass         : classe CSS à appliquer sur le bouton #}
 {# - event          : évènement à programmer sur le bouton #}
 {# - codeJS         : code JavaScript à exécuter #}
-{# - title          : titre affecté à l'objet pour faire office de tooltip #}
-{# - formnovalidate : indicateur de non validation de formulaire si inclus dans un #}
-{# - type           : type du bouton #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) de la case à cocher #}
-{% macro btn(name, label="", args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set event = args.event is defined ? args.event : "" %}
-    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
-    {% set title = args.title is defined ? args.title : "" %}
-    {% set formnovalidate = args.formnovalidate ?? false %}
-    {% set type = args.type ?? 'submit' %}
-    {% set data_url = args.data_url is defined ? args.data_url : "" %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{# - title          : popover / tooltips à afficher au surval du bouton #}
+{% macro cancelbtn(name, label="", args= {}) %}
+	{% set class = args.class ?? "" %}
+	{% set event = args.event ?? "" %}
+	{% set codeJS = args.codeJS ?? "" %}
+	{% set disabled = args.disabled ?? false %}
+	{% set title = args.title ?? "" %}
 
-    {% set attributes %}
-        {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}
+	{% set attributes %}
 		{% if class|length %} class="{{ class }}" {% endif %}
-		{% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
-            {{ event }}="{{ codeJS }}"
-    	{% endif %}
-		{% if title|length %} title="{{ title }}" {% endif %}
-		{% if formnovalidate %}
-	        formnovalidate="formnovalidate"
-    	{% endif %}
-		{% if data_url|length %}
-            data-url="{{ data_url }}"
-	    {% endif %}
-        type="{{ type }}"
-    	{% set args_keys = args|keys %}
-		{% for key in args_keys %}
-			{% if key starts with 'data-' %}
-                {{ key }}="{{ args[key] }}"
-        	{% endif %}
-	    {% endfor %}
-		{% if disabled %} disabled {% endif %}
+		{% if disabled %} disabled="disabled" {% endif %}
+        {% if title|length %} title="{{ title }}" {% endif %}
+        {% if label|length %} value="{{ label }}" {% endif %}
+        type="reset"
 	{% endset %}
-    <button {{ attributes|raw }}>
-        {{ label|raw }}
-    </button>
+    {% if event|length and codeJS|length %}
+        {% set attributes = attributes ~ ' ' ~ event ~':"'~codeJS~'"' %}
+    {% endif %}
+	<input id="{{ name }}" name="{{ name }}" {{ attributes|raw }}>
+{% endmacro %}
+
+{# macro select liste de sélection simple ou multiple #}
+{# - idname         : identifiant #}
+{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# dans le tableau args #}
+{# - class          : classes à appliquer au DIV HTML englobant le sélecteur #}
+{# - placeholder    : label ou libellé affiché dans la liste de sélection quand rien n'est choisi #}
+{# - sl_class       : classes CSS à appliquer sur le label et le selecteur (bootstrap par défaut à 12) #}
+{# - multiple       : booléen indiquant si 1 seul choix (false)à ou plusieurs (true), valeur par défaut : 1 choix #}
+{# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
+{# - default        : valeur de selection par défaut dans la liste de sélection #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la liste de sélection #}
+{# - choices        : tableau des valeurs à afficher formé d'item : clé 'value', contenant {'disabled', 'label'} #}
+{# - required       : booléen indiquant si le champ est requis ou non #}
+{% macro select(idname, label='', args={}) %}
+    {% set class = args.class ?? "" %}
+    {% set class = class ? class : field.vars.class %}
+    {% set placeholder = args.placeholder ?? "" %}
+    {% set sl_class = args.sl_class ?? {} %}
+    {% set multiple = args.multiple ?? false %}
+    {% set require_hide = args.require_hide ?? false %}
+    {% set default = args.default ?? "" %}
+    {% set disabled = args.disabled ?? false %}
+    {% set choices = args.choices ?? {} %}
+    {% set choices = choices ?? field.vars.choices %}
+    {% set required = args.required ?? false %}
+
+    {% if placeholder is empty and choices[0] is defined and choices[0] is not empty %}
+        {% set placeholder =  'placeholder' in choices[0]|keys ? choices[0]['placeholder'] : "" %}
+    {% endif %}
+    {% if disabled == false and choices[0] is defined and choices[0] is not empty %}
+        {% set disabled =  'disabled' in choices[0]|keys ? choices[0]['disabled'] : false %}
+    {% endif %}
+
+    {% set label_cl = (sl_class is defined and sl_class.label is defined) ? sl_class.label : '' %}
+    {% set select_cl = (sl_class is defined and sl_class.select is defined) ? sl_class.select : '' %}
+	{% if select_cl is not empty or label_cl is not empty %}
+        {% set class = class ~ ' row' %}
+    {% endif %}
+    {% set required = 'required' in label_cl ? true : args.required ?? false %}
+	{% if required and 'required' not in label_cl %}
+        {% set label_cl = label_cl ~ " required" %}
+    {% endif %}
+
+    {% set name = idname ~ (multiple ? '[]' : '') %}
+    {% if label_cl|length and select_cl|length %}
+        {% set class = class ~ " row" ~ (strpos(class, "col-") == -1 ? ' col-12' : '') %}
+    {% endif %}
+
+    {% set lattributes %}
+        {% if label_cl|length %} class="{{ label_cl }}" {% endif %}
+    {% endset %}
+
+    {% set sattributes %}
+        {% if select_cl|length %} class="select{{ select_cl }}" {% endif %}
+        {% if multiple %} multiple="multiple" {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+	{% if required and not require_hide %}
+        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
+    {% endif %}
+
+	<div class="{% if class|length %}{{ class }}{% endif %}"> 
+        {% if label|length %}
+	    	<label for="{{ idname }}" {{ lattributes }}>
+		    	{{ label|raw }}
+		    </label>
+    	{% endif %}
+	    <select id="{{ idname }}" name="{{ name }}" {{ sattributes }}
+        {% if placeholder|length %} data-placeholder="{{ placeholder }}" {% endif %}>
+		{% for choice in choices %}
+			<option 
+                value="{{ choice.value }}"
+				{% if choice.value == default %} selected="selected" {% endif %}>
+				{{ choice.label }}
+			</option>
+		{% endfor %}
+    	</select>
+    </div>
 {% endmacro %}
 
 {# macro input Input HTML multifonction #}
@@ -441,84 +487,6 @@
 {% endmacro %}
 
 {# #}
-{# - idname         : identifiant #}
-{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
-{# dans le tableau args #}
-{# - placeholder    : label ou libellé affiché dans la liste de sélection quand rien n'est choisi #}
-{# - datas          : tableau des valeurs à afficher formé d'item : clé 'value', contenant {'disabled', 'label'} #}
-{# - lclass         : classe CSS à appliquer sur le label (bootstrap par défaut à 12) #}
-{# - sclass         : classe CSS à appliquer sur select HTML (bootstrap par défaut à 12) #}
-{# - multiple       : booléen indiquant si 1 seul choix (false)à ou plusieurs (true), valeur par défaut : 1 choix #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) de la liste de sélection #}
-{# - selection      : valeur de sélection dans la liste des options correspondant à une valeu de clé (value) #}
-{# - vanillaSelect  : booléen indiquant l'utilisation de vanillaSelectBox (true) ou non (false) pour l'affichage #}
-{% macro select(idname, label='', args={}) %}
-    {% set datas = 'datas' in args|keys ? args.datas : {} %}
-    {% set selection = 'selection' in args|keys ? args.selection : "" %}
-    {% set vanillaSelect = args.vanillaSelect ?? false %}
-    {% set placeholder = args.placeholder ?? "" %}
-    {% if placeholder is empty and datas[0] is defined and datas[0] is not empty %}
-        {% set placeholder =  'placeholder' in datas[0]|keys ? datas[0]['placeholder'] : "" %}
-    {% endif %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-    {% if disabled ==false and datas[0] is defined and datas[0] is not empty %}
-        {% set disabled =  'disabled' in datas[0]|keys ? datas[0]['disabled'] : false %}
-    {% endif %}
-
-    {% set lclass = args.lclass is defined ? args.lclass : "col-12" %}
-    {% set sclass = args.sclass is defined ? args.sclass : "col-12" %}
-    {% set multiple = args.multiple is defined ? args.multiple : false %}
-    {% set name = idname ~ (multiple ? '[]' : '') %}
-    {% set class %}
-        text-black
-        {{ args.class is defined ? args.class : "" }}
-    {% endset %}
-    {% if lclass|length and sclass|length %}
-        {% set class = class ~ " row" ~ (strpos(class, "col-") == -1 ? ' col-12' : '') %}
-    {% endif %}
-
-    {% set sattributes %}
-        {% if sclass|length %} class="select{{ sclass }}" {% endif %}
-        {% if multiple %} multiple="multiple" {% endif %}
-        {% if disabled %} disabled="disabled" {% endif %}
-    {% endset %}
-
-    {% set lattributes %}
-        {% if lclass|length %} class="{{ lclass }}" {% endif %}
-    {% endset %}
-
-    <div id="{{ idname }}_select" 
-        {% if class|length %} class="{{ class }}" {% endif %}>
-        {% if label|length %}
-            <label for="{{ name }}" {{ lattributes }}>{{ label }}</label>
-        {% endif %}
-        <select id="{{ idname }}" name="{{ name }}" {{ sattributes }}
-            {% if placeholder|length %} data-placeholder="{{ placeholder }}" {% endif %}>
-			{% if placeholder|length %}
-                {% set attrPlaceholder %}
-                    disabled="disabled" 
-                    {% if selection is empty %}
-                        selected="selected"
-                    {% endif %}
-                {% endset %}
-                {% if vanillaSelect == false %}
-                    <option value="" class="text-secondary" {{ attrPlaceholder }}>{{ placeholder }}</option>
-                {% endif %}
-            {% endif %}
-            {% for idx, data in datas %}
-                {% if idx > 0 %}
-                    <option value="{{ data.value }}" title="{{ data.label|raw }}"
-                        {% if data.disabled is defined and data.disabled %} disabled="disabled" {% endif %}
-                        {% if data.value == selection %} selected="selected" {% endif %}>
-                        {{ data.label|raw }}
-                    </option>
-                {% endif %}
-            {% endfor %}
-        </select>
-    </div>
-{% endmacro %}
-
-{# #}
 {# - id             : identifiant #}
 {# - type           : type de champ à afficher #}
 {# dans le tableau args #}
@@ -672,4 +640,55 @@
         </label>
         <div class="col-4 text-start {{ rclass }}">{{ rtext }}</div>
     </div>
+{% endmacro %}
+
+{# macros spécifiques HTML de base #}
+
+{# macro btn Bouton pouvant avoir un évènement intégré #}
+{# - name           : nom et identifiant #}
+{# - label          : label ou libellé à afficher dans le bouton #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - bclass         : classe CSS à appliquer sur le bouton #}
+{# - event          : évènement à programmer sur le bouton #}
+{# - codeJS         : code JavaScript à exécuter #}
+{# - title          : titre affecté à l'objet pour faire office de tooltip #}
+{# - formnovalidate : indicateur de non validation de formulaire si inclus dans un #}
+{# - type           : type du bouton #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la case à cocher #}
+{% macro btn(name, label="", args={}) %}
+    {% set class = args.class is defined ? args.class : "" %}
+    {% set event = args.event is defined ? args.event : "" %}
+    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+    {% set title = args.title is defined ? args.title : "" %}
+    {% set formnovalidate = args.formnovalidate ?? false %}
+    {% set type = args.type ?? 'submit' %}
+    {% set data_url = args.data_url is defined ? args.data_url : "" %}
+    {% set disabled = args.disabled is defined ? args.disabled : false %}
+
+    {% set attributes %}
+        {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}
+		{% if class|length %} class="{{ class }}" {% endif %}
+		{% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+            {{ event }}="{{ codeJS }}"
+    	{% endif %}
+		{% if title|length %} title="{{ title }}" {% endif %}
+		{% if formnovalidate %}
+	        formnovalidate="formnovalidate"
+    	{% endif %}
+		{% if data_url|length %}
+            data-url="{{ data_url }}"
+	    {% endif %}
+        type="{{ type }}"
+    	{% set args_keys = args|keys %}
+		{% for key in args_keys %}
+			{% if key starts with 'data-' %}
+                {{ key }}="{{ args[key] }}"
+        	{% endif %}
+	    {% endfor %}
+		{% if disabled %} disabled {% endif %}
+	{% endset %}
+    <button {{ attributes|raw }}>
+        {{ label|raw }}
+    </button>
 {% endmacro %}

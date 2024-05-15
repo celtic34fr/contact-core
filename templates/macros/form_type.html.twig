@@ -6,9 +6,9 @@
 {# - action     : URL d'appel serveur, par défaut '#' = pas d'appel #}
 {# - classes    : Classe(s) CSS de présentation Bootstrap du formulaire, par défaut 'col-12 row' #}
 {% macro form_start(form, name= "", args = {}) %}
-	{% set method = args.method is defined ? args.method : 'POST' %}
-	{% set action = args.action is defined ?args.action : "#" %}
-	{% set classes = args.class is defined ? args.class : 'col-12 row' %}
+	{% set method = args.method ?? 'POST' %}
+	{% set action = args.action ?? "#" %}
+	{% set classes = args.class ?? 'col-12 row' %}
 
     {{ form_start(form, {
         action: action,
@@ -79,7 +79,7 @@
 	{% set label = label ?? field.vars.label %}
 	{% set checked = args.checked ?? false %}
 	{% set value = args.value ?? "" %}
-    {% set value = value ?? field.vars.value %}
+    {% set value = value|length ? value : field.vars.value %}
 	{% set inline = args.inline ?? false %}
 	{% set inline = inline ? " one-line" : "" %}
     {% set side = args.side ?? "left" %}
@@ -140,7 +140,7 @@
 	{% set ref = args.ref ?? "" %}
 	{% set form = args.form ?? '' %}
     {% set custom_name = args.custom_name ?? name %}
-    {% set value = value ?? field.vars.value %}
+    {% set value = value|length ? value : field.vars.value %}
 
     {% set attributes = {
         date-ref: ref,
@@ -150,6 +150,149 @@
     }%}
 
     {{ form_widget(field, {'value': value, 'attr': attributes }) }}
+{% endmacro %}
+
+{# macro submitbtn Bouton de soumission de formulaire #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - label          : label ou libellé à afficher dans le bouton #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - event          : évènement à programmer sur le bouton #}
+{# - codeJS         : code JavaScript à exécuter #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{# - title          : popover / tooltips à afficher au surval du bouton #}
+{% macro submitbtn(field, label="", args={}) %}
+	{% set label = label|length ? label : field.vars.label %}
+	{% set class = args.class ?? "" %}
+	{% set event = args.event ?? "" %}
+	{% set codeJS = args.codeJS ?? "" %}
+	{% set disabled = args.disabled ?? false %}
+	{% set title = args.title ?? "" %}
+
+    {% set attributes ={
+        class: class,
+        disabled: disabled,
+        title: title,
+        value: label
+        type: "submit",
+    } %}
+    {% if event|length and codeJS|length %}
+        {% set attributes = attribtes | merge({(event): codeJS}) %}
+    {% endif %}
+    {{ form_widget(field, {'attr': attributes, 'label': label}) }}
+{% endmacro %}
+
+{# macro cancelbtn Bouton d'annulation de formulaire #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - label          : label ou libellé à afficher dans le bouton #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - event          : évènement à programmer sur le bouton #}
+{# - codeJS         : code JavaScript à exécuter #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{# - title          : popover / tooltips à afficher au surval du bouton #}
+{% macro cancelbtn(field, label="", args={}) %}
+	{% set label = label|length ? label : field.vars.label %}
+	{% set class = args.class ?? "" %}
+	{% set event = args.event ?? "" %}
+	{% set codeJS = args.codeJS ?? "" %}
+	{% set disabled = args.disabled ?? false %}
+	{% set title = args.title ?? "" %}
+
+    {% set attributes ={
+        class: class,
+        disabled: disabled,
+        title: title,
+        value: label
+        type: "cancel",
+    } %}
+    {% if event|length and codeJS|length %}
+        {% set attributes = attribtes | merge({(event): codeJS}) %}
+    {% endif %}
+    {{ form_widget(field, {'attr': attributes, 'label': label}) }}
+{% endmacro %}
+
+{# macro select liste de sélection simple ou multiple #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# dans le tableau args #}
+{# - class          : classes à appliquer au DIV HTML englobant le sélecteur #}
+{# - placeholder    : label ou libellé affiché dans la liste de sélection quand rien n'est choisi #}
+{# - sl_class       : classes CSS à appliquer sur le label et le selecteur (bootstrap par défaut à 12) #}
+{# - multiple       : booléen indiquant si 1 seul choix (false)à ou plusieurs (true), valeur par défaut : 1 choix #}
+{# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
+{# - default        : valeur de selection par défaut dans la liste de sélection #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la liste de sélection #}
+{# - choices        : tableau des valeurs à afficher formé d'item : clé 'value', contenant {'disabled', 'label'} #}
+{% macro select(field, label="", args={}) %}
+    {% set label = label ?? field.vars.label %}
+    {% set class = args.class ?? "" %}
+    {% set class = class ? class : field.vars.class %}
+    {% set placeholder = args.placeholder ?? "" %}
+    {% set placeholder = placeholder|length ? placeholder : field.vars.placeholder %}
+    {% set sl_class = args.sl_class ?? {} %}
+    {% set multiple = args.multiple ?? false %}
+    {% set require_hide = args.require_hide ?? false %}
+    {% set default = args.default ?? "" %}
+    {% set default = default|length ? default : field.vars.value %}
+    {% set disabled = args.disabled ?? false %}
+    {% set choices = args.choices ?? {} %}
+    {% set choices = choices ?? field.vars.choices %}
+
+
+    {% if placeholder is empty and choices[0] is defined and choices[0] is not empty %}
+        {% set placeholder =  'placeholder' in choices[0]|keys ? choices[0]['placeholder'] : "" %}
+    {% endif %}
+    {% if disabled == false and choices[0] is defined and choices[0] is not empty %}
+        {% set disabled =  'disabled' in choices[0]|keys ? choices[0]['disabled'] : false %}
+    {% endif %}
+
+    {% set label_cl = (sl_class is defined and sl_class.label is defined) ? sl_class.label : '' %}
+    {% set select_cl = (sl_class is defined and sl_class.select is defined) ? sl_class.select : '' %}
+	{% if select_cl is not empty or label_cl is not empty %}
+        {% set class = class ~ ' row' %}
+    {% endif %}
+    {% set required = 'required' in label_cl ? true : args.required ?? false %}
+    {% set required = required ? required : field.vars.required ?? false %}
+	{% if required and 'required' not in label_cl %}
+        {% set label_cl = label_cl ~ " required" %}
+    {% endif %}
+
+    {% if label_cl|length and select_cl|length %}
+        {% set class = class ~ " row" ~ (strpos(class, "col-") == -1 ? ' col-12' : '') %}
+    {% endif %}
+
+    {% set lattributes %}
+        {% if label_cl|length %} class="{{ label_cl }}" {% endif %}
+    {% endset %}
+
+    {% set sattributes %}
+	    {% if select_cl|length %}class="select {{ select_cl }}"{% endif %}
+	    {% if multiple %} multiple="multiple" {% endif %}
+	    {% if disabled %} disabled="disabled"{% endif %}
+    {% endset %}
+
+	{% if field.vars.required and not require_hide %}
+        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
+    {% endif %}
+
+	<div class="{% if class|length %}{{ class }}{% endif %}"> 
+        {% if label|length %}
+	    	<label for="{{ field.vars.id }}" {{ lattributes }}>
+		    	{{ label|raw }}
+		    </label>
+    	{% endif %}
+	    <select id="{{ field.vars.id }}" name="{{ field.vars.full_name }}" {{ sattributes }}
+        {% if placeholder|length %} data-placeholder="{{ placeholder }}" {% endif %}>
+		{% for choice in choices %}
+			<option 
+                value="{{ choice.value }}"
+				{% if choice.value == default %} selected="selected" {% endif %}>
+				{{ choice.label }}
+			</option>
+		{% endfor %}
+    	</select>
+    </div>
 {% endmacro %}
 
 {# macro field tratement des champs standards #}
@@ -244,49 +387,6 @@
 			{% endif %}
 		{% endfor %}
 	</fieldset>
-{% endmacro %}
-
-{# macro submitbtn Bouton de soumission de formulaire #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{# - label          : label ou libellé à afficher dans le bouton #}
-{# dans le tableau args #}
-{# - class          : classe CSS à appliquer (possible : inutile) #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
-{# - title          : popover / tooltips à afficher au surval du bouton #}
-{% macro submitbtn(field, label="", args={}) %}
-	{% set class = args.class is defined ? args.class : '' %}
-	{% set label = label is not empty ? label : field.vars.label %}
-	{% set disabled = args.disabled ?? false %}
-	{% set event = args.event ?? "" %}
-	{% set action = args.action ?? "" %}
-	{% set title = args.title ?? "" %}
-
-	{% set disabled = disabled ? true : false %}
-
-    {% if event|length and action|length %}
-		{{ form_widget(field, {'attr': {
-            'class': class,
-            'disabled': disabled,
-            (event): action,
-            'title': title
-        }, 'label': label}) }}
-	{% else %}
-		{{ form_widget(field, {'attr': {
-            'class': class,
-            'disabled': disabled,
-            'title': title
-        }, 'label': label}) }}
-	{% endif %}
-{% endmacro %}
-
-{# macro submitBtnLabel label de bouton de soumission de formulaire #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{# - label          : label ou libellé à afficher dans le bouton #}
-{% macro submitbtnlabel(field, label="") %}
-	{% set label = label is empty ? field.vars.label : label %}
-    <p class="form_element ">
-        <label for="{{ field.vars.id }}" tabindex="0" class="button">{{ label }}</label>
-	</p>
 {% endmacro %}
 
 {# macro dragNDrop rewrite zone de déposer-glisser pour chargement de fichier #}
@@ -465,71 +565,6 @@
 	    {% if gallery %}
 		    <div id="{{ field.vars.id }}-gallery" class="gallery"></div>
 	    {% endif %}
-    </div>
-{% endmacro %}
-
-{# macro select liste de sélection simple ou multiple #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
-{#                    dans le tableau args #}
-{# - class          : classes à appliquer au DIV HTML englobant le sélecteur #}
-{# - placeholder    : label ou libellé affiché dans la liste de sélection quand rien n'est choisi #}
-{# - sl_class       : classes CSS à appliquer sur le label et le selecteur (bootstrap par défaut à 12) #}
-{# - multiple       : booléen indiquant si 1 seul choix (false)à ou plusieurs (true), valeur par défaut : 1 choix #}
-{# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
-{# - default        : valeur de selection par défaut dans la liste de sélection #}
-{% macro select(field, label="", args={}) %}
-    {% set label = label ?? field.vars.label %}
-    {% set class %}
-        text-black
-        {{ args.class ?? (field.vars.attr.class ?? "") }}
-    {% endset %}
-
-    {% set placeholder = args.placeholder is defined ? args.placeholder : field.vars.placeholder %}
-    {% set multiple = args.multiple is defined ? args.multiple : false %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-    {% set require_hide = args.require_hide ?? false %}
-    {% set default = args.default ?? field.vars.value %}
-    {% set choices = args.choices ?? field.vars.choices %}
-
-    {% set sl_class = args.sl_class ?? {} %}
-    {% set label_cl = (sl_class is defined and sl_class.label is defined) ? sl_class.label : '' %}
-    {% set select_cl = (sl_class is defined and sl_class.select is defined) ? sl_class.select : '' %}
-	{% if select_cl is not empty or label_cl is not empty %}
-        {% set class = class ~ ' row' %}
-    {% endif %}
-    {#% set required = 'required' in label_cl ? true : field.vars.required ?? false %}
-	{% if required and 'required' not in label_cl %}
-        {% set label_cl = label_cl ~ " required" %}
-    {% endif %#}
-
-    {% set sattributes %}
-	    {% if select_cl|length %}class="select {{ select_cl }}"{% endif %}
-	    {% if multiple %} multiple="multiple" {% endif %}
-	    {% if disabled %} disabled="disabled"{% endif %}
-    {% endset %}
-
-	{% if field.vars.required and not require_hide %}
-        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
-    {% endif %}
-
-	<div class="{% if class|length %}{{ class }}{% endif %}"> 
-        {% if label|length %}
-	    	<label for="{{ field.vars.id }}" {% if label_cl|length %} class="{{ label_cl }}" {% endif %}>
-		    	{{ label|raw }}
-		    </label>
-    	{% endif %}
-	    <select id="{{ field.vars.id }}" name="{{ field.vars.full_name }}" {{ sattributes }}
-        {% if placeholder|length > 0 %} data-placeholder="{{ placeholder }}" {% endif %}>
-		{% for choice in choices %}
-			<option 
-                {# value="{{ choice.value }}" {% if choice is selectedchoice(default) %} selected="selected" {% endif %}>#}
-                value="{{ choice.value }}"
-				{% if choice.value == default %} selected="selected" {% endif %}>
-				{{ choice.label }}
-			</option>
-		{% endfor %}
-    	</select>
     </div>
 {% endmacro %}
 
