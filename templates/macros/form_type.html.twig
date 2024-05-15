@@ -1,3 +1,157 @@
+{# macros visant à l'affichage et au paramétrage des champs de formulaire #}
+{# sous Symfony #}
+
+{# macro form_start Entête/Ouverture de formulaire #}
+{# - method     : Méthode d'envoye du formuliare, par défaut : 'POST' #}
+{# - action     : URL d'appel serveur, par défaut '#' = pas d'appel #}
+{# - classes    : Classe(s) CSS de présentation Bootstrap du formulaire, par défaut 'col-12 row' #}
+{% macro form_start(form, name= "", args = {}) %}
+	{% set method = args.method is defined ? args.method : 'POST' %}
+	{% set action = args.action is defined ?args.action : "#" %}
+	{% set classes = args.class is defined ? args.class : 'col-12 row' %}
+
+    {{ form_start(form, {
+        action: action,
+        method: method,
+        attr: { class: classes, name: name, id: name }
+    }) }}
+    {{ form_row(form._token) }}
+{% endmacro %}
+
+{# macro form_end Fermeture de formulaire #}
+{% macro form_end(form, required = false) %}
+    {{ form_end(form, {render_rest: false}) }}
+    {% if required %}
+    <div class="col-12 mt-2 text-right text-gray-600 px-0 mx-3">
+        * champs obligatoires
+    </div>
+    {% endif %}
+{% endmacro %}
+
+{# macro radioBtn Radio Bouton #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - occur          : occurance du radio bouton pour complément d'identifiant #}
+{# dans le tableau args #}
+{# - ovalue         : valeur associée à l'occurence de bouton radio #}
+{# - olabel         : label affiché associée à l'occurence de bouton radio #}
+{# - oclass         : classe CSS à appliquer au radio bouton #}
+{# - disabled       : booléen indiquant si le radio bouton est actif (false) ou inactif (true) #}
+{% macro radioBtn(field, occur, args={}) %}
+	{% set ovalue = args.ovalue ?? false %}
+	{% set olabel = args.olabel ?? "" %}
+	{% set oclass = args.oclass ?? "" %}
+    {% set disabled = args.disabled ?? false %}
+
+	{% set attributes %}
+		{% if oclass|length %} class="{{ oclass }}" {% endif %}
+		{% if disabled %} disabled="disabled" {% endif %}
+        {% if field.vars.value == ovalue %} checked="checked" {% endif %}
+	{% endset %}
+
+    {% set id_ = field.vars.name ~ occur %}
+    {% if olabel|length %}
+        <label for="{{ id_ }}"> {{ olabel }}
+    {% endif %}
+    <input type="radio" id="{{ id_ }}" name="{{ field.vars.full_name }}" value="{{ ovalue }}"
+        {{ attributes }}
+    />
+    {% if olabel|length %}
+        </label>
+	{% endif %}
+{% endmacro %}
+
+{# macro checkbox Case à cocher #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - label          : label ou libellé à afficher à coté de la case à cocher #}
+{# dans le tableau args #}
+{# - checked        : booléen indiquant si la case à cocher est cochée ou non #}
+{# - value          : valeur associée à la case à cocher #}
+{# - inline         : booléen indiquant l'affichage en 1 ligne (true) ou en 2 ligne standard (false) #}
+{# - side           : coté de présention de la case à cacher : droite (right) ou gauche (left, valeur par défaut) #}
+{# - class          : classe CSS à appliquer au group label et case à cocher #}
+{# - cl_class       : classe à appliquer au label et à la case à cocher pour présentation #}
+{#      - labelClass    : classe à applique sur le label #}
+{#      - checkClass    : classe à aplliquer à la case à cocher #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la case à cocher #}
+{# - title          : titre affecté à l'objet pour faire office de tooltip #}
+{# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
+{% macro checkbox(field, label="", args={}) %}
+	{% set label = label ?? field.vars.label %}
+	{% set checked = args.checked ?? false %}
+	{% set value = args.value ?? "" %}
+    {% set value = value ?? field.vars.value %}
+	{% set inline = args.inline ?? false %}
+	{% set inline = inline ? " one-line" : "" %}
+    {% set side = args.side ?? "left" %}
+    {% set side = (side != "right" and side != "left") ? "left" : side %}
+	{% set class = args.class ?? "" %}
+	{% set cl_class = args.cl_class ?? {} %}
+    {% set labelClass = "" %}
+    {% set checkClass = "" %}
+	{% if cl_class is not empty %}
+		{% set labelClass = cl_class.label ?? "" %}
+	    {% set checkClass = cl_class.check ?? "" %}
+	{% endif %}
+	{% set labelClass = labelClass ~ inline %}
+	{% set disabled = args.disabled ?? false %}
+	{% set title = args.title ?? "" %}
+    {% set require_hide = args.require_hide ?? false %}
+    {% set required = field.vars.required ?? false %}
+    {% if inline %}
+        {% set checkClass = "checkbox col-12 row mx-0 px-0" %}
+    {% else %}
+        {% set checkClass = "checkbox col-12 mx-0 px-0" %}
+    {% endif %}
+
+	{% set attributes = {
+        class: checkClass,
+        disabled : disabled,
+        title: title,
+        checked: checked,
+        id: field.vars.id~"Input",
+        value: value
+    } %}
+
+	{% if required and not require_hide %}
+        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
+    {% endif %}
+
+    <div class="{{ class }}" id="{{ field.vars.id }}">
+        {% if side == "left" %}
+        <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label }}</label>
+        {% endif %}
+        {{ form_widget(field, {'value': value, 'attr': attributes }) }}
+        {% if side == "right" %}
+        <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label|raw }}</label>
+        {% endif %}
+	</div>
+{% endmacro %}
+
+{# macro hidden Input type Hidden (caché) #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - value          : valeur par défaut du champs caché #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - ref            : identifiant servant de référence pour un autre champ pouvant modifier la valeur par défaut #}
+{# - form           : #}
+{# - custom_name    : #}
+{% macro hidden(field, value="", args={}) %}
+	{% set class = args.class ?? "" %}
+	{% set ref = args.ref ?? "" %}
+	{% set form = args.form ?? '' %}
+    {% set custom_name = args.custom_name ?? name %}
+    {% set value = value ?? field.vars.value %}
+
+    {% set attributes = {
+        date-ref: ref,
+        class: class,
+        form: form,
+        type: 'hidden'
+    }%}
+
+    {{ form_widget(field, {'value': value, 'attr': attributes }) }}
+{% endmacro %}
+
 {# macro field tratement des champs standards #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
@@ -125,63 +279,6 @@
 	{% endif %}
 {% endmacro %}
 
-{# macro checkbox case à cocher #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{# - label          : label ou libellé à afficher dans le bouton #}
-{# dans le tableau args #}
-{# - inline         : booléen indiquant l'affichage en 1 ligne (true) ou en 2 ligne standard (false) #}
-{# - side           : coté de présention de la case à cacher : droite (right) ou gauche (left, valeur par défaut) #}
-{# - checked        : booléen indiquant si la case à cocher est cochée ou non #}
-{# - cl_class       : classe à appliquer au label et à la case à cocher pour présentation #}
-{#      - labelClass    : classe à applique sur le label #}
-{#      - checkClass    : classe à aplliquer à la case à cocher #}
-{# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
-{% macro checkbox(field, label="", args={}) %}
-	{% set label = label is empty ? field.vars.label : label %}
-	{% set inline = args.inline ?? false %}
-    {% set side = args.side ?? "left" %}
-    {% if side != "right" and side != "left" %}
-        {% set side = "left" %}
-    {% endif %}
-	{% set checked = args.checked ?? false %}
-	{% set class = args.class ?? "" %}
-	{% set cl_class = args.cl_class ?? {} %}
-    {% set require_hide = args.require_hide ?? false %}
-
-	{% set class = "form-check" ~ (class|length ? " " ~ class : "") %}
-	{% set inline = inline ? " one-line" : "" %}
-    {% set labelClass = "" %}
-    {% set inputClass = "" %}
-	{% if cl_class is not empty %}
-		{% set labelClass = cl_class.label ?? "" %}
-	    {% set inputClass = cl_class.check ?? "" %}
-	{% endif %}
-	{% set labelClass = labelClass ~ inline %}
-	{% if field.vars.required and not require_hide %}
-        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
-    {% endif %}
-	{% set inputClass = inputClass ~ inline %}
-
-    <div class="{{ class }}" id="{{ field.vars.id }}">
-        {% if inline %}
-            {% set checkClass = "checkbox col-12 row mx-0 px-0" %}
-        {% else %}
-            {% set checkClass = "checkbox col-12 mx-0 px-0" %}
-        {% endif %}
-        <div class="{{ checkClass }}">
-            {% if side == "left" %}
-            <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label }}</label>
-            {% endif %}
-            <input type="checkbox" id="{{ field.vars.id }}" name="field.vars.name"
-                class="col-2{% if inputClass is not empty %} {{ inputClass }}{% endif %}"
-                value="{{ field.vars.value}}"{% if checked %} checked="checked"{% endif %}>
-            {% if side == "right" %}
-            <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label|raw }}</label>
-            {% endif %}
-        </div>
-	</div>
-{% endmacro %}
-
 {# macro submitBtnLabel label de bouton de soumission de formulaire #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
@@ -190,35 +287,6 @@
     <p class="form_element ">
         <label for="{{ field.vars.id }}" tabindex="0" class="button">{{ label }}</label>
 	</p>
-{% endmacro %}
-
-{# macro radioBtn bouton(s) radio #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{# - occurs         : numero de l'occurence de bouton radio #}
-{# dans le tableau args #}
-{# - ovalue         : valeur associée à l'occurence de bouton radio #}
-{# - olabel         : label affiché associée à l'occurence de bouton radio #}
-{% macro radioBtn(field, occur, args={}) %}
-	{% set ovalue = (args.ovalue != false) %}
-	{% set olabel = args.olabel ?? "" %}
-	{% set oclass = args.oclass ?? "" %}
-	{% set class = args.class ?? "" %}
-
-	{{ field.vars.value }}
-	{{ ovalue }}
-	{{ field.vars.val == ovalue ? 'true' : 'false' }}
-
-	<div {% if class|length %} class="{{ class }}" {% endif %}>
-        {% set id_ = field.vars.name ~ occur %}
-		<input type="radio" id="{{ id_ }}" name="{{ field.vars.full_name }}" value="{{ ovalue }}"
-        {% if field.vars.value == ovalue %} checked="checked" {% endif %}
-        {% if oclass|length %} class="{{ oclass }}" {% endif %}/>
-		{% if olabel|length %}
-			<label for="{{ id_ }}" {% if oclass|length %} class="{{ oclass }}" {% endif %}>
-				{{ olabel }}
-			</label>
-		{% endif %}
-	</div>
 {% endmacro %}
 
 {# macro dragNDrop rewrite zone de déposer-glisser pour chargement de fichier #}
@@ -398,17 +466,6 @@
 		    <div id="{{ field.vars.id }}-gallery" class="gallery"></div>
 	    {% endif %}
     </div>
-{% endmacro %}
-
-{# macro hidden : input[type=hidden] #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{% macro hidden(field, args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set ref = args.ref is defined ? args.ref : "" %}
-    {% set value = args.value is defined ? args.value : field.vars.value %}
-    <input id="{{ field.vars.id }}" name="{{ field.vars.full_name }}" type="hidden" value="{{ value }}"
-        {% if ref|length %} data-ref="{{ ref }}" {% endif %}
-        {% if class|length %} class="{{ class }}" {% endif %}/>
 {% endmacro %}
 
 {# macro select liste de sélection simple ou multiple #}

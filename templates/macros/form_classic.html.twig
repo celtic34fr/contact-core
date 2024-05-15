@@ -1,45 +1,56 @@
-{# rendu de bouton radio hors formulaire #}
+{# macros visant à l'affichage et au paramétrage des champs de formulaire #}
+{# en HTML de base #}
 
 {# macro form_start Entête/Ouverture de formulaire #}
 {# - method     : Méthode d'envoye du formuliare, par défaut : 'POST' #}
 {# - action     : URL d'appel serveur, par défaut '#' = pas d'appel #}
-{# - class      : Classe(s) CSS de présentation Bootstrap du formulaire, par défaut 'col-12 row' #}
+{# - classes    : Classe(s) CSS de présentation Bootstrap du formulaire, par défaut 'col-12 row' #}
 {% macro form_start(name= "", args = {}) %}
 	{% set method = args.method is defined ? args.method : 'POST' %}
 	{% set action = args.action is defined ?args.action : "#" %}
-	{% set class = args.class is defined ? args.class : 'col-12 row' %}
+	{% set classes = args.class is defined ? args.class : 'col-12 row' %}
 
-	<form action="{{ action }}" method="{{ method }}" class="{{ class }}"
+	<form action="{{ action }}" method="{{ method }}" class="{{ classes }}"
     {% if name is not empty %} id="{{ name }}" name="{{ name }}" {% endif %}>
 {% endmacro %}
 
 {# macro form_end Fermeture de formulaire #}
-{% macro form_end() %}
+{% macro form_end(required = false) %}
 	</form>
+    {% if required %}
+    <div class="col-12 mt-2 text-right text-gray-600 px-0 mx-3">
+        * champs obligatoires
+    </div>
+    {% endif %}
 {% endmacro %}
 
 {# macro radioBtn Radio Bouton #}
 {# - name           : nom et identifiant #}
 {# - occur          : occurance du radio bouton pour complément d'identifiant #}
 {# dans le tableau args #}
-{# - olabel         : label ou libellé à afficher à coté #}
+{# - ovalue         : valeur associée à l'occurence de bouton radio #}
+{# - olabel         : label affiché associée à l'occurence de bouton radio #}
 {# - oclass         : classe CSS à appliquer au radio bouton #}
 {# - disabled       : booléen indiquant si le radio bouton est actif (false) ou inactif (true) #}
+{# - value          : valeur de sélection associée au groupe de radio boutons  #}
 {% macro radioBtn(name, occur, args={}) %}
-	{% set ovalue = args.ovalue is defined ? args.ovalue : "" %}
-	{% set olabel = args.olabel is defined ? args.olabel : "" %}
-	{% set oclass = args.oclass is defined ? args.oclass : "" %}
-	{% set disabled = args.disabled is defined ? args.disabled : false %}
+	{% set ovalue = args.ovalue ?? false %}
+	{% set olabel = args.olabel ?? "" %}
+	{% set oclass = args.oclass ?? "" %}
+    {% set disabled = args.disabled ?? false %}
+	{% set value = args.value ?? false %}
 
 	{% set attributes %}
 		{% if oclass|length %} class="{{ oclass }}" {% endif %}
 		{% if disabled %} disabled="disabled" {% endif %}
+        {% if value == ovalue %} checked="checked" {% endif %}
 	{% endset %}
 
+    {% set id_ = name ~ occur %}
     {% if olabel|length %}
-        <label for="{{ name~occur }}"> {{ olabel }}
+        <label for="{{ id_ }}"> {{ olabel }}
     {% endif %}
-    <input type="radio" id="{{ name~occur }}" name="{{ name }}" value="{{ ovalue }}"
+    <input type="radio" id="{{ id_ }}" name="{{ name }}" value="{{ ovalue }}"
         {{ attributes }}
     />
     {% if olabel|length %}
@@ -49,44 +60,67 @@
 
 {# macro checkbox Case à cocher #}
 {# - name           : nom et identifiant #}
-{# - value          : à true ou false pour coché ou non #}
+{# - label          : label ou libellé à afficher à coté de la case à cocher #}
 {# dans le tableau args #}
-{# - label          : label ou libellé à afficher à coté #}
+{# - checked        : booléen indiquant si la case à cocher est cochée ou non #}
+{# - value          : valeur associée à la case à cocher #}
+{# - inline         : booléen indiquant l'affichage en 1 ligne (true) ou en 2 ligne standard (false) #}
+{# - side           : coté de présention de la case à cacher : droite (right) ou gauche (left, valeur par défaut) #}
 {# - class          : classe CSS à appliquer au group label et case à cocher #}
-{# - ckclass        : classe CSS à appliquer à la case à cocher #}
-{# - lbclass        : classe CSS à appliquer au label #}
+{# - cl_class       : classe à appliquer au label et à la case à cocher pour présentation #}
+{#      - labelClass    : classe à applique sur le label #}
+{#      - checkClass    : classe à aplliquer à la case à cocher #}
 {# - disabled       : booléen d'activation (false) ou désactivation (true) de la case à cocher #}
 {# - title          : titre affecté à l'objet pour faire office de tooltip #}
-{# - row            : booléen d'activation (false) ou désactivation (true) de la classe row pour le groupe #}
-{% macro checkbox(name, value=false, args={}) %}
-	{% set class = args.class is defined ? args.class : "" %}
-	{% set ckclass = args.ckclass is defined ? args.ckclass : "" %}
-	{% set lbclass = args.lbclass is defined ? args.lbclass : "" %}
-	{% set disabled = args.disabled is defined ? args.disabled : false %}
-	{% set title = args.title is defined ? args.title : "" %}
-	{% set label = args.label is defined ? args.label : "" %}
-	{% set row = args.row is defined ? args.row : true %}
-    {% if ckclass|length and lbclass|length and row %}
-		{% set class = class ~ ('col-12' in class ? '' : ' col-12') ~ ' row' %}
-	{% else %}
-		{% if class is empty %}
-			{% set class = 'col-12' %}
-		{% endif %}
+{# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
+{# - require        : booléen indiquant si le champ est requis ou non #}
+{% macro checkbox(name, label="", args={}) %}
+	{% set checked = args.checked ?? false %}
+	{% set value = args.value ?? "" %}
+	{% set inline = args.inline ?? false %}
+	{% set inline = inline ? " one-line" : "" %}
+    {% set side = args.side ?? "left" %}
+    {% set side = (side != "right" and side != "left") ? "left" : side %}
+	{% set class = args.class ?? "" %}
+	{% set cl_class = args.cl_class ?? {} %}
+    {% set labelClass = "" %}
+    {% set checkClass = "" %}
+	{% if cl_class is not empty %}
+		{% set labelClass = cl_class.label ?? "" %}
+	    {% set checkClass = cl_class.check ?? "" %}
 	{% endif %}
+	{% set labelClass = labelClass ~ inline %}
+	{% set disabled = args.disabled ?? false %}
+	{% set title = args.title ?? "" %}
+    {% set require_hide = args.require_hide ?? false %}
+    {% set require = args.require ?? false %}
+    {% if inline %}
+        {% set checkClass = "checkbox col-12 row mx-0 px-0" %}
+    {% else %}
+        {% set checkClass = "checkbox col-12 mx-0 px-0" %}
+    {% endif %}
 
 	{% set attributes %}
-        {% if ckclass|length %} class="{{ ckclass }}" {% endif %}
+        {% if checkClass|length %} class="{{ checkClass }}" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
         {% if title|length %} title="{{ title }}" {% endif %}
-	{% endset %}
+        {% if checked %} checked="checked" {% endif %}
+        id="{{ name }}Input"
+        value="{{ value }}"
+    {% endset %}
 
-	<div class="{{ class }}">
-		{% if label|length %}
-			<label for="{{ name }}" id="{{ name }}_label" {% if lbclass|length %} class="{{ lbclass }}" {% endif %}>
-				{{ label }}
-			</label>
-		{% endif %}
-		<input type="checkbox" name="{{ name }}" id="{{ name }}" {% if value != false %} checked="checked" {% endif %} {{ attributes|raw }}/>
+	{% if required and not require_hide %}
+        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
+    {% endif %}
+
+	<div class="{{ class }}" id="{{ name }}">
+        {% if side == "left" %}
+        <label for="{{ name }}Input" class="{{ labelClass }} col-10">{{ label }}</label>
+        {% endif %}
+		<input type="checkbox" name="{{ name }}" {{ attributes|raw }}/>
+        {% if side == "right" %}
+        <label for="{{ name }}Input" class="{{ labelClass }} col-10">{{ label|raw }}</label>
+        {% endif %}
 	</div>
 {% endmacro %}
 
@@ -96,26 +130,22 @@
 {# dans le tableau args #}
 {# - class          : classe CSS à appliquer (possible : inutile) #}
 {# - ref            : identifiant servant de référence pour un autre champ pouvant modifier la valeur par défaut #}
-{% macro hidden(name, value, args={}) %}
-	{% set class = args.class is defined ? args.class : "" %}
-	{% set ref = args.ref is defined ? args.ref : "" %}
-	{% set form = args.form is defined ? args.form : '' %}
-    {% set custom_name = args.custom_name is defined ? args.custom_name : name %}
+{# - form           : #}
+{# - custom_name    : #}
+{% macro hidden(name, value="", args={}) %}
+	{% set class = args.class ?? "" %}
+	{% set ref = args.ref ?? "" %}
+	{% set form = args.form ?? '' %}
+    {% set custom_name = args.custom_name ?? name %}
 
-	{% set attributes = '' %}
-    {% if ref|length %}
-        {% set attributes = attributes ~ 'data-ref="' ~ ref ~ '" ' %}
-    {% endif %}
-    {% if class|length %}
-        {% set attributes = attributes ~ 'class="' ~ class ~ '" ' %}
-    {% endif %}
-    {% if form|length %}
-        {% set attributes = attributes ~ 'form="' ~ form ~ '" ' %}
-    {% endif %}
+    {% set attributes %}
+        data-ref="{{ ref }}"
+        class="{{ class }}"
+        form="{{ form }}"
+        type="hidden"
+    {% endset %}
 
-    <input type="hidden" name="{{ custom_name|raw }}" id="{{ name }}" value="{{ value }}"
-        {{ attributes|raw }}
-    />
+    <input name="{{ custom_name|raw }}" id="{{ name }}" value="{{ value }}" {{ attributes|raw }}/>
 {% endmacro %}
 
 {# macro submitbtn Bouton de soumission de formulaire #}
