@@ -295,6 +295,211 @@
     </div>
 {% endmacro %}
 
+{# macro switchTextSides interrupteur avec texte de chaque coté #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - checked        : si l'interrupteur est à 'on' (true) ou non (false par défaut) ref. checkbox #}
+{#                    dans le tableau args #}
+{# - class          : classes à appliquer au DIV HTML englobant l'interrupteur #}
+{# - ltext          : Label à afficher à gauche de l'interrupteur #}
+{# - lclass         : classes CSS à appliquer sur le label à gauche de l'interrupteur #}
+{# - lbckgrd        : couleur de fond à appliquer à l'interrupteur non 'coché' #}
+{# - rtext          : Label à afficher à droite de l'interrupteur #}
+{# - rclass         : classes CSS à appliquer sur le label à droite de l'interrupteur #}
+{# - rbckgrd        : couleur de fond à appliquer à l'interrupteur 'coché' #}
+{# - type           : type d'interrupteur : 'round' (valeur par défaut), et 'square' #}
+{# - forme          : forme de présentation : 'h' horizontal (1 ligne), 'v' vertival (3 lignes) #}
+{# - between        : espace entre les textes pour le bouton ON/OFF, par défaut 2 (bootstrap) #}
+{% macro switchTextSides(field, checked = false, args = {}) %}
+    {% set class = args.class ?? "" %}
+    {% set ltext = args.ltext ?? "" %}
+    {% set lclass = args.lclass ?? "" %}
+    {% set lbckgrd = args.lbckgrd ?? "#CCCCCC" %}
+    {% set rtext = args.rtext ?? "" %}
+    {% set rclass = args.rclass ?? "" %}
+    {% set rbckgrd = args.rbckgrd ?? "#2196F3" %}
+    {% set type = args.type ?? "" %}
+    {% set forme = args.forme ?? 'h' %}
+    {% set between = args.between ?? 2 %}
+    {% set between = between|number_format(0) %}
+
+    {% set type = type not in ['round', 'square'] ? 'round' : type %}
+    {% set checked = checked is empty or not checked ? field.vars.checked : checked %}
+    {% set class = class ~ " switchTextSides" %}
+    {% if form == "h" %}{% set class = class ~ " row" %}{% endif %}
+
+	<style>
+        .switchTextSides .col-4 {
+            margin: 0 12px !important;
+        }
+
+        .switchTextSides .switch {
+            height: 32px !important;
+        }
+
+        .switchTextSides label {
+            padding: 0 12px;
+        }
+
+        .switchTextSides .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .switchTextSides .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: {{lbckgrd}};
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+
+        .switchTextSides .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+
+        .switchTextSides input:checked + .slider {
+            background-color: {{rbckgrd}};
+        }
+
+        .switchTextSides input:focus + .slider {
+            box-shadow: 0 0 1px{{rbckgrd}};
+        }
+
+        .switchTextSides input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        .switchTextSides .slider.round {
+            border-radius: 34px;
+        }
+
+        .switchTextSides .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+
+	<div id="{{ field.vars.full_name }}OnOff" class="{{ class }}">
+        <div class="col-{{ (2 - (between / 2))|number_format(0) }}">&nbsp;</div>
+        <div class="col-4 text-end {{ lclass }}">{{ ltext }}</div>
+        <label class="switch col-{{ between }}">
+            <input type="checkbox" id="{{ field.vars.id }}" name="{{ field.vars.full_name }}"
+                {% if checked %} checked {% endif %}>
+            <span class="slider {{ type }}"></span>
+        </label>
+        <div class="col-4 text-start {{ rclass }}">{{ rtext }}</div>
+    </div>
+{% endmacro %}
+
+{# macro textarea pour affichage de zone de saisie de texte #}
+{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# dans le tableau args #}
+{# - class          : classes à appliquer au DIV HTML englobant le sélecteur #}
+{# - placeholder    : label ou libellé affiché dans la liste de sélection quand rien n'est choisi #}
+{# - rows           : nombre de lignes à afficher à l'écran #}
+{# - cols           : nombre de colonnes à afficher à l'écran #}
+{# - maxlength      : #}
+{# - required       : #}
+{# - tl_class       : #}
+{#      - label         : classe à applique sur le label #}
+{#      - textarea      : classe à aplliquer au textarea #}
+{# - value          : valeur à afficher à l'écran #}
+{% macro textarea(field, label='', args={}) %}
+    {% set label = label ?? field.vars.label %}
+    {% set class = args.class ?? "" %}
+    {% set placeholder = args.placeholder ?? field.vars.placeholder is defined ? field.vars.placeholder : '' %}
+    {% set rows = args.rows ?? "" %}
+    {% set cols = args.cols ?? "" %}
+    {% set maxlength = args.maxlength ?? "" %}
+    {% set required = args.required ?? field.vars.required ?? false %}
+    {% set tl_class = args.tl_class ?? {} %}
+    {% set value = args.value ?? field.vars.value ?? '' %}
+
+	{% if required and label|length %}
+        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
+    {% endif %}
+	{% if required and label|length == 0 %}
+        {% set class = class ~ ' required' %}
+    {% endif %}
+    {% set label_class = tl_class.label ?? "" %}
+    {% set textarea_class = tl_class.textarea ?? "" %}
+	{% if label_class|length and textarea_class|length %}
+        {% set class = class ~ " row" %}
+    {% endif %}
+
+	<div {% if class|length%} class="{{ class }}" {% endif %}>
+        {% if label is not empty %}
+            <label for="{{ field.vars.id }}" {% if label_class|length%} class="{{ label_class }}" {% endif %}>
+                {{ label|raw }}
+            </label>
+        {% endif %}
+
+    	<textarea id="{{ field.vars.id }}" name="{{ field.vars.full_name }}"
+            {% if rows|length %} rows="{{ rows }}" {% endif %}
+            {% if cols|length %} cols="{{ cols }}" {% endif %}
+            {% if maxlength|length %} maxlength="{{ maxlength }}" {% endif %}
+            {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
+            {% if textarea_class|length and label|length %} class="{{ textarea_class }}" {% endif %}>
+            {{ value|raw }}
+        </textarea>
+    </div>
+{% endmacro %}
+
+{# macro group groupement de champs #}
+{# - group          : identifiant associé au groupe de champs #}
+{# - title          : label ou titre donné au bloc group #}
+{# dans le tableau args #}
+{# - class          : classes à appliquer au DIV HTML englobant le sélecteur #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
+{# - title_tag      : balise HTML pour affichage du titre - entête du groupe de champs #}
+{# - title_color    : couleur  d'écriture du titre - entête du groupe de champs au format '#rrggbb' #}
+{# - fields         : tableau des champs du groupe issus du formulaire Wymfony #}
+{# - labels         : tableau de redéfinitions des labels associés aux champs du groupe (clé : nom completyy) #}
+{% macro group(group, title="", args={} ) %}
+	{% import _self as fields %}
+    {% set class = args.class ?? "" %}
+    {% set disabled = args.disabled ?? false %}
+	{% set title_tag = args.title_tag ?? 'h3' %}
+	{% set title_color = args.title_color ?? '#000000' %}
+    {% set fields = args.fields ?? {} %}
+    {% set labels = args.labels ?? {} %}
+
+	<fieldset class="{{ class }}" id="{{ group }}" name="{{ group }}">
+        {% if title|length %}
+		<{{title_tag}} style="font-weight:400; color: {{ title_color }}" class="col-12">
+			{{ title|raw }}
+		</{{title_tag}}>
+        {% endif %}
+		{% for field in fields %}
+            {% set label = labels[field.vars.full_name] ?? (field.vars.label ?? "") %}
+            {% set args = {} %}
+
+			{% if field.vars.block_prefixes.1 == "choice" %}
+				{{ fields.select(field, label, args) }}
+			{% elseif field.vars.block_prefixes.1 == "hidden" %}
+				{{ fields.hidden(field, label, args) }}
+			{% else %}
+				{{ fields.field(field, label, args) }}
+			{% endif %}
+		{% endfor %}
+	</fieldset>
+{% endmacro %}
+
 {# macro field tratement des champs standards #}
 {# - field          : champ déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton #}
@@ -355,38 +560,6 @@
             {{ form_widget(field, {'value': value, 'attr': attributes }) }}
         </div>
     </div>
-{% endmacro %}
-
-{# macro group #}
-{% macro group(group, title="", args={} ) %}
-	{% import _self as formfields %}
-	{% set title = title is not empty ? title : group.vars.label %}
-	{% set title_tag = args.title_tag ?? 'h3' %}
-	{% set title_color = args.title_color ?? '#000000' %}
-	{% set group_class = args.group_class ?? 'col-12' %}
-	{% set fields = args.fields ?? {} %}
-
-	<fieldset class="{{ group_class }} row">
-		<{{title_tag}} style="font-weight:400; color: {{ title_color }}" class="col-12">
-			{{ title }}
-		</{{title_tag}}>
-		{% for field in group %}
-			{% set label = "" %}
-			{% set parms = {} %}
-			{% if field.vars.name in fields|keys %}
-				{% set gField = fields[field.vars.name] %}
-				{% set label = gField.label ?? "" %}
-				{% set parms = gField.args ?? {} %}
-			{% endif %}
-			{% if field.vars.block_prefixes.1 == "choice" %}
-				{{ formfields.select(field, label, parms) }}
-			{% elseif field.vars.block_prefixes.1 == "hidden" %}
-				{{ formfields.hidden(field, label, parms) }}
-			{% else %}
-				{{ formfields.field(field, label, parms) }}
-			{% endif %}
-		{% endfor %}
-	</fieldset>
 {% endmacro %}
 
 {# macro dragNDrop rewrite zone de déposer-glisser pour chargement de fichier #}
@@ -565,163 +738,5 @@
 	    {% if gallery %}
 		    <div id="{{ field.vars.id }}-gallery" class="gallery"></div>
 	    {% endif %}
-    </div>
-{% endmacro %}
-
-{# macro switchTextSides interrupteur avec texte de chaque coté #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{# - checked        : si l'interrupteur est à 'on' (true) ou non (false par défaut) ref. checkbox #}
-{#                    dans le tableau args #}
-{# - class          : classes à appliquer au DIV HTML englobant l'interrupteur #}
-{# - ltext          : Label à afficher à gauche de l'interrupteur #}
-{# - lclass         : classes CSS à appliquer sur le label à gauche de l'interrupteur #}
-{# - lbckgrd        : couleur de fond à appliquer à l'interrupteur non 'coché' #}
-{# - rtext          : Label à afficher à droite de l'interrupteur #}
-{# - rclass         : classes CSS à appliquer sur le label à droite de l'interrupteur #}
-{# - rbckgrd        : couleur de fond à appliquer à l'interrupteur 'coché' #}
-{# - type           : type d'interrupteur : 'round' (valeur par défaut), et 'square' #}
-{% macro switchTextSides(field, checked = false, args = {}) %}
-    {% set class = args.class ?? "" %}
-    {% set ltext = args.ltext ?? "" %}
-    {% set lclass = args.lclass ?? "" %}
-    {% set lbckgrd = args.lbckgrd ?? "#CCCCCC" %}
-    {% set rtext = args.rtext ?? "" %}
-    {% set rclass = args.rclass ?? "" %}
-    {% set rbckgrd = args.rbckgrd ?? "#2196F3" %}
-    {% set type = args.type ?? "" %}
-
-    {% set type = type not in ['round', 'square'] ? 'round' : type %}
-    {% set checked = checked is empty or not checked ? field.vars.checked : checked %}
-    {% set class = class ~ " switchTextSides" %}
-
-	<style>
-        .switchTextSides .col-4 {
-            margin: 0 12px !important;
-        }
-
-        .switchTextSides .switch {
-            height: 32px !important;
-        }
-
-        .switchTextSides label {
-            padding: 0 12px;
-        }
-
-        .switchTextSides .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .switchTextSides .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: {{lbckgrd}};
-            -webkit-transition: 0.4s;
-            transition: 0.4s;
-        }
-
-        .switchTextSides .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: 0.4s;
-            transition: 0.4s;
-        }
-
-        .switchTextSides input:checked + .slider {
-            background-color: {{rbckgrd}};
-        }
-
-        .switchTextSides input:focus + .slider {
-            box-shadow: 0 0 1px{{rbckgrd}};
-        }
-
-        .switchTextSides input:checked + .slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-        }
-
-        .switchTextSides .slider.round {
-            border-radius: 34px;
-        }
-
-        .switchTextSides .slider.round:before {
-            border-radius: 50%;
-        }
-    </style>
-
-	<div class="{{ class }}">
-        <div class="col-1">&nbsp;</div>
-        <div class="col-4 text-end {{ lclass }}">{{ ltext }}</div>
-        <label class="switch col-2 row">
-            <input type="checkbox" id="{{ field.vars.id }}" name="{{ field.vars.full_name }}"
-                {% if checked %} checked {% endif %}>
-            <span class="slider {{ type }}"></span>
-        </label>
-        <div class="col-4 text-start {{ rclass }}">{{ rtext }}</div>
-    </div>
-{% endmacro %}
-
-{# macro textarea pour affichage de zone de saisie de texte #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
-{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
-{#                    dans le tableau args #}
-{# - class          : classes à appliquer au DIV HTML englobant le sélecteur #}
-{# - placeholder    : label ou libellé affiché dans la liste de sélection quand rien n'est choisi #}
-{# - rows           : nombre de lignes à afficher à l'écran #}
-{# - cols           : nombre de colonnes à afficher à l'écran #}
-{# - value          : valeur à afficher à l'écran #}
-{% macro textarea(field, label='', args={}) %}
-    {% set label = label ?? field.vars.label %}
-    {% set class = args.class ?? "" %}
-    {% set placeholder = args.placeholder is defined ? args.placeholder :
-        field.vars.placeholder is defined ? field.vars.placeholder : '' %}
-    {% set rows = args.rows ?? "" %}
-    {% set cols = args.cols ?? "" %}
-    {% set maxlength = args.maxlength ?? "" %}
-    {% set required = field.vars.required ?? false %}
-    {% set tl_class = args.tl_class ?? {} %}
-    {% set value = args.value ?? field.vars.value ?? '' %}
-
-	{#% if required %}
-        {% set label_class = "required" %}
-    {% endif %#}
-	{% if required and label is not empty %}
-        {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
-    {% endif %}
-	{% if required and label is empty %}
-        {% set class = class ~ ' required' %}
-    {% endif %}
-    {% set label_class = tl_class.label ?? "" %}
-    {% set textarea_class = tl_class.textarea ?? "" %}
-	{% if label_class is not empty and textarea_class is not empty %}
-        {% set class = class ~ " row" %}
-    {% endif %}
-
-	<div {% if class is not empty %} class="{{ class }}" {% endif %}>
-        {% if label is not empty %}
-            <label for="{{ field.vars.id }}" {% if label_class is not empty %} class="{{ label_class }}" {% endif %}>
-                {{ label|raw }}
-            </label>
-        {% endif %}
-
-    	<textarea id="{{ field.vars.id }}" name="{{ field.vars.full_name }}"
-            {% if rows is not empty %} rows="{{ rows }}" {% endif %}
-            {% if cols is not empty %} cols="{{ cols }}" {% endif %}
-            {% if maxlength is not empty %} maxlength="{{ maxlength }}" {% endif %}
-            {% if placeholder is not empty %} placeholder="{{ placeholder }}" {% endif %}
-            {% if textarea_class is not empty and label is not empty %} class="{{ textarea_class }}" {% endif %}>
-            {{ value }}
-        </textarea>
     </div>
 {% endmacro %}
