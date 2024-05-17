@@ -1,10 +1,268 @@
 
+{# macro datepickerStylesheets : resources CSS #}
 {% macro datepickerStylesheets() %}
     <link rel="stylesheet" type="text/css" href="{{ asset('contact-assets/css/datepickerVanilla/datepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('contact-assets/css/datepickerVanilla/datepicker-bs5.css') }}">
 {% endmacro %}
 
+{# macro datepickerJavaScripts : resources vanilla JS #}
 {% macro datepickerJavaScripts() %}
     <script src="{{ asset('contact-assets/js/datepickerVanilla/datepicker-full.js') }}"></script>
     <script src="{{ asset('contact-assets/js/datepickerVanilla/locales/fr.js') }}"></script>
+{% endmacro %}
+
+{# macro datepickerJSinit : script JavaScript de déclaration et création des objets Datepicker #}
+{# dans le tableau args paramètres de la création d'objet Datepicker #}
+{# - format     : chaîne de caractères précisant le format de sortie (type format de DateTime) #}
+{# - autohide #}
+{# - language       : code iso 6133 sur 2 caractères de la langue ou locale à utiliser, par défaut 'en' : anglais #}
+{# - orientation #}
+{# - nextArrow #}
+{# - prevArrow #}
+{# - weekStart      : indexation par valeur numérique du jour de début de la demaine 0 : dimanche, 1 : lundi, ... 6 : samedi #}
+{# - calendarWeeks  : booléen indiquant si l'on affiche (true) ou non (false) kes jours de la semaine #}
+{# - clearButton    : booléen indiquant si un bouton de réinitialisation à vide est affiché (true) ou non (false) #}
+{# - todayButton    : booléen indiquant si un bouton de mis à date du jour est affiché (true) ou non (false) #}
+{# - todayButtonMode #}
+{# - dateDelimiter #}
+{# - daysOfWeekHighlighted : Jours de la semaine à souligner #}
+{# - pickLevel #}
+{# - startView #}
+{# - weekNumbers : affichage numéro de semaine, 0 : pas d'affichage, 1 : iso 8601 (france) par défaut possible de 0 à 4 #}
+{# - daysOfWeekDisabled : jour de la semaine ne pouvfant être choisi tableau de valeur numérique de 0 (dimanche' à 6 'samedi) #}
+{# - maxNumberOfDates : nombre maximum de date en saisie, par défaut 1 #}
+{# - datesDisabled : tableau ou function pour indiquer les dates que l'on ne pourra choisir #}
+{# ----- à voir si ajout ? #}
+{% macro datepickerJSinit(args={}) %}
+    {% set format = (args.format is defined and args.format is not empty) ? args.format : "dd/mm/yyyy" %}
+    {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
+    {% set language = args.language is defined ? args.language : app.request.locale %}
+
+    {% set orientation = args.orientation is defined ? args.orientation : 'auto' %}
+    {% set nextArrow = args.nextArrow is defined ? args.nextArrow : "»" %}
+    {% set prevArrow = args.prevArrow is defined ? args.prevArrow : "«" %}
+    {% set weekStart = args.weekStart is defined ? args.weekStart : 0 %}
+    {% set calendarWeeks = args.calendarWeeks is defined ? ( args.calendarWeeks ? 'true' : 'false') : 'false' %}
+    {% set clearButton = args.clearButton is defined ? ( args.clearButton ? 'true' : 'false') : 'false' %}
+    {% set todayButton = args.todayButton is defined ? ( args.todayButton ? 'true' : 'false') : 'false' %}
+    {% set todayButtonMode = args.todayButtonMode is defined ? args.todayButtonMode : 0 %}
+    {% set dateDelimiter = args.dateDelimiter is defined ? args.dateDelimiter : '/' %}
+    {% set daysOfWeekHighlighted = args.daysOfWeekHighlighted is defined ? args.daysOfWeekHighlighted : '' %}
+    {% set pickLevel = args.pickLevel ?? 0 %}
+    {% set startView = args.startView ?? 0 %}
+    {% set weekNumbers = args.weekNumbers is defined ? args.weekNumbers : 1 %}
+    {% set daysOfWeekDisabled = args.daysOfWeekDisabled is defined ? args.daysOfWeekDisabled : '' %}
+    {% set maxNumberOfDates = args.maxNumberOfDates ?? 1 %}
+    {% set datesDisabled = args.datesDisabled ?? {} %}
+
+    {% if datesDisabled is not empty %}
+        {% if datesDisabled is not typeOf('array') %}
+            {% set datesDisabled = "" %}
+        {% else %}
+            {% set arrayDatesDisable = "" %}
+            {% for dateDisabled in datesDisabled %}
+                {% if dateDisabled is typeOf('date') %}
+                    {% import _self as fields %}
+                    {% set dateDisabled = fields.datetimeArrayToString(dateDisabled, true, false) %}
+                {% endif %}
+                {% set arrayDatesDisable = arrayDatesDisable ~ dateDisabled ~ ", " %}
+            {% endfor %}
+            {% set datesDisabled = arrayDatesDisable|slice(0, arrayDatesDisable|length - 2) %}
+        {% endif %}
+    {% endif %}
+    
+    <script>
+        function date_to_input_str(date) {
+            return `${date.getYear() + 1900}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate()}`
+        }
+
+        function build_datepicker(datepicker) {
+            let date_min = datepicker.dataset.dateMin ?? '';
+            let date_max = datepicker.dataset.dateMax ?? '';
+            let date_start = datepicker.dataset.date ?? null;
+            let title = datepicker.dataset.title ?? "";
+            let date = new Datepicker(datepicker, {
+                autohide: {{ autohide }},
+                minDate: date_min,
+                maxDate: date_max,
+                maxNumberOfDates: {{ maxNumberOfDates }},
+                format: '{{ format }}',
+                language: '{{ language }}',
+                nextArrow: '{{ nextArrow }}',
+                prevArrow: '{{ prevArrow }}',
+                weekStart: {{ weekStart }},
+                calendarWeeks: {{ calendarWeeks }},
+                clearButton: {{ clearButton }},
+                todayButton: {{ todayButton }},
+                todayButtonMode: {{ todayButtonMode }},
+                dateDelimiter: '{{ dateDelimiter }}',
+                daysOfWeekHighlighted: [ {{ daysOfWeekHighlighted }} ],
+                daysOfWeekDisabled: [ {{ daysOfWeekDisabled }} ],
+                weekNumbers: {{ weekNumbers }},
+                orientation: '{{ orientation }}',
+                pickLevel: {{ pickLevel }},
+                startView: {{ startView }},
+                title: title,
+                {% if datesDisabled is not empty %}
+                datesDisabled: [{{ datesDisabled|toString }}],
+                {% endif %}
+            } );
+            if (date_start) {
+                let date_init = new Date(date_start);
+                date.setDate(date_init);
+            }
+            let hidden = datepicker.parentElement.querySelector("input.hidden");
+            hidden.setAttribute('type', 'hidden');
+
+            datepicker.addEventListener('changeDate', function (e) {
+                let parent = this.parentElement;
+                let inputdate = parent.querySelector("input[type=hidden]");
+                let date = e.detail.date;
+                inputdate.value = date_to_input_str(date);
+                let {detail} = e;
+                inputdate.dispatchEvent(new CustomEvent("changeDate", {detail, bubbles: true, cancelable: true}));
+            } );
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let datepickerFields = document.querySelectorAll('input.datepicker-input');
+            datepickerFields.forEach(datepickerField => {
+                build_datepicker(datepickerField);
+            } );
+        } );
+    </script>
+{% endmacro %}
+
+{# macro datepickerqRangeJS : script JavaScript de déclaration et création des objets DatepickerRange #}
+{# dans le tableau args paramètres de la création d'objet Datepicker #}
+{# - format     : chaîne de caractères précisant le format de sortie (type format de DateTime) #}
+{# - autohide #}
+{# - language       : code iso 6133 sur 2 caractères de la langue ou locale à utiliser, par défaut celui de bolt CMS #}
+{# - orientation #}
+{# - nextArrow #}
+{# - prevArrow #}
+{# - weelStart      : indixation par valeur numérique du jour de début de la demaine 0 : dimanche, 1 : lunfi, ... 6 : samedi #}
+{# - calendarWeeks  : booléen indiquant si l'on affiche (true) ou non (false) kes jours de la semaine #}
+{# - clearBtn       : booléen indiquant si un bouton de réinitialisation à vide est affiché (true) ou non (false) #}
+{# - todayBrn       : boolézn indiquant si un bouton de mis à date du jour est affiché (true) ou non (false) #}
+{# - todayBtnMode #}
+{# - dateDelimiter #}
+{# - daysOfWeekHighlighted #}
+{# - maxDate #}
+{# - maxNumberOfDates : nombre maximum de date en saisie, par défaut 1 #}
+{# - disabled #}
+{# - pickLevel #}
+{# - startView #}
+{# - weekNumbers : affichage numéro de semaine, 0 : pas d'affichage, 1 : iso 8601 (france) par défaut possible de 0 à 4 #}
+{% macro datepickerRangeJSinit(args={}) %}
+    {# ensemble de code JS visant à gérer laes datepickerRange #}
+    {% set format = (args.format is defined and args.format is not empty) ? args.format : "y-m-d" %}
+    {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
+    {% set language = args.language is defined ? args.language : app.reques.locale %}
+
+    {% set orientation = args.orientation is defined ? args.orientation : 'auto' %}
+    {% set nextArrow = args.nextArrow is defined ? args.nextArrow : "»" %}
+    {% set prevArrow = args.prevArrow is defined ? args.prevArrow : "«" %}
+    {% set weekStart = args.weekStart is defined ? args.weekStart : 0 %}
+    {% set calendarWeeks = args.calendarWeeks is defined ? ( args.calendarWeeks ? 'true' : 'false') : 'false' %}
+    {% set clearBtn = args.clearBtn is defined ? ( args.clearBtn ? 'true' : 'false') : 'false' %}
+    {% set todayBtn = args.todayBtn is defined ? ( args.todayBtn ? 'true' : 'false') : 'false' %}
+    {% set todayBtnMode = args.todayBtnMode is defined ? args.todayBtnMode : 0 %}
+    {% set dateDlimiter = args.dateDlimiter is defined ? args.dateDlimiter : '/' %}
+    {% set daysOfWeekHighlighted = args.daysOfWeekHighlighted is defined ? args.daysOfWeekHighlighted : {} %}
+    {% set pickLevel = args.pickLevel ?? 0 %}
+    {% set startView = args.startView ?? 0 %}
+    {% set maxNumberOfDates = args.maxNumberOfDates ?? 1 %}
+    {% set disabled = args.disabled is defined ? (args.disabled ? 'true' : 'false') : 'false' %}
+    {% set title = args.title ?? "" %}
+    {% set weekNumbers = args.weekNumbers is defined ? args.weekNumbers : 1 %}
+
+    <script>
+        let $rangepicker = {};
+
+        document.addEventListener('DOMContentLoaded', function (evt) {
+            for (let datepickerRange of document.querySelectorAll('.datepickerRange')) {
+                let date_min = datepickerRange.dataset.dateMin ? new Date(datepickerRange.dataset.dateMin) : null;
+                let date_max = datepickerRange.dataset.dateMax ? new Date(datepickerRange.dataset.dateMax) : null;
+                let rangepicker = new DateRangePicker(datepickerRange, {
+                    autohide: {{ autohide }},
+                    format: "{{ format }}",
+                    clearBtn: {{ clearBtn }},
+                    todayBtn: {{ todayBtn }},
+                    calendarWeeks: {{ calendarWeeks }},
+                    dateDlimiter: '{{ dateDlimiter }}',
+                    daysOfWeekHighlighted: [{{ daysOfWeekHighlighted }}],
+                    weekNumbers: {{ weekNumbers }},
+                    language: '{{ language }}',
+                    minDate: date_min,
+                    maxDate: date_max,
+                    maxNumberOfDates: {{ maxNumberOfDates }},
+                    nextArrow: '{{ nextArrow }}',
+                    prevArrow: '{{ prevArrow }}',
+                    orientation: '{{ orientation }}',
+                    showDaysOfWeek: true,
+                    title: "{{ title }}",
+                    todayBtnMode: {{ todayBtnMode }},
+                    weekStart: {{ weekStart }},
+                    inputs: [
+                        datepickerRange.querySelector(".start"), datepickerRange.querySelector(".end")
+                    ],
+                    pickLevel: {{ pickLevel }},
+                    startView: {{ startView }}
+                });
+
+                let date_start = datepickerRange.querySelector(".hidden_start").value ?? null;
+                if (date_start) {
+                    date_start = new Date(date_start);
+                }
+                let date_end = datepickerRange.querySelector(".hidden_end").value ?? null;
+                if (date_end) {
+                    date_end = new Date(date_end);
+                }
+
+                rangepicker.setDates(date_start, date_end);
+                datepickerRange.querySelectorAll("input:not([type=hidden])")
+                    .forEach((e) => e.addEventListener('changeDate', function (e) {
+                        let parent = this.parentElement;
+                        let inputdate = parent.querySelector("input[type=hidden]");
+                        let date = e.detail.date;
+                        inputdate.value = date_to_input_str(date);
+                        let {detail} = e;
+                        inputdate.dispatchEvent(new CustomEvent("changeDate", {
+                            detail,
+                            bubbles: true,
+                            cancelable: true
+                        }));
+                    }));
+                $rangepicker[datepickerRange.id] = rangepicker;
+            }
+        });
+    </script>
+{% endmacro %}
+
+{# macro datetimeArrayToString : transporfomation de form DateTimeType value en chaîne de carectères #}
+{# - datetime       : valeur proprement dite du datetime : #}
+{#      tableau avec 2 tableaus : date et time #}
+{#          date : [year, month, day] #}
+{#          time: [hour, minut] #}
+{# - date           : booleén précisant si l'on transforme la date (true) ou non (false) dans la chaîne finale  #}
+{# - time           : booleén précisant si l'on transforme l'horaire (true) ou non (false) dans la chaîne finale  #}
+{% macro datetimeArrayToString(datetime, date=true, time=true) %}
+	{% set datetimeString = "" %}
+    {% if datetime is not empty %}
+        {% if date %}
+            {% set datetimeString = 
+                    datetimeString ~ (datetime.year ? datetime.year : '0000') ~ ":"
+                    ~ (datetime.month ? datetime.month : '00') ~ ":"
+                    ~ (datetime.day ? datetime.day : '00')
+                %}
+        {% endif %}
+        {% if time %}
+            {% set datetimeString = 
+                    datetimeString ~ " " ~ (datetime.time.hour ? datetime.time.hour : '00')~":"
+                    ~ (datetime.time.minute ? datetime.time.minute : '00')
+                %}
+        {% endif %}
+    {% endif %}
+    {{ datetimeString|trim }}
 {% endmacro %}

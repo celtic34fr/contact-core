@@ -1,0 +1,182 @@
+
+{# macro datepicker zone de sélection d'une date #}
+{# - name           : identifiant et name déclaré pour le formulaire #}
+{# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - date_min       : date minimale pouvant être choisie #}
+{# - daye_max       : date maximale pouvant être choisie #}
+{# - title          : infobulle affiché au surval de la zone avec la souris #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
+{# - day_date       : valeur initiale du choix de la date #}
+{# - label_ico      : si présent, icône à mettre à la place du label #}
+{# - datesDisabled : tableau ou function pour indiquer les dates que l'on ne pourra choisir #}
+{% macro datepicker(name, label="", args={}) %} 
+    {% set class = args.class ?? '' %}
+    {% set placeholder = args.placeholder ?? "" %}
+    {% set date_min = args.date_min ?? "" %}
+    {% set date_max = args.date_max ?? "" %}
+    {% set title = args.title ?? label %}
+    {% set disabled = args.disabled  ? true : false %}
+    {% set label_ico = args.label_ico ?? "" %}
+    {% set day_date = args.day_date ?? "" %}
+    {% if day_date is not empty %}
+        {% if day_date is typeOf('array') %}
+            {% set date = day_date %}
+            {% set day_date = "%04d"|format(date.year) ~"-"~ "%02d"|format(date.month) ~"-"~ "%02d"|format(date.day) %}
+        {% endif %}
+    {% endif %}
+    
+    <div class="datepicker-group{% if class is not empty %} {{ class }}{% endif %}"
+        {% if class|length == 0 %} style="display: contents" {% endif %}>
+        <label for="{{ name }}Input" class="ps-1 pe-2 mx-0">
+            {% if label_ico %}
+                <i class="{{ label_ico }}"></i>
+            {% else %}
+                {{ label|raw }}
+            {% endif %}
+        </label>
+        <input id="{{ name }}Input" name="{{ name }}Input" type="text" class="datepicker-input ps-2 px-0 mx-0"
+            {% if date_min %} data-date-min="{{ date_min }}" {% endif %}
+            {% if date_max %} data-date-max="{{ date_max }}" {% endif %}
+            {% if day_date != "0000-00-00" and day_date is not empty %} data-date="{{ day_date }}" {% endif %}
+            {% if title %} title="{{ title }}" data-title="{{ title }}" {% endif %}
+            {% if placeholder %} placeholder="{{ placeholder }}" {% endif %}
+            {% if disabled %} disabled="disabled" {% endif %}
+        >
+        <div class="hidden datepicker" id="{{ name }}">
+            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+            {{ forms.hidden(name ~ "_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
+                'custom_name': name ~ "[day]", "class": "date_day",
+            }) }}
+            {{ forms.hidden(name ~ "_month", (day_date is not empty ? day_date|slice(5, 2) : ""), {
+                'custom_name': name ~ "[date][month]", "class": "date_month",
+            }) }}
+        	{{ forms.hidden(name ~ "_year", (day_date is not empty ? day_date|slice(0, 4) : ""), {
+                'custom_name': name ~ "[date][year]", "class": "date_day",
+            }) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{# macro datepickerRange zone de sélection de 2 dates #}
+{# - form_start     : champ date de début déclaré dans le formulaure #}
+{# - form_end       : champ date de fin déclaré dans le formulaure #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - date_min       : date minimale pouuvant être choisie, par défaut vide #}
+{# - date_max       : date maximale pouuvant être choisie, par défaut vide #}
+{# - slabel         : label affiché pour la valeur de début de période #}
+{# - stitle         : infobulle affiché au surval de valeur de début de période avec la souris #}
+{# - svalue         : valeur initiale du début de période (STRING ou ARRAY: [year, month, day, hour, minute]) #}
+{# - elabel         : label affiché pour la valeur de fin de période #}
+{# - etitle         : infobulle affiché au surval de valeur de fin de période avec la souris #}
+{# - svalue         : valeur initiale du fin de période (STRING ou ARRAY: [year, month, day, hour, minute]) #}
+{# - disabled #}
+{#      - sdisabled #}
+{#      - edisabled #}
+{# - label_ico #}
+{#      - sico #}
+{#      - eico #}
+{% macro datepickerRange(form_start, form_end, args={}) %}
+    {% set class = args.class ?? "" %}
+    {% set date_min = args.date_min ?? "" %}
+    {% set date_max = args.date_max ?? "" %}
+
+    {% set slabel = args.slabel ?? '' %}
+    {% set sclass = args.sclass ?? "" %}
+    {% set stitle = args.stitle ?? slabel %}
+    {% set svalue = args.svalue ?? "" %}
+    {% if slabel is not empty %}
+        {% set sclass = (sclass ~ " p-1")|trim %}
+    {% endif %}
+
+    {% set elabel = args.elabel ?? "" %}
+    {% set eclass = args.eclass ?? "" %}
+    {% set etitle = args.etitle ?? elabel %}
+    {% set evalue = args.evalue ?? "" %}
+    {% if elabel is not empty %}
+        {% set eclass = (eclass ~ " p-1")|trim %}
+    {% endif %}
+
+    {% set disabled = args.disabled ?? {} %}
+    {% set sdisabled = false %}
+    {% set edisabled = false %}
+    {% if disabled %}
+        {% set sdisabled = disabled.sdisabled ? true : false %}
+        {% set edisabled = disabled.edisabled ? true : false %}
+    {% endif %}
+    {% set sdisabled = sdisabled ? 'disabled="disabled"' : '' %}
+    {% set edisabled = edisabled ? 'disabled="disabled"' : '' %}
+
+    {% set lanel_ico = args.label_ico ?? {} %}
+    {% set sico = label_ico.sico ?? "" %}
+    {% set eico = label_ico.eico ?? "" %}
+
+    {% import "@contact-core/templates/macros/datepicker_resources.html.twig" as fields %}
+    {% if svalue is typeOf('array') %}
+        {% set svalue = fields.datetimeArrayToString(svalue, true, false) %}
+    {% endif %}
+    {% if evalue is typeOf('array') %}
+        {% set evalue = fields.datetimeArrayToString(evaleur, true, false) %}
+    {% endif %}
+    
+    <div id="datepickerRange_{{ form_start }}_{{ form_end }}"
+        class="row datepickerRange{% if class %} {{ class }}{% endif %}"
+        {% if date_min %} data-date-min="{{ date_min }}" {% endif %}
+        {% if date_max %} data-date-max="{{ date_max }}" {% endif %}
+        {% if svalue|trim != "0000:00:00" %} data-start="{{ svalue }}" {% endif %}
+        {% if evalue|trim != "0000:00:00" %} data-end="{{ evalue }}" {% endif %}
+    >
+        <div {% if sclass %} class="datepicker-group {{ sclass }}" {% endif %}>
+            <label for="{{ form_start }}Input">
+                {% if sico is not empty %}
+                    <i class="{{ sico }}"></i>
+                {% else %}
+                    {{ slabel|raw }}
+                {% endif %}
+            </label>
+            <input type="text" name="{{ form_start }}Input" id="{{ form_start }}Input"
+                class="datepicker-input start" {{ sdisabled }}
+                {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
+            >
+            <div class="hidden hidden_start datepicker" id="{{ form_start }}">
+                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+                {{ forms.hidden(form_start ~ "_day", (svalue is not empty ? svalue|slice(8, 2) : ""), {
+                    'custom_name': form_start ~ "[day]", "class": "date_day",
+                }) }}
+                {{ forms.hidden(form_start ~ "_month", (svalue is not empty ? svalue|slice(5, 2) : ""), {
+                    'custom_name': form_start ~ "[month]", "class": "date_month",
+                }) }}
+                {{ forms.hidden(form_start ~ "_year", (svalue is not empty ? svalue|slice(0, 4) : ""), {
+                    'custom_name': form_start ~ "[year]", "class": "date_day",
+                }) }}
+            </div>
+        </div>
+        <div {% if eclass %} class="datepicker-group {{ eclass }}" {% endif %}>
+            <label for="{{ form_end }}Input">
+                {% if eico is not empty %}
+                    <i class="{{ eico }}"></i>
+                {% else %}
+                    {{ elabel|raw }}
+                {% endif %}
+            </label>
+            <input type="text" name="{{ form_end }}Input" id="{{ form_end }}Input"
+                class="datepicker-input end" {{ edisabled }}
+            >
+            <div class="hidden hidden_end datepicker" id="{{ form_end }}">
+                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+                {{ forms.hidden(form_end ~ "_day", (evalue is not empty ? evalue|slice(8, 2) : ""), {
+                    'custom_name': form_end ~ "[day]", "class": "date_day",
+                }) }}
+            	{{ forms.hidden(form_end ~ "_month", (evalue is not empty ? evalue|slice(5, 2) : ""), {
+                    'custom_name': form_end ~ "[month]", "class": "date_month",
+                }) }}
+	            {{ forms.hidden(form_end ~ "_year", (evalue is not empty ? evalue|slice(0, 4) : ""), {
+                    'custom_name': form_end ~ "[year]", "class": "date_day",
+                }) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}

@@ -10,23 +10,23 @@
 {# - params     : tableau de clé -> valeur servant de paramètre à la génération de l'URL de redirection #}
 {# - target     : cible HTML de l'ouverture de kien de redirection, par défaut : la la même fenêtre ou même onglet #}
 {% macro btnRedirect(name, label="", args={}) %}
-    {% set class = args.class is defined ? args.class : "btn btn-default" %}
-    {% set bclass = args.bclass is defined ? args.bclass : "" %}
-    {% set title = args.title is defined ? args.title : "" %}
-    {% set route = args.route is defined ? args.route : "" %}
-    {% set params = args.params is defined ? args.params : {} %}
-    {% set target = args.target is defined ? args.target : '_self' %}
+    {% set class = args.class ?? "btn btn-default" %}
+    {% set bclass = args.bclass ?? "" %}
+    {% set title = args.title ?? "" %}
+    {% set route = args.route ?? "" %}
+    {% set params = args.params ?? {} %}
+    {% set target = args.target ?? '_self' %}
 
     {% if 'col-' not in class %}
         {% set class = class ~ " col-12" %}
     {% endif %}
 
     {% set attributes %}
-        {% if bclass|length %} class="{{ bclass }}" {% endif %}
-        {% if title|length %} title="{{ title }}" {% endif %}
+        {% if bclass %} class="{{ bclass }}" {% endif %}
+        {% if title %} title="{{ title }}" {% endif %}
     {% endset %}
 
-    {% set href = route|length ? path(route, params) :"#" %}
+    {% set href = route ? path(route, params) : "#" %}
     <div {% if class is not empty %}class="{{ class }}"{% endif %}>
         <button id="{{ name }}" type="button" {{ attributes|raw }} onclick="window.open('{{ href }}', '{{ target }}')">
             {{ label|raw }}
@@ -77,7 +77,9 @@
 {# - format     : chaîne de caractères précisant le format de sortie (type format de DateTime) #}
 {% macro date(field, format) %}
     {% set dte = field %}
-    {% if field is typeOf('array') %}{% set dte = field.date %}{% endif %}
+    {% if field is typeOf('array') %}
+        {% set dte = field.date %}
+    {% endif %}
     {% if format is empty %}
         {% set format = "d M Y" %}
     {% endif %}
@@ -91,24 +93,24 @@
 {# - class          : calsse(s) CSS à appliquer au bouton (externe div container) #}
 {# - title          : tooltip - popovrt à afficher au survazl du bouton #}
 {# - event, codeJS  : #}
-{#          définition de l'événement et du code Javascript à exécuter #}
-{#          - event     : événement sous la forme 'on'+event ex Click #}
-{#          - codeJS    : code ou fonction JavaScript à exécuter #}
+{#      - définition de l'événement et du code Javascript à exécuter #}
+{#      -> event     : événement sous la forme 'on'+event ex Click #}
+{#      -> codeJS    : code ou fonction JavaScript à exécuter #}
 {# - datasets       : tableau de clé -> valeur pour génération des attributs data-* #}
 {% macro btn(name, label="", args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set title = args.title is defined ? args.title : "" %}
-    {% set datasets = args.datasets is defined ? args.datadates : {} %}
-    {% set event = args.event is defined ? args.event : "" %}
-    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
+    {% set class = args.class ?? "" %}
+    {% set title = args.title ?? "" %}
+    {% set datasets = args.datasets  {} %}
+    {% set event = args.event ?? "" %}
+    {% set codeJS = args.codeJS ?? "" %}
 
     {% set attributes %}
-        {% if class|length %} class="{{ class }}" {% endif %}
-        {% if event is defined and event is not empty and codeJS is defined and codeJS is not empty %}
+        {% if class %} class="{{ class }}" {% endif %}
+        {% if event and codeJS %}
             {{ event }}="{{ codeJS }}"
         {% endif %}
-        {% if title|length %} title="{{ title }}" {% endif %}
-        {% if datasets is defined and datasets is not empty %}
+        {% if title %} title="{{ title }}" {% endif %}
+        {% if datasets %}
             {% for cle, val in datasets %}
                 data-{{ cle }}="{{ val }}"
             {% endfor %}

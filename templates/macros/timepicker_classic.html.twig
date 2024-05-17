@@ -1,0 +1,118 @@
+
+{# macro timepicker zone de sélection d'une heure #}
+{# - name           : identifiant et name déclaré pour le formulaire #}
+{# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - title          : infobulle affiché au surval de la zone avec la souris #}
+{# - disabled       : booléen d'activation (absent) ou désactivation (présent) du bouton de soumission #}
+{# - label_ico      : si présent, icône à mettre à la place du label #}
+{# - time           : heure et minute valeur de base #}
+{% macro timepicker(name, label="", args={}) %}
+    {% set class = args.class ?? '' %}
+    {% set title = args.title ?? label %}
+    {% set disabled = args.disabled ? true : false %}
+    {% set label_ico = args.label_ico ?? "" %}
+    {% set time = agrs.time ?? "" %}
+
+    <div {% if class %} class="datepicker-group {{ class }}" {% else %} style="display: contents" {% endif %}>
+        <label for="{{ name }}Input">
+            {% if label_ico %}
+                <i class="{{ label_ico }}"></i>
+            {% else %}
+                {{ label|raw }}
+            {% endif %}
+        </label>
+        <div class="timepicker-ui">
+            <input type="text" class="timepicker-ui-input" id="{{ name }}Input" name="{{ name }}Input"
+                {% if time %} data-time="{{ time }}" {% endif %}
+            />
+        </div>
+        <div class="timepicker hidden" id="{{ name }}">
+            {% import "@templates/macros/form_classic.html.twig" as forms %}
+            {{ forms.hidden(name ~ "_hour", (time is not empty ? time|slice(8, 2) : ""), {
+                'custom_name': name ~ "[hour]",
+            }) }}
+            {{ forms.hidden(name ~ "_minute", (time is not empty ? time|slice(3, 2) : ""), {
+                'custom_name': name ~ "[hour]",
+            }) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{# macro timepickerRange #}
+{# - form_start     : champ heure de début déclaré dans le formulaure #}
+{# - form_end       : champ heure de fin déclaré dans le formulaure #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - slabel         : label affiché pour la valeur de début de période #}
+{# - elabel         : label affiché pour la valeur de fin de période #}
+{# - label_ico      : si présent, icône à mettre à la place du label #}
+{#      - sico #}
+{#      - eico #}
+{# - time           : heure et minute valeur de base #}
+{#      - stime #}
+{#      - etime #}
+{% macro timepickerRange(form_start, form_end, args=[]) %}
+    {% set class = args.class ?? '' %}
+    {% set slabel = args.slabel ?? "" %}
+    {% set elabel = args.elabel ?? "" %}
+
+    {% set lanel_ico = args.label_ico ?? {} %}
+    {% set sico = label_ico.sico ?? "" %}
+    {% set eico = label_ico.eico ?? "" %}
+
+    {% set time = args.time ?? {} %}
+    {% set stime = time.stime ?? "" %}
+    {% set etime = time.etime ?? "" %}
+
+    <div id="timepickerRange_{{ form_start }}_{{ form_end }}"
+        class="row datepickerRange{% if class %} {{ class }}{% endif %}"
+    >
+        <div {% if sclass %} class="timepicker-group {{ sclass }}" {% endif %}>
+            <label for="{{ form_start }}Input">
+                {% if sico %}
+                    <i class="{{ sico }}"></i>
+                {% else %}
+                    {{ slabel|raw }}
+                {% endif %}
+            </label>
+            <div class="timepicker-ui">
+                <input type="text" class="timepicker-ui-input" 
+                    id="{{ form_start }}Input" name="{{ form_start }}Input"
+                    {% if stime %} data-time="{{ stime }}" {% endif %}/>
+            </div>
+            <div class="timepicker hidden" id="{{ form_start }}">
+                {% import "@templates/macros/form_classic.html.twig" as forms %}
+                {{ forms.hidden(form_start ~ "_hour", (stime is not empty ? stime|slice(0, 2) : ""), {
+                    'custom_name': form_start ~ "[hour]",
+                }) }}
+                {{ forms.hidden(form_start ~ "_minute", (stime is not empty ? stime|slice(3, 2) : ""), {
+                    'custom_name': form_start ~ "[hour]",
+                }) }}
+            </div>
+        </div>
+        <div {% if eclass %} class="timepicker-group {{ eclass }}" {% endif %}>
+            <label for="{{ form_end }}Input">
+                {% if eico %}
+                    <i class="{{ eico }}"></i>
+                {% else %}
+                    {{ elabel|raw }}
+                {% endif %}
+            </label>
+            <div class="timepicker-ui">
+                <input type="text" class="timepicker-ui-input" id="{{ form_end }}Input" name="{{ form_end }}Input"
+                    {% if etime %} data-time="{{ etime }}" {% endif %}/>
+            </div>
+            <div class="timepicker hidden" id="{{ form_end }}">
+                {% import "@templates/macros/form_classic.html.twig" as forms %}
+                {{ forms.hidden(form_end ~ "_hour", (etime is not empty ? etime|slice(0, 2) : ""), {
+                    'custom_name': form_end ~ "[hour]",
+                }) }}
+            	{{ forms.hidden(form_end ~ "_minute", (etime is not empty ? etime|slice(3, 2) : ""), {
+                    'custom_name': form_end ~ "[hour]",
+                }) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}

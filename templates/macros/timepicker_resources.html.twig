@@ -1,3 +1,64 @@
 {% macro timepickerJavaScripts() %}
 	<script src="{{ asset('contact-assets/js/timepicker-ui/timepicker-ui.umd.js') }}"></script>
 {% endmacro %}
+
+{# macro timepickerJSinit : script JavaScript de déclaration et création des objets timepicker-ui #}
+{# - clockType          : type d'horloge -> 12h ou 24h seulement, 12h par défaut #}
+{# - enableSwitchIcon #}
+{# - animation #}
+{# - cancelLAbel        : libellé à afficher pour le bouton d'annulation, 'CANCEL' par défaut #}
+{# - okLabel            : libellé à afficher pour le bouton de validation, 'OK4 par défaut #}
+{# - mobile #}
+{# - enableSrollbar #}
+{# - timeLabel          : libellé du titre de la fenêtre modale en mode 'desktop' #}
+{# - mobileTimeLabel    : libellé du tritre de la fenêtre modale en mode 'mobile' #}
+{# - dans le cas de dlocktype = '12h' #}
+{#          - amLabel       : libellé à afficher pour le matin, 'AM' par défaut #}
+{#          - pmLabel       : libellé à afficher pour l'après midi, 'PM' par défaut#}
+{% macro timepickerJSinit(args={}) %}
+    {% set clockType = args.clockType ?? "12h" %}
+    {% set enableSwitchIcon = (args.enableSwitchIcon is defined ? (args.enableSwitchIcon ? true : false) : false) %}
+    {% set animation = (args.animation is defined ? (args.animation ? true : false) : false) %}
+    {% set cancelLabel = args.cancelLabel ?? 'CANCEL' %}
+    {% set okLabel = args.okLabel ?? 'OK' %}
+    {% set mobile = (args.mobile is defined ? (args.mobile ? true : false) : false) %}
+    {% set enableScrollbar = (args.enableScrollbar is defined ? (args.enableScrollbar ? true : false) : false) %}
+    {% set timeLabel = args.timeLabel ?? "Entrez l'heure" %}
+    {% set mobileTimeLabel = args.mobileTimeLabel ?? "Entrez l'heure" %}
+
+    {% if clockType == "12h" %}
+        {% set amLabel = args.amLabel ?? "AM" %}
+        {% set pmLabel = args.pmLabel ?? "PM" %}
+    {% endif %}
+    
+    <script>
+        const timepickers = document.querySelectorAll(".timepicker-ui");
+        timepickers.forEach(timepicker => {
+            const options = {
+                clockType: '{{ clockType }}',
+                enableSwitchIcon: {{ enableSwitchIcon ? 'true' : 'false' }},
+                animation: {{ animation ? 'true' : 'false' }},
+                okLabel: '{{ okLabel }}',
+                cancelLabel: '{{ cancelLabel }}',
+                mobile: {{ mobile ? 'true' : 'false' }},
+                enableScrollbar: {{ enableScrollbar ? 'true' : 'false' }},
+                timeLabel: "{{ timeLabel }}",
+                mobileTimeLabel: "{{ mobileTimeLabel }}",
+                {% if (clockType == "12h") %}
+                amLabel: '{{ amLabel }}',
+                pmLabel: '{{ pmLabel }}',
+                {% endif %}
+            };
+            const newTimepicker = new window.tui.TimepickerUI(timepicker, options);
+
+            const defaultTime = timepicker.querySelector("input").dataset.time;
+            let datetime = new Date();
+            if (defaultTime != undefined && defaultTime.length > 0) {
+                datetime.setHours(defaultTime.subStr(0,2), defaultTime.substr(3,2), 0);
+                newTimepicker.update({options: { currentTime: defaultTime } });
+            }
+
+            newTimepicker.create();
+        });
+    </script>
+{% endmacro %}
