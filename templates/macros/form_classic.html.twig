@@ -11,7 +11,7 @@
 	{% set classes = args.class ?? 'col-12 row' %}
 
 	<form action="{{ action }}" method="{{ method }}" class="{{ classes }}"
-    {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}>
+    {% if name %} id="{{ name }}" name="{{ name }}" {% endif %}>
 {% endmacro %}
 
 {# macro form_end Fermeture de formulaire #}
@@ -41,19 +41,19 @@
 	{% set value = args.value ?? false %}
 
 	{% set attributes %}
-		{% if oclass|length %} class="{{ oclass }}" {% endif %}
+		{% if oclass %} class="{{ oclass }}" {% endif %}
 		{% if disabled %} disabled="disabled" {% endif %}
         {% if value == ovalue %} checked="checked" {% endif %}
 	{% endset %}
 
     {% set id_ = name ~ occur %}
-    {% if olabel|length %}
+    {% if olabel %}
         <label for="{{ id_ }}"> {{ olabel }}
     {% endif %}
     <input type="radio" id="{{ id_ }}" name="{{ name }}" value="{{ ovalue }}"
         {{ attributes }}
     />
-    {% if olabel|length %}
+    {% if olabel %}
         </label>
 	{% endif %}
 {% endmacro %}
@@ -95,15 +95,15 @@
     {% set require_hide = args.require_hide ?? false %}
     {% set require = args.require ?? false %}
     {% if inline %}
-        {% set checkClass = checkClass|length ? checkClass : "checkbox col-12 row mx-0 px-0" %}
+        {% set checkClass = checkClass ? checkClass : "checkbox col-12 row mx-0 px-0" %}
     {% else %}
-        {% set checkClass = checkClass|length ? checkClass : "checkbox col-12 mx-0 px-0" %}
+        {% set checkClass = checkClass ? checkClass : "checkbox col-12 mx-0 px-0" %}
     {% endif %}
 
 	{% set attributes %}
-        {% if checkClass|length %} class="{{ checkClass }}" {% endif %}
+        {% if checkClass %} class="{{ checkClass }}" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
-        {% if title|length %} title="{{ title }}" {% endif %}
+        {% if title %} title="{{ title }}" {% endif %}
         {% if checked %} checked="checked" {% endif %}
         id="{{ name }}Input"
         value="{{ value }}"
@@ -136,12 +136,13 @@
 	{% set class = args.class ?? "" %}
 	{% set ref = args.ref ?? "" %}
 	{% set form = args.form ?? '' %}
-    {% set custom_name = args.custom_name ?? name %}
+    {% set custom_name = args.custom_name ?? field.vars.name ?? "" %}
 
     {% set attributes %}
         data-ref="{{ ref }}"
         class="{{ class }}"
         form="{{ form }}"
+        name="{{ custom_name }}"
         type="hidden"
     {% endset %}
 
@@ -165,13 +166,13 @@
 	{% set title = args.title ?? "" %}
 
 	{% set attributes %}
-		{% if class|length %} class="{{ class }}" {% endif %}
+		{% if class %} class="{{ class }}" {% endif %}
 		{% if disabled %} disabled="disabled" {% endif %}
-        {% if title|length %} title="{{ title }}" {% endif %}
-        {% if label|length %} value="{{ label }}" {% endif %}
+        {% if title %} title="{{ title }}" {% endif %}
+        {% if label %} value="{{ label }}" {% endif %}
         type="submit"
 	{% endset %}
-    {% if event|length and codeJS|length %}
+    {% if event and codeJS %}
         {% set attributes = attributes ~ ' ' ~ event ~':"'~codeJS~'"' %}
     {% endif %}
     <input id="{{ name }}" name="{{ name }}" {{ attributes|raw }}>
@@ -194,13 +195,13 @@
 	{% set title = args.title ?? "" %}
 
 	{% set attributes %}
-		{% if class|length %} class="{{ class }}" {% endif %}
+		{% if class %} class="{{ class }}" {% endif %}
 		{% if disabled %} disabled="disabled" {% endif %}
-        {% if title|length %} title="{{ title }}" {% endif %}
-        {% if label|length %} value="{{ label }}" {% endif %}
+        {% if title %} title="{{ title }}" {% endif %}
+        {% if label %} value="{{ label }}" {% endif %}
         type="reset"
 	{% endset %}
-    {% if event|length and codeJS|length %}
+    {% if event and codeJS %}
         {% set attributes = attributes ~ ' ' ~ event ~':"'~codeJS~'"' %}
     {% endif %}
 	<input id="{{ name }}" name="{{ name }}" {{ attributes|raw }}>
@@ -250,7 +251,7 @@
     {% endif %}
 
     {% set name = idname ~ (multiple ? '[]' : '') %}
-    {% if label_cl|length and select_cl|length %}
+    {% if label_cl and select_cl %}
         {% set class = class ~ " row" ~ (strpos(class, "col-") == -1 ? ' col-12' : '') %}
     {% endif %}
 
@@ -259,7 +260,7 @@
     {% endset %}
 
     {% set sattributes %}
-        {% if select_cl|length %} class="select{{ select_cl }}" {% endif %}
+        {% if select_cl %} class="select {{ select_cl }}" {% endif %}
         {% if multiple %} multiple="multiple" {% endif %}
         {% if disabled %} disabled="disabled" {% endif %}
     {% endset %}
@@ -268,14 +269,14 @@
         {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
     {% endif %}
 
-	<div class="{% if class|length %}{{ class }}{% endif %}"> 
-        {% if label|length %}
+	<div class="{% if class %}{{ class }}{% endif %}"> 
+        {% if label %}
 	    	<label for="{{ idname }}" {{ lattributes }}>
 		    	{{ label|raw }}
 		    </label>
     	{% endif %}
 	    <select id="{{ idname }}" name="{{ name }}" {{ sattributes }}
-        {% if placeholder|length %} data-placeholder="{{ placeholder }}" {% endif %}>
+        {% if placeholder %} data-placeholder="{{ placeholder }}" {% endif %}>
 		{% for choice in choices %}
 			<option 
                 value="{{ choice.value }}"
@@ -421,34 +422,188 @@
     {% set tl_class = args.tl_class ?? {} %}
     {% set value = args.value ?? '' %}
 
-	{% if required and label|length %}
+	{% if required and label %}
         {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
     {% endif %}
-	{% if required and label|length == 0 %}
+	{% if required and label == 0 %}
         {% set class = class ~ ' required' %}
     {% endif %}
     {% set label_class = tl_class.label ?? "" %}
     {% set textarea_class = tl_class.textarea ?? "" %}
-	{% if label_class|length and textarea_class|length %}
+	{% if label_class and textarea_class %}
         {% set class = class ~ " row" %}
     {% endif %}
 
-	<div {% if class|length %} class="{{ class }}" {% endif %}>
-        {% if label|length %}
-            <label for="{{ name }}" {% if label_class|length %} class="{{ label_class }}" {% endif %}>
+	<div {% if class %} class="{{ class }}" {% endif %}>
+        {% if label %}
+            <label for="{{ name }}" {% if label_class %} class="{{ label_class }}" {% endif %}>
                 {{ label|raw }}
             </label>
         {% endif %}
 
     	<textarea id="{{ name }}" name="{{ name }}"
-            {% if rows|length %} rows="{{ rows }}" {% endif %}
-            {% if cols|length %} cols="{{ cols }}" {% endif %}
-            {% if maxlength|length %} maxlength="{{ maxlength }}" {% endif %}
-            {% if placeholder|length %} placeholder="{{ placeholder }}" {% endif %}
-            {% if textarea_class|length and label|length %} class="{{ textarea_class }}" {% endif %}>
+            {% if rows %} rows="{{ rows }}" {% endif %}
+            {% if cols %} cols="{{ cols }}" {% endif %}
+            {% if maxlength %} maxlength="{{ maxlength }}" {% endif %}
+            {% if placeholder %} placeholder="{{ placeholder }}" {% endif %}
+            {% if textarea_class and label %} class="{{ textarea_class }}" {% endif %}>
             {{ value|raw }}
         </textarea>
     </div>
+{% endmacro %}
+
+{# macro dragNDrop rewrite Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
+{# - name               : nom et identifiant #}
+{# dans le tableau args #}
+{# - label              : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# - label_class        : classe CSS à appliquer sur le label #}
+{# - placeholder        : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - class              : classe CSS à appliquer à toute la zone #}
+{# - multiple           : booléen d'indication si l'on télécharge plusieurs fichiers (true) ou qu'un seul (false) #}
+{# - accept             : extension ou type de fichiers accepté au chargement #}
+{# - disabled           : booléen d'activation (false) ou désactivation (true) de la zone #}
+{# - progressbar        : booléen indiquant si l'on doit présenter (true) ou non (false) une barre de progression du téléchargement #}
+{# - preview            : booléen permettant la mise en place d'une zone de prévisualisation (true) ou non (false) des fichiers chargés #}
+{# - routeController    : route Symfony pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
+{# - maxSize            : poids maximum des fichiers autorisés au chargement, "" = pas de limite, donné avec unité de stockage #}
+{# - maxWidth           : largeur en points maximale autorisée pour une image à charger, 0 = pas de limite #}
+{# - maxHeight          : hauteur en points maximale autorisée pour une image à charger, 0 = pas de limite #}
+{# - maxFiles           : nombre maximum de fichiers à charger #}
+{# - removeBtn          : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
+{# - viewBtn            : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
+{# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - initial_datas      : ensemble de fichiers présents à afficher #}
+{# - hidden_name        : #}
+{% macro dragNDrop2(name, args={}) %}
+    {% set label = args.label ?? "" %}
+    {% set label_class = args.label_class ?? "" %}
+	{% set placeholder = args.placeholder ?? "" %}
+	{% set class = (args.class ?? "") ~ " drop-area" %}
+	{% set multiple = args.multiple ?? false %}
+    {% set accept = args.accept ?? "*" %}
+    {% set disabled = args.disabled ?? false %}
+	{% set progressbar = args.progressbar ?? false %}
+	{% set preview = args.preview ?? false %}
+    {% set routeController = args.routeController ?? "" %}
+    {% set maxSize = args.maxSize ?? "" %}
+    {% set maxWidth = args.maxWidth ?? 0 %}
+    {% set maxHeight = args.maxHeight ?? 0 %}
+    {% set maxFiles = args.maxFiles ?? O %}
+    {% if maxFiles > 1 %}
+    	{% set multiple = true %}
+	{% endif %}
+
+    {% set handleFunction = args.handleFunction ?? "handleFiles" %}
+	{% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
+
+    {% set removeBtn = args.removeBtn ?? false %}
+    {% set viewBtn = args.viewBtn ?? false %}
+	{% set hidden_name = args.hidden_name ?? (name ~ "_hidden") %}
+
+    {% set input_attributes %}
+        type="file"
+        id="{{ name }}-fileElem"
+        onchange="{{ handleFunction }}(this.files, '', '{{ name }}')"
+        {% if multiple %} multiple {% endif %}
+        {% if accept is not empty %} accept="{{ accept }}" {% endif %}
+        {% if routeController is not empty %} data-url="{{ path(routeController) }}" {% endif %}
+        {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
+        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
+        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}
+        {% if maxFiles > 0 %} data-nb-files="{{ maxFiles }}" {% endif %}
+        {% if removeBtn > 0 and not disabled %} data-remove-btn="{{ removeBtn }}" {% endif %}
+        {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
+        {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+        data-hidden-name="{{ hidden_name }}"
+    {% endset %}
+
+    <div id="{{ name }}" class="{{ class }}">
+        {% if placeholder is not empty %}<p>{{ placeholder }}</p>{% endif %}
+        <input {{ input_attributes }}>
+        {% if label is not empty %}
+        <label class="button" for="{{name }}-fileElem">{{ label }}</label>
+        {% endif %}
+        {% if progressbar %}
+        <progress id="{{ name }}-progress-bar" class="col-12" max=100 value=0></progress>
+        {% endif %}
+        <div id="{{ name }}-gallery" class="gallery{% if not preview %} hidden{% endif %}" data-nb-upd="0"></div>
+    </div>
+{% endmacro %}
+
+{# macro dragNDrop Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
+{# - name           : nom et identifiant #}
+{# dans le tableau args #}
+{# - label              : label ou libellé à afficher dans le bouton de chargement de fichier #}
+{# - label_class        : classe CSS à appliquer sur le label #}
+{# - placeholder        : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - class              : classe CSS à appliquer à toute la zone #}
+{# - multiple           : booléen d'indication si l'on télécharge plusieurs fichiers (true) ou qu'un seul (false) #}
+{# - accept             : extension ou type de fichiers accepté au chargement #}
+{# - disabled           : booléen d'activation (false) ou désactivation (true) de la zone #}
+{# - progressbar        : booléen indiquant si l'on doit présenter (true) ou non (false) une barre de progression du téléchargement #}
+{# - preview            : booléen permettant la mise en place d'une zone de prévisualisation (true) ou non (false) des fichiers chargés #}
+{# - routeController    : route Symfony pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
+{# - maxSize            : poids maximum des fichiers autorisés au chargement, "" = pas de limite, donné avec unité de stockage #}
+{# - maxWidth           : largeur en points maximale autorisée pour une image à charger, 0 = pas de limite #}
+{# - maxHeight          : hauteur en points maximale autorisée pour une image à charger, 0 = pas de limite #}
+{# - maxFiles           : nombre maximum de fichiers à charger #}
+{# - removeBtn          : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
+{# - viewBtn            : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
+{# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
+{# - initial_datas      : ensemble de fichiers présents à afficher #}
+{# - hidden_name        : #}
+{% macro dragNDrop(name, args={}) %}
+    {% set label = args.label ?? "" %}
+    {% set label_class = args.label_class ?? "" %}
+	{% set placeholder = args.placeholder ?? "" %}
+	{% set class = (args.class ?? "") ~ " drop-area" %}
+	{% set multiple = args.multiple ?? false %}
+    {% set accept = args.accept ?? "*" %}
+    {% set disabled = args.disabled ?? false %}
+	{% set progressbar = args.progressbar ?? false %}
+	{% set preview = args.preview ?? false %}
+    {% set routeController = args.routeController ?? "" %}
+    {% set maxSize = args.maxSize ?? "" %}
+    {% set maxWidth = args.maxWidth ?? 0 %}
+    {% set maxHeight = args.maxHeight ?? 0 %}
+    {% set maxFiles = args.maxFiles ?? O %}
+    {% if maxFiles > 1 %}
+    	{% set multiple = true %}
+	{% endif %}
+
+    {% set handleFunction = args.handleFunction ?? "handleFiles" %}
+	{% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
+
+    {% set removeBtn = args.removeBtn ?? false %}
+    {% set viewBtn = args.viewBtn ?? false %}
+	{% set hidden_name = args.hidden_name ?? (name ~ "_hidden") %}
+
+    {% set attributes %}
+        {% if multiple %} multiple {% endif %}
+        {% if accept is not empty %} accept="{{ accept }}" {% endif %}
+        {% if url is not empty %} data-url="{{ url }}" {% endif %}
+        {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
+        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
+        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}
+        {% if maxFiles > 0 %} data-nb-files="{{ maxFiles }}" {% endif %}
+        {% if removeBtn > 0 and not disabled %} data-remove-btn="{{ removeBtn }}" {% endif %}
+        {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
+        {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
+        data-hidden-name="{{ hidden_name }}"
+        {% if disabled %} disabled="disabled" {% endif %}
+    {% endset %}
+
+    <div id="{{ name }}-drop-area" class="drop-area">
+        <input type="file" id="{{ name }}" name="{{ name }}" class="{{ class }}" {{ attributes|raw }}>
+        <label class="{{ label_class }}" for="{{ name }}">{{ label }}</label>
+        {% if progressbar %}
+            <progress id="{{ name }}progress-bar" class="progress" max="100" value="0"></progress>
+		{% endif %}
+		{% if gallery %}
+			<div id="{{ name }}-gallery" class="gallery"></div>
+		{% endif %}
+	</div>
 {% endmacro %}
 
 {# macro group groupement de champs #}
@@ -497,229 +652,15 @@
                 {{ forms.switchTextSides(name,  (args.checked ?? false), args) }}
             {% elseif macro == "textarea" %}
                 {{ forms.textarea(name, label, args) }}
+            {% elseif macro == "dragNDrop2" %}
+                {{ forms.dragNDrop2(name, args) }}
+            {% elseif macro == "dragNDrop" %}
+                {{ forms.dragNDrop(name, args) }}
             {% elseif macro == 'input' %}
                 {{ forms.input(name, label, args) }}
             {% endif %}
         {% endfor %}
     </fieldset>
-{% endmacro %}
-
-{# # to HARMONIZE # #}
-
-{# macro input Input HTML multifonction #}
-{# - name           : nom et identifiant #}
-{# - label          : label ou libellé à afficher dans le bouton #}
-{# dans le tableau args #}
-{# - class          : classe CSS à appliquer (possible : inutile) #}
-{# - lclass         : classe CSS à appliquer sur le label (bootstrap par défaut à 12) #}
-{# - iclass         : classe CSS à appliquer sur input HTML (bootstrap par défaut à 12) #}
-{# - type           : type d'entrée attendue #}
-{# - value          : valeur par défaut de la zone d'entrée #}
-{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
-{# - form           : id formulaire relatif #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de saisie #}
-{% macro input(name, label="", args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set lclass = args.lclass is defined ? args.lclass : "col-12" %}
-    {% set iclass = args.iclass is defined ? args.iclass : "col-12" %}
-    {% if 'col-' not in class %}
-        {% set class = class ~ " col-12" %}
-    {% endif %}
-    {% if (lclass|length or iclass|length) and ('row' not in class) %}
-        {% set class = class ~ " row" %}
-    {% endif %}
-
-    {% set type = args.type is defined ? args.type : "text" %}
-    {% set value = args.value is defined ? args.value : "" %}
-    {% set placeholder = args.placeholder is defined ? args.placeholder : "" %}
-    {% set form = args.form is defined ? args.form : '' %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-    {% set dataset = args.dataset ?? {} %}
-
-    {% if "[" in name and "]" in name %}
-        {% set id = name|slice(0, strpos(name, '['))
-            ~ "_" ~ name|slice(strpos(name, '[') + 1, strpos(name, ']') - strpos(name, '[')) %}
-    {% else %}
-        {% set id = name %}
-    {% endif %}
-
-    {% set attributes %}
-        {% if type|length %} type="{{ type }}" {% endif %}
-        value="{{ value }}"
-        {% if placeholder|length %} placehoder="{{ placeholder }}" {% endif %}
-        {% if form|length %} form="{{ form }}" {% endif %}
-        {% if disabled %} disabled="disabled" {% endif %}
-        {% for name, value in dataset %}
-            data-{{ name }}="{{ value }}"
-        {% endfor %}
-    {% endset %}
-
-    <div class="{{ class is not empty ? class : '' }}">
-        {% if label|length %}
-            <label for="{{ name }}" class="{{ lclass ?: '' }}">
-                {{ label|raw }}
-            </label>
-        {% endif %}
-        <div class="input_classic {{ iclass ?: '' }}"
-            <input id="{{ id }}" name="{{ name }}" class="col-12 mx-0 px-0" {{ attributes|raw }}>
-        </div>
-    </div>
-{% endmacro %}
-
-{# macro dragNDrop rewrite Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
-{# - name           : nom et identifiant #}
-{# dans le tableau args #}
-{# - label              : label ou libellé à afficher dans le bouton de chargement de fichier #}
-{# - label_class        : classe CSS à appliquer sur le label #}
-{# - placeholder        : label ou libellé affiché dans la zone de saisie quand vide #}
-{# - class              : classe CSS à appliquer sur input type:file #}
-{# - multiple           : booléen (via strin) indiquant la possibilité ou non de charger plusieurs fichiers en 1 fois #}
-{# - accept             : extension ou type de fichiers accepté au chargement #}
-{# - routeController    : route Symfony pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
-{# - maxSize            : poids maximum des fichiers autorisés au chargement #}
-{# - maxWidth           : largeur en points maximale autorisée pour une image à charger #}
-{# - maxHeight          : hauteur en points maximale autorisée pour une image à charger #}
-{# - maxFiles           : nombre maximum de fichiers à charger #}
-{# - removeBtn          : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
-{# - viewBtn            : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
-{# - progressbar        : booléen indiquant la présence ou non d'une barre de progression des chargement de fichiers #}
-{# - preview            : booléen indiquant la présence ou non d'une zone de visualisation des fichiers chargés #}
-{# - disabled           : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
-{# - handleFuntion      : nom de la méthode de prise en charge du téléchargement, 'handleFiles' par défaut #}
-{# - initial_datas      : ensemble de fichiers présents à afficher #}
-{% macro dragNDrop2(name, args={}) %}
-    {% set label = args.label is defined ? args.label : "" %}
-    {% set label_class = args.label_class is defined ? args.label_class : "" %}
-	{% set class = (args.class is defined ? args.class : "") ~ " drop-area" %}
-    {% set accept = args.accept is defined ? args.accept : "*" %}
-    {% set multiple = args.multiple is defined ? args.multiple : "" %}
-    {% set handleFunction = args.handleFunction ?? "handleFiles" %}
-	{% set placeholder = args.placeholder ?? "" %}
-
-    {% set routeController = args.routeController is defined ? args.routeController : "" %}
-    {% set maxSize = args.maxSize is defined ? args.maxSize : "" %}
-    {% set maxWidth = args.maxWidth is defined ? args.maxWidth : "" %}
-    {% set maxHeight = args.maxHeight is defined ? args.maxHeight : "" %}
-    {% set maxFiles = args.maxFiles is defined ? args.maxFiles : "" %}
-    {% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
-
-    {% set removeBtn = args.removeBtn is defined ? args.removeBtn : false %}
-    {% set viewBtn = args.viewBtn is defined ? args.viewBtn : false %}
-    {% set progressbar = args.progressbar is defined ? args.progressbar : false %}
-    {% set preview = args.preview is defined ? args.preview : false %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-
-    {% set input_attributes %}
-        type="file"
-        id="{{ name }}-fileElem"
-        onchange="{{ handleFunction }}(this.files, '', '{{ name }}')"
-        {% if multiple %} multiple {% endif %}
-        {% if accept is not empty %} accept="{{ accept }}" {% endif %}
-        {% if routeController is not empty %} data-url="{{ path(routeController) }}" {% endif %}
-        {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
-        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
-        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}
-        {% if maxFiles > 0 %} data-nb-files="{{ maxFiles }}" {% endif %}
-        {% if removeBtn > 0 and not disabled %} data-remove-btn="{{ removeBtn }}" {% endif %}
-        {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
-        {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
-        {% if disabled %} disabled="disabled" {% endif %}
-    {% endset %}
-
-    <div id="{{ name }}" class="{{ class }}">
-        {% if placeholder is not empty %}<p>{{ placeholder }}</p>{% endif %}
-        <input {{ input_attributes }}>
-        {% if label is not empty %}
-        <label class="button" for="{{name }}-fileElem">{{ label }}</label>
-        {% endif %}
-        {% if progressbar %}
-        <progress id="{{ name }}-progress-bar" class="col-12" max=100 value=0></progress>
-        {% endif %}
-        <div id="{{ name }}-gallery" class="gallery{% if not preview %} hidden{% endif %}" data-nb-upd="0"></div>
-    </div>
-{% endmacro %}
-
-{# macro dragNDrop Zone de Glisser-Déposer pour chargement de fichier via module javascript AJAX #}
-{# - name           : nom et identifiant #}
-{# dans le tableau args #}
-{# - label          : label ou libellé à afficher dans le bouton de chargement de fichier #}
-{# - label_class    : classe CSS à appliquer sur le label #}
-{# - class          : classe CSS à appliquer sur input type:file #}
-{# - multiple       : booléen (via strin) indiquant la possibilité ou non de charger plusieurs fichiers en 1 fois #}
-{# - accept         : extension ou type de fichiers accepté au chargement #}
-{# - url            : URL pour le module AJAX : appel pour déclenchement module chargement coté serveur #}
-{# - maxSize        : poids maximum des fichiers autorisés au chargement #}
-{# - maxWidth       : largeur en points maximale autorisée pour une image à charger #}
-{# - maxHeight      : hauteur en points maximale autorisée pour une image à charger #}
-{# - maxFiles       : nombre maximum de fichiers à charger #}
-{# - removeBtn      : booléen indiquant la présence ou non d'un bouton visant à supprimer le fichier chargé #}
-{# - viewBtn        : booléen indiquant la présence ou non d'un bouton visant à visualiser le fichier chargé #}
-{# - progressbar    : booléen indiquant la présence ou non d'une barre de progression des chargement de fichiers #}
-{# - gallery        : booléen indiquant la présence ou non d'une zone de visualisation des fichiers chargés #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
-{% macro dragNDrop(name, args={}) %}
-    {% set label = args.label is defined ? args.label : "" %}
-    {% set label_class = args.label_class is defined ? args.label_class : "" %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set accept = args.accept is defined ? args.accept : "*" %}
-    {% set multiple = args.multiple is defined ? args.multiple : "" %}
-
-    {% set url = args.url is defined ? args.url : "" %}
-    {% set maxSize = args.maxSize is defined ? args.maxSize : "" %}
-    {% set maxWidth = args.maxWidth is defined ? args.maxWidth : "" %}
-    {% set maxHeight = args.maxHeight is defined ? args.maxHeight : "" %}
-    {% set maxFiles = args.maxFiles is defined ? args.maxFiles : "" %}
-    {% set initial_datas = args.initial_datas is defined ? (args.initial_datas | json_encode) : {} %}
-
-    {% set removeBtn = args.removeBtn is defined ? args.removeBtn : false %}
-    {% set viewBtn = args.viewBtn is defined ? args.viewBtn : false %}
-    {% set progressbar = args.progressbar is defined ? args.progressbar : false %}
-    {% set gallery = args.gallery is defined ? args.gallery : false %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-
-    {% set hidden_name = args.hidden_name %}
-
-    {% set attributes %}
-        {% if multiple %} multiple {% endif %}
-        {% if accept is not empty %} accept="{{ accept }}" {% endif %}
-        {% if url is not empty %} data-url="{{ url }}" {% endif %}
-        {% if maxSize is not empty %} data-max-size="{{ maxSize }}" {% endif %}
-        {% if maxWidth > 0 %} data-max-width="{{ maxWidth }}" {% endif %}
-        {% if maxHeight > 0 %} data-max-height="{{ maxHeight }}" {% endif %}
-        {% if maxFiles > 0 %} data-max-file="{{ maxFiles }}" {% endif %}
-        {% if removeBtn > 0 and not disabled %} data-remove-btn="{{ removeBtn }}" {% endif %}
-        {% if viewBtn > 0 %} data-view-btn="{{ viewBtn }}" {% endif %}
-        {% if initial_datas is not empty %} data-initial="{{ initial_datas }}" {% endif %}
-        data-hidden-name="{{ hidden_name }}"
-        {% if disabled %} disabled="disabled" {% endif %}
-    {% endset %}
-
-    <div id="{{ name }}-drop-area" class="drop-area"> <input type="file" id="{{ name }}" name="{{ name }}" class="{{ class }}" {{ attributes|raw }}>
-        <label class="{{ label_class }}" for="{{ name }}">{{ label }}</label>
-        {% if progressbar %}
-            <progress id="{{ name }}progress-bar" class="progress" max="100" value="0"></progress>
-		{% endif %}
-		{% if gallery %}
-			<div id="{{ name }}-gallery" class="gallery"></div>
-		{% endif %}
-	</div>
-{% endmacro %}
-
-{# #}
-{# - id             : identifiant #}
-{# - type           : type de champ à afficher #}
-{# dans le tableau args #}
-{# - label          : label ou libellé à afficher #}
-{# - fclas          : classe à appliquer au champ #}
-{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de chargement #}
-{% macro inputs(id, type, args) %}
-    {% set label = args.label is defined ? args.label : "" %}
-    {% set fclas = args.fclas is defined ? args.fclas : "" %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
-
-    {% if type == 'input' %}
-        {{ _self.input(id, label, {'class':fclas, 'disabled':disabled}) }}
-    {% endif %}
 {% endmacro %}
 
 {# macros spécifiques HTML de base #}
@@ -771,4 +712,64 @@
     <button {{ attributes|raw }}>
         {{ label|raw }}
     </button>
+{% endmacro %}
+
+{# macro input Input HTML multifonction #}
+{# - name           : nom et identifiant #}
+{# - label          : label ou libellé à afficher dans le bouton #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer (possible : inutile) #}
+{# - lclass         : classe CSS à appliquer sur le label (bootstrap par défaut à 12) #}
+{# - iclass         : classe CSS à appliquer sur input HTML (bootstrap par défaut à 12) #}
+{# - type           : type d'entrée attendue #}
+{# - value          : valeur par défaut de la zone d'entrée #}
+{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - form           : id formulaire relatif #}
+{# - disabled       : booléen d'activation (false) ou désactivation (true) de la zone de saisie #}
+{% macro input(name, label="", args={}) %}
+    {% set class = args.class ?? "" %}
+    {% set lclass = args.lclass ?? "col-12" %}
+    {% set iclass = args.iclass ?? "col-12" %}
+    {% if 'col-' not in class %}
+        {% set class = class ~ " col-12" %}
+    {% endif %}
+    {% if (lclass or iclass) and ('row' not in class) %}
+        {% set class = class ~ " row" %}
+    {% endif %}
+
+    {% set type = args.type ?? "text" %}
+    {% set value = args.value ?? "" %}
+    {% set placeholder = args.placeholder ?? "" %}
+    {% set form = args.form ?? '' %}
+    {% set disabled = args.disabled ?? false %}
+    {% set dataset = args.dataset ?? {} %}
+
+    {% if "[" in name and "]" in name %}
+        {% set id = name|slice(0, strpos(name, '['))
+            ~ "_" ~ name|slice(strpos(name, '[') + 1, strpos(name, ']') - strpos(name, '[')) %}
+    {% else %}
+        {% set id = name %}
+    {% endif %}
+
+    {% set attributes %}
+        {% if type %} type="{{ type }}" {% endif %}
+        value="{{ value }}"
+        {% if placeholder %} placehoder="{{ placeholder }}" {% endif %}
+        {% if form %} form="{{ form }}" {% endif %}
+        {% if disabled %} disabled="disabled" {% endif %}
+        {% for name, value in dataset %}
+            data-{{ name }}="{{ value }}"
+        {% endfor %}
+    {% endset %}
+
+    <div class="{{ class is not empty ? class : '' }}">
+        {% if label %}
+            <label for="{{ name }}" class="{{ lclass ?: '' }}">
+                {{ label|raw }}
+            </label>
+        {% endif %}
+        <div class="input_classic {{ iclass ?: '' }}"
+            <input id="{{ id }}" name="{{ name }}" class="col-12 mx-0 px-0" {{ attributes|raw }}>
+        </div>
+    </div>
 {% endmacro %}
