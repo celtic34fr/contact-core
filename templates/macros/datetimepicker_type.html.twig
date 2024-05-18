@@ -1,0 +1,113 @@
+
+{# macro datetimepicker : affichage d'un champ de sélection de date et heure #}
+{# - field          : champ date déclaré dans le formulaure Symfony Form #}
+{# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - date_min       : date minimale pouuvant être choisie #}
+{# - date_max       : date maximale pouuvant être choisie #}
+{# - disabled       : booléen d'activation (absent) ou désactivation (présent) du bouton de soumission #}
+{# - day_date       : valeur initiale du choix de la date #}
+{# - day_time       : valeur initiale du choix de l'heure #}
+{# - label_ico      : booléen précisant la présence d'icône (présent) ou non (absent) devant la date / heure #}
+{# - title          : infobulle affiché au surval de la zone avec la souris #}
+{% macro datetimepicker(field, label="", args={}) %}
+    {% set field_id = field.vars.id %}
+    {% set class = args.class ?? 'col-12 row' %}
+    {% set placeholder = args.placeholder ?? "" %}
+    {% set date_min = args.date_min ?? "" %}
+    {% set date_max = args.date_max ?? "" %}
+    {% set disabled = args.disabled ? true : false %}
+    {% set label_ico = args.label_ico ? true : false %}
+    {% set title = args.title ?? "" %}
+
+    {% set day_date = args.day_date ?? "" %}
+    {% set day_time = args.day_time ?? "" %}
+    {% set field_value = field.vars.value %}
+    {% set field_date = "" %}
+    {% set field_time = "" %}
+    {% if field_value %}
+        {% set field_date = "%04d"|format(field_value.date.year ~"-"~ "%02d"|format(field_value.date.month)
+                ~"-"~ "%02d"|format(field_value.date.day) ) %}
+        {% set field_time = "%02d"|format(field_value.time.hour) ~":"~ "%02d"|format(field_value.time.minute) %}
+    {% endif %}
+    {% set day_date = day_date ?? field_date %}
+    {% set day_time = day_time ?? field_time %}
+
+    {% if day_date %}
+        {% if day_date is typeOf('array') %}
+            {% set dayD = day_date %}
+            {% set day_date = "%04d"|format(dateD.year) ~"-"~ "%02d"|format(dateD.month) ~"-"~ "%02d"|format(dateD.day) %}
+        {% endif %}
+    {% endif %}
+    {% if day_time empty %}
+        {% if day_time is typeOf('array') %}
+            {% set dayT = day_time %}
+            {% set day_time = "%02d"|format(dayT.hour) ~":"~ "%02d"|format(dayT.minute) %}
+        {% endif %}
+    {% endif %}    
+
+    <div class="datetimepicker-group {{ class }}">
+        {# datepicker : field.vars.id+'Datepicker' #}
+        {% if label or label_ico %}
+        <label for="{{ field_id }}DatepickerInput">
+            {% if label_ico %}
+            <i class="fa fa-calendar"></i>
+            {% else %}
+            {{ label|raw }}
+            {% endif %}
+        </label>
+        {% endif %}
+        <input id="{{ field_id }}DatepickerInput" name="{{ field_id }}DatepickerInput"
+            type="text" class="datepicker-input"
+            {% if date_min %} data-date-min="{{ date_min }}" {% endif %}
+            {% if day_date != "0000-00-00" and day_date is not empty %} data-date="{{ day_date }}" {% endif %}
+            {% if date_max %} data-date-max="{{ date_max }}" {% endif %}
+            {% if title %} title="{{ title }}" data-title="{{ title }}" {% endif %}
+            {% if placeholder %} placeholder="{{ placeholder }}" {% endif %}
+            {% if disabled %} disabled="disabled" {% endif %}>
+        <input type="hidden" id="{{ field_id }}Datepicker" class="hidden"
+            {% if day_date %} value="{{ day_date }}" {% endif %}>
+        {# timepicker : field.vars.id+'Timepicker' #}
+        {% if label_ico %}
+        <label for="{{ field_id }}TimepickerInput">  
+            {% if label_ico %}
+                <i class="fa fa-clock"></i>
+            {% endif %}
+        </label>
+        {% endif %}
+        <div class="timepicker-ui">
+            <input id="{{ field_id }}TimepickerInput" name="{{ field_id }}TimepickerInput"
+                type="text" class="timepicker-ui-input"
+                {% if day_time %} value="{{ day_time }}" {% endif %}
+            />
+        </div>
+        <div class="hidden datetimepicker" id="{{ field_id }}">
+            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+            {% set field_name = field.vars.name %}
+            {{ forms.hidden(field_id ~ "_date_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
+                'custom_name': field_name ~ "[date][day]", "class": "date_day",
+            }) }}
+            {{ forms.hidden(field_id ~ "_date_month", (day_date is not empty ? day_date|slice(5, 2) : ""), {
+                'custom_name': field_name ~ "[date][month]", "class": "date_month",
+            }) }}
+            {{ forms.hidden(field_id ~ "_date_year", (day_date is not empty ? day_date|slice(0, 4) : ""), {
+                'custom_name': field_name ~ "[date][year]", "class": "date_day",
+            }) }}
+            {{ forms.hidden(field_id ~ "_time_hour", (day_time is not empty ? day_time|slice(0,2) : ""), {
+                'custom_name': field_name ~ '[time][hour]', "class": "time_hour",
+            }) }}
+            {{ forms.hidden(field_id ~ "_time_minute", (day_time is not empty ? day_time|slice(3, 2) : ""), {
+                'custom_name': field_name ~ '[time][minute]', "class": "time_minute",
+            }) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{# macro datetimepickerRange zone de sélection de 2 dates #}
+{# - field_start    : champ date / heure de début déclaré dans le formulaure Symfony Form #}
+{# - field_end      : champ date / heure de fin déclaré dans le formulaure Symfony Form #}
+{% macro datetimepickerRange(field_start, field_end, args={}) %}
+    {# à developper #}
+{% endmacro %}

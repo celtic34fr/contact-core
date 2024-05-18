@@ -10,3 +10,56 @@
     <script src="{{ asset('contact-assets/js/datepickerVanilla/locales/fr.js') }}"></script>
     <script src="{{ asset('contact-assets/js/timepicker-ui/timepicker-ui.umd.js') }}"></script>
 {% endmacro %}
+
+{# macro datetimepickerJSinit : script JavaScript de déclaration et création des objets Datepicker & timepicker-ui #}
+{# - datepicker     : tableau des paramètres à appliquer aux objets DAtepicker #}
+{# - timepicker     : tableau des paramètres à appliquer aux objets timepicker-ui#}
+{% macro datetimepickerJSinit(args={}) %}
+    {% set datepicker = args.datepicker ?? {} %}
+    {% set timepicker = args.timepicker ?? {} %}
+
+    {% import "@contact-core/macros/datepicker_resources.html.twig" as datepickerBlk %}
+    {% import "@contact-core/macros/timepicker_resources.html.twig" as timepickerBlk %}
+    {{ datepickerBlk.datepickerJSinit(datepicker) }}
+    {{ timepickerBlk.timepickerJSinit(timepicker) }}
+    
+    <script>
+        function build_datetimeDatepicker(datepicker) {
+            datepicker.addEventListener('changeDate', function (e) {
+                let parentElt = e.target.parentElement;
+                let divDatetimepicker = parentElt.querySelector("div.hidden.datetimepicker");
+                let date = e.detail.date;
+                let inputdate = date_to_input_str(date);
+                divDatetimepicker.querySelector(".date_year").value = inputdate.substr(0,4);
+                divDatetimepicker.querySelector(".date_month").value = inputdate.substr(5,2);
+                divDatetimepicker.querySelector(".date_day").value = inputdate.substr(8,2);
+            });
+        }
+
+        function build_datetimeTimepicker(timepicker) {
+            timepicker.querySelector("input").addEventListener('change', function(e) {
+                let parentElt = e.target.parentElement;
+                let inputtime = timepicker.querySelector("input").value;
+                let divDatetimepicker = parentElt.querySelector("div.hidden.datetimepicker");
+                divDatetimepicker.querySelector(".time_hour").value = inputtime.substr(0, 2);
+                divDatetimepicker.querySelector(".time_minute").value = inputtime.substr(3, 2);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let datepickerFields = document.querySelectorAll('input.datepicker-input');
+            let timepickerFields = document.querySelectorAll(".timepicker-ui");
+
+            datepickerFields.forEach(datepickerField => {
+                if (datepickerField.parentElement.classList.contains("datetimepicker-group")) {
+                    build_datetimeDatepicker(datepickerField);
+                }
+            });
+            timepickerFields.forEach(timepickerField => {
+                if (timepickerField.parentElement.classList.contains("datetimepicker-group")) {
+                    build_datetimeTimepicker(timepickerField);
+                }
+            });
+        });
+    </script>
+{% endmacro %}

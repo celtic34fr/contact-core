@@ -1,0 +1,96 @@
+
+{# macro datetimepicker : affichage d'un champ de sélection de date et heure #}
+{# - name           : identifiant et name déclaré pour le formulaire #}
+{# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
+{# dans le tableau args #}
+{# - class          : classe CSS à appliquer #}
+{# - placeholder    : label ou libellé affiché dans la zone de saisie quand vide #}
+{# - date_min       : date minimale pouvant être choisie #}
+{# - date_max       : date maximale pouvant être choisie #}
+{# - disabled       : booléen d'activation (absent) ou désactivation (présent) du bouton de soumission #}
+{# - day_date       : valeur initiale du choix de la date #}
+{# - label_ico      : booléen précisant la présence d'icône (présent) ou non (absent) devant la date et l'heure #}
+{# - title          : infobulle affiché au surval de la zone avec la souris #}
+{% macro datetimepicker(name, label="", args={}) %}
+    {% set class = args.class ?? 'col-12 row' %}
+    {% set placeholder = args.placeholder ?? "" %}
+    {% set date_min = args.date_min ?? "" %}
+    {% set date_max = args.date_max ?? "" %}
+    {% set disabled = args.disabeled ? true : false %}
+    {% set label_ico = args.label_ico ? true : false %}
+    {% set title = args.title ?? "" %}
+
+    {% set day_date = args.day_date ?? "" %}
+    {% if day_date %}
+        {% if day_date is typeOf('array') %}
+            {% set dateD = day_date %}
+            {% set day_date = "%04d"|format(dateD.year) ~"-"~ "%02d"|format(dateD.month) ~"-"~ "%02d"|format(dateD.day) %}
+        {% endif %}
+    {% endif %}
+    {% if day_time %}
+        {% if day_time is typeOf('array') %}
+            {% set dayT = day_time %}
+            {% set day_time = "%02d"|format(dayT.hour) ~":"~ "%02d"|format(dayT.minute) %}
+        {% endif %}
+    {% endif %}
+
+    <div class="datetimepicker-group {{ class }}">
+        {# datepicker : name+'Datepicker' #}
+        {% if label or label_ico %}
+        <label for="{{ name }}DatepickerInput">
+            {% if label_ico %}
+            <i class="fa fa-calendar" l-date-max="{{ date_max }}"
+            {% else %}
+            {{ label|raw }}
+            {% endif %}
+        </label>
+        {% endif %}
+        <input type="text" id="{{ name }}DatepickerInput" name="{{ name }}DatepickerInput" class="datepicker-input"
+            {% if date_min %} data-date-min="{{ date_min }}" {% endif %}
+            {% if date_max %} data-date-max="{{ date_max }}" {% endif %}
+            {% if day_date and day_date != "0000-00-00" %} data-date="{{ day_date }}" {% endif %}
+            {% if title %} title="{{ title }}" data-title="{{ title }}" {% endif %}
+            {% if placeholder %} placeholder="{{ placeholder }}" {% endif %}
+            {% if disabled %} disabled="disabled" {% endif %}
+        >
+        {# timepicker : name+'Timepicker' #}
+        {% if label_ico %}       
+        <label for="{{ name }}TimepickerInput">
+            {% if label_ico %}
+                <i class="fa fa-clock"></i>
+            {% endif %}
+        </label>
+        {% endif %}
+        <div class="timepicker-ui">
+            <input id="{{ name }}TimepickerInput" name="{{ name }}TimepickerInput" type="text"
+                class="timepicker-ui-input"
+                {% if day_time %} value="{{ day_time }}" {% endif %}
+            />
+        </div>
+        <div class="hidden datetimepicker" id="{{ name }}">
+            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+            {{ forms.hidden(name ~ "_date_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
+                'custom_name': name ~ "[date][day]", "class": "date_day",
+            }) }}
+            {{ forms.hidden(name ~ "_date_month", (day_date is not empty ? day_date|slice(5, 2) : ""), {
+                'custom_name': name ~ "[date][month]", "class": "date_month",
+            }) }}
+            {{ forms.hidden(name ~ "_date_year", (day_date is not empty ? day_date|slice(0, 4) : ""), {
+                'custom_name': name ~ "[date][year]", "class": "date_year",
+            }) }}
+            {{ forms.hidden(name ~ "_time_hour", (day_time is not empty ? day_time|slice(0,2) : ""), {
+                'custom_name': name ~ '[time][hour]', "class": "time_hour",
+            }) }}
+            {{ forms.hidden(name ~ "_time_minute", (day_time is not empty ? day_time|slice(3, 2) : ""), {
+                'custom_name': name ~ '[time][minute]', "class": "time_minute",
+            }) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{# macro datetimepickerRange zone de sélection de 2 dates #}
+{# - form_start     : champ date / heure de début déclaré dans le formulaure #}
+{# - form_end       : champ date / heure de fin déclaré dans le formulaure #}
+{% macro datetimepickerRange(form_start, form_end, args={}) %}
+    {# à developper #}
+{% endmacro %}
