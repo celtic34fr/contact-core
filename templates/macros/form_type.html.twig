@@ -713,7 +713,7 @@
 	{% set required = 'required' in label_class ? true : field.vars.required ?? false %}
 
     {% set input_class %}
-        {% (il_class|length and input in il_class|keys) ? il_class.input : '' %}
+        {{ (il_class|length and input in il_class|keys) ? il_class.input : '' }}
 	{% endset %}
 	{% if label_class|length or input_class|length %}
     	{% set class = class ~ " row" %}
