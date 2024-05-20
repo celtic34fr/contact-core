@@ -164,7 +164,7 @@
 {# - disabled       : booléen d'activation (false) ou désactivation (true) du bouton de soumission #}
 {# - title          : popover / tooltips à afficher au surval du bouton #}
 {% macro submitbtn(field, label="", args={}) %}
-	{% set label = <label for=""></label> ? label : field.vars.label %}
+	{% set label = label ? label : field.vars.label %}
 	{% set class = args.class ?? "" %}
 	{% set event = args.event ?? "" %}
 	{% set codeJS = args.codeJS ?? "" %}
