@@ -1,5 +1,3 @@
-{% import "@contact-core/templates/macros/datepicker_resources.html.twig" as dp_res %}
-
 {# macro datepicker zone de sélection d(une date #}
 {# - field          : champ date déclaré dans le formulaure Symfony Form #}
 {# - label          : label ou libellé à afficher dans le bouton, par défaut celui du Form #}
@@ -14,6 +12,7 @@
 {# - label_ico      : si présent, icône à mettre à la place du label #}
 {# - datesDisabled : tableau ou function pour indiquer les dates que l'on ne pourra choisir #}
 {% macro datepicker(field, label='', args={}) %}
+    {% import "@contact-core/templates/macros/datepicker_resources.html.twig" as dp_res %}
     {% set class = args.class ?? "" %}
     {% set label = label ?? field.vars.label %}
     {% set title = args.title ?? label %}
@@ -83,6 +82,7 @@
 {#      - sico #}
 {#      - eico #}
 {% macro datepickerRange(field_start, field_end, args={}) %}
+    {% import "@contact-core/templates/macros/datepicker_resources.html.twig" as dp_res %}
     {% set class = args.class ?? "" %}
     {% set date_min = args.date_min ?? "" %}
     {% set date_max = args.date_max ?? "" %}
