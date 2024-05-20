@@ -95,7 +95,9 @@
 	    {% set checkClass = cl_class.check ?? "" %}
 	{% endif %}
 	{% set labelClass = labelClass ~ inline %}
-    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+    {#% set disabled = ('disabled' in args and args.disabled)  ? true : false %#}
+    {% set disabled = args.disabled ?? false %}
+    {% set disabled = disabled ? true : false %}
 	{% set title = args.title ?? "" %}
     {% set require_hide = ('require_hide' in args and args.require_hide) ? true : false %}
     {% set required = field.vars.required ?? false %}
