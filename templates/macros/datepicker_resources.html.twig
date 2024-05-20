@@ -173,7 +173,7 @@
     {% set pickLevel = args.pickLevel ?? 0 %}
     {% set startView = args.startView ?? 0 %}
     {% set maxNumberOfDates = args.maxNumberOfDates ?? 1 %}
-    {% set disabled = args.disabled is defined ? (args.disabled ? 'true' : 'false') : 'false' %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
     {% set title = args.title ?? "" %}
     {% set weekNumbers = args.weekNumbers is defined ? args.weekNumbers : 1 %}
 

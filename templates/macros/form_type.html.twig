@@ -40,7 +40,7 @@
 	{% set ovalue = args.ovalue ?? false %}
 	{% set olabel = args.olabel ?? "" %}
 	{% set oclass = args.oclass ?? "" %}
-    {% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 
 	{% set attributes %}
 		{% if oclass|length %} class="{{ oclass }}" {% endif %}
@@ -77,10 +77,10 @@
 {# - require_hide   : booléen indiquant si l'on doit afficher (true) ou non (false) que le champ est requis #}
 {% macro checkbox(field, label="", args={}) %}
 	{% set label = label ?? field.vars.label %}
-	{% set checked = args.checked ?? false %}
+	{% set checked = ('checked' in args and args.checked) ? true : false %}
 	{% set value = args.value ?? "" %}
     {% set value = value ? value : field.vars.value %}
-	{% set inline = args.inline ?? false %}
+	{% set inline = ('inline' in args and args.inline) ? true : false %}
 	{% set inline = inline ? " one-line" : "" %}
     {% set side = args.side ?? "left" %}
     {% set side = (side != "right" and side != "left") ? "left" : side %}
@@ -93,9 +93,9 @@
 	    {% set checkClass = cl_class.check ?? "" %}
 	{% endif %}
 	{% set labelClass = labelClass ~ inline %}
-	{% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title = args.title ?? "" %}
-    {% set require_hide = args.require_hide ?? false %}
+    {% set require_hide = ('require_hide' in args and args.require_hide) ? true : false %}
     {% set required = field.vars.required ?? false %}
     {% if inline %}
         {% set checkClass = "checkbox col-12 row mx-0 px-0" %}
@@ -168,7 +168,7 @@
 	{% set class = args.class ?? "" %}
 	{% set event = args.event ?? "" %}
 	{% set codeJS = args.codeJS ?? "" %}
-	{% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title = args.title ?? "" %}
 
     {% set attributes ={
@@ -198,7 +198,7 @@
 	{% set class = args.class ?? "" %}
 	{% set event = args.event ?? "" %}
 	{% set codeJS = args.codeJS ?? "" %}
-	{% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title = args.title ?? "" %}
 
     {% set attributes ={
@@ -234,10 +234,10 @@
     {% set placeholder = placeholder ? placeholder : field.vars.placeholder %}
     {% set sl_class = args.sl_class ?? {} %}
     {% set multiple = args.multiple ?? false %}
-    {% set require_hide = args.require_hide ?? false %}
+    {% set require_hide = ('require_hide' in args and args.require_hide) ? true : false %}
     {% set default = args.default ?? "" %}
     {% set default = default ? default : field.vars.value %}
-    {% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
     {% set choices = args.choices ?? {} %}
     {% set choices = choices ?? field.vars.choices %}
 
@@ -489,14 +489,14 @@
     {% set label_class = args.label_class ?? "" %}
 	{% set placeholder = args.placeholder ?? "" %}
 	{% set class = (args.class ?? "") ~ " drop-area" %}
-	{% set multiple = args.multiple ?? false %}
+	{% set multiple = ('multiple' in args and args.multiple) ? true : false %}
 	{% set multiple = field.vars.attr.multiple ?? multiple %}
 	{% set accept = args.accept ?? "" %}
 	{% set accept = accept ? accept : (field.vars.attr.accept ?? "*") %}
-    {% set disabled = args.disabled ?? false %}
-	{% set progressbar = args.progressbar ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+	{% set progressbar = ('progressbar' in args and args.progressbar) ? true : false %}
 	{% set progressbar = progressbar ? progressbar : field.vars.attr.progressbar ?? false %}
-	{% set preview = args.preview ?? false %}
+	{% set preview = ('preview' in args and args.preview) ? true : false %}
 	{% set preview = preview ? preview : field.vars.attr.preview ?? false %}
 	{% set routeController = args.routeController ?? "" %}
 	{% set maxSize = args.maxSize ?? "" %}
@@ -578,14 +578,14 @@
     {% set label_class = args.label_class ?? "" %}
 	{% set placeholder = args.placeholder ?? "" %}
 	{% set class = (args.class ?? "") ~ " drop-area" %}
-	{% set multiple = args.multiple ?? false %}
+	{% set multiple = ('multiple' in args and args.multiple) ? true : false %}
 	{% set multiple = field.vars.attr.multiple ?? multiple %}
 	{% set accept = args.accept ?? "" %}
 	{% set accept = accept ? accept : (field.vars.attr.accept ?? "*") %}
-    {% set disabled = args.disabled ?? false %}
-	{% set progressbar = args.progressbar ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+	{% set progressbar = ('progressbar' in args and args.progressbar) ? true : false %}
 	{% set progressbar = progressbar ? progressbar : field.vars.attr.progressbar ?? false %}
-	{% set preview = args.preview ?? false %}
+	{% set preview =('preview' in args and args.preview) ? true : false %}
 	{% set preview = preview ? preview : field.vars.attr.preview ?? false %}
 	{% set routeController = args.routeController ?? "" %}
 	{% set maxSize = args.maxSize ?? "" %}
@@ -649,7 +649,7 @@
 {% macro group(group, title="", args={} ) %}
 	{% import _self as fields %}
     {% set class = args.class ?? "" %}
-    {% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title_tag = args.title_tag ?? 'h3' %}
 	{% set title_color = args.title_color ?? '#000000' %}
     {% set fields = args.fields ?? {} %}
@@ -695,8 +695,8 @@
 
 	{% set class = args.class ?? "" %}
 	{% set il_class = args.il_class ?? {} %}
-	{% set require_hide = args.require_hide ?? false %}
-	{% set disabled = args.disabled ?? false %}
+	{% set require_hide = ('require_hide' in args and args.require_hide) ? true : false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set value = args.value ?? field.vars.value ?? "" %}
 	{% set required = field.vars.required ?? false %}
     {% set dataset = args.dataset ?? {} %}

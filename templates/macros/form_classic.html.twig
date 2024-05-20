@@ -37,7 +37,7 @@
 	{% set ovalue = args.ovalue ?? false %}
 	{% set olabel = args.olabel ?? "" %}
 	{% set oclass = args.oclass ?? "" %}
-    {% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set value = args.value ?? false %}
 
 	{% set attributes %}
@@ -90,10 +90,10 @@
 	    {% set checkClass = cl_class.check ?? "" %}
 	{% endif %}
 	{% set labelClass = labelClass ~ inline %}
-	{% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title = args.title ?? "" %}
-    {% set require_hide = args.require_hide ?? false %}
-    {% set require = args.require ?? false %}
+    {% set require_hide = ('required_hide' in args and args.require_hide) ? true : false %}
+    {% set require = ('require' in args and args.require) ? true : false %}
     {% if inline %}
         {% set checkClass = checkClass ? checkClass : "checkbox col-12 row mx-0 px-0" %}
     {% else %}
@@ -162,7 +162,7 @@
 	{% set class = args.class ?? "" %}
 	{% set event = args.event ?? "" %}
 	{% set codeJS = args.codeJS ?? "" %}
-	{% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title = args.title ?? "" %}
 
 	{% set attributes %}
@@ -191,7 +191,7 @@
 	{% set class = args.class ?? "" %}
 	{% set event = args.event ?? "" %}
 	{% set codeJS = args.codeJS ?? "" %}
-	{% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title = args.title ?? "" %}
 
 	{% set attributes %}
@@ -226,12 +226,12 @@
     {% set placeholder = args.placeholder ?? "" %}
     {% set sl_class = args.sl_class ?? {} %}
     {% set multiple = args.multiple ?? false %}
-    {% set require_hide = args.require_hide ?? false %}
+    {% set require_hide = ('require_hide' in args and args.require_hide) ? true : false %}
     {% set default = args.default ?? "" %}
-    {% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
     {% set choices = args.choices ?? {} %}
     {% set choices = choices ?? field.vars.choices %}
-    {% set required = args.required ?? false %}
+    {% set required = ('require' in args and args.required) ? true : false %}
 
     {% if placeholder is empty and choices[0] is defined and choices[0] is not empty %}
         {% set placeholder =  'placeholder' in choices[0]|keys ? choices[0]['placeholder'] : "" %}
@@ -479,11 +479,11 @@
     {% set label_class = args.label_class ?? "" %}
 	{% set placeholder = args.placeholder ?? "" %}
 	{% set class = (args.class ?? "") ~ " drop-area" %}
-	{% set multiple = args.multiple ?? false %}
+	{% set multiple = ('multiple' in args and args.multiple) ? true : false %}
     {% set accept = args.accept ?? "*" %}
-    {% set disabled = args.disabled ?? false %}
-	{% set progressbar = args.progressbar ?? false %}
-	{% set preview = args.preview ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+	{% set progressbar = ('progressbar' in args and args.progressbar) ? true : false %}
+	{% set preview = ('preview' in args and args.preview) ?? false %}
     {% set routeController = args.routeController ?? "" %}
     {% set maxSize = args.maxSize ?? "" %}
     {% set maxWidth = args.maxWidth ?? 0 %}
@@ -558,11 +558,11 @@
     {% set label_class = args.label_class ?? "" %}
 	{% set placeholder = args.placeholder ?? "" %}
 	{% set class = (args.class ?? "") ~ " drop-area" %}
-	{% set multiple = args.multiple ?? false %}
+	{% set multiple = ('multiple' in args and args.multiple) ? ture : false %}
     {% set accept = args.accept ?? "*" %}
-    {% set disabled = args.disabled ?? false %}
-	{% set progressbar = args.progressbar ?? false %}
-	{% set preview = args.preview ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+	{% set progressbar = ('progressbar' in args and args.progressbar) ? true : false %}
+	{% set preview = ('preview' in args and args.preview) ?? false %}
     {% set routeController = args.routeController ?? "" %}
     {% set maxSize = args.maxSize ?? "" %}
     {% set maxWidth = args.maxWidth ?? 0 %}
@@ -622,7 +622,7 @@
 {% macro group(group, title="", args={} ) %}
     {% import _self as forms %}
     {% set class = args.class ?? "" %}
-    {% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set title_tag = args.title_tag ?? 'h3' %}
 	{% set title_color = args.title_color ?? '#000000' %}
     {% set fields = args.fields ?? {} %}
@@ -678,14 +678,14 @@
 {# - type           : type du bouton #}
 {# - disabled       : booléen d'activation (false) ou désactivation (true) de la case à cocher #}
 {% macro btn(name, label="", args={}) %}
-    {% set class = args.class is defined ? args.class : "" %}
-    {% set event = args.event is defined ? args.event : "" %}
-    {% set codeJS = args.codeJS is defined ? args.codeJS : "" %}
-    {% set title = args.title is defined ? args.title : "" %}
-    {% set formnovalidate = args.formnovalidate ?? false %}
+    {% set class = args.class ??"" %}
+    {% set event = args.event ?? "" %}
+    {% set codeJS = args.codeJS ?? : "" %}
+    {% set title = args.title ?? "" %}
+    {% set formnovalidate = ('formnovalidate' in args and args.formnovalidate) ? true : false %}
     {% set type = args.type ?? 'submit' %}
-    {% set data_url = args.data_url is defined ? args.data_url : "" %}
-    {% set disabled = args.disabled is defined ? args.disabled : false %}
+    {% set data_url = args.data_url ?? "" %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 
     {% set attributes %}
         {% if name|length %} id="{{ name }}" name="{{ name }}" {% endif %}
@@ -741,7 +741,7 @@
     {% set value = args.value ?? "" %}
     {% set placeholder = args.placeholder ?? "" %}
     {% set form = args.form ?? '' %}
-    {% set disabled = args.disabled ?? false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
     {% set dataset = args.dataset ?? {} %}
 
     {% if "[" in name and "]" in name %}

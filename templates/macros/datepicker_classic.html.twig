@@ -18,7 +18,7 @@
     {% set date_min = args.date_min ?? "" %}
     {% set date_max = args.date_max ?? "" %}
     {% set title = args.title ?? label %}
-    {% set disabled = args.disabled  ? true : false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
     {% set label_ico = args.label_ico ?? "" %}
     {% set day_date = args.day_date ?? "" %}
     {% if day_date is not empty %}
@@ -104,8 +104,8 @@
     {% set sdisabled = false %}
     {% set edisabled = false %}
     {% if disabled %}
-        {% set sdisabled = disabled.sdisabled ? true : false %}
-        {% set edisabled = disabled.edisabled ? true : false %}
+        {% set sdisabled = ('sdisabled' in disabled and disabled.sdisabled) ? true : false %}
+        {% set edisabled = ('edisabled' in disabled and disabled.edisabled) ? true : false %}
     {% endif %}
     {% set sdisabled = sdisabled ? 'disabled="disabled"' : '' %}
     {% set edisabled = edisabled ? 'disabled="disabled"' : '' %}

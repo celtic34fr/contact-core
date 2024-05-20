@@ -13,8 +13,8 @@
     {% set label = label ?? field.vars.label %}
     {% set title = args.title ?? label %}
     {% set label = label ~ (field.vars.required ? ' <abbr class="required" title="required">*</abbr>' : '') %}
-    {% set disabled = args.disabled ? true : false %}
-    {% set label_ico = args.label_ico ?? "" %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+    {% set label_ico = ('label_ico' in args and args.label_ico) ? true : false %}
     {% set time = agrs.time ?? "" %}
 
     {% set field_id = field.vars.id %}

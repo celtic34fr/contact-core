@@ -16,8 +16,8 @@
     {% set placeholder = args.placeholder ?? "" %}
     {% set date_min = args.date_min ?? "" %}
     {% set date_max = args.date_max ?? "" %}
-    {% set disabled = args.disabled ? true : false %}
-    {% set label_ico = args.label_ico ? true : false %}
+    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+    {% set label_ico = ('label_ico' in args and args.label_ico) ? true : false %}
     {% set title = args.title ?? "" %}
 
     {% set day_date = args.day_date ?? "" %}
