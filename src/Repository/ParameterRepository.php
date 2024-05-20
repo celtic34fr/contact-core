@@ -329,8 +329,8 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $activitiesSectors = [];
         $valeurs = $this->findItemsByCle(ActivitySector::CLE);
-        if ($values) {
-            $activitiesSectors = $this->formatActivitiesList($values);
+        if ($valeurs) {
+            $activitiesSectors = $this->formatActivitiesList($valeurs);
             $activitiesSectors = $this->buildActivitiesTree($activitiesSectors);
         }
         return $activitiesSectors;
