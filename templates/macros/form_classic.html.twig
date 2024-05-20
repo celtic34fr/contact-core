@@ -680,7 +680,7 @@
 {% macro btn(name, label="", args={}) %}
     {% set class = args.class ??"" %}
     {% set event = args.event ?? "" %}
-    {% set codeJS = args.codeJS ?? : "" %}
+    {% set codeJS = args.codeJS ?? "" %}
     {% set title = args.title ?? "" %}
     {% set formnovalidate = ('formnovalidate' in args and args.formnovalidate) ? true : false %}
     {% set type = args.type ?? 'submit' %}
