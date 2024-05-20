@@ -707,9 +707,10 @@
 	{% set required = field.vars.required ?? false %}
     {% set dataset = args.dataset ?? {} %}
 
-	{% set label_class %}
+	{#% set label_class %}
     	{{ (il_class|length and label in il_class|keys) ? il_class.label : '' }}
-	{% endset %}
+	{% endset %#}
+    {% set label_class = il_class is not empty ?. (il_class.label ?? "") : "" %}
 	{% set required = 'required' in label_class ? true : field.vars.required ?? false %}
 
     {#% set input_class %}
