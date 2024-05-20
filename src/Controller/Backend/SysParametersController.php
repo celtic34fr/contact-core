@@ -95,6 +95,12 @@ class SysParametersController extends AbstractController
     #[Route('/rcategories_form/{id}', name: 'rcategories-form')]
     public function rcategories_form(Parameter $parameter, Request $request): JsonResponse
     {
+        $response = [
+            'type' => "success",
+            'message' => "Récupération des informations des catégories exécutée avecc succès",
+            'paramsList' => [],
+        ];
+        return new JsonResponse($response);
     }
 
     #[Route('/rcategories_toggle/{status}', name: 'rcategories-toggle')]
