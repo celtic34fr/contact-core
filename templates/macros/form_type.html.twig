@@ -708,11 +708,13 @@
     {% set dataset = args.dataset ?? {} %}
 
 	{% set label_class %}
-    	{{ ((il_class|length and label in il_class|keys) ? il_class.label : '') }}
+    	{{ (il_class|length and label in il_class|keys) ? il_class.label : '' }}
 	{% endset %}
 	{% set required = 'required' in label_class ? true : field.vars.required ?? false %}
 
-    {% set input_class = (il_class|length and input in il_class|keys) ? il_class.input : '' %}
+    {% set input_class %}
+        {% (il_class|length and input in il_class|keys) ? il_class.input : '' %}
+	{% endset %}
 	{% if label_class|length or input_class|length %}
     	{% set class = class ~ " row" %}
     {% endif %}
