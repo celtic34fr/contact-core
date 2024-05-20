@@ -35,7 +35,8 @@
 {# ----- à voir si ajout ? #}
 {% macro datepickerJSinit(args={}) %}
     {% set format = (args.format is defined and args.format is not empty) ? args.format : "dd/mm/yyyy" %}
-    {% set autohide = args.autohide is defined ? (args.autohide ? 'true' : 'false') : 'false' %}
+    {% set autohide = args.autohide ?? false %}
+    {% set autohide = (autohide == 'true' or autohide) ? 'true' : 'false' %}
     {% set language = args.language is defined ? args.language : app.request.locale %}
 
     {% set orientation = args.orientation is defined ? args.orientation : 'auto' %}

@@ -20,7 +20,8 @@
     {% set placeholder = args.placeholder ?? "" %}
     {% set date_min = args.date_min ?? "" %}
     {% set date_max = args.date_max ?? "" %}
-    {% set disabled = ('disabled' in args and args.disabled) ? true : false %}
+    {% set disabled = args.disabled ?? false %}
+    {% set disabled = (disabled == 'true' or disabled) ? true : false %}
     {% set label_ico = args.label_ico ?? "" %}
     
     {% set field_value = dp_res.datetimeArrayToString(field.vars.value, true, false) %}
