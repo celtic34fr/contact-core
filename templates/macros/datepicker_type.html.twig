@@ -1,3 +1,4 @@
+{% import "@contact-core/templates/macros/datepicker_resources.html.twig" as dp_res %}
 
 {# macro datepicker zone de sélection d(une date #}
 {# - field          : champ date déclaré dans le formulaure Symfony Form #}
@@ -23,8 +24,7 @@
     {% set disabled = ('disabled' in args and args.disabled) ? true : false %}
     {% set label_ico = args.label_ico ?? "" %}
     
-    {% import "@contact-core/templates/macros/datepicker_resources.html.twig" as fields %}
-    {% set field_value = fields.datetimeArrayToString(field.vars.value, true, false) %}
+    {% set field_value = dp_res.datetimeArrayToString(field.vars.value, true, false) %}
     {% set day_date = args.day_date ?? field_value %}
     {% if day_date %}
         {% if day_date is typeOf('array') %}
@@ -111,9 +111,8 @@
     {% set sico = label_ico.sico ?? "" %}
     {% set eico = label_ico.eico ?? "" %}
 
-    {% import "@contact-core/templates/macros/datepicker_resources.html.twig" as fields %}
-    {% set field_start_value = fields.datetimeArrayToString(field_start.vars.value, true, false) %}
-    {% set field_end_value = fields.datetimeArrayToString(field_end.vars.value, true, false) %}
+    {% set field_start_value = dp_res.datetimeArrayToString(field_start.vars.value, true, false) %}
+    {% set field_end_value = dp_res.datetimeArrayToString(field_end.vars.value, true, false) %}
     {% set field_start_id = field_start.vars.id %}
     {% set field_start_name = field_start.vars.name %}
     {% set field_end_id = field_end.vars.id %}
