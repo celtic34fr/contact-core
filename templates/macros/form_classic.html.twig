@@ -483,7 +483,7 @@
     {% set accept = args.accept ?? "*" %}
     {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
 	{% set progressbar = ('progressbar' in args and args.progressbar) ? true : false %}
-	{% set preview = ('preview' in args and args.preview) ?? false %}
+	{% set preview = ('preview' in args and args.preview)  ? true : false %}
     {% set routeController = args.routeController ?? "" %}
     {% set maxSize = args.maxSize ?? "" %}
     {% set maxWidth = args.maxWidth ?? 0 %}
