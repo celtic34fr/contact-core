@@ -140,20 +140,22 @@ class SysParametersController extends AbstractController
     public function socialnetworks_list(Request $request)
     {
         $paramsList = [];
-        $entreprise = $this->extConfig->get('contact-core/entreprise');
+        $entreprise = $this->extConfig->get('celtic34fr-contactcore/entreprise');
         $socialNetworkList = $this->parameterRepo->findValidSocialNetworks();
         if ($socialNetworkList) {
             foreach ($socialNetworkList as $id => $infos) {
                 list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
-                $item = [
-                    'id'        => $id,
-                    'name'      => $infos['name'],
-                    'logo'      => $logo[0],
-                    'pUrl'      => ($entreprise[$infos['name']] ?? ""),
-                    'created'   => $infos['created'],
-                    'updated'   => $infos['updated'],
-                ];
-                $paramsList[] = $item;
+                if ($logo) {
+                    $item = [
+                        'id'        => $id,
+                        'name'      => $infos['name'],
+                        'logo'      => $logo[0],
+                        'pUrl'      => ($entreprise[$infos['name']] ?? ""),
+                        'created'   => $infos['created'],
+                        'updated'   => $infos['updated'],
+                    ];
+                    $paramsList[] = $item;
+                }
             }
         }
 
@@ -200,7 +202,7 @@ class SysParametersController extends AbstractController
             }
         } elseif ($request->getMethod() == "POST") {
             // traitement du formulaire de saisie d'informations réseaux sociaux
-            $myPreset = $request->getSession()->get("myPreset");
+             $myPreset = $request->getSession()->get("myPreset");
 
             $socialNetwork = new SysSocialNetwork();
             $socialNetwork->setLogoID($request->request->get('logoId'));
@@ -209,6 +211,7 @@ class SysParametersController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $socialNetwork->setLogoID($request->request->get('logoId'));
                 // traitement de l'icone du réseau social
                 $socialNetworkName = $socialNetwork->getName();
                 if ($socialNetworkName) {
@@ -216,11 +219,11 @@ class SysParametersController extends AbstractController
                 }
                 /** @var Parameter $parameter */
                 if (!$parameter) {
-                    $parameterList = $this->parameterRepo->findSocialNetworks();
+                    $parameterList = $this->parameterRepo->findAllSocialNetworks();
                     $parameter = new Parameter();
                     $parameter->setCle(SocialNetwork::CLE);
-                    $parameter->setOrd(sizeof($parameterList));
-                    $parameter->setValeur($socialNetwork->getValeur() + 1);
+                    $parameter->setOrd(sizeof($parameterList) + 1);
+                    $parameter->setValeur($socialNetwork->getValeur());
                     $this->parameterRepo->save($parameter, true);
                     $logo = $this->entityManager->getRepository(PieceJointe::class)->find($socialNetwork->getLogoID());
                     $logo->setTempo(false);

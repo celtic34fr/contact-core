@@ -100,29 +100,31 @@ class UploadFiles
             if (!$err_msg) {
                 foreach ($pj_ids as $pj_id) {
                     /** @var PieceJointe $pj */
-                    $pj = $this->entityManager->getRepository(PieceJointe::class)->find($pj_id);
+                    if ($pj_id) {
+                        $pj = $this->entityManager->getRepository(PieceJointe::class)->find($pj_id);
 
-                    $item = [];
-                    $item['id'] = $pj_id;
-                    $item['view_url'] = $this->router->generate('tools_view_doc', ['id' => $pj_id]);
-
-                    switch ($mode) {
-                        case 'icon':
-                            $name = $pj->getFileName();
-                            $ext = pathinfo($name, PATHINFO_EXTENSION);
-                            $file_path = __DIR__ . "/../../public/contact_assets/icons/$ext.svg";
-                            if (file_exists($file_path)) {
-                                $url = $this->assetManager->getUrl("contact_assets/icons/$ext.svg");
-                            } else {
-                                $url = $this->assetManager->getUrl('contact_assets/icons/unknown.svg');
-                            }
-                            $item['preview_url'] = $url;
-                            break;
-                        case 'thumbnail':
-                            $item['preview_url'] = $this->router->generate('tools_raw_doc', ['id' => $pj_id]);
-                            break;
+                        $item = [];
+                        $item['id'] = $pj_id;
+                        $item['view_url'] = $this->router->generate('tools_view_doc', ['id' => $pj_id]);
+    
+                        switch ($mode) {
+                            case 'icon':
+                                $name = $pj->getFileName();
+                                $ext = pathinfo($name, PATHINFO_EXTENSION);
+                                $file_path = __DIR__ . "/../../public/contact_assets/icons/$ext.svg";
+                                if (file_exists($file_path)) {
+                                    $url = $this->assetManager->getUrl("contact_assets/icons/$ext.svg");
+                                } else {
+                                    $url = $this->assetManager->getUrl('contact_assets/icons/unknown.svg');
+                                }
+                                $item['preview_url'] = $url;
+                                break;
+                            case 'thumbnail':
+                                $item['preview_url'] = $this->router->generate('tools_raw_doc', ['id' => $pj_id]);
+                                break;
+                        }
+                        $initial_datas[] = $item;
                     }
-                    $initial_datas[] = $item;
                 }
             }
         }

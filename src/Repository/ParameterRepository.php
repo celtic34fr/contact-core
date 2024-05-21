@@ -219,7 +219,7 @@ class ParameterRepository extends ServiceEntityRepository
         }
         if ($orderBy) {
             foreach ($orderBy as $cle => $order) {
-                $qb->orderBy('p'.$cle, $order);
+                $qb->orderBy("p.$cle", $order);
             }
         }
         return $qb->getQuery()->getResult();
@@ -242,7 +242,7 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $socialNetworks = [];
         $values = $this->findValidItemsByCle(SocialNetwork::CLE);
-        if ($values) $socialNetwork = $this->formatSocialNetworksList($values);        
+        if ($values) $socialNetworks = $this->formatSocialNetworksList($values);        
         return $socialNetworks;
     }
 
@@ -270,7 +270,8 @@ class ParameterRepository extends ServiceEntityRepository
         ], [
             'created_at' => 'DESC',
         ]);
-        return $socialNetwork[0] ? $this->formatSocialNetworksList($socialNetwork[0]) : null;
+        $socialNetworkItem = $socialNetwork[0] ?? null;
+        return $socialNetworkItem ? $this->formatSocialNetworksList($socialNetworkItem) : null;
     }
 
     /**
