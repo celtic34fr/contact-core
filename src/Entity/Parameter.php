@@ -142,7 +142,7 @@ class Parameter
     /**
      * Get the value of updated_at
      */
-    public function getUpdatedAt(): DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updated_at;
     }
