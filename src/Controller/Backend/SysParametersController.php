@@ -174,13 +174,11 @@ class SysParametersController extends AbstractController
     }
 
     #[Route('/socialnetworks_form/{id}', name: 'socialnetworks-form')]
-    public function socialnetworks_form(Parameter $parameter, Request $request): JsonResponse
+    public function socialnetworks_form(Request $request, int $id=null): JsonResponse
     {
+        $parameter = $id ? $this->parameterRepo->find($id) : null;
         $response = "";
-        if ($request->getMethod() == "GET" ) {
-            // récupération des informations pour alimentation du formulaire
-            /*$paramId = $request->query->get('paramId');
-            $parameter = $this->parameterRepo->find($paramId);*/
+        if ($request->getMethod() == "GET") {
             $socialNetwork = new SocialNetwork($parameter);
             $entreprise = $this->extConfig->get('contact-core/entreprise');
             list($error_prepare, $prepare_initial_datas) = $this->uploadFiles->prepare_initial_datas([$socialNetwork->getLogoID()], "thumbnail", "array");
@@ -230,7 +228,7 @@ class SysParametersController extends AbstractController
                 } else {
                     if ($parameter->getValeur() != $socialNetwork->getValeur()) {
                         $parameter->setValeur($socialNetwork->getValeur());
-                        $this->parameterRepo->updateParameter($parameter, true);    
+                        $this->parameterRepo->update($parameter, true);    
                     }
                 }
                 // traitement de la référence à la page du réseau social
@@ -301,7 +299,7 @@ class SysParametersController extends AbstractController
                 'message' => "Réseau social ".$socialNetwork->getName()." déjà actif, veuillez modifier ce dernier plutôt que de demander une réactivation",
             ];
         } else {
-            $this->parameterRepo->updateParameter($social, true);
+            $this->parameterRepo->update($social, true);
             $response = [
                 'type' => "success",
                 'message' => "Réactivation du réseau social ".$socialNetwork->getName()." réalisé avec succés",
