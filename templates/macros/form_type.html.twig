@@ -143,11 +143,11 @@
 	{% set ref = args.ref ?? "" %}
 	{% set form = args.form ?? '' %}
     {% set custom_name = args.custom_name ?? "" %}
-    {% set custom_name = custom_name ? custom_name : field.vars.name ?? "" %}
+    {% set custom_name = custom_name ? custom_name : field.vars.full_name ?? "" %}
     {% set value = value ? value : field.vars.value %}
 
     {% set attributes = 'data-ref="'~ref~'" class="'~class~'" form="'~form~'"' %}
-    <input type="hidden" name="{{ custom_name }}" {{ attributes }}>
+    <input type="hidden" id="{{ field.vars.id }}" name="{{ custom_name }}" {{ attributes }}>
 {% endmacro %}
 
 {# macro submitbtn Bouton de soumission de formulaire #}
