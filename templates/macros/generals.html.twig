@@ -100,7 +100,7 @@
 {% macro btn(name, label="", args={}) %}
     {% set class = args.class ?? "" %}
     {% set title = args.title ?? "" %}
-    {% set datasets = args.datasets  {} %}
+    {% set datasets = args.datasets : {} %}
     {% set event = args.event ?? "" %}
     {% set codeJS = args.codeJS ?? "" %}
 
