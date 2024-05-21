@@ -25,6 +25,8 @@ class SocialNetwork extends Parameter
             $this->id = $parameter->getId();
             $this->setCle($parameter->getCle());
             $this->setOrd($parameter->getOrd());
+            $this->setCreatedAt($parameter->getCreatedAt());
+            $this->setUpdatedAt($parameter->getUpdatedAt());
         }
         // if empty valeur : not is initialize
     }
