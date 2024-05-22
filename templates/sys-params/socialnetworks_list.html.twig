@@ -37,6 +37,11 @@
 		input[type="file"] {
 			display: none;
 		}
+
+		.logo img {
+			width: 60%;
+			height: 60%;
+		}
 	</style>
 {% endblock %}
 
@@ -229,6 +234,7 @@
 		function submitFormRef(evt) {
 			evt.preventDefault
 			evt.stopPropagation
+			let notif_area = document.querySelector(".admin__notifications")
 
 			let url = "/bcknd/sys_params/socialnetworks_form"
 			let formDatas = new FormData(evt.target)
@@ -240,6 +246,13 @@
 				headers: {'X-Requested-With': 'XMLHttpRequest'},
 				body: formDatas
 	  		}).then(function (response) {
+				return response.json()
+			}).then(function(reponse){
+				if (reponse.type == "success") {
+					location.reload()
+				} else {
+					show_toast(reponse.type, reponse.message, notif_area)
+				}
             })
 		}
 
