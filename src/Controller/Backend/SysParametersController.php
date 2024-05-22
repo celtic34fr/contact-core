@@ -282,7 +282,7 @@ class SysParametersController extends AbstractController
     {
         $response = [];
         $social->setUpdatedAt(new DateTimeImmutable('now'));
-        $this->parameterRepo->save($social);
+        $this->parameterRepo->save($social, true);
         $socialNetwork = new SocialNetwork($social);
 
         $response = [
