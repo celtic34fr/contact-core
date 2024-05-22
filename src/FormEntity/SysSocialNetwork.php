@@ -85,11 +85,13 @@ class SysSocialNetwork
 
     /**
      * redefine getValeur to serve string formated
+     * name & logoID must be not empty else return null
      * @return string|null
      */
     public function getValeur(): mixed
     {
-        if (!$this->name && !$this->logoID) return null;
-        return ($this->name ?? "").'|'.($this->logoID ?? "");
+        if (!$this->name || !$this->logoID) return null;
+        $rtrn = $this->name.'|'.$this->logoID;
+        return $rtrn;
     }
 }

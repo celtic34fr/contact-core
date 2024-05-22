@@ -193,7 +193,7 @@ class ParameterRepository extends ServiceEntityRepository
      * @param string $cle
      * @return null|array
      */
-    public function findItemsByCle(string $cle): mixed
+    public function findAllItemsByCle(string $cle): mixed
     {
         $db = $this->createQueryBuilder('p');
         return $db
@@ -215,6 +215,7 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p');
         foreach ($criteria as $cle => $partial) {
+            if ($cle == "valeur") $partial = '"'.$partial;
             $qb->andWhere("p.$cle LIKE '$partial'");
         }
         if ($orderBy) {
@@ -253,7 +254,7 @@ class ParameterRepository extends ServiceEntityRepository
     public function findAllSocialNetworks(): array
     {
         $socialNetworks = [];
-        $values = $this->findItemsByCle(SocialNetwork::CLE);
+        $values = $this->findAllItemsByCle(SocialNetwork::CLE);
         if ($values) $socialNetwork = $this->formatSocialNetworksList($values);        
         return $socialNetworks;
     }
@@ -310,7 +311,7 @@ class ParameterRepository extends ServiceEntityRepository
     public function findAllRelationCategories(): array
     {
         $relationCategories = [];
-        $values = $this->findItemsByCle(SocialNetwork::CLE);
+        $values = $this->findAllItemsByCle(SocialNetwork::CLE);
         if ($values) $relationCategories = $this->formatSocialNetworksList($values);        
         return $relationCategories;
     }
@@ -329,7 +330,7 @@ class ParameterRepository extends ServiceEntityRepository
     public function findAllActivitiesSectors(): array
     {
         $activitiesSectors = [];
-        $valeurs = $this->findItemsByCle(ActivitySector::CLE);
+        $valeurs = $this->findAllItemsByCle(ActivitySector::CLE);
         if ($valeurs) {
             $activitiesSectors = $this->formatActivitiesList($valeurs);
             $activitiesSectors = $this->buildActivitiesTree($activitiesSectors);
