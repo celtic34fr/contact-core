@@ -255,15 +255,15 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $socialNetworks = [];
         $values = $this->findAllItemsByCle(SocialNetwork::CLE);
-        if ($values) $socialNetwork = $this->formatSocialNetworksList($values);        
+        if ($values) $socialNetworks = $this->formatSocialNetworksList($values);        
         return $socialNetworks;
     }
 
     /**
      * @param string $name
-     * @return Parameter|null
+     * @return array|null
      */
-    public function findSocialNetworkByName(string $name): ?Parameter
+    public function findSocialNetworkByName(string $name): array
     {
         $socialNetwork = $this->findByPartialFields([
             'cle' => SocialNetwork::CLE,
@@ -288,6 +288,9 @@ class ParameterRepository extends ServiceEntityRepository
         ], [
             'created_at' => 'DESC',
         ]);
+        $socialNetworkItem = $this->findSocialNetworkByName($name);
+        $socialNetworkLogo = $socialNetworkItem ? $this->formatSocialNetworksList($socialNetworkItem) : null;
+        return $socialNetworkLogo ?? null; 
         if ($socialNetwork) {
             return $socialNetwork[0]->getLogoID();
         }
