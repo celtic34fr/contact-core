@@ -243,7 +243,13 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $socialNetworks = [];
         $values = $this->findValidItemsByCle(SocialNetwork::CLE);
-        if ($values) $socialNetworks = $this->formatSocialNetworksList($values);        
+        if ($values) {
+            foreach ($values as $value) {
+                /** @var SocialNetwork $socialNetwork */
+                $socialNetwork = $this->ParameterToSocialNetworks($value);
+                $socialNetworks[] = $this->formatSocialNetworks($socialNetwork);
+            }
+        }        
         return $socialNetworks;
     }
 
@@ -255,7 +261,13 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $socialNetworks = [];
         $values = $this->findAllItemsByCle(SocialNetwork::CLE);
-        if ($values) $socialNetworks = $this->formatSocialNetworksList($values);        
+        if ($values) {
+            foreach ($values as $value) {
+                /** @var SocialNetwork $socialNetwork */
+                $socialNetwork = $this->ParameterToSocialNetworks($value);
+                $socialNetworks[] = $this->formatSocialNetworks($socialNetwork);
+            }
+        }
         return $socialNetworks;
     }
 
@@ -272,7 +284,12 @@ class ParameterRepository extends ServiceEntityRepository
             'created_at' => 'DESC',
         ]);
         $socialNetworkItem = $socialNetwork[0] ?? null;
-        return $socialNetworkItem ? $this->formatSocialNetworksList($socialNetworkItem) : null;
+        if ($socialNetworkItem) {
+            /** @var SocialNetwork $socialNetwork */
+            $socialNetwork = $this->ParameterToSocialNetworks($socialNetworkItem);
+            return $this->formatSocialNetworks($socialNetwork);
+        }
+        return null;
     }
 
     /**
@@ -289,12 +306,8 @@ class ParameterRepository extends ServiceEntityRepository
             'created_at' => 'DESC',
         ]);
         $socialNetworkItem = $this->findSocialNetworkByName($name);
-        $socialNetworkLogo = $socialNetworkItem ? $this->formatSocialNetworksList($socialNetworkItem) : null;
-        return $socialNetworkLogo ?? null; 
-        if ($socialNetwork) {
-            return $socialNetwork[0]->getLogoID();
-        }
-        return false;
+        $socialNetworkLogo = $socialNetworkItem[0] ? $socialNetworkItem[0]['logoID'] : null;
+        return $socialNetworkLogo ?? false;
     }
 
     /**
@@ -315,7 +328,7 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $relationCategories = [];
         $values = $this->findAllItemsByCle(SocialNetwork::CLE);
-        if ($values) $relationCategories = $this->formatSocialNetworksList($values);        
+        if ($values) $relationCategories = $this->formatRelationCategories($values);        
         return $relationCategories;
     }
 
@@ -370,19 +383,34 @@ class ParameterRepository extends ServiceEntityRepository
      * @param array $values
      * @return array
      */
-    private function formatSocialNetworksList(array $values) : array
+    private function ParameterToSocialNetworks(Parameter $parameter) : SocialNetwork
+    {
+        return new SocialNetwork($parameter);
+    }
+
+    /**
+     * @param $values
+     * @return array
+     */
+    private function formatSocialNetworks($values) : array
     {
         $socialNetworks = [];
         if ($values) {
-            foreach ($values as $value) {
-                $socialNetwork = new SocialNetwork($value);
-                $socialNetworks[$socialNetwork->getId()] = [
-                    'id' => $socialNetwork->getId(),
-                    'name' => $socialNetwork->getName(),
-                    'logoID' => $socialNetwork->getLogoID(),
-                    'created' => $socialNetwork->getCreatedAt(),
-                    'updated' => $socialNetwork->getUpdatedAt(),
-                ];
+            if (is_array($values)) {
+                foreach ($values as $value) {
+                    $socialNetwork = new SocialNetwork($value);
+                    $socialNetworks[$socialNetwork->getId()] = [
+                        'id' => $socialNetwork->getId(),
+                        'cle' => $socialNetwork->getCle(),
+                        'ord' => $socialNetwork->getOrd(),
+                        'name' => $socialNetwork->getName(),
+                        'logoID' => $socialNetwork->getLogoID(),
+                        'created' => $socialNetwork->getCreatedAt(),
+                        'updated' => $socialNetwork->getUpdatedAt(),
+                    ];
+                }
+            } elseif ($values instanceof SocialNetwork) {
+                $socialNetworks = $values->getAsArray();
             }
         }
         return $socialNetworks;

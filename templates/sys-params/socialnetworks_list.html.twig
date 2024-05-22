@@ -244,14 +244,14 @@
 		}
 
 		function createBtn(name, label = "",args = {}) {
-			let classes = args.hasOwnProperty('class') ? args.classes : ""
+			let classe = args.hasOwnProperty('classe') ? args.classe : ""
 			let title = args.hasOwnProperty('title') ? args.title : ""
 			let datasets = args.hasOwnProperty('datasets') ? args.datasets : {}
 			let event = args.hasOwnProperty('event') ? args.event : ""
 			let codeJS = args.hasOwnProperty('codeJS') ? args.codeJS : ""
 			let btn = document.createElement('button')
 			btn.id = name
-			btn.classList.add(classes.split(' '))
+			btn.classList.add('col-5', 'btn', 'p-0', 'm-0', classe)
 			if (label.length > 0) {
 				btn.innerHTML = label
 			}
@@ -285,7 +285,8 @@
 			let imgLogo = document.createElement('img')
 			imgLogo.src = item.logo.preview_url
 			imgLogo.title = item.name
-			divItem.appendChild(imgLogo)
+			divLogo.appendChild(imgLogo)
+			divItem.appendChild(divLogo)
 			let divUrl = document.createElement('div')
 			divUrl.classList.add('pUrl', 'col-7', 'mx-0', 'px-0')
 			divUrl.innerHTML = item.pUrl
@@ -293,19 +294,27 @@
 			let divActions = document.createElement('div')
 			divActions.classList.add('actions', 'col-3', 'mx-0', 'px-0', 'text-center')
 			let datasets = { 'paramId': item.id }
-			let btnEArgs = {
-				type: 'edt', id: item.id, ico: 'pen', classes: 'col-5 btn btn-success p-0 m-0',
-				title:'Editer la référence',bclass:'btn btn-success p-0 m-auto col-12',
+			if (item.updated) {
+			let btnactv = createBtn('act' + item.id, '<i class="fa fa-recycle"></i>', {
+				type: 'edt', id: item.id, ico: 'pen', classe: 'btn-info',
+				title:'Editer la référence',
+				event: 'onClick', codeJS:'actvRef(' + item.id + ')', dataset: datasets
+			})
+			divActions.appendChild(btnactv)
+			} else {
+			let btnedit = createBtn('edt' + item.id, '<i class="fa fa-pen"></i>', {
+				type: 'edt', id: item.id, ico: 'pen', classe: 'btn-success',
+				title:'Editer la référence',
 				event: 'onClick', codeJS:'editRef(' + item.id + ')', dataset: datasets
-			}
-			let btnedit = createBtn('edt' + item.id, '', btnEArgs)
+			})
 			divActions.appendChild(btnedit)
-			let btndelt = createBtn('del' + item.id, '', {
-				type: 'del', id: item.id, ico: 'trash', classes: 'col-5 btn btn-warning row m-0 p-0',
-				title:'Supprimer la référence',bclass:'btn btn-warning p-0 m-auto col-12',
+			let btndelt = createBtn('del' + item.id, '<i class="fa fa-trash"></i>', {
+				type: 'del', id: item.id, ico: 'trash', classe: 'btn-warning',
+				title:'Supprimer la référence',
 				event: 'onClick', codeJS:'deltRef(' + item.id + ')', dataset: datasets
 			})
 			divActions.appendChild(btndelt)
+			}
 			divItem.appendChild(divActions)
 			return divItem
 		}
@@ -334,6 +343,7 @@
 					listTab.appendChild(noResult())
 				} else {
 					networkList.forEach(element => {
+						console.log(element);
 						listTab.appendChild(formatLine(element))
 					});
 				}

@@ -3,6 +3,7 @@
 namespace Celtic34fr\ContactCore\EntityRedefine;
 
 use Celtic34fr\ContactCore\Entity\Parameter;
+use DateTimeImmutable;
 
 class SocialNetwork extends Parameter
 {
@@ -12,21 +13,32 @@ class SocialNetwork extends Parameter
     private ?string $urlPage = null;
     private ?int $logoID = null;
 
-    public function __construct(Parameter $parameter= null)
+    public function __construct($parameter= null)
     {
         if ($parameter) {
-            $valeur = $parameter->getValeur();
-            if ($valeur) { // if sommething is in valeur
-                $first  = strpos($valeur, '|');
-                $this->name = substr($valeur, 0, $first);
-                $this->logoID = (int) substr($valeur, $first + 1);
-                $this->urlPage = null;
-            }
-            $this->id = $parameter->getId();
-            $this->setCle($parameter->getCle());
-            $this->setOrd($parameter->getOrd());
-            $this->setCreatedAt($parameter->getCreatedAt());
-            $this->setUpdatedAt($parameter->getUpdatedAt());
+            if ($parameter instanceof Parameter) {
+                $valeur = $parameter->getValeur();
+                if ($valeur) { // if sommething is in valeur
+                    $first  = strpos($valeur, '|');
+                    $this->name = substr($valeur, 0, $first);
+                    $this->logoID = (int) substr($valeur, $first + 1);
+                    $this->urlPage = null;
+                }
+                $this->id = $parameter->getId();
+                $this->setCle($parameter->getCle());
+                $this->setOrd($parameter->getOrd());
+                $this->setCreatedAt($parameter->getCreatedAt());
+                $this->setUpdatedAt($parameter->getUpdatedAt());
+            } elseif (is_array($parameter)) {
+                $this->id = $parameter['id'] ?? null;
+                $this->cle = $parameter['cle'];
+                $this->ord = $parameter['ord'];
+                $this->created_at = gettype($parameter['created']) == 'string' ? new DateTimeImmutable($parameter['created']) : $parameter['created'];
+                $this->updated_at = gettype($parameter['updated']) == 'string' ? new DateTimeImmutable($parameter['updated']) : $parameter['updated'];
+                $this->name = $parameter['name'];
+                $this->logoID = (int) $parameter['logoID'];
+                $this->urlPage = $parameter['urlPage'];
+        }
         }
         // if empty valeur : not is initialize
     }
@@ -89,6 +101,25 @@ class SocialNetwork extends Parameter
     public function getValeur(): mixed
     {
         if (!$this->name && !$this->logoID) return null;
-        return ($this->name ?? "").'|'($this->logoID ?? "");
+        return ($this->name ?? "").'|'.($this->logoID ?? "");
+    }
+
+    public function getAsArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'cle' => $this->getCle(),
+            'ord' => $this->getOrd(),
+            'created' => $this->getCreatedAt(),
+            'updated' => $this->getUpdatedAt(),
+            'name' => $this->getName(),
+            'logoID' => $this->getLogoID(),
+            'urlPage' => $this->getUrlPage(),
+        ];
+    }
+
+    public function setFromArray(array $valArray) : SocialNetwork
+    {
+        
     }
 }

@@ -214,8 +214,11 @@ class SysParametersController extends AbstractController
                 $socialNetwork->setLogoID($request->request->get('logoId'));
                 // traitement de l'icone du réseau social
                 $socialNetworkName = $socialNetwork->getName();
+                $parameter = null;
                 if ($socialNetworkName) {
-                    $parameter = $this->parameterRepo->findSocialNetworkByName($socialNetworkName);
+                    $socialNetworkArray = $this->parameterRepo->findSocialNetworkByName($socialNetworkName);
+                    $socialNetwork = new SocialNetwork($socialNetworkArray);
+                    $parameter = $this->parameterRepo->find($socialNetwork->getId());
                 }
                 /** @var Parameter $parameter */
                 if (!$parameter) {
@@ -229,6 +232,7 @@ class SysParametersController extends AbstractController
                     $logo->setTempo(false);
                     $this->entityManager->flush();
                 } else {
+                    
                     if ($parameter->getValeur() != $socialNetwork->getValeur()) {
                         $parameter->setValeur($socialNetwork->getValeur());
                         $this->parameterRepo->update($parameter, true);    
