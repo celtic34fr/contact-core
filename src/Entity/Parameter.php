@@ -64,6 +64,15 @@ class Parameter
     {
         return $this->id;
     }
+    
+    /**
+     * Get the value of id
+     */
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * Get the value of cle

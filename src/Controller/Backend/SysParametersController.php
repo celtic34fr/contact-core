@@ -299,13 +299,14 @@ class SysParametersController extends AbstractController
         $response = [];
         $socialNetwork = new SocialNetwork($social);
         $active = $this->parameterRepo->findSocialNetworkByName($socialNetwork->getName());
+        $lastSocial = new SocialNetwork($active);
         if ($active  && $active['updated'] == null) {
             $response = [
                 'type' => "error",
                 'message' => "Réseau social ".$socialNetwork->getName()." déjà actif, veuillez modifier ce dernier plutôt que de demander une réactivation",
             ];
         } else {
-            $this->parameterRepo->update($social, $social->getValeur(), true);
+            $this->parameterRepo->update($lastSocial->getParameter(), $social->getValeur(), true);
             $response = [
                 'type' => "success",
                 'message' => "Réactivation du réseau social ".$socialNetwork->getName()." réalisé avec succés",
