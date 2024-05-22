@@ -196,10 +196,12 @@
 				return response.json()
 				}).then(function(reponse){
                 show_toast(reponse.type, reponse.message, notif_area)
-				let formular = document.querySelector(".sn_form")
-				formular.querySelector('.sName input').value = reponse.name
-				formular.querySelector('.sUrl input').value = reponse.urlPage
-				showLogo(formular.querySelector(".gallery"), reponse.logoID)
+				if (reponse.type == "success") {
+					let formular = document.querySelector(".sn_form")
+					formular.querySelector('.sName input').value = reponse.name
+					formular.querySelector('.sUrl input').value = reponse.urlPage
+					showLogo(formular.querySelector(".gallery"), reponse.logoID)
+				}
             })
 		}
 
@@ -209,11 +211,14 @@
 			fetch(url, { method: "DELETE", }).then(function(response){
 				return response.json()
 			}).then(function(reponse){
-                show_toast(reponse.type, reponse.message, notif_area)
-				let formular = document.querySelector(".sn_form")
-				formular.querySelector('.sName input').value = ""
-				formular.querySelector(".sId input").value = 0
-				removeLogo(formular.querySelector(".gallery"), reponse.sLogo)
+				if (reponse.type == "success") {
+					document.querySelector("#toggle_status").checked = false
+					document.querySelector("#sys_social_network_name").value = ""
+					document.querySelector("#sys_social_network_urlPage").value = ""
+					location.reload()
+				} else {
+					show_toast(reponse.type, reponse.message, notif_area)
+				}
 			})
 		}
 
@@ -223,11 +228,14 @@
 			fetch(url, { method: "POST", }).then(function(response){
 				return response.json()
 			}).then(function(reponse){
-                show_toast(reponse.type, reponse.message, notif_area)
-				let formular = document.querySelector(".sn_form")
-				formular.querySelector('.sName input').value = reponse.name
-				formular.querySelector('.sUrl input').value = reponse.urlPage
-				showLogo(formular.querySelector(".gallery"), reponse.logoID)
+				if (reponse.type == "success") {
+					document.querySelector("#toggle_status").checked = false
+					document.querySelector("#sys_social_network_name").value = ""
+					document.querySelector("#sys_social_network_urlPage").value = ""
+					location.reload()
+				} else {
+					show_toast(reponse.type, reponse.message, notif_area)
+				}
 			})
 		}
 

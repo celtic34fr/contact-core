@@ -316,7 +316,6 @@
     {% set between = between|number_format(0) %}
 
     {% set type = type not in ['round', 'square'] ? 'round' : type %}
-    {% set checked = checked is empty or not checked ? false : checked %}
     {% set class = class ~ " switchTextSides" %}
     {% if forme == "h" %}{% set class = class ~ " row" %}{% endif %}
 

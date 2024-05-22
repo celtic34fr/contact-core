@@ -293,19 +293,19 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('/socialnetworks_act/{id}', name: 'socialnetworks-act')]
+    #[Route('/socialnetworks_actv/{id}', name: 'socialnetworks-act')]
     public function socialnetworks_act(Parameter $social, Request $request): JsonResponse
     {
         $response = [];
         $socialNetwork = new SocialNetwork($social);
         $active = $this->parameterRepo->findSocialNetworkByName($socialNetwork->getName());
-        if ($active  && $active['updated'] != null) {
+        if ($active  && $active['updated'] == null) {
             $response = [
                 'type' => "error",
                 'message' => "Réseau social ".$socialNetwork->getName()." déjà actif, veuillez modifier ce dernier plutôt que de demander une réactivation",
             ];
         } else {
-            $this->parameterRepo->update($social, true);
+            $this->parameterRepo->update($social, $social->getValeur(), true);
             $response = [
                 'type' => "success",
                 'message' => "Réactivation du réseau social ".$socialNetwork->getName()." réalisé avec succés",
