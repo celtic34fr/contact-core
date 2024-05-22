@@ -147,7 +147,7 @@ class SysParametersController extends AbstractController
                 list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
                 if ($logo) {
                     $item = [
-                        'id'        => $id,
+                        'id'        => $infos['id'],
                         'name'      => $infos['name'],
                         'logo'      => $logo[0],
                         'pUrl'      => ($entreprise[$infos['name']] ?? ""),
@@ -328,7 +328,7 @@ class SysParametersController extends AbstractController
             foreach ($values as $id => $infos) {
                 list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
                 $item = [
-                    'id'        => $id,
+                    'id'        => $infos['id'],
                     'name'      => $infos['name'],
                     'logo'      => $logo[0],
                     'pUrl'      => ($entreprise[$infos['name']] ?? ""),
