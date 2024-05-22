@@ -104,10 +104,10 @@ class SysParametersController extends AbstractController
     }
 
     #[Route('/rcategories_toggle/{status}', name: 'rcategories-toggle')]
-    public function rcategories_toggle(bool $status, Request $request): JsonResponse
+    public function rcategories_toggle(string $status, Request $request): JsonResponse
     {
         $paramsList = [];
-        if ($status) {
+        if ($status == "true") {
             $values = $this->parameterRepo->findAllRelationCategories();
         } else {
             $values = $this->parameterRepo->findValidRelationCategories();
