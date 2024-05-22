@@ -59,12 +59,14 @@ class ParameterRepository extends ServiceEntityRepository
      * @param boolean $flush
      * @return void
      */
-    public function update(Parameter $entity, bool $flush = false): void
+    public function update(Parameter $previous, $value, bool $flush = false): void
     {
-        $previous = $this->getEntityManager()->getRepository(Parameter::class)
-            ->findOneBy(['cle' => $entity->getCle(), 'ord' => $entity->getOrd(), 'created_at' => $entity->getCreatedAt()]);
         $previous->setUpdatedAt(new DateTimeImmutable('now'));
         $this->save($previous, $flush);
+        $entity = new Parameter();
+        $entity->setCle($previous->getCle());
+        $entity->setOrd($previous->getOrd());
+        $entity->setValeur($value);
         $entity->setCreatedAt(new DateTimeImmutable('now'));
         $entity->setUpdatedAt(null);
         $this->save($entity, $flush);

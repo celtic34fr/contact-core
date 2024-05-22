@@ -117,9 +117,4 @@ class SocialNetwork extends Parameter
             'urlPage' => $this->getUrlPage(),
         ];
     }
-
-    public function setFromArray(array $valArray) : SocialNetwork
-    {
-        
-    }
 }

@@ -211,13 +211,13 @@ class SysParametersController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $socialNetwork->setLogoID($request->request->get('logoId'));
                 // traitement de l'icone du réseau social
                 $socialNetworkName = $socialNetwork->getName();
                 $parameter = null;
                 if ($socialNetworkName) {
                     $socialNetworkArray = $this->parameterRepo->findSocialNetworkByName($socialNetworkName);
                     $socialNetwork = new SocialNetwork($socialNetworkArray);
+                    $socialNetwork->setLogoID($request->request->get('logoId'));
                     $parameter = $this->parameterRepo->find($socialNetwork->getId());
                 }
                 /** @var Parameter $parameter */
@@ -234,8 +234,7 @@ class SysParametersController extends AbstractController
                 } else {
                     
                     if ($parameter->getValeur() != $socialNetwork->getValeur()) {
-                        $parameter->setValeur($socialNetwork->getValeur());
-                        $this->parameterRepo->update($parameter, true);    
+                        $this->parameterRepo->update($parameter, $socialNetwork->getValeur(), true);    
                     }
                 }
                 // traitement de la référence à la page du réseau social
