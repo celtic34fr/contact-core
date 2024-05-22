@@ -313,10 +313,10 @@ class SysParametersController extends AbstractController
     }
 
     #[Route('/socialnetworks_toggle/{status}', name:'socialnetworks-toggle')]
-    public function socialnetworks_toggle(bool $status, Request $request): JsonResponse
+    public function socialnetworks_toggle(string $status, Request $request): JsonResponse
     {
         $paramsList = [];
-        if ($status) {
+        if ($status == "true") {
             $values = $this->parameterRepo->findAllSocialNetworks();
         } else {
             $values = $this->parameterRepo->findValidSocialNetworks();
