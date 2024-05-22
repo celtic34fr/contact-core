@@ -115,7 +115,7 @@ class SysParametersController extends AbstractController
         if ($values) {
             foreach ($values as $id => $infos) {
                 $item = [
-                    'id'            => $id,
+                    'id'            => $infos['id'],
                     'name'          => $infos['name'],
                     'description'   => $infos['description'],
                     'created'       => $infos['created'],
