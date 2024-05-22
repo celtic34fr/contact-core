@@ -277,7 +277,7 @@ class SysParametersController extends AbstractController
         );
     }
 
-    #[Route('/socialnetworks_del/{id}', name: 'socialnetworks-del')]
+    #[Route('/socialnetworks_delt/{id}', name: 'socialnetworks-del')]
     public function socialnetworks_del(Parameter $social, Request $request): JsonResponse
     {
         $response = [];
