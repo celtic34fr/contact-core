@@ -38,7 +38,7 @@ class SocialNetwork extends Parameter
                 $this->name = $parameter['name'];
                 $this->logoID = (int) $parameter['logoID'];
                 $this->urlPage = $parameter['urlPage'];
-        }
+            }
         }
         // if empty valeur : not is initialize
     }

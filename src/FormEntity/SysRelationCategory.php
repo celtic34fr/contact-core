@@ -4,7 +4,7 @@ namespace Celtic34fr\ContactCore\FormEntity;
 
 class SysRelationCategory
 {
-    private string $name;
+    private string $category;
     private ?string $description = null;
 
     
@@ -12,17 +12,17 @@ class SysRelationCategory
     /**
      * Get the value of name
      */
-    public function getName(): string
+    public function getCategory(): string
     {
-        return $this->name;
+        return $this->category;
     }
 
     /**
-     * Set the value of name
+     * Set the value of category
      */
-    public function setName(string $name): self
+    public function setCategory(string $category): self
     {
-        $this->name = $name;
+        $this->category = $category;
 
         return $this;
     }

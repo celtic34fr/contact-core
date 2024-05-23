@@ -5,8 +5,11 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 use Bolt\Configuration\Config;
 use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\Entity\PieceJointe;
+use Celtic34fr\ContactCore\EntityRedefine\RelationCategory;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
+use Celtic34fr\ContactCore\EntityRedefine\SysActivitySector;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
+use Celtic34fr\ContactCore\Form\SysActivitySectorType;
 use Celtic34fr\ContactCore\Form\SysRelationsCategoryType;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
 use Celtic34fr\ContactCore\FormEntity\SysRelationCategory;
@@ -48,91 +51,6 @@ class SysParametersController extends AbstractController
     }
 
     /**
-     * Activities Sectorsd Management
-     */
-
-    #[Route('/activities_list', name: 'activities-list')]
-    public function activity_list()
-    {
-        $paramsList = $this->parameterRepo->findValidActivitiesSectors();
-
-        return $this->render('@contact-core/sys-params/activities_list.html.twig', [
-            'paramsList' => $paramsList,
-            'title' => "Liste des secteurs d'activités",
-        ]);
-    }
-
-    /**
-     * Contact Categories Management
-     */
-
-    #[Route('/rcategories_list', name: 'rcategories-list')]
-    public function rcategories_list(Request $request)
-    {
-        $paramsList = $this->parameterRepo->findValidRelationCategories();
-
-        /**
-         * création du formulaire de création de catégorie de contact ou relation
-         * -> formulaire ayant deux champs en saisi : nom, description + bouton validation du formulaire
-         * -> après validation :
-         *   => faire la recherche avec le nom saisi
-         *      * si il existe déjà une valeur active de cette catégorie => message erreur 'déjà exitante active'
-         *      * si il n'existe pas de valeur active de cette catégorie => création d'un nouvel enregistrement
-         */
-        $rcategory = new SysRelationCategory();
-        $form = $this->createForm(SysRelationsCategoryType::class, $rcategory);
-
-        $myPreset = uniqid();
-        $request->getSession()->set("myPreset", $myPreset);
-        return $this->render('@contact-core/sys-params/rcategories_list.html.twig', [
-            'paramsList' => $paramsList,
-            'title' => "Liste des fontions ou catégories des relations",
-            'form' => $form->createView(),
-            'myPreset' => $myPreset,
-        ]);
-    }
-
-    #[Route('/rcategories_form/{id}', name: 'rcategories-form')]
-    public function rcategories_form(Parameter $parameter, Request $request): JsonResponse
-    {
-        $response = [
-            'type' => "success",
-            'message' => "Récupération des informations des catégories exécutée avecc succès",
-            'paramsList' => [],
-        ];
-        return new JsonResponse($response);
-    }
-
-    #[Route('/rcategories_toggle/{status}', name: 'rcategories-toggle')]
-    public function rcategories_toggle(string $status, Request $request): JsonResponse
-    {
-        $paramsList = [];
-        if ($status == "true") {
-            $values = $this->parameterRepo->findAllRelationCategories();
-        } else {
-            $values = $this->parameterRepo->findValidRelationCategories();
-        }
-        if ($values) {
-            foreach ($values as $id => $infos) {
-                $item = [
-                    'id'            => $infos['id'],
-                    'name'          => $infos['name'],
-                    'description'   => $infos['description'],
-                    'created'       => $infos['created'],
-                    'updated'       => $infos['updated'],
-                ];
-                $paramsList[] = $item;
-            }
-        }
-        $response = [
-            'type' => "success",
-            'message' => "Récupération des informations des catégories exécutée avecc succès",
-            'paramsList' =>$paramsList,
-        ];
-        return new JsonResponse($response);
-    }
-
-    /**
      * Socials Networks Parameter Management
      */
 
@@ -158,10 +76,10 @@ class SysParametersController extends AbstractController
                 }
             }
         }
-
+ 
         $socialNetwork = new SysSocialNetwork();
         $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
-
+ 
         $myPreset = uniqid();
         $request->getSession()->set("myPreset", $myPreset);
         return $this->render('@contact-core/sys-params/socialnetworks_list.html.twig', [
@@ -174,7 +92,7 @@ class SysParametersController extends AbstractController
             'logoID' => "non",
         ]);
     }
-
+ 
     #[Route('/socialnetworks_form/{id}', name: 'socialnetworks-form')]
     public function socialnetworks_form(Request $request, int $id=null): JsonResponse
     {
@@ -186,10 +104,14 @@ class SysParametersController extends AbstractController
             list($error_prepare, $prepare_initial_datas) = $this->uploadFiles->prepare_initial_datas([$socialNetwork->getLogoID()], "thumbnail", "array");
             if (!$error_prepare) {
                 $prepare_initial_datas = $prepare_initial_datas[0];
-
                 $response = [
                     'type'      => 'success',
                     'message'   => 'informations récupérées',
+                    'id'        => $socialNetwork->getId(),
+                    'cle'       => $socialNetwork->getCle(),
+                    'ord'       => $socialNetwork->getOrd(),
+                    'created'   => $socialNetwork->getCreatedAt(),
+                    'updated'   => $socialNetwork->getUpdatedAt(),
                     'name'      => $socialNetwork->getName(),
                     'urlPage'   => ($entreprise[$socialNetwork->getName()] ?? ""),
                     'logoID'    => $prepare_initial_datas,
@@ -202,14 +124,14 @@ class SysParametersController extends AbstractController
             }
         } elseif ($request->getMethod() == "POST") {
             // traitement du formulaire de saisie d'informations réseaux sociaux
-             $myPreset = $request->getSession()->get("myPreset");
-
+            $myPreset = $request->getSession()->get("myPreset");
+ 
             $socialNetwork = new SysSocialNetwork();
             $socialNetwork->setLogoID($request->request->get('logoId'));
             $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
-
+ 
             $form->handleRequest($request);
-
+ 
             if ($form->isSubmitted() && $form->isValid()) {
                 // traitement de l'icone du réseau social
                 $socialNetworkName = $socialNetwork->getName();
@@ -232,7 +154,6 @@ class SysParametersController extends AbstractController
                     $logo->setTempo(false);
                     $this->entityManager->flush();
                 } else {
-                    
                     if ($parameter->getValeur() != $socialNetwork->getValeur()) {
                         $this->parameterRepo->update($parameter, $socialNetwork->getValeur(), true);    
                     }
@@ -241,7 +162,7 @@ class SysParametersController extends AbstractController
                 $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contactcore.yaml';
                 $yaml = Yaml::parse(file_get_contents($configFile));
                 $entreprise = $yaml['entreprise'];
-
+ 
                 $socialNetworkUrlPage = $socialNetwork->getUrlPage();
                 if ($socialNetworkUrlPage && $entreprise[$socialNetworkName] != $socialNetworkUrlPage) {
                     $entreprise[$socialNetworkName] = $socialNetworkUrlPage;
@@ -253,17 +174,17 @@ class SysParametersController extends AbstractController
                     'type' => "success",
                     'message' => "Enregistrement du réseau social ".$socialNetwork->getName()." réalisé avec succés",
                 ];
-            }    
+            }
         } else {
             $response = [
                 'type' => "error",
                 'message' => "Type de traitement non pris en charge (".$request->getMethod().")",
             ];
         }
-
+ 
         return new JsonResponse($response);
     }
-
+ 
     #[Route('/socialnetworks_upload', name: 'socialnetworks-upload', methods: ['POST'])]
     public function socialnetworks_upload(Request $request): JsonResponse
     {
@@ -276,7 +197,7 @@ class SysParametersController extends AbstractController
             $operator
         );
     }
-
+ 
     #[Route('/socialnetworks_delt/{id}', name: 'socialnetworks-del')]
     public function socialnetworks_del(Parameter $social, Request $request): JsonResponse
     {
@@ -284,15 +205,15 @@ class SysParametersController extends AbstractController
         $social->setUpdatedAt(new DateTimeImmutable('now'));
         $this->parameterRepo->save($social, true);
         $socialNetwork = new SocialNetwork($social);
-
+ 
         $response = [
             'type' => "success",
-            'message' => "Suppressiion / Invalidation du réseau social ".$socialNetwork->getName()." réalisé avec succés",
+            'message' => "Suppressiion / Invalidation du réseau social ".$socialNetwork->getName()." réalisée avec succés",
         ];
-
+ 
         return new JsonResponse($response);
     }
-
+ 
     #[Route('/socialnetworks_actv/{id}', name: 'socialnetworks-act')]
     public function socialnetworks_act(Parameter $social, Request $request): JsonResponse
     {
@@ -309,13 +230,13 @@ class SysParametersController extends AbstractController
             $this->parameterRepo->update($lastSocial->getParameter(), $social->getValeur(), true);
             $response = [
                 'type' => "success",
-                'message' => "Réactivation du réseau social ".$socialNetwork->getName()." réalisé avec succés",
+                'message' => "Réactivation du réseau social ".$socialNetwork->getName()." réalisée avec succés",
             ];
         }
-
+ 
         return new JsonResponse($response);
     }
-
+ 
     #[Route('/socialnetworks_toggle/{status}', name:'socialnetworks-toggle')]
     public function socialnetworks_toggle(string $status, Request $request): JsonResponse
     {
@@ -329,10 +250,12 @@ class SysParametersController extends AbstractController
             foreach ($values as $id => $infos) {
                 list ($error, $logo) = $this->uploadFiles->prepare_initial_datas([$infos['logoID']], "thumbnail");
                 $item = [
-                    'id'        => $infos['id'],
+                   'id'        => $infos['id'],
                     'name'      => $infos['name'],
                     'logo'      => $logo[0],
                     'pUrl'      => ($entreprise[$infos['name']] ?? ""),
+                    'cle'       => $infos['cle'],
+                    'ord'       => $infos['ord'],
                     'created'   => $infos['created'],
                     'updated'   => $infos['updated'],
                 ];
@@ -341,9 +264,184 @@ class SysParametersController extends AbstractController
         }
         $response = [
             'type' => "success",
-            'message' => "Récupération des informations des réseaux sociaux exécutée avecc succès",
+            'message' => "Récupération des informations des réseaux sociaux exécutée avec succès",
             'paramsList' =>$paramsList,
         ];
         return new JsonResponse($response);
+    }
+ 
+    /**
+     * Contact Categories Management
+     */
+
+    #[Route('/rcategories_list', name: 'rcategories-list')]
+    public function rcategories_list(Request $request)
+    {
+        $paramsList = $this->parameterRepo->findValidRelationCategories();
+        $rcategory = new SysRelationCategory();
+        $form = $this->createForm(SysRelationsCategoryType::class, $rcategory);
+ 
+        $myPreset = uniqid();
+        $request->getSession()->set("myPreset", $myPreset);
+        return $this->render('@contact-core/sys-params/rcategories_list.html.twig', [
+            'paramsList' => $paramsList,
+            'title' => "Liste des fontions ou catégories des relations",
+            'form' => $form->createView(),
+            'myPreset' => $myPreset,
+        ]);
+    }
+ 
+    #[Route('/rcategories_form/{id}', name: 'rcategories-form')]
+    public function rcategories_form(Request $request, int $id=null): JsonResponse
+    {
+        $parameter = $id ? $this->parameterRepo->find($id) : null;
+        $response = "";
+        if ($request->getMethod() == "GET") {
+            // récupération des informations pour alimentation du formulaire en retour d'appel AJAX
+            $relationCategory = new RelationCategory($parameter);
+            $response = [
+                'type'          => 'success',
+                'message'       => 'informations récupérées',
+                'id'            => $relationCategory->getId(),
+                'cle'           => $relationCategory->getCle(),
+                'ord'           => $relationCategory->getOrd(),
+                'created'       => $relationCategory->getCreatedAt(),
+                'updated'       => $relationCategory->getUpdatedAt(),
+                'category'      => $relationCategory->getCategory(),
+                'description'   => $relationCategory->getDescription() ?? "",
+            ];
+        } elseif ($request->getMethod() == "POST") {
+            //  traitement du formulaire de saisie des information de catégorie de relation (client/prospect/fournisseur/partenaire)
+            $myPreset = $request->getSession()->get("myPreset");
+ 
+            $relationCategory = new SysRelationCategory();
+            $form = $this->createForm(SysRelationsCategoryType::class, $relationCategory);
+ 
+            $form->handleRequest($request);
+ 
+            if ($form->isSubmitted() && $form->isValid()) {
+                $relationCategoryCategory = $relationCategory->getCategory();
+                $parameter = null;
+                if ($relationCategoryCategory) {
+                    $relationCategoryArray = $this->parameterRepo->findRelationCategoryByName($relationCategoryCategory);
+                    $relationCategory = new RelationCategory($relationCategoryArray);
+                    $parameter = $this->parameterRepo->find($relationCategory->getId());
+                }
+                /** @var Parameter $parameter */
+                if (!$parameter) {
+                    $parameterList = $this->parameterRepo->findAllRelationCategories();
+                    $parameter = new Parameter();
+                    $parameter->setCle(RelationCategory::CLE);
+                    $parameter->setOrd(sizeof($parameterList) + 1);
+                    $parameter->setValeur($relationCategory->getValeur());
+                    $this->parameterRepo->save($parameter, true);
+                } else {
+                    if ($parameter->getValeur() != $relationCategory->getValeur()) {
+                        $this->parameterRepo->update($parameter, $relationCategory->getValeur(), true);    
+                    }
+                }
+                $response = [
+                    'type' => "success",
+                    'message' => "Enregistrement de la catégorie ".$relationCategory->getCategory()." réalisé avec succés",
+                ];
+            }
+        } else {
+            $response = [
+                'type' => "error",
+                'message' => "Type de traitement non pris en charge (".$request->getMethod().")",
+            ];
+        }
+ 
+        return new JsonResponse($response);
+    }
+ 
+    #[Route('/rcategories_delt/{id}', name: 'rcategories-del')]
+    public function rcategories_del(Parameter $category, Request $request): JsonResponse
+    {
+        $response = [];
+        $category->setUpdatedAt(new DateTimeImmutable('now'));
+        $this->parameterRepo->save($category, true);
+        $relationCategory = new SysRelationCategory($category);
+ 
+        $response = [
+            'type' => "success",
+            'message' => "Suppressiion / Invalidation de la catégorie ".$relationCategory->getCategory()." réalisée avec succés",
+        ];
+ 
+        return new JsonResponse($response);
+    }
+  
+    #[Route('/rcategories_actv/{id}', name: 'rcategories-act')]
+    public function rcategories_act(Parameter $category, Request $request): JsonResponse
+    {
+        $response = [];
+        $relationCategory = new RelationCategory($category);
+        $active = $this->parameterRepo->findRelationCategoryByName($relationCategory->getCategory());
+        $lastCategory = new RelationCategory($active);
+        if ($active  && $active['updated'] == null) {
+            $response = [
+                'type' => "error",
+                'message' => "Catégorie ".$relationCategory->getCategory()." déjà active, veuillez modifier cete dernière plutôt que de demander une réactivation",
+            ];
+        } else {
+            $this->parameterRepo->update($lastCategory->getParameter(), $category->getValeur(), true);
+            $response = [
+                'type' => "success",
+                'message' => "Réactivation de la catégorie ".$relationCategory->getCategory()." réalisée avec succés",
+            ];
+        }
+ 
+        return new JsonResponse($response);
+    }
+
+    #[Route('/rcategories_toggle/{status}', name: 'rcategories-toggle')]
+    public function rcategories_toggle(string $status, Request $request): JsonResponse
+    {
+        $paramsList = [];
+        if ($status == "true") {
+            $values = $this->parameterRepo->findAllRelationCategories();
+        } else {
+            $values = $this->parameterRepo->findValidRelationCategories();
+        }
+        if ($values) {
+            foreach ($values as $id => $infos) {
+                $item = [
+                    'id'            => $infos['id'],
+                    'name'          => $infos['name'],
+                    'description'   => $infos['description'],
+                    'cle'           => $infos['cle'],
+                    'ord'           => $infos['ord'],
+                    'created'       => $infos['created'],
+                    'updated'       => $infos['updated'],
+                ];
+                $paramsList[] = $item;
+            }
+        }
+        $response = [
+            'type' => "success",
+            'message' => "Récupération des informations des catégories exécutée avec succès",
+            'paramsList' =>$paramsList,
+        ];
+        return new JsonResponse($response);
+    }
+ 
+    /**
+     * Activities Sectorsd Management
+     */
+
+    #[Route('/activities_list', name: 'activities-list')]
+    public function activity_list(Request $request)
+    {
+        $paramsList = $this->parameterRepo->findValidActivitiesSectors();
+        $acticitySector = new SysActivitySector();
+        $form = $this->createForm(SysActivitySectorType::class, $acticitySector);
+ 
+        $myPreset = uniqid();
+        $request->getSession()->set("myPreset", $myPreset);
+        return $this->render('@contact-core/sys-params/activities_list.html.twig', [
+            'paramsList' => $paramsList,
+            'title' => "Liste des secteurs d'activités",
+            'form' => $form->createView(),
+        ]);
     }
 }

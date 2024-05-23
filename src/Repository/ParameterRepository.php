@@ -319,7 +319,13 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $relationCategories = [];
         $values = $this->findValidItemsByCle(RelationCategory::CLE);
-        if ($values) $relationCategories = $this->formatRelationCategories($values);
+        if ($values) {
+            foreach ($values as $value) {
+                /** @var RelationCategory $relationCategory */
+                $relationCategory = $this->ParameterToRelationCategories($value);
+                $relationCategories[] = $this->formatRelationCategories($relationCategory);
+            }
+        }
         return $relationCategories;
     }
 
@@ -330,8 +336,35 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $relationCategories = [];
         $values = $this->findAllItemsByCle(SocialNetwork::CLE);
-        if ($values) $relationCategories = $this->formatRelationCategories($values);        
+        if ($values) {
+            foreach ($values as $value) {
+                /** @var RelationCategory $relationCategory */
+                $relationCategory = $this->ParameterToRelationCategories($value);
+                $relationCategories[] = $this->formatRelationCategories($relationCategory);
+            }
+        }
         return $relationCategories;
+    }
+
+    /**
+     * @param string $name
+     * @return array|null
+     */
+    public function findRelationCategoryByName(string $name): array
+    {
+        $relationCategories = $this->findByPartialFields([
+            'cle' => RelationCategory::CLE,
+            'valeur' => $name.'%'
+        ], [
+            'created_at' => 'DESC',
+        ]);
+        $relationCategoryItem = $relationCategories[0] ?? null;
+        if ($relationCategoryItem) {
+            /** @var RelationCategory $relationCategory */
+            $relationCategory = $this->ParameterToRelationCategories($relationCategoryItem);
+            return $this->formatRelationCategories($relationCategory);
+        }
+        return null;
     }
 
     public function findValidActivitiesSectors(): array
@@ -383,11 +416,20 @@ class ParameterRepository extends ServiceEntityRepository
 
     /**
      * @param array $values
-     * @return array
+     * @return SocialNetwork
      */
     private function ParameterToSocialNetworks(Parameter $parameter) : SocialNetwork
     {
         return new SocialNetwork($parameter);
+    }
+
+    /**
+     * @param array $values
+     * @return SocialNetwork
+     */
+    private function ParameterToRelationCategories(Parameter $parameter) : RelationCategory
+    {
+        return new RelationCategory($parameter);
     }
 
     /**
@@ -419,6 +461,34 @@ class ParameterRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param $values
+     * @return array
+     */
+    private function formatRelationCategories($values): array
+    {
+        $relationCategories = [];
+        if ($values) {
+            if (is_array($values)) {
+                foreach ($values as $value) {
+                    $category = new RelationCategory($value);
+                    $activities[$category->getId()] = [
+                        'id' => $category->getId(),
+                        'cle' => $category->getCle(),
+                        'ord' =>$category->getOrd(),
+                        'created' => $category->getCreatedAt(),
+                        'updated' => $category->getUpdatedAt(),
+                        'category' => $category->getCategory(),
+                        'description' => $category->getDescription(),
+                    ];
+                }
+            }elseif ($values instanceof RelationCategory){
+                return $values->getAsArray();
+            }
+        }
+        return $relationCategories;
+    }
+
+    /**
      * @param array $values
      * @return array
      */
@@ -430,6 +500,10 @@ class ParameterRepository extends ServiceEntityRepository
                 $activity = new ActivitySector($value);
                 $activities[$activity->getId()] = [
                     'id' => $activity->getId(),
+                    'cle' => $category->getCle(),
+                    'ord' =>$category->getOrd(),
+                    'created' => $category->getCreatedAt(),
+                    'updated' => $category->getUpdatedAt(),
                     'name' => $activity->getName(),
                     'description' => $activity->getDescription(),
                     'parentId' => $activity->getParentId(),
@@ -465,25 +539,5 @@ class ParameterRepository extends ServiceEntityRepository
             }
         }
         return $activitiesTree;
-    }
-
-    /**
-     * @param array $values
-     * @return array
-     */
-    private function formatRelationCategories(array $values): array
-    {
-        $relationCategories = [];
-        if ($values) {
-            foreach ($values as $value) {
-                $category = new ActivitySector($value);
-                $activities[$category->getId()] = [
-                    'id' => $category->getId(),
-                    'name' => $category->getName(),
-                    'description' => $category->getDescription(),
-                ];
-            }
-        }
-        return $relationCategories;
     }
 }
