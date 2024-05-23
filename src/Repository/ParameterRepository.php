@@ -277,7 +277,7 @@ class ParameterRepository extends ServiceEntityRepository
      * @param string $name
      * @return array|null
      */
-    public function findSocialNetworkByName(string $name): array
+    public function findSocialNetworkByName(string $name): ?array
     {
         $socialNetwork = $this->findByPartialFields([
             'cle' => SocialNetwork::CLE,
@@ -350,7 +350,7 @@ class ParameterRepository extends ServiceEntityRepository
      * @param string $name
      * @return array|null
      */
-    public function findRelationCategoryByName(string $name): array
+    public function findRelationCategoryByName(string $name): ?array
     {
         $relationCategories = $this->findByPartialFields([
             'cle' => RelationCategory::CLE,
