@@ -140,7 +140,7 @@ class SysParametersController extends AbstractController
                     $socialNetworkArray = $this->parameterRepo->findSocialNetworkByName($socialNetworkName);
                     $socialNetwork = new SocialNetwork($socialNetworkArray);
                     $socialNetwork->setLogoID($request->request->get('logoId'));
-                    $parameter = $this->parameterRepo->find($socialNetwork->getId());
+                    $parameter = $socialNetwork->getId() ? $this->parameterRepo->find($socialNetwork->getId()) : $parameter;
                 }
                 /** @var Parameter $parameter */
                 if (!$parameter) {
@@ -325,7 +325,7 @@ class SysParametersController extends AbstractController
                 if ($relationCategoryCategory) {
                     $relationCategoryArray = $this->parameterRepo->findRelationCategoryByName($relationCategoryCategory);
                     $relationCategory = new RelationCategory($relationCategoryArray);
-                    $parameter = $this->parameterRepo->find($relationCategory->getId());
+                    $parameter = $relationCategory->getId() ? $this->parameterRepo->find($relationCategory->getId()) : $parameter;
                 }
                 /** @var Parameter $parameter */
                 if (!$parameter) {
