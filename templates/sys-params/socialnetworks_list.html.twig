@@ -194,7 +194,7 @@
 			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
 				return response.json()
-				}).then(function(reponse){
+			}).then(function(reponse){
                 show_toast(reponse.type, reponse.message, notif_area)
 				if (reponse.type == "success") {
 					let formular = document.querySelector(".sn_form")
@@ -213,8 +213,8 @@
 			}).then(function(reponse){
 				if (reponse.type == "success") {
 					document.querySelector("#toggle_status").checked = false
-					document.querySelector("#sys_social_network_name").value = ""
-					document.querySelector("#sys_social_network_urlPage").value = ""
+					document.querySelector(".sName input").value = ""
+					document.querySelector(".sUrl input").value = ""
 					location.reload()
 				} else {
 					show_toast(reponse.type, reponse.message, notif_area)
@@ -230,8 +230,8 @@
 			}).then(function(reponse){
 				if (reponse.type == "success") {
 					document.querySelector("#toggle_status").checked = false
-					document.querySelector("#sys_social_network_name").value = ""
-					document.querySelector("#sys_social_network_urlPage").value = ""
+					document.querySelector(".sName input").value = ""
+					document.querySelector(".sUrl input").value = ""
 					location.reload()
 				} else {
 					show_toast(reponse.type, reponse.message, notif_area)

@@ -41,7 +41,7 @@
 				</div>
 				{% endif %}
 				<div class="line_tab tabBody col-12 row mx-0 px-0 border boder-dark py-1">
-					<div class="category col-2 mx-0 px-0 text-center">{{ paramList.name }}</div>
+					<div class="category col-2 mx-0 px-0 text-center">{{ paramList.category }}</div>
 					<div class="description col-7 mx-0 px-0">{{ paramList.description }}</div>
 					<div class="actions col-3 mx-0 px-0 text-center">
 					{% if paramList.updated is not empty %}
@@ -81,8 +81,8 @@
 			{{ form_start(form, {'action': urlForm, 'method': 'POST'}) }}
 			{{ form_row(form._token) }}
 
-			{{ fields.field(form.name, '', {
-				'class': 'col-12 mx-0 px-0 mb-2 sName',
+			{{ fields.field(form.category, '', {
+				'class': 'col-12 mx-0 px-0 mb-2 sCategory',
 				'il_class': {'label': 'col-6 mx-0 px-0', 'input': 'col-6 mx-0 px-0'}
 			}) }}
 
@@ -137,22 +137,24 @@
 			submitFormRef(event)
 		})
 
-		function submitFormCat(evt) {
+		function submitFormRef(evt) {
 			evt.preventDefault
 			evt.stopPropagation
 
 			let url = "/bcknd/sys_params/rcategories_form"
 			let formDatas = new FormData(evt.target)
-			/*
-			let previewDiv = evt.target.querySelector(".dragdrop .gallery .img_preview")
-			let logoId = previewDiv.querySelector('i').dataset.fileId
-			formDatas.append('logoId', logoId)
-			*/
             fetch(url, { 
 				method: "POST",
 				headers: {'X-Requested-With': 'XMLHttpRequest'},
 				body: formDatas
 	  		}).then(function (response) {
+				return response.json()
+			}).then(function(reponse){
+				if (reponse.type == "success") {
+					location.reload()
+				} else {
+					show_toast(reponse.type, reponse.message, notif_area)
+				}
             })
 		}
 
@@ -161,12 +163,14 @@
 			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
 				return response.json()
-				}).then(function(reponse){
+			}).then(function(reponse){
                 show_toast(reponse.type, reponse.message, notif_area)
-				let formular = document.querySelector('.rc_form').innerHTML
-				formular.querySelector('h2').innerHTML = "Modifier une catégorie"
-				formular.querySelector('.sName input').value = reponse.name
-				formular.querySelector('.sDescription input').value = reponse.description
+				if (reponse.type == "success") {
+					let formular = document.querySelector('.rc_form').innerHTML
+					formular.querySelector('h2').innerHTML = "Modifier une catégorie"
+					formular.querySelector('.sCategory input').value = reponse.category
+					formular.querySelector('.sDescription input').value = reponse.description
+				}
             })
 		}
 
@@ -176,13 +180,14 @@
 			fetch(url, { method: "DELETE", }).then(function(response){
 				return response.json()
 			}).then(function(reponse){
-                show_toast(reponse.type, reponse.message, notif_area)
-				/*
-				let formular = document.querySelector(".sn_form")
-				formular.querySelector('.sName input').value = ""
-				formular.querySelector(".sId input").value = 0
-				removeLogo(formular.querySelector(".gallery"), reponse.sLogo)
-				*/
+				if (reponse.type == "success") {
+					document.querySelector("#toggle_status").checked = false
+					document.querySelector(".sCategory input").value = ""
+					document.querySelector(".sDescription input").value = ""
+					location.reload()
+				} else {
+	                show_toast(reponse.type, reponse.message, notif_area)
+				}
 			})
 		}
 
@@ -192,13 +197,14 @@
 			fetch(url, { method: "POST", }).then(function(response){
 				return response.json()
 			}).then(function(reponse){
-                show_toast(reponse.type, reponse.message, notif_area)
-				/*
-				let formular = document.querySelector(".sn_form")
-				formular.querySelector('.sName input').value = reponse.name
-				formular.querySelector('.sUrl input').value = reponse.urlPage
-				showLogo(formular.querySelector(".gallery"), reponse.logoID)
-				*/
+				if (reponse.type == "success") {
+					document.querySelector("#toggle_status").checked = false
+					document.querySelector(".sCategory input").value = ""
+					document.querySelector(".sDescription input").value = ""
+					location.reload()
+				} else {
+					show_toast(reponse.type, reponse.message, notif_area)
+				}
 			})
 		}
 
