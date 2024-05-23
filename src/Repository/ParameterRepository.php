@@ -313,6 +313,20 @@ class ParameterRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return int
+     */
+    public function findNextOrdSocialNetworks(): int
+    {
+        $values = $this->findAllItemsByCle(SocialNetwork::CLE);
+        $ord = null;
+        /** @var Parameter $value */
+        foreach ($values as $value) {
+            if ($ord != $value->getOrd()) $ord = $value->getOrd();
+        }
+        return ((int)$ord +1);
+    }
+
+    /**
      * @return array
      */
     public function findValidRelationCategories(): array
@@ -335,7 +349,7 @@ class ParameterRepository extends ServiceEntityRepository
     public function findAllRelationCategories(): array
     {
         $relationCategories = [];
-        $values = $this->findAllItemsByCle(SocialNetwork::CLE);
+        $values = $this->findAllItemsByCle(RelationCategory::CLE);
         if ($values) {
             foreach ($values as $value) {
                 /** @var RelationCategory $relationCategory */
@@ -344,6 +358,20 @@ class ParameterRepository extends ServiceEntityRepository
             }
         }
         return $relationCategories;
+    }
+
+    /**
+     * @return int
+     */
+    public function findNextOrdRelationCategories(): int
+    {
+        $values = $this->findAllItemsByCle(RelationCategory::CLE);
+        $ord = null;
+        /** @var Parameter $value */
+        foreach ($values as $value) {
+            if ($ord != $value->getOrd()) $ord = $value->getOrd();
+        }
+        return ((int)$ord +1);
     }
 
     /**
@@ -496,14 +524,14 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $activities = [];
         if ($values) {
-            foreach ($$values as $value) {
+            foreach ($values as $value) {
                 $activity = new ActivitySector($value);
                 $activities[$activity->getId()] = [
                     'id' => $activity->getId(),
-                    'cle' => $category->getCle(),
-                    'ord' =>$category->getOrd(),
-                    'created' => $category->getCreatedAt(),
-                    'updated' => $category->getUpdatedAt(),
+                    'cle' => $activity->getCle(),
+                    'ord' =>$activity->getOrd(),
+                    'created' => $activity->getCreatedAt(),
+                    'updated' => $activity->getUpdatedAt(),
                     'name' => $activity->getName(),
                     'description' => $activity->getDescription(),
                     'parentId' => $activity->getParentId(),

@@ -44,4 +44,10 @@ class SysRelationCategory
 
         return $this;
     }
+
+    public function getValeur(): string
+    {
+        if (!$this->category && !$this->description) return null;
+        return ($this->category ?? "").'|'.($this->description ?? "");
+    }
 }

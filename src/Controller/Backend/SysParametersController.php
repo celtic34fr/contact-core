@@ -126,15 +126,15 @@ class SysParametersController extends AbstractController
             // traitement du formulaire de saisie d'informations réseaux sociaux
             $myPreset = $request->getSession()->get("myPreset");
  
-            $socialNetwork = new SysSocialNetwork();
-            $socialNetwork->setLogoID($request->request->get('logoId'));
-            $form = $this->createForm(SysSocialNetworkType::class, $socialNetwork);
+            $sysSocialNetwork = new SysSocialNetwork();
+            $sysSocialNetwork->setLogoID($request->request->get('logoId'));
+            $form = $this->createForm(SysSocialNetworkType::class, $sysSocialNetwork);
  
             $form->handleRequest($request);
  
             if ($form->isSubmitted() && $form->isValid()) {
                 // traitement de l'icone du réseau social
-                $socialNetworkName = $socialNetwork->getName();
+                $socialNetworkName = $sysSocialNetwork->getName();
                 $parameter = null;
                 if ($socialNetworkName) {
                     $socialNetworkArray = $this->parameterRepo->findSocialNetworkByName($socialNetworkName);
@@ -144,10 +144,10 @@ class SysParametersController extends AbstractController
                 }
                 /** @var Parameter $parameter */
                 if (!$parameter) {
-                    $parameterList = $this->parameterRepo->findAllSocialNetworks();
+                    $ord = $this->parameterRepo->findNextOrdSocialNetworks();
                     $parameter = new Parameter();
                     $parameter->setCle(SocialNetwork::CLE);
-                    $parameter->setOrd(sizeof($parameterList) + 1);
+                    $parameter->setOrd($ord);
                     $parameter->setValeur($socialNetwork->getValeur());
                     $this->parameterRepo->save($parameter, true);
                     $logo = $this->entityManager->getRepository(PieceJointe::class)->find($socialNetwork->getLogoID());
@@ -314,26 +314,26 @@ class SysParametersController extends AbstractController
             //  traitement du formulaire de saisie des information de catégorie de relation (client/prospect/fournisseur/partenaire)
             $myPreset = $request->getSession()->get("myPreset");
  
-            $relationCategory = new SysRelationCategory();
-            $form = $this->createForm(SysRelationsCategoryType::class, $relationCategory);
+            $sysRelationCategory = new SysRelationCategory();
+            $form = $this->createForm(SysRelationsCategoryType::class, $sysRelationCategory);
  
             $form->handleRequest($request);
  
             if ($form->isSubmitted() && $form->isValid()) {
-                $relationCategoryCategory = $relationCategory->getCategory();
+                $category = $sysRelationCategory->getCategory();
                 $parameter = null;
-                if ($relationCategoryCategory) {
-                    $relationCategoryArray = $this->parameterRepo->findRelationCategoryByName($relationCategoryCategory);
+                if ($category) {
+                    $relationCategoryArray = $this->parameterRepo->findRelationCategoryByName($category);
                     $relationCategory = new RelationCategory($relationCategoryArray);
                     $parameter = $relationCategory->getId() ? $this->parameterRepo->find($relationCategory->getId()) : $parameter;
                 }
                 /** @var Parameter $parameter */
                 if (!$parameter) {
-                    $parameterList = $this->parameterRepo->findAllRelationCategories();
+                    $ord = $this->parameterRepo->findNextOrdRelationCategories();
                     $parameter = new Parameter();
                     $parameter->setCle(RelationCategory::CLE);
-                    $parameter->setOrd(sizeof($parameterList) + 1);
-                    $parameter->setValeur($relationCategory->getValeur());
+                    $parameter->setOrd($ord);
+                    $parameter->setValeur($sysRelationCategory->getValeur());
                     $this->parameterRepo->save($parameter, true);
                 } else {
                     if ($parameter->getValeur() != $relationCategory->getValeur()) {
@@ -342,7 +342,7 @@ class SysParametersController extends AbstractController
                 }
                 $response = [
                     'type' => "success",
-                    'message' => "Enregistrement de la catégorie ".$relationCategory->getCategory()." réalisé avec succés",
+                    'message' => "Enregistrement de la catégorie ".$sysRelationCategory->getCategory()." réalisé avec succés",
                 ];
             }
         } else {

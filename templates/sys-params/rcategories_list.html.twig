@@ -1,4 +1,5 @@
 {% extends '@contact-core/layout_backend.html.twig' %}
+{% import "@contact-core/macros/generals.html.twig" as generals %}
 {% import '@contact-core/macros/form_type.html.twig' as fields %}
 {% import '@contact-core/macros/form_classic.html.twig' as forms %}
 
@@ -16,16 +17,10 @@
 {% endblock %}
 
 {% block main %}
-	{#
-	=> page en 2 colonnes :
-		gauche : table des catégories actives avec un bouton de bascule pour avoir toutes ou les actives
-		droite : formulaire proprement dit pour la saisie ou modification d'une catégories
-	#}
 	{% set urlForm = path('sys-params-rcategories-list') %}
 	<div class="container col-12 row">
 		<div class="col-7 list">
-			{{ 
-				forms.switchTextSides('toggle_status', false, {
+			{{ forms.switchTextSides('toggle_status', false, {
 					rtext: 'Voir toutes les catégories', ltext: 'Les catégories paramétrées',
 					lclass: 'col-4', rclass: 'col-4', class: "col-12",
 					lbckgrd: "#00CC00", rbckgrd: "#CC0000", form: 'h', between: 1,
@@ -44,7 +39,7 @@
 					<div class="category col-2 mx-0 px-0 text-center">{{ paramList.category }}</div>
 					<div class="description col-7 mx-0 px-0">{{ paramList.description }}</div>
 					<div class="actions col-3 mx-0 px-0 text-center">
-					{% if paramList.updated is not empty %}
+					{% if paramList.updated is empty %}
 						{{ generals.btn('edt' ~ paramList.id, '<i class="fa fa-pen"></i>', {
 							class:'col-5 btn btn-success p-0 m-0', title:'Editer la catégorie',
 							bclass:'btn btn-success p-0 m-auto col-12', dataset: {'paramId': paramList.id},
@@ -62,6 +57,7 @@
 							event: 'onClick', codeJS:'actvRef(' ~ paramList.id ~')',
 						}) }}
 					{% endif %}
+					</div>
 				</div>
 			{% else %}
 				<div class="line_tab tabHeader col-12 row mx-0 px-0 border boder-dark py-1">
@@ -166,7 +162,7 @@
 			}).then(function(reponse){
                 show_toast(reponse.type, reponse.message, notif_area)
 				if (reponse.type == "success") {
-					let formular = document.querySelector('.rc_form').innerHTML
+					let formular = document.querySelector('.rc_form')
 					formular.querySelector('h2').innerHTML = "Modifier une catégorie"
 					formular.querySelector('.sCategory input').value = reponse.category
 					formular.querySelector('.sDescription input').value = reponse.description
