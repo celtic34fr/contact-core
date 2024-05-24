@@ -33,7 +33,7 @@ class Parameter
     #[Assert\Type('integer')]
     protected int $ord = 0;
 
-    #[ORM\Column(type: Types::JSON, length: 255, nullable: false)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
     protected string $valeur;
@@ -112,7 +112,7 @@ class Parameter
 
     /**
      * Get the value of valeur
-     * @return  null|string|array
+     * @return  null|string
      */
     public function getValeur(): mixed
     {
@@ -121,10 +121,10 @@ class Parameter
 
     /**
      * Set the value of valeur
-     * @param string|array $valeur
+     * @param string $valeur
      * @return  self
      */
-    public function setValeur(mixed $valeur): self
+    public function setValeur(string $valeur): self
     {
         $this->valeur = $valeur;
         return $this;
