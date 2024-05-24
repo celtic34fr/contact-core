@@ -323,18 +323,18 @@
 			})
 			divActions.appendChild(btnactv)
 			} else {
-			let btnedit = createBtn('edt' + item.id, '<i class="fa fa-pen"></i>', {
-				type: 'edt', id: item.id, ico: 'pen', classe: 'btn-success',
-				title:'Editer la référence',
-				event: 'onClick', codeJS:'editRef(' + item.id + ')', dataset: datasets
-			})
-			divActions.appendChild(btnedit)
-			let btndelt = createBtn('del' + item.id, '<i class="fa fa-trash"></i>', {
-				type: 'del', id: item.id, ico: 'trash', classe: 'btn-warning',
-				title:'Supprimer la référence',
-				event: 'onClick', codeJS:'deltRef(' + item.id + ')', dataset: datasets
-			})
-			divActions.appendChild(btndelt)
+				let btnedit = createBtn('edt' + item.id, '<i class="fa fa-pen"></i>', {
+					type: 'edt', id: item.id, ico: 'pen', classe: 'btn-success',
+					title:'Editer la référence',
+					event: 'onClick', codeJS:'editRef(' + item.id + ')', dataset: datasets
+				})
+				divActions.appendChild(btnedit)
+				let btndelt = createBtn('del' + item.id, '<i class="fa fa-trash"></i>', {
+					type: 'del', id: item.id, ico: 'trash', classe: 'btn-warning',
+					title:'Supprimer la référence',
+					event: 'onClick', codeJS:'deltRef(' + item.id + ')', dataset: datasets
+				})
+				divActions.appendChild(btndelt)
 			}
 			divItem.appendChild(divActions)
 			return divItem

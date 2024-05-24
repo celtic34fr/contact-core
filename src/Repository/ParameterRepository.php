@@ -61,15 +61,22 @@ class ParameterRepository extends ServiceEntityRepository
      */
     public function update(Parameter $previous, $value, bool $flush = false): void
     {
-        $previous->setUpdatedAt(new DateTimeImmutable('now'));
-        $this->save($previous, $flush);
+        $pEntity = $this->find($previous->getId());
         $entity = new Parameter();
         $entity->setCle($previous->getCle());
         $entity->setOrd($previous->getOrd());
         $entity->setValeur($value);
         $entity->setCreatedAt(new DateTimeImmutable('now'));
         $entity->setUpdatedAt(null);
-        $this->save($entity, $flush);
+        $this->getEntityManager()->persist($entity);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+        $pEntity->setUpdatedAt($entity->getCreatedAt());
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+
     }
 
     /**
@@ -217,7 +224,7 @@ class ParameterRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p');
         foreach ($criteria as $cle => $partial) {
-            if ($cle == "valeur") $partial = '"'.$partial;
+//            if ($cle == "valeur") $partial = '"'.$partial;
             $qb->andWhere("p.$cle LIKE '$partial'");
         }
         if ($orderBy) {

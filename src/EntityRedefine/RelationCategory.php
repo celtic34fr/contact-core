@@ -21,7 +21,7 @@ class RelationCategory extends Parameter
     private string $description;
 
 
-    public function __construct(?Parameter $parameter = null)
+    public function __construct($parameter = null)
     {
         if ($parameter) {
             if ($parameter instanceof Parameter) {

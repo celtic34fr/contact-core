@@ -336,8 +336,8 @@ class SysParametersController extends AbstractController
                     $parameter->setValeur($sysRelationCategory->getValeur());
                     $this->parameterRepo->save($parameter, true);
                 } else {
-                    if ($parameter->getValeur() != $relationCategory->getValeur()) {
-                        $this->parameterRepo->update($parameter, $relationCategory->getValeur(), true);    
+                    if ($parameter->getValeur() != $sysRelationCategory->getValeur()) {
+                        $this->parameterRepo->update($parameter, $sysRelationCategory->getValeur(), true);    
                     }
                 }
                 $response = [
@@ -361,7 +361,7 @@ class SysParametersController extends AbstractController
         $response = [];
         $category->setUpdatedAt(new DateTimeImmutable('now'));
         $this->parameterRepo->save($category, true);
-        $relationCategory = new SysRelationCategory($category);
+        $relationCategory = new RelationCategory($category);
  
         $response = [
             'type' => "success",
@@ -407,7 +407,7 @@ class SysParametersController extends AbstractController
             foreach ($values as $id => $infos) {
                 $item = [
                     'id'            => $infos['id'],
-                    'name'          => $infos['name'],
+                    'category'      => $infos['category'],
                     'description'   => $infos['description'],
                     'cle'           => $infos['cle'],
                     'ord'           => $infos['ord'],
