@@ -458,7 +458,7 @@
         {% endif %}
 
     	<textarea id="{{ field.vars.id }}" name="{{ field.vars.full_name }}"
-            {% if row %} rows="{{ rows }}" {% endif %}
+            {% if rows %} rows="{{ rows }}" {% endif %}
             {% if cols %} cols="{{ cols }}" {% endif %}
             {% if maxlength %} maxlength="{{ maxlength }}" {% endif %}
             {% if placeholder %} placeholder="{{ placeholder }}" {% endif %}
