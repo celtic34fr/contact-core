@@ -24,11 +24,11 @@ class EntrepriseInfosType extends AbstractType
         ])
         ->add('siren', TextType::class, [
             'label' => 'Votre SIREN',
-            'required' => false,
+            'required' => true,
         ])
         ->add('siret', TextType::class, [
             'label' => 'Votre SIRET',
-            'required' => false,
+            'required' => true,
         ])
         ->add('courriel', TextType::class, [
             'label' => 'Votre adresse Courriel',
