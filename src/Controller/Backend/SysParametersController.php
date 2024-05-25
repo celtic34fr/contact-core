@@ -445,6 +445,42 @@ class SysParametersController extends AbstractController
         ]);
     }
 
+    #[Route('/activities_form/{id}', name: 'activities-form')]
+    public function activities_form(Request $request, int $id=null): JsonResponse
+    {
+        $paramsList = [];
+        $response =  null;
+
+        return new JsonResponse($response);
+    }
+
+    #[Route('/activities_delt/{id}', name: 'activities-delt')]
+    public function activities_delt(Parameter $sector, Request $request): JsonResponse
+    {
+        $paramsList = [];
+        $response =  null;
+
+        return new JsonResponse($response);
+    }
+
+    #[Route('/activities_actv/{id}', name: 'activities-actv')]
+    public function activities_actv(Parameter $sector, Request $request): JsonResponse
+    {
+        $paramsList = [];
+        $response =  null;
+
+        return new JsonResponse($response);
+    }
+
+    #[Route('/activities_upst/{id}', name: 'activities-upst')]
+    public function activities_upst(Parameter $sector, Request $request): JsonResponse
+    {
+        $paramsList = [];
+        $response =  null;
+
+        return new JsonResponse($response);
+    }
+
     #[Route('/activities_toggle/{status}', name: 'activities-toggle')]
     public function activities_toggle(string $status, Request $request): JsonResponse
     {

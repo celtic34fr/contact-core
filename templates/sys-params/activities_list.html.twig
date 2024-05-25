@@ -39,7 +39,75 @@
 					<div class="actions col-3 mx-0 px-0 text-center">Actions</div>
 				</div>
 				{% endif %}
+				<div class="line_tab tabBody col-12 mx-0 px-0 border boder-dark py-1 text-center">
+					<div class="category col-2 mx-0 px-0 text-center">{{ paramList.name }}</div>
+					<div class="category col-2 mx-0 px-0 text-center"></div>
+					<div class="description col-7 mx-0 px-0">{{ paramList.description }}</div>
+					<div class="actions col-3 mx-0 px-0 text-center">
+					{% if paramList.updated is empty %}
+						{{ generals.btn('edt' ~ paramList.id, '<i class="fa fa-pen"></i>', {
+							class:'col-5 btn btn-success p-0 m-0', title:'Editer lE SECTEUR',
+							bclass:'btn btn-success p-0 m-auto col-12', dataset: {'paramId': paramList.id},
+							event: 'onClick', codeJS:'editRef(' ~ paramList.id ~')',
+						}) }}
+						{{ generals.btn('del' ~ paramList.id, '<i class="fa fa-trash"></i>', {
+							class:'col-5 btn btn-warning row m-0 p-0', title:'Supprimer lE SECTEUR',
+							bclass:'btn btn-warning p-0 m-auto col-12', dataset: {'id': paramList.id},
+							event: 'onClick', codeJS:'deltRef(' ~ paramList.id ~')',
+						}) }}
+					{% else %}
+						{{ generals.btn('act' ~ paramList.id, '<i class="fa fa-cycle"></i>', {
+							class:'col-5 btn btn-info p-0 m-0', title:'Réactiver le secteur',
+							bclass:'btn btn-success p-0 m-auto col-12', dataset: {'paramId': paramList.id},
+							event: 'onClick', codeJS:'actvRef(' ~ paramList.id ~')',
+						}) }}
+					{% endif %}
+					</div>
+				</div>
+				{% for child in paramList.children %}
+				<div class="line_tab tabBody col-12 mx-0 px-0 border boder-dark py-1 text-center">
+					<div class="category col-2 mx-0 px-0 text-center"></div>
+					<div class="category col-2 mx-0 px-0 text-center">{{ child.name }}</div>
+					<div class="description col-7 mx-0 px-0">{{ child.description }}</div>
+					<div class="actions col-3 mx-0 px-0 text-center">
+					{% if child.updated %}
+						{{ generals.btn('edt' ~ child.id, '<i class="fa fa-pen"></i>', {
+							class:'col-5 btn btn-success p-0 m-0', title:'Editer le sous-secteur',
+							bclass:'btn btn-success p-0 m-auto col-12', dataset: {'paramId': child.id},
+							event: 'onClick', codeJS:'editRef(' ~ child.id ~')',
+						}) }}
+						{{ generals.btn('del' ~ child.id, '<i class="fa fa-trash"></i>', {
+							class:'col-5 btn btn-warning row m-0 p-0', title:'Supprimer le sous-secteur',
+							bclass:'btn btn-warning p-0 m-auto col-12', dataset: {'id': child.id},
+							event: 'onClick', codeJS:'deltRef(' ~ child.id ~')',
+						}) }}
+					{% else %}
+						{{ generals.btn('act' ~ child.id, '<i class="fa fa-cycle"></i>', {
+							class:'col-5 btn btn-info p-0 m-0', title:'Réactiver le sous-secteur',
+							bclass:'btn btn-success p-0 m-auto col-12', dataset: {'paramId': child.id},
+							event: 'onClick', codeJS:'actvRef(' ~ child.id ~')',
+						}) }}
+					{% endif %}
+						{{ generals.btn('ups' ~ child.id, '<i class="fa fa-trash"></i>', {
+							class:'col-5 btn btn-primary row m-0 p-0', title:'Passer le sous-secteur en secteur',
+							bclass:'btn btn-primary p-0 m-auto col-12', dataset: {'id': child.id},
+							event: 'onClick', codeJS:'upstRef(' ~ child.id ~')',
+						}) }}
+					</div>
+				</div>
+				{% endfor %}
+			{% else %}
+				<div class="line_tab tabHeader col-12 row mx-0 px-0 border boder-dark py-1">
+					<div class="category col-2 mx-0 px-0 text-center">Secteur</div>
+					<div class="category col-2 mx-0 px-0 text-center">Sous Secteur</div>
+					<div class="description col-7 mx-0 px-0">Description</div>
+					<div class="actions col-3 mx-0 px-0 text-center">Actions</div>
+				</div>
+				<div class="line_tab tabBody col-12 mx-0 px-0 border boder-dark py-1 text-center">
+					Pas encore de secteur d'activité enregistré
+				</div>
 			{% endfor %}
+			</div>
 		</div>
 	</div>
 {% endblock %}
@@ -47,6 +115,73 @@
 {% block javascripts %}
 	{{ parent() }}
 	<script>
+
+		function editRef(id) {
+			let url = "/bcknd/sys_params/activities_form/"+id
+			let notif_area = document.querySelector(".admin__notifications")
+            fetch(url, { method: "GET", }).then(function (response) {
+				return response.json()
+			}).then(function(reponse){
+                show_toast(reponse.type, reponse.message, notif_area)
+				if (reponse.type == "success") {
+					let formular = document.querySelector('.rc_form')
+					formular.querySelector('h2').innerHTML = "Modifier une catégorie"
+					formular.querySelector('.sName input').value = reponse.category
+					formular.querySelector('.sDescription input').value = reponse.description
+				}
+            })
+		}
+
+		function deltRef(id) {
+			let url = "/bcknd/sys_params/activities_delt/"+id
+			let notif_area = document.querySelector(".admin__notifications")
+			fetch(url, { method: "DELETE", }).then(function(response){
+				return response.json()
+			}).then(function(reponse){
+				if (reponse.type == "success") {
+					document.querySelector("#toggle_status").checked = false
+					document.querySelector(".sName input").value = ""
+					document.querySelector(".sDescription input").value = ""
+					location.reload()
+				} else {
+	                show_toast(reponse.type, reponse.message, notif_area)
+				}
+			})
+		}
+
+		function actvRef(id) {
+			let url = "/bcknd/sys_params/activities_actv/"+id
+			let notif_area = document.querySelector(".admin__notifications")
+			fetch(url, { method: "POST", }).then(function(response){
+				return response.json()
+			}).then(function(reponse){
+				if (reponse.type == "success") {
+					document.querySelector("#toggle_status").checked = false
+					document.querySelector(".sName input").value = ""
+					document.querySelector(".sDescription input").value = ""
+					location.reload()
+				} else {
+					show_toast(reponse.type, reponse.message, notif_area)
+				}
+			})
+		}
+
+		function upstRef(id) {
+			let url = "/bcknd/sys_params/activities_upst/"+id
+			let notif_area = document.querySelector(".admin__notifications")
+			fetch(url, { method: "POST", }).then(function(response){
+				return response.json()
+			}).then(function(reponse){
+				if (reponse.type == "success") {
+					document.querySelector("#toggle_status").checked = false
+					document.querySelector(".sName input").value = ""
+					document.querySelector(".sDescription input").value = ""
+					location.reload()
+				} else {
+					show_toast(reponse.type, reponse.message, notif_area)
+				}
+			})
+		}
 
 		function noResult() {
 			let divItem = document.createElement('div')
