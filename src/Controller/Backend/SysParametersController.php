@@ -7,11 +7,11 @@ use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\Entity\PieceJointe;
 use Celtic34fr\ContactCore\EntityRedefine\RelationCategory;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
-use Celtic34fr\ContactCore\EntityRedefine\SysActivitySector;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
 use Celtic34fr\ContactCore\Form\SysActivitySectorType;
 use Celtic34fr\ContactCore\Form\SysRelationsCategoryType;
 use Celtic34fr\ContactCore\Form\SysSocialNetworkType;
+use Celtic34fr\ContactCore\FormEntity\SysActivitySector;
 use Celtic34fr\ContactCore\FormEntity\SysRelationCategory;
 use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
@@ -444,4 +444,18 @@ class SysParametersController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/activities_toggle/{status}', name: 'activities-toggle')]
+    public function activities_toggle(string $status, Request $request): JsonResponse
+    {
+        $paramsList = [];
+        $response =  null;
+        if ($status == "true") {
+            $values = $this->parameterRepo->findAllActivitiesSectors();
+        } else {
+            $values = $this->parameterRepo->findValidActivitiesSectors();
+        }
+
+        return new JsonResponse($response);
+   }
 }

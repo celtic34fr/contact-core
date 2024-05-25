@@ -17,8 +17,66 @@
 	<pre>
 		{{ dump(paramsList) }}
 	</pre>
+	{% set urlForm = path('sys-params-rcategories-list') %}
+	<div class="container col-12 row">
+		<div class="col-7 list">
+			{{ forms.switchTextSides('toggle_status', false, {
+				rtext: 'Voir toutes les secteurs', ltext: 'Les secteurs paramétrés',
+				lclass: 'col-4', rclass: 'col-4', class: "col-12",
+				lbckgrd: "#00CC00", rbckgrd: "#CC0000", form: 'h', between: 1,
+				})
+			}}
+			<div class="list_tab col-12 row">
+			{% for paramList in paramsList %}
+				{% if loop.first %}
+				<div class="line_tab tabHeader col-12 row mx-0 px-0 border boder-dark py-1">
+					<div class="category col-2 mx-0 px-0 text-center">Secteur</div>
+					<div class="category col-2 mx-0 px-0 text-center">Sous Secteur</div>
+					<div class="description col-7 mx-0 px-0">Description</div>
+					<div class="actions col-3 mx-0 px-0 text-center">Actions</div>
+				</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
+	<script>
+
+		function noResult() {
+			let divItem = document.createElement('div')
+			divItem.classList.add('line_tab', 'tabBody', 'col-12', 'mx-0', 'px-0', 'border', 'boder-dark', 'py-1', 'text-center', 'tabBody')
+			divItem.innerHTML = 'Pas encore de catégorie enregistrée et active'
+			return divItem
+		}
+
+		function formatLine(item) {
+		}
+
+		document.querySelector("#toggle_status").addEventListener('click', function(event){
+			let notif_area = document.querySelector(".admin__notifications")
+			// true => OFF, false = ON
+			let url = "/bcknd/sys_params/activities_toggle/"+this.checked
+            fetch(url, { method: "GET", }).then(function (response) {
+				return response.json()
+			}).then(function(reponse){
+				show_toast(reponse.type, reponse.message, notif_area)
+				// remplacement des lignes du tableau RéseauxSociaux par le retour de fonction
+				// => suppresdsion de l'existant
+				document.querySelectorAll(".tabBody").forEach(el => el.remove());
+				let listTab = document.querySelector(".list_tab")
+				// => création des lignes ou de la ligne si aucun résultat retourné
+				let networkList = reponse.paramsList
+				if (networkList.length == 0) {
+					listTab.appendChild(noResult())
+				} else {
+					networkList.forEach(element => {
+						listTab.appendChild(formatLine(element))
+					});
+				}
+			})
+		})
+	</script>
 {% endblock %}
