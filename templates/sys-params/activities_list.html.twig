@@ -35,14 +35,14 @@
 				<div class="line_tab tabHeader col-12 row mx-0 px-0 border boder-dark py-1">
 					<div class="category col-2 mx-0 px-0 text-center">Secteur</div>
 					<div class="category col-2 mx-0 px-0 text-center">Sous Secteur</div>
-					<div class="description col-7 mx-0 px-0">Description</div>
+					<div class="description col-5 mx-0 px-0">Description</div>
 					<div class="actions col-3 mx-0 px-0 text-center">Actions</div>
 				</div>
 				{% endif %}
 				<div class="line_tab tabBody col-12 mx-0 px-0 border boder-dark py-1 text-center">
 					<div class="category col-2 mx-0 px-0 text-center">{{ paramList.name }}</div>
 					<div class="category col-2 mx-0 px-0 text-center"></div>
-					<div class="description col-7 mx-0 px-0">{{ paramList.description }}</div>
+					<div class="description col-5 mx-0 px-0">{{ paramList.description }}</div>
 					<div class="actions col-3 mx-0 px-0 text-center">
 					{% if paramList.updated is empty %}
 						{{ generals.btn('edt' ~ paramList.id, '<i class="fa fa-pen"></i>', {
@@ -68,7 +68,7 @@
 				<div class="line_tab tabBody col-12 mx-0 px-0 border boder-dark py-1 text-center">
 					<div class="category col-2 mx-0 px-0 text-center"></div>
 					<div class="category col-2 mx-0 px-0 text-center">{{ child.name }}</div>
-					<div class="description col-7 mx-0 px-0">{{ child.description }}</div>
+					<div class="description col-5 mx-0 px-0">{{ child.description }}</div>
 					<div class="actions col-3 mx-0 px-0 text-center">
 					{% if child.updated %}
 						{{ generals.btn('edt' ~ child.id, '<i class="fa fa-pen"></i>', {
@@ -100,7 +100,7 @@
 				<div class="line_tab tabHeader col-12 row mx-0 px-0 border boder-dark py-1">
 					<div class="category col-2 mx-0 px-0 text-center">Secteur</div>
 					<div class="category col-2 mx-0 px-0 text-center">Sous Secteur</div>
-					<div class="description col-7 mx-0 px-0">Description</div>
+					<div class="description col-5 mx-0 px-0">Description</div>
 					<div class="actions col-3 mx-0 px-0 text-center">Actions</div>
 				</div>
 				<div class="line_tab tabBody col-12 mx-0 px-0 border boder-dark py-1 text-center">

@@ -5,6 +5,7 @@ namespace Celtic34fr\ContactCore\Controller\Backend;
 use Bolt\Configuration\Config;
 use Celtic34fr\ContactCore\Entity\Parameter;
 use Celtic34fr\ContactCore\Entity\PieceJointe;
+use Celtic34fr\ContactCore\EntityRedefine\ActivitySector;
 use Celtic34fr\ContactCore\EntityRedefine\RelationCategory;
 use Celtic34fr\ContactCore\EntityRedefine\SocialNetwork;
 use Celtic34fr\ContactCore\Enum\UtilitiesPJEnums;
@@ -448,8 +449,57 @@ class SysParametersController extends AbstractController
     #[Route('/activities_form/{id}', name: 'activities-form')]
     public function activities_form(Request $request, int $id=null): JsonResponse
     {
-        $paramsList = [];
-        $response =  null;
+        $parameter = $id ? $this->parameterRepo->find($id) : null;
+        $response = "";
+        if ($request->getMethod() == "GET") {
+            // récupération des informations pour alimentation du formulaire en retour d'appel AJAX
+            $activitySector = new ActivitySector($parameter);
+            $response = [
+                'type'          => 'success',
+                'message'       => 'informations récupérées',
+                'id'            => $activitySector->getId(),
+                'cle'           => $activitySector->getCle(),
+                'ord'           => $activitySector->getOrd(),
+                'created'       => $activitySector->getCreatedAt(),
+                'updated'       => $activitySector->getUpdatedAt(),
+                'name'          => $activitySector->getName(),
+                'description'   => $activitySector->getDescription() ?? "",
+            ];
+        } elseif ($request->getMethod() == "POST") {
+            $myPreset = $request->getSession()->get("myPreset");
+ 
+            $sysActivitySector = new SysActivitySector();
+            $form = $this->createForm(SysActivitySectorType::class, $sysActivitySector);
+ 
+            $form->handleRequest($request);
+ 
+            if ($form->isSubmitted() && $form->isValid()) {
+                $name = $sysActivitySector->getName();
+                $parameter = null;
+                if ($name) {
+                    $activitySectorArray = $this->parameterRepo->findActivitySectorByName($name);
+                    $activitySector = new ActivitySector($activitySectorArray);
+                    $parameter = $activitySector->getId() ? $this->parameterRepo->find($activitySector->getId()) : $parameter;
+                }
+                /** @var Parameter $parameter */
+                if (!$parameter) {
+                    $ord = $this->parameterRepo->findNextOrdRelationCategories();
+                    $parameter = new Parameter();
+                    $parameter->setCle(RelationCategory::CLE);
+                    $parameter->setOrd($ord);
+                    $parameter->setValeur($sysActivitySector->getValeur());
+                    $this->parameterRepo->save($parameter, true);
+                } else {
+                    if ($parameter->getValeur() != $sysActivitySector->getValeur()) {
+                        $this->parameterRepo->update($parameter, $sysActivitySector->getValeur(), true);    
+                    }
+                }
+                $response = [
+                    'type' => "success",
+                    'message' => "Enregistrement de la catégorie ".$sysActivitySector->getName()." réalisé avec succés",
+                ];
+            }
+        }
 
         return new JsonResponse($response);
     }

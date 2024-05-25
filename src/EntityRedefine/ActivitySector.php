@@ -85,4 +85,9 @@ class ActivitySector extends Parameter
         $this->parent_id = $parent_id;
         return $this;
     }
+
+    public function getValeur(): string
+    {
+        return $this->name."|".($this->description ?? "")."|".($this->parent_id ? strval($this->parent_id) : "");
+    }
 }
