@@ -241,10 +241,6 @@
     {% set choices = args.choices ?? {} %}
     {% set choices = choices is not empty ? choices : field.vars.choices %}
 
-        <pre>
-            {{ dump(placeholder) }}
-         </pre>
-
     {% if placeholder is empty and choices[0] is defined and choices[0] is not empty %}
         {% set placeholder =  'placeholder' in choices[0]|keys ? choices[0]['placeholder'] : "" %}
     {% endif %}
