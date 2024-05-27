@@ -136,7 +136,7 @@
 	{% set class = args.class ?? "" %}
 	{% set ref = args.ref ?? "" %}
 	{% set form = args.form ?? '' %}
-    {% set custom_name = args.custom_name ?? field.vars.name ?? "" %}
+    {% set custom_name = args.custom_name ?? name ?? "" %}
 
     {% set attributes %}
         data-ref="{{ ref }}"
@@ -222,7 +222,6 @@
 {# - required       : booléen indiquant si le champ est requis ou non #}
 {% macro select(idname, label='', args={}) %}
     {% set class = args.class ?? "" %}
-    {% set class = class ? class : field.vars.class %}
     {% set placeholder = args.placeholder ?? "" %}
     {% set sl_class = args.sl_class ?? {} %}
     {% set multiple = args.multiple ?? false %}
@@ -230,7 +229,6 @@
     {% set default = args.default ?? "" %}
     {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
     {% set choices = args.choices ?? {} %}
-    {% set choices = choices ?? field.vars.choices %}
     {% set required = ('require' in args and args.required) ? true : false %}
 
     {% if placeholder is empty and choices[0] is defined and choices[0] is not empty %}
@@ -289,7 +287,7 @@
 {% endmacro %}
 
 {# macro switchTextSides interrupteur avec texte de chaque coté #}
-{# - field          : champ déclaré dans le formulaure Symfony Form #}
+{# - full_name      : nom du champ déclaré dans le formulaure #}
 {# - checked        : si l'interrupteur est à 'on' (true) ou non (false par défaut) ref. checkbox #}
 {#                    dans le tableau args #}
 {# - class          : classes à appliquer au DIV HTML englobant l'interrupteur #}
