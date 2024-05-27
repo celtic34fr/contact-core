@@ -464,6 +464,7 @@ class SysParametersController extends AbstractController
                 'updated'       => $activitySector->getUpdatedAt(),
                 'name'          => $activitySector->getName(),
                 'description'   => $activitySector->getDescription() ?? "",
+                'parentId'      => $activitySector->getParentId() ?? null,
             ];
         } elseif ($request->getMethod() == "POST") {
             $myPreset = $request->getSession()->get("myPreset");

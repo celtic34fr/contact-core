@@ -146,7 +146,11 @@
     {% set custom_name = custom_name ? custom_name : field.vars.full_name ?? "" %}
     {% set value = value ? value : field.vars.value %}
 
-    {% set attributes = 'data-ref="'~ref~'" class="'~class~'" form="'~form~'"' %}
+    {% set attributes %}
+        {% if ref %} data-ref="{{ ref }}" {% endif %}
+        {% if class %} class="{{ class }}" {% endif %}
+        {% if form %} form="{{ form }}" {% endif %}
+    {% endset %}
     <input type="hidden" id="{{ field.vars.id }}" name="{{ custom_name }}" {{ attributes }}>
 {% endmacro %}
 
