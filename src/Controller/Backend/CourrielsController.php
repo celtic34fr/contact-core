@@ -115,6 +115,7 @@ class CourrielsController extends AbstractController
                     'nav' => $nav,
                     'choices' => $choices,
                     'limit' => $limit,
+                    'title' => "Gestion des Courriels générés par l'application",
                 ]);
         } else {
             $this->addFlash('danger', "La table Courriels n'existe pas, veuillez en avertir l'administrateur");
