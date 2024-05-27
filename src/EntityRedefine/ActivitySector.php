@@ -90,4 +90,16 @@ class ActivitySector extends Parameter
     {
         return $this->name."|".($this->description ?? "")."|".($this->parent_id ? strval($this->parent_id) : "");
     }
+
+    public function getParameter(): Parameter
+    {
+        $parameter = new Parameter();
+        $parameter->setId($this->getId());
+        $parameter->setCle($this->getCle());
+        $parameter->setOrd($this->getOrd());
+        $parameter->setValeur($this->getValeur());
+        $parameter->setCreatedAt($this->getCreatedAt());
+        $parameter->setUpdatedAt($this->getUpdatedAt());
+        return $parameter;
+    }
 }

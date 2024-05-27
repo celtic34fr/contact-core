@@ -382,7 +382,7 @@ class SysParametersController extends AbstractController
         if ($active  && $active['updated'] == null) {
             $response = [
                 'type' => "error",
-                'message' => "Catégorie ".$relationCategory->getCategory()." déjà active, veuillez modifier cete dernière plutôt que de demander une réactivation",
+                'message' => "Catégorie ".$relationCategory->getCategory()." déjà active, veuillez modifier cette dernière plutôt que de demander une réactivation",
             ];
         } else {
             $this->parameterRepo->update($lastCategory->getParameter(), $category->getValeur(), true);
@@ -497,7 +497,7 @@ class SysParametersController extends AbstractController
                 }
                 $response = [
                     'type' => "success",
-                    'message' => "Enregistrement de la catégorie ".$sysActivitySector->getName()." réalisé avec succés",
+                    'message' => "Enregistrement du secteur ".$sysActivitySector->getName()." réalisé avec succés",
                 ];
             }
         }
@@ -506,19 +506,42 @@ class SysParametersController extends AbstractController
     }
 
     #[Route('/activities_delt/{id}', name: 'activities-delt')]
-    public function activities_delt(Parameter $sector, Request $request): JsonResponse
+    public function activities_del(Parameter $sector, Request $request): JsonResponse
     {
         $paramsList = [];
         $response =  null;
+        $sector->setUpdatedAt(new DateTimeImmutable('now'));
+        $this->parameterRepo->save($sector, true);
+        $acticitySector = new ActivitySector($sector);
+ 
+        $response = [
+            'type' => "success",
+            'message' => "Suppressiion / Invalidation du secteur ".$acticitySector->getName()." réalisé avec succés",
+        ];
 
         return new JsonResponse($response);
     }
 
     #[Route('/activities_actv/{id}', name: 'activities-actv')]
-    public function activities_actv(Parameter $sector, Request $request): JsonResponse
+    public function activities_act(Parameter $sector, Request $request): JsonResponse
     {
         $paramsList = [];
         $response =  null;
+        $activitySector = new ActivitySector($sector);
+        $active = $this->parameterRepo->findActivitySectorByName($activitySector->getName());
+        $lastCategory = new ActivitySector($active);
+        if ($active  && $active['updated'] == null) {
+            $response = [
+                'type' => "error",
+                'message' => "Secteur ".$activitySector->getName()." déjà actif, veuillez modifier ce dernier plutôt que de demander une réactivation",
+            ];
+        } else {
+            $this->parameterRepo->update($lastCategory->getParameter(), $sector->getValeur(), true);
+            $response = [
+                'type' => "success",
+                'message' => "Réactivation de la catégorie ".$activitySector->getName()." réalisée avec succés",
+            ];
+        }
 
         return new JsonResponse($response);
     }
@@ -528,6 +551,14 @@ class SysParametersController extends AbstractController
     {
         $paramsList = [];
         $response =  null;
+        $sector->setUpdatedAt(null);
+        $this->parameterRepo->save($sector, true);
+        $acticitySector = new ActivitySector($sector);
+ 
+        $response = [
+            'type' => "success",
+            'message' => "Passage en Secteur du sous secteur ".$acticitySector->getName()." réalisé avec succés",
+        ];
 
         return new JsonResponse($response);
     }
