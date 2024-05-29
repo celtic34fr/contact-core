@@ -294,13 +294,6 @@
     	{% endif %}
 	    <select id="{{ field.vars.id }}" name="{{ field.vars.full_name }}" {{ sattributes }}
         {% if placeholder %} data-placeholder="{{ placeholder }}" {% endif %}>
-
-        {% if placeholder %}
-			<option selected="selected">
-				{{ placeholder }}
-			</option>
-        {% endif %}
-
 		{% for choice in choices %}
 			<option 
                 value="{{ choice.value }}"
