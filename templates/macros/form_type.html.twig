@@ -292,7 +292,8 @@
 		    	{{ label|raw }}
 		    </label>
     	{% endif %}
-	    <select id="{{ field.vars.id }}" name="{{ field.vars.full_name }}" {{ sattributes }}>
+	    <select id="{{ field.vars.id }}" name="{{ field.vars.full_name }}" {{ sattributes }}
+            data-placeholder="{{ placeholder }}">
 
 		{% for choice in choices %}
 			<option 
