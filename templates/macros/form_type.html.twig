@@ -82,11 +82,10 @@
     {% set checked = checked == "true" ? true : false %}
 	{% set value = args.value ?? "" %}
     {% set value = value ? value : field.vars.value %}
-	{% set inline = ('inline' in args and args.inline) ? true : false %}
-	{% set inline = inline ? " one-line" : "" %}
     {% set side = args.side ?? "left" %}
     {% set side = (side != "right" and side != "left") ? "left" : side %}
 	{% set class = args.class ?? "" %}
+	{% set inline = ('inline' in args and args.inline) ? true : false %}
 	{% set cl_class = args.cl_class ?? {} %}
     {% set labelClass = "" %}
     {% set checkClass = "" %}
@@ -105,13 +104,15 @@
     {% set required = field.vars.required ?? false %}
     {% if inline %}
         {% set checkClass = "checkbox col-2 row mx-0 px-0" %}
+    	{% set inline = inline ? " one-line" : "" %}
+        {% set class = class ~ " row" %}
     {% else %}
         {% set checkClass = "checkbox col-2 mx-0 px-0" %}
     {% endif %}
 
 	{% set attributes = 'class="'~checkClass~'" title="'~title~'" id="'~field.vars.id~'Input" value="'~value~'"' %}
     {% if checked %}{% set attributes = attributes ~ ' checked="checked"' %}{% endif %}
-    {% if disabled %}{% set attributes = attributes ~ ' disabled="'~disabled~'"' %}{% endif %}
+    {% if disabled %}{% set attributes = attributes ~ ' disabled="disabled"' %}{% endif %}
     
 
 	{% if required and not require_hide %}
