@@ -240,7 +240,9 @@
     {% set placeholder = placeholder ? placeholder : field.vars.placeholder %}
     {% set sl_class = args.sl_class ?? {} %}
     {% set multiple = args.multiple ?? false %}
-    {% set require_hide = ('require_hide' in args and args.require_hide) ? true : false %}
+    {% set multiple = multiple == 'true' ? true : false %}
+    {% set require_hide = args.require_hide ?? false %}
+    {% set require_hide = require_hide == 'true' ? true : false %}
     {% set default = args.default ?? "" %}
     {% set default = default == 'true' ? true : false %}
     {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
