@@ -110,7 +110,11 @@
         {% set checkClass = "checkbox col-2 mx-0 px-0" %}
     {% endif %}
 
-	{% set attributes = 'class="'~checkClass~'" title="'~title~'" id="'~field.vars.id~'Input" value="'~value~'"' %}
+	{% set attributes %}
+    id="{{ field.vars.id }}" name="{{ field.vars.full_name }}"
+    {% if title %} title="{{ title }}" {% endif %}
+    {% if value %} value="{{ value }}" {% endif %}
+    {% endset %}
     {% if checked %}{% set attributes = attributes ~ ' checked="checked"' %}{% endif %}
     {% if disabled %}{% set attributes = attributes ~ ' disabled="disabled"' %}{% endif %}
     
@@ -119,14 +123,15 @@
         {% set label = label ~ ' <abbr class="required" title="required">*</abbr>' %}
     {% endif %}
 
-    <div class="{{ class }}" id="{{ field.vars.id }}">
+    <div class="{{ class }}">
         {% if side == "left" %}
-        <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label|raw }}</label>
+        <label for="{{ field.vars.id }}" class="{{ labelClass }} col-10">{{ label|raw }}</label>
         {% endif %}
+        <div class="{{ checkClass}}">
         <input type="checkbox" {{ attributes|raw }}>
-        {#{{ form_widget(field, {'value': value, 'attr': attributes }) }}#}
+        </div>
         {% if side == "right" %}
-        <label for="{{ field.vars.id }}Input" class="{{ labelClass }} col-10">{{ label|raw }}</label>
+        <label for="{{ field.vars.id }}" class="{{ labelClass }} col-10">{{ label|raw }}</label>
         {% endif %}
 	</div>
 {% endmacro %}
