@@ -245,7 +245,8 @@
     {% set require_hide = require_hide == 'true' ? true : false %}
     {% set default = args.default ?? "" %}
     {% set default = default == 'true' ? true : false %}
-    {% set disabled = ('disabled' in args and args.disabled)  ? true : false %}
+    {% set disabled = args.disabled ?? false %}
+    {% set disabled = disabled == 'true' ? true : false %}
     {% set choices = args.choices ?? {} %}
     {% set choices = choices is not empty ? choices : field.vars.choices %}
 
