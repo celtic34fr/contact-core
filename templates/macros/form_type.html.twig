@@ -232,6 +232,7 @@
 {# - default        : valeur de selection par défaut dans la liste de sélection #}
 {# - disabled       : booléen d'activation (false) ou désactivation (true) de la liste de sélection #}
 {# - choices        : tableau des valeurs à afficher formé d'item : clé 'value', contenant {'disabled', 'label'} #}
+{# - selected       : tableau de ou des valeurs sélectionnées avant affichage #}
 {% macro select(field, label="", args={}) %}
     {% set label = label ?? field.vars.label %}
     {% set class = args.class ?? "" %}
@@ -249,6 +250,8 @@
     {% set disabled = disabled == 'true' ? true : false %}
     {% set choices = args.choices ?? {} %}
     {% set choices = choices is not empty ? choices : field.vars.choices %}
+    {% set selected = args.selected ?? {} %}
+    {% set selected = selected ? selected : field.vars.value %}
 
     {% if placeholder is empty and choices[0] is defined and choices[0] is not empty %}
         {% set placeholder =  'placeholder' in choices[0]|keys ? choices[0]['placeholder'] : "" %}
