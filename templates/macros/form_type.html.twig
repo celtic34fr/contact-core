@@ -278,8 +278,8 @@
 
     {% set sattributes %}
 	    {% if select_cl %}class="select {{ select_cl }}"{% endif %}
-	    {% if multiple %} multiple="multiple" {% endif %}
-	    {% if disabled %} disabled="disabled"{% endif %}
+	    {% if multiple %} multiple {% endif %}
+	    {% if disabled %} disabled {% endif %}
     {% endset %}
 
 	{% if field.vars.required and not require_hide %}
