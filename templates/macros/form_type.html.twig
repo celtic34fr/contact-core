@@ -296,7 +296,7 @@
             data-placeholder="{{ placeholder }}">
 
 		{% for choice in choices %}
-            {% set selected = (default is typeof('array')) ? choice.value in default : choice.value == default %}
+            {% set selected = (default is typeOf('array')) ? choice.value in default : choice.value == default %}
 			<option 
                 value="{{ choice.value }}"
                 {% if selected %} selected="selected" {% endif %}>
