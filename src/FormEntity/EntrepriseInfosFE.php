@@ -28,13 +28,13 @@ class EntrepriseInfosFE
     public function getInfosArray(): array
     {
         return [
-            'designation' => $this->designation,
-            'siren' => $this->siren,
-            'siret' => $this->siret,
-            'courriel' => $this->courriel,
-            'telephone' => $this->telephone,
-            'reponse' => $this->reponse,
-            'logoID' => $this->logoID,
+            'designation' => $this->designation ?? "",
+            'siren' => $this->siren ?? "",
+            'siret' => $this->siret ?? "",
+            'courriel' => $this->courriel ?? "",
+            'telephone' => $this->telephone ?? "",
+            'reponse' => $this->reponse ?? "",
+            'logoID' => $this->logoID ?? "",
         ];
     }
 

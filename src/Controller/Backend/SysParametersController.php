@@ -18,6 +18,7 @@ use Celtic34fr\ContactCore\FormEntity\SysSocialNetwork;
 use Celtic34fr\ContactCore\Repository\ParameterRepository;
 use Celtic34fr\ContactCore\Service\ExtensionConfig;
 use Celtic34fr\ContactCore\Service\UploadFiles;
+use Celtic34fr\ContactCore\Service\YamlConfigService;
 use Celtic34fr\ContactCore\Traits\UtilitiesTrait;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +29,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Yaml\Yaml;
 
 #[Route('sys_params', name: 'sys-params-')]
 class SysParametersController extends AbstractController
@@ -45,6 +45,7 @@ class SysParametersController extends AbstractController
         private Packages $assetManager,
         private KernelInterface $kernel,
         private Config $config,
+        private YamlConfigService $yamlConfig,
     )
     {
         $this->uploadFiles = new UploadFiles($entityManager, $router, $assetManager);
@@ -161,15 +162,18 @@ class SysParametersController extends AbstractController
                 }
                 // traitement de la référence à la page du réseau social
                 $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contactcore.yaml';
-                $yaml = Yaml::parse(file_get_contents($configFile));
+                // $yaml = Yaml::parse(file_get_contents($configFile));
+                $yaml = $this->yamlConfig->setFilePath($configFile)->read();
+
                 $entreprise = $yaml['entreprise'];
  
                 $socialNetworkUrlPage = $socialNetwork->getUrlPage();
                 if ($socialNetworkUrlPage && $entreprise[$socialNetworkName] != $socialNetworkUrlPage) {
                     $entreprise[$socialNetworkName] = $socialNetworkUrlPage;
                     $yaml['entreprise'] = $entreprise;
-                    $new_yaml = Yaml::dump($yaml, 2);
-                    file_put_contents($configFile, $new_yaml);
+                    // $new_yaml = Yaml::dump($yaml, 2);
+                    // file_put_contents($configFile, $new_yaml);
+                    $this->yamlConfig->write($yaml, 2);
                 }
                 $response = [
                     'type' => "success",
