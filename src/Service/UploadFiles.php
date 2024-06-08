@@ -21,6 +21,14 @@ class UploadFiles
     {
     }
 
+    /**
+     * @param Request $request
+     * @param array $valid_extensions
+     * @param array $dimensions
+     * @param string $cible
+     * @param User $owner
+     * @return JsonResponse
+     */
     public function uploadFile(Request $request, array $valid_extensions, array $dimensions, string $cible,
         User $owner
     ): JsonResponse {
@@ -85,6 +93,11 @@ class UploadFiles
         return new JsonResponse(['error' => ['type de fichier non supporté (' . $ext . ')']], Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * @param array $pj_ids
+     * @param string $mode
+     * @return array
+     */
     public function prepare_initial_datas(array $pj_ids, string $mode): array
     {
         $err_msg = [];
@@ -131,7 +144,11 @@ class UploadFiles
         return [$err_msg, $initial_datas];
     }
 
-    private function filesize_formated(int $size)
+    /**
+     * @param integer $size
+     * @return void
+     */
+    public function filesize_formated(int $size)
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $power = $size > 0 ? floor(log($size, 1024)) : 0;
