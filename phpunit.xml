@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         cacheResultFile="/tmp/.phpunit.cache/test-results"
+         executionOrder="depends,defects"
+         forceCoversAnnotation="false"
+         beStrictAboutCoversAnnotation="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         colors="true"
+         stopOnFailure="true"
+         stopOnError="true"
+         verbose="true"
+         testdox="true"
+         bootstrap="vendor/autoload.php">
+    <testsuites>
+        <!-- Test des entités de formulaire -->
+        <testsuite name="FormEntity - EntrepriseInfosFETest">
+            <file>tests/FormEntity/EntrepriseInfosFETest.php</file>
+        </testsuite>
+        <!-- Test des services -->
+        <testsuite name="Service - CourrielsDbInfosTest">
+            <file>tests/Service/CourrielsDbInfosTest.php</file>
+        </testsuite>
+        <testsuite name="Service - ExtensionConfigTest">
+            <file>tests/Service/ExtensionConfigTest.php</file>
+        </testsuite>
+        <!--
+        <testsuite name="Service - IndexGeneratorTest">
+            <file>tests/Service/IndexGeneratorTest.php</file>
+        </testsuite>
+        -->
+        <testsuite name="Service - SendMailerTest">
+            <file>tests/Service/SendMailerTest.php</file>
+        </testsuite>
+        <!--
+        <testsuite name="Service - PdfRenderTest">
+            <file>tests/Service/PdfRenderTest.php</file>
+        </testsuite>
+        <testsuite name="Service - TntEngineTest">
+            <file>tests/Service/TntEngineTest.php</file>
+        </testsuite>
+        -->
+        <testsuite name="Service - ToolsServiceTest">
+            <file>tests/Service/ToolsServiceTest.php</file>
+        </testsuite>
+        <!--
+        <testsuite name="Service - UploadFilesTest">
+            <file>tests/Service/UploadFilesTest.php</file>
+        </testsuite>
+        -->
+        <testsuite name="Service - YamlConfigTest">
+            <file>tests/Service/YamlConfigServiceTest.php</file>
+        </testsuite>
+        <!-- Test des widgets -->
+        <testsuite name="Widget - CourrielsWidgetTest">
+            <file>tests/Widget/CourrielsWidgetTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
