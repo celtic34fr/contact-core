@@ -110,7 +110,12 @@ class IndexGenerator
             }
     }
 
-    private function isExistOrCreateIndex(string $indexName, string $query): TNTIndexer
+    /**
+     * @param string $indexName
+     * @param string $query
+     * @return TNTIndexer
+     */
+    public function isExistOrCreateIndex(string $indexName, string $query): TNTIndexer
     {
         $tnt = $this->engine->get();
         $config = $this->connectionConfig->getConfig();

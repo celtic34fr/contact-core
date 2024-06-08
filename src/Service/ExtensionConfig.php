@@ -81,10 +81,13 @@ class ExtensionConfig
     }
 
     /** méthode de vérification de la présence d'une extension Bolt CMS */
-    public function isExtnsionInstall(string $extName): bool
+    public function isExtensionInstall(string $extName): bool
     {
         foreach ($this->extInstall as $extInstalled) {
-            $name = substr($extInstalled, strpos($extInstalled, '-') + 1);
+            $name = $extInstalled;
+            if (strpos($extInstalled, '-') != false) {
+                $name = substr($extInstalled, strpos($extInstalled, '-') + 1);
+            }
             $name = substr($name, 0, (strpos($name, '.') ? strpos($name, '.') : strlen($name)));
             if ($name === $extName) {
                 return true;
