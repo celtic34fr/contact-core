@@ -72,6 +72,21 @@
         <testsuite name="Validator - Constraint - CourrielStatusTypeTest">
             <file>tests/Validator/Constraint/CourrielStatusTypeTest.php</file>
         </testsuite>
+        <testsuite name="Validator - Constraint - CourrielStatusTypeValidatorTest">
+            <file>tests/Validator/Constraint/CourrielStatusTypeValidatorTest.php</file>
+        </testsuite>
+        <testsuite name="Validator - Constraint - CourrielTypeTest">
+            <file>tests/Validator/Constraint/CourrielTypeTest.php</file>
+        </testsuite>
+        <testsuite name="Validator - Constraint - CourrielTypeValidatorTest">
+            <file>tests/Validator/Constraint/CourrielTypeValidatorTest.php</file>
+        </testsuite>
+        <testsuite name="Validator - Constraint - PhoneNumberTest">
+            <file>tests/Validator/Constraint/PhoneNumberTest.php</file>
+        </testsuite>
+        <testsuite name="Validator - Constraint - PhoneNumberValidatorTest">
+            <file>tests/Validator/Constraint/PhoneNumberValidatorTest.php</file>
+        </testsuite>
         <!-- Test des widgets -->
         <testsuite name="Widget - CourrielsWidgetTest">
             <file>tests/Widget/CourrielsWidgetTest.php</file>
