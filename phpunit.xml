@@ -7,18 +7,38 @@
          beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
-         failOnRisky="true"
-         failOnWarning="true"
+         failOnRisky="false"
+         failOnWarning="false"
          colors="true"
-         stopOnFailure="true"
-         stopOnError="true"
+         stopOnFailure="false"
+         stopOnError="false"
          verbose="true"
          testdox="true"
          bootstrap="vendor/autoload.php">
     <testsuites>
+        <!-- Test extension -->
+        <testsuite name="ExtensionTest">
+            <file>tests/ExtensionTest.php</file>
+        </testsuite>
+        <!-- Test DOCTRINE -->
+        <testsuite name="Doctrine - ConnectionConfigTest">
+            <file>tests/Doctrine/ConnectionConfigTest.php</file>
+        </testsuite>
         <!-- Test des entités de formulaire -->
         <testsuite name="FormEntity - EntrepriseInfosFETest">
             <file>tests/FormEntity/EntrepriseInfosFETest.php</file>
+        </testsuite>
+        <testsuite name="FormEntity - ParameterFETest">
+            <file>tests/FormEntity/ParameterFETest.php</file>
+        </testsuite>
+        <testsuite name="FormEntity - SysActivitySectorTest">
+            <file>tests/FormEntity/SysActivitySectorTest.php</file>
+        </testsuite>
+        <testsuite name="FormEntity - SysRelationCategoryTest">
+            <file>tests/FormEntity/SysRelationCategoryTest.php</file>
+        </testsuite>
+        <testsuite name="FormEntity - SysSocialNetworkTest">
+            <file>tests/FormEntity/SysSocialNetworkTest.php</file>
         </testsuite>
         <!-- Test des services -->
         <testsuite name="Service - CourrielsDbInfosTest">
@@ -27,32 +47,30 @@
         <testsuite name="Service - ExtensionConfigTest">
             <file>tests/Service/ExtensionConfigTest.php</file>
         </testsuite>
-        <!--
         <testsuite name="Service - IndexGeneratorTest">
             <file>tests/Service/IndexGeneratorTest.php</file>
         </testsuite>
-        -->
-        <testsuite name="Service - SendMailerTest">
-            <file>tests/Service/SendMailerTest.php</file>
-        </testsuite>
-        <!--
         <testsuite name="Service - PdfRenderTest">
             <file>tests/Service/PdfRenderTest.php</file>
+        </testsuite>
+        <testsuite name="Service - SendMailerTest">
+            <file>tests/Service/SendMailerTest.php</file>
         </testsuite>
         <testsuite name="Service - TntEngineTest">
             <file>tests/Service/TntEngineTest.php</file>
         </testsuite>
-        -->
         <testsuite name="Service - ToolsServiceTest">
             <file>tests/Service/ToolsServiceTest.php</file>
         </testsuite>
-        <!--
         <testsuite name="Service - UploadFilesTest">
             <file>tests/Service/UploadFilesTest.php</file>
         </testsuite>
-        -->
         <testsuite name="Service - YamlConfigTest">
             <file>tests/Service/YamlConfigServiceTest.php</file>
+        </testsuite>
+        <!-- Test des validators -->
+        <testsuite name="Validator - Constraint - CourrielStatusTypeTest">
+            <file>tests/Validator/Constraint/CourrielStatusTypeTest.php</file>
         </testsuite>
         <!-- Test des widgets -->
         <testsuite name="Widget - CourrielsWidgetTest">

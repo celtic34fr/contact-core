@@ -27,15 +27,16 @@ class EntrepriseInfosFE
      */
     public function getInfosArray(): array
     {
-        return [
-            'designation' => $this->designation ?? "",
-            'siren' => $this->siren ?? "",
-            'siret' => $this->siret ?? "",
-            'courriel' => $this->courriel ?? "",
-            'telephone' => $this->telephone ?? "",
-            'reponse' => $this->reponse ?? "",
-            'logoID' => $this->logoID ?? "",
-        ];
+        $parameters = [];
+        if ($this->designation)     $parameters['designation']   = $this->designation;
+        if ($this->siren)           $parameters['siren']         = $this->siren;
+        if ($this->siret)           $parameters['siret']         = $this->siret;
+        if ($this->courriel)        $parameters['courriel']      = $this->courriel;
+        if ($this->telephone)       $parameters['telephone']     = $this->telephone;
+        if ($this->reponse)         $parameters['reponse']       = $this->reponse;
+        if ($this->logoID)          $parameters['logoID']        = $this->logoID;
+
+        return $parameters;
     }
 
     /**
@@ -45,13 +46,13 @@ class EntrepriseInfosFE
      */
     public function setByArray(array $parameters): self
     {
-        $this->designation = $parameters['designation'] ?? "";
-        $this->siren = $parameters['siren'] ?? "";
-        $this->siret = $parameters['siret'] ?? "";
-        $this->courriel = $parameters['courriel'] ?? "";
-        $this->telephone = $parameters['telephone'] ?? "";
-        $this->reponse = $parameters['reponse'] ?? "";
-        $this->logoID = $parameters['logoID'] ?? "";
+        if (array_key_exists('designation', $parameters))   $this->designation  = $parameters['designation'];
+        if (array_key_exists('siren', $parameters))         $this->siren        = $parameters['siren'];
+        if (array_key_exists('siret', $parameters))         $this->siret        = $parameters['siret'];
+        if (array_key_exists('courriel', $parameters))      $this->courriel     = $parameters['courriel'];
+        if (array_key_exists('telephone', $parameters))     $this->telephone    = $parameters['telephone'];
+        if (array_key_exists('reponse', $parameters))       $this->reponse      = $parameters['reponse'];
+        if (array_key_exists('logoID', $parameters))        $this->logoID       = $parameters['logoID'];
 
         /** 
          * if siren is empty && siret not empty :
@@ -164,15 +165,12 @@ class EntrepriseInfosFE
      */ 
     public function setTelephone($telephone): mixed
     {
-        /** string is numeric but too long or to short */
-        if (is_numeric($telephone) && strlen($telephone) != 10) return false;
-
         /** string must contains numbers, space, dot and plus character */
         $tempo = str_replace('+', '', $telephone);
         $tempo = str_replace('.', '', $tempo);
         $tempo = str_replace(' ', '', $tempo);
+        if (substr($tempo, 0, 2) == '33') $tempo = "0".substr($tempo, 2);
         if (!is_numeric($tempo) || strlen($tempo) != 10) return false;
-
         $this->telephone = $telephone;
 
         return $this;

@@ -11,7 +11,7 @@ class EntrepriseInfosFETest extends TestCase
     private array $goodInfos = [];
     private EntrepriseInfosFE $infos; 
 
-    public function __construct()
+    public function setUp(): void
     {
         $this->badInfos = [
             'designation' => 'ceci est un test',
@@ -37,7 +37,7 @@ class EntrepriseInfosFETest extends TestCase
 
         $array1 = $info1->getInfosArray();
         $array2 = $info2->getInfosArray();
-
+        
         /** validation array1 contains */
         $this->assertArrayNotHasKey('CA', $array1);
         $this->assertArrayNotHasKey('courriel', $array1);
@@ -50,20 +50,13 @@ class EntrepriseInfosFETest extends TestCase
         $this->assertNotEquals($info1, $array1);
 
         /** validation array2 empty values */
-        $this->assertArrayHasKey('courriel', $array2);
-        $this->assertArrayHasKey('reponse', $array2);
-        $this->assertArrayHasKey('logoµID', $array2);
-        $this->assertArrayHasKey('designation', $array2);
-        $this->assertArrayHasKey('siren', $array2);
-        $this->assertArrayHasKey('siret', $array2);
-        $this->assertArrayHasKey('telephone', $array2);
-        $this->assertEquals(null, $array2['designation']);
-        $this->assertEquals(null, $array2['siren']);
-        $this->assertEquals(null, $array2['siret']);
-        $this->assertEquals(null, $array2['courriel']);
-        $this->assertEquals(null, $array2['telephone']);
-        $this->assertEquals(null, $array2['reponse']);
-        $this->assertEquals(null, $array2['logoID']);
+        $this->assertArrayNotHasKey('courriel', $array2);
+        $this->assertArrayNotHasKey('reponse', $array2);
+        $this->assertArrayNotHasKey('logoµID', $array2);
+        $this->assertArrayNotHasKey('designation', $array2);
+        $this->assertArrayNotHasKey('siren', $array2);
+        $this->assertArrayNotHasKey('siret', $array2);
+        $this->assertArrayNotHasKey('telephone', $array2);
 
         /** validation affectation goodInfos to info2 */
         $info2->setByArray($this->goodInfos);
@@ -73,9 +66,13 @@ class EntrepriseInfosFETest extends TestCase
         $this->assertEquals($info2->getSiret(), $array2['siret']);
         $this->assertEquals($info2->getCourriel(), $array2['courriel']);
         $this->assertEquals($info2->getTelephone(), $array2['telephone']);
-        $this->assertEquals($info2->getReponse(), $array2['reponse']);
+        // => goodInfos['reponse'] à chaîne vide = pas initialisé en retour array
+        $this->assertArrayNotHasKey('reponse', $array2);
         $this->assertEquals($info2->getLogoID(), $array2['logoID']);
-        $this->assertEquals($array2, $info2);
+        $goodArray = $this->goodInfos;
+        unset($goodArray['reponse']);
+        $this->assertEquals($array2, $goodArray);
+        $this->assertNotEquals($array2, $this->goodInfos);
 
         /** validation value per field */
         $info2->setDesignation('un changement');
@@ -84,24 +81,24 @@ class EntrepriseInfosFETest extends TestCase
         $this->assertFalse($info2->setSiren('0123456789012'));
         $this->assertFalse($info2->setSiren('012345'));
         $this->assertFalse($info2->setSiren('0a1Z23R45'));
-        $this->assertTrue($info2->setSiren('987654321'));
+        $this->assertEquals($info2, $info2->setSiren('987654321'));
         $this->assertNotEquals('012345678', $info2->getSiren());
         $this->assertEquals('987654321', $info2->getSiren());
 
         $this->assertFalse($info2->setSiret('01233456'));
         $this->assertFalse($info2->setSiret("01234567890123456789"));
-        $this->assertFalse($info2->setSireT('0a1Z23R45YU12p'));
-        $this->assertTrue($info2->setSiret("98765432154321"));
+        $this->assertFalse($info2->setSiret('0a1Z23R45YU12p'));
+        $this->assertEquals($info2, $info2->setSiret("98765432154321"));
         $this->assertEquals('98765432154321', $info2->getSiret());
 
         $this->assertFalse($info2->setTelephone("/01245.23.322"));
         $this->assertFalse($info2->setTelephone("azor.253.456"));
-        $this->assertTrue($info2->setTelephone("+33 4 01 02 03 04"));
-        $this->assertTrue($info2->setTelephone("+33 401020304"));
-        $this->assertTrue($info2->setTelephone("+33 4.01.02.03.04"));
-        $this->assertTrue($info2->setTelephone("04 01 02 03 04"));
-        $this->assertTrue($info2->setTelephone("04.01.02.03.04"));
-        $this->assertTrue($info2->setTelephone("0501020304"));
+        $this->assertEquals($info2, $info2->setTelephone("+33 4 01 02 03 04"));
+        $this->assertEquals($info2, $info2->setTelephone("+33 401020304"));
+        $this->assertEquals($info2, $info2->setTelephone("+33 4.01.02.03.04"));
+        $this->assertEquals($info2, $info2->setTelephone("04 01 02 03 04"));
+        $this->assertEquals($info2, $info2->setTelephone("04.01.02.03.04"));
+        $this->assertEquals($info2, $info2->setTelephone("0501020304"));
         $this->assertNotEquals("0401020304", $info2->getTelephone());
         $this->assertEquals("0501020304", $info2->getTelephone());
     }

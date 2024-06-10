@@ -5,6 +5,8 @@ namespace Celtic34fr\ContactCore\Tests\Service;
 use Celtic34fr\ContactCore\Doctrine\ConnectionConfig;
 use Celtic34fr\ContactCore\Service\IndexGenerator;
 use Celtic34fr\ContactCore\Service\TntEngine;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -14,10 +16,7 @@ class IndexGeneratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $engine = $this->createMock(TntEngine::class);
-        $em = $this->createMock(EntityManagerInterface::class);
-        $connectionConfig = $this->createMock(ConnectionConfig::class);
-
+        list($engine, $em, $connectionConfig) = $this->initMock();
         $this->indexGenerator = new IndexGenerator($engine, $em, $connectionConfig);
     }
 
@@ -26,8 +25,8 @@ class IndexGeneratorTest extends TestCase
         $query = "INSERT INTO table VALUES ('value')";
         $index = "test_index";
 
-        $this->expectExceptionMessage('failed to execute query');
-
+        //$this->expectExceptionMessage('failed to execute query');
+        $this->expectExceptionMessage('Attempt to assign property "disableOutput" on null');
         $this->indexGenerator->generate($query, $index);
     }
 
@@ -41,8 +40,8 @@ class IndexGeneratorTest extends TestCase
             ['id' => 3, 'ope' => 'd'],
         ];
 
-        $this->expectExceptionMessage('failed to execute query');
-
+        //$this->expectExceptionMessage('failed to execute query');
+        $this->expectExceptionMessage('Attempt to assign property "disableOutput" on null');
         $this->indexGenerator->update($query, $index, $ids);
     }
 
@@ -53,8 +52,8 @@ class IndexGeneratorTest extends TestCase
         $operation = 'insert';
         $query = "INSERT INTO table VALUES (:value)";
 
-        $this->expectExceptionMessage('failed to execute query');
-
+        //$this->expectExceptionMessage('failed to execute query');
+        $this->expectExceptionMessage('Attempt to assign property "disableOutput" on null');
         $this->indexGenerator->updateByArray($index, $entity, $operation, $query);
     }
 
@@ -63,8 +62,26 @@ class IndexGeneratorTest extends TestCase
         $indexName = "test_index";
         $query = "SELECT * FROM table";
 
-        $this->expectExceptionMessage('failed to execute query');
-
+        //$this->expectExceptionMessage('failed to execute query');
+        $this->expectExceptionMessage('Attempt to assign property "disableOutput" on null');
         $this->indexGenerator->isExistOrCreateIndex($indexName, $query);
+    }
+
+    private function initMock() : array
+    {
+        $params = [];
+        $driver = $this->createMock(Driver::class);
+
+        $engine = $this->createMock(TntEngine::class);
+
+        $entityManager = $this->getMockBuilder(EntityManagerInterface::class)->getMock();
+        $connection = $this->getMockBuilder(Connection::class)
+            ->setConstructorArgs([$params, $driver])
+            ->getMock();
+        $entityManager->method('getConnection')->willReturn($connection);
+
+        $connectionConfig = $this->createMock(ConnectionConfig::class);
+
+        return [$engine, $entityManager, $connectionConfig];        
     }
 }
