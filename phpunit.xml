@@ -92,7 +92,4 @@
             <file>tests/Widget/CourrielsWidgetTest.php</file>
         </testsuite>
     </testsuites>
-    <extensions>
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
-    </extensions>
 </phpunit>
