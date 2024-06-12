@@ -37,18 +37,11 @@ class CliInfosRepository extends ServiceEntityRepository
         }
     }
 
-    public function findFullname(string $fullname) :mixed
+    public function isExistFullname(string $fullname) :mixed
     {
-        $found = false;
-        $allUSer = $this->getEntityManager()->getRepository(CliInfos::class)->findAll();
-        /** @var CliInfos $user */
-        foreach ($allUSer as $user) {
-            if ($fullname == $user->getFullname()) {
-                $found = true;
-                break;
-            }
-        }
-        return $found;
+        $qb = $this->createQueryBuilder('c');
+        $qb->expr()->eq($fullname, $qb->expr()->concat('c.nom', $qb->expr()->concat(' ', 'c.prenom')));
+        return $qb->getQuery()->getResult() ? true : false;
     }
 
 //    /**

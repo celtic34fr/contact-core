@@ -118,7 +118,7 @@ class ParameterRepository extends ServiceEntityRepository
      * @param string $name
      * @return array
      */
-    public function getValuesParamterList(string $name): array
+    public function getValuesParameterList(string $name): array
     {
         $paramList = [];
         $rslt = $this->findBy(['cle' => $name], ['ord' => 'ASC']);
