@@ -3,6 +3,7 @@
 namespace Celtic34fr\ContactCore\Validator\Constraint;
 
 use Celtic34fr\ContactCore\Enum\CourrielEnums;
+use Celtic34fr\ContactCore\Validator\Constraint\ContainsAlphanumeric;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

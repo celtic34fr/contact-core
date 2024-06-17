@@ -2,18 +2,16 @@
 
 namespace Celtic34fr\ContactCore\Validator\Constraint;
 
-use Celtic34fr\ContactCore\Enum\CustomerEnums;
-use Celtic34fr\ContactCore\Validator\Constraint\ContainsAlphanumeric;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-class CustomerTypeValidator extends ConstraintValidator
+class ContainsAlphanumericValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof CustomerType) {
+        if (!$constraint instanceof ContainsAlphanumeric) {
             throw new UnexpectedTypeException($constraint, ContainsAlphanumeric::class);
         }
 
@@ -36,11 +34,13 @@ class CustomerTypeValidator extends ConstraintValidator
             // ...
         }
 
-        /** logique de la validation */
-        if (!CustomerEnums::isValid($value)) {
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ string }}', $value)
-                ->addViolation();
+        if (preg_match('/^[a-zA-Z0-9]+$/', $value, $matches)) {
+            return;
         }
+
+        // the argument must be a string or an object implementing __toString()
+        $this->context->buildViolation($constraint->message)
+            ->setParameter('{{ string }}', $value)
+            ->addViolation();
     }
 }
