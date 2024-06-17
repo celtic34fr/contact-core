@@ -61,7 +61,7 @@ class ParametersController extends AbstractController
     #[Route('/informations', name: 'info-structure')]
     public function index(Request $request): Response
     {
-        if ($this->extConfig->isExtnsionInstall("contactcore")) {
+        if ($this->extConfig->isExtensionInstall("contactcore")) {
             $entreprise = $this->extConfig->get('celtic34fr-contactcore/entreprise');
             if (!$entreprise) {
                 $entreprise  = [

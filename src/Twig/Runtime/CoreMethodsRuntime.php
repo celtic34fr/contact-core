@@ -17,7 +17,7 @@ class CoreMethodsRuntime implements RuntimeExtensionInterface
 
     public function twigFunction_isExtensionInstall($name): bool
     {
-        return $this->extensionConfig->isExtnsionInstall($name);
+        return $this->extensionConfig->isExtensionInstall($name);
     }
 
     public function twigFunction_mailError() :int
