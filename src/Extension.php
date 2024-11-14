@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Celtic34fr\ContactCore;
 
 use Bolt\Extension\BaseExtension;
+use Celtic34fr\ContactCore\Trait\ExecShellTrait;
 use Celtic34fr\ContactCore\Widget\CourrielsWidget;
 use Symfony\Component\Filesystem\Filesystem;
 
 /** classe de déclaration et initialisation de l'extension Bolt CMS */
 class Extension extends BaseExtension
 {
+    use ExecShellTrait;
+    
     /**
      * Return the full name of the extension
      */
@@ -54,9 +57,12 @@ class Extension extends BaseExtension
         $source = dirname(__DIR__) . '/public';
         $destination = $projectDir . '/public/contact-assets';
         if (!$filesystem->exists($destination)) {
-            $filesystem->mkdir($destination);
-            $filesystem->chgrp($destination, 'www-data', true);
-            $filesystem->chmod($destination, 0777);
+            $mkdirCmd = sprintf(
+                'mkdir -p %s && chmod -R 0777 %s',
+                $destination,
+                $destination
+            );
+            $this->executeShellCommand($mkdirCmd);
         }
         $this->doCopy($source, $destination, $filesystem);
     }
