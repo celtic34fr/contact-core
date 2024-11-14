@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Celtic34fr\ContactCore;
 
 use Bolt\Extension\BaseExtension;
-use Celtic34fr\ContactCore\Trait\ExecShellTrait;
+use Celtic34fr\ContactCore\Traits\ExecShellTrait;
 use Celtic34fr\ContactCore\Widget\CourrielsWidget;
 use Symfony\Component\Filesystem\Filesystem;
 

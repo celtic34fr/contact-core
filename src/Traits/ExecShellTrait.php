@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Trait;
+namespace Celtic34fr\ContactCore\Traits;
 
 trait ExecShellTrait
 {
