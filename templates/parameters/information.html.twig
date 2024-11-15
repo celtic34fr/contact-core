@@ -1,8 +1,8 @@
-{% extends '@contact-core/layout_backend.html.twig' %}
-{% import '@contact-core/macros/form_type.html.twig' as fields %}
-{% import '@contact-core/macros/generals.html.twig' as generals %}
-{% import "@contact-core/macros/upload_files.html.twig" as updFiles %}
-{% import "@contact-core/macros/show_toast.js.twig" as toasts %}
+{% extends '@contactcore/layout_backend.html.twig' %}
+{% import '@contactcore/macros/form_type.html.twig' as fields %}
+{% import '@contactcore/macros/generals.html.twig' as generals %}
+{% import "@contactcore/macros/upload_files.html.twig" as updFiles %}
+{% import "@contactcore/macros/show_toast.js.twig" as toasts %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block main %}
-	{{ form_start(form, {'action': path('parameters-info-structure'), 'method': 'POST'}) }}
+	{{ form_start(form, {'action': path('parameters-informations'), 'method': 'POST'}) }}
 		{{ form_row(form._token) }}
 		{% set errors = formErrors(form) %}
 		{% if errors|length %}
@@ -111,7 +111,7 @@
 			</div>
 			{{ fields.dragNDrop2(form.logo, {
 				label: 'Déposez-Glissez votre logo', maxFiles: 1,
-				accept: acceptFiles, routeController: 'parameters-upload-logo', progressbar: false,
+				accept: acceptFiles, routeController: 'parameters-uploadLogo', progressbar: false,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, 'initial_datas': logoDB,
 				hidden_name: form.logoID.vars.id
 			}) }}
@@ -136,13 +136,13 @@
 {% block javascripts %}
 	{{ parent() }}
 	{{ updFiles.jsFunc_dropzone({
-		routeController: "parameters-upload-logo", dropArea: form.logo.vars.id,
+		routeController: "parameters-uploadLogo", dropArea: form.logo.vars.id,
 		preview: true, progressbar: false, iconSide: 'BR',
 	}) }}
 	{{ updFiles.jsInit_dropzone({
 		preview: true, iconSide: 'BR',
 	}) }}
-	{% include "@contact-core/includes/_show_toast.html.twig" %}
+	{% include "@contactcore/includes/_show_toast.html.twig" %}
 
 	<script>
 		function toggleCloseOpen(event) {

@@ -32,7 +32,7 @@ class Extension extends BaseExtension
     public function initialize($cli = false): void
     {
         /** ajout de l'espace de nommage pour accès aux templates de l'extension */
-        $this->addTwigNamespace("contact-core", dirname(__DIR__)."/templates");
+        $this->addTwigNamespace("contactcore", dirname(__DIR__)."/templates");
         $this->addWidget(new CourrielsWidget());
     }
 

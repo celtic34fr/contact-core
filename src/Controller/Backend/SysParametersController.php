@@ -30,7 +30,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 
-#[Route('sys_params', name: 'sys-params-')]
+#[Route('sysParams', name: 'sysParams-')]
 class SysParametersController extends AbstractController
 {
     use UtilitiesTrait;
@@ -56,11 +56,11 @@ class SysParametersController extends AbstractController
      * Socials Networks Parameter Management
      */
 
-    #[Route('/socialnetworks_list', name: 'socialnetworks-list')]
-    public function socialnetworks_list(Request $request)
+    #[Route('/socialnetworksList', name: 'socialnetworksList')]
+    public function socialnetworksList(Request $request)
     {
         $paramsList = [];
-        $entreprise = $this->extConfig->get('celtic34fr-contactcore/entreprise');
+        $entreprise = $this->extConfig->get('celtic34fr-contact-core/entreprise');
         $socialNetworkList = $this->parameterRepo->findValidSocialNetworks();
         if ($socialNetworkList) {
             foreach ($socialNetworkList as $id => $infos) {
@@ -84,7 +84,7 @@ class SysParametersController extends AbstractController
  
         $myPreset = uniqid();
         $request->getSession()->set("myPreset", $myPreset);
-        return $this->render('@contact-core/sys-params/socialnetworks_list.html.twig', [
+        return $this->render('@contactcore/sysParams/socialnetworksList.html.twig', [
             'paramsList' => $paramsList,
             'title' => "Liste des réseaux sociaux utilisés",
             'form' => $form->createView(),
@@ -95,8 +95,8 @@ class SysParametersController extends AbstractController
         ]);
     }
  
-    #[Route('/socialnetworks_form/{id}', name: 'socialnetworks-form')]
-    public function socialnetworks_form(Request $request, int $id=null): JsonResponse
+    #[Route('/socialnetworksForm/{id}', name: 'socialnetworksForm')]
+    public function socialnetworksForm(Request $request, int $id=null): JsonResponse
     {
         $parameter = $id ? $this->parameterRepo->find($id) : null;
         $response = "";
@@ -161,7 +161,7 @@ class SysParametersController extends AbstractController
                     }
                 }
                 // traitement de la référence à la page du réseau social
-                $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contactcore.yaml';
+                $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contact-core.yaml';
                 // $yaml = Yaml::parse(file_get_contents($configFile));
                 $yaml = $this->yamlConfig->setFilePath($configFile)->read();
 
@@ -190,8 +190,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
  
-    #[Route('/socialnetworks_upload', name: 'socialnetworks-upload', methods: ['POST'])]
-    public function socialnetworks_upload(Request $request): JsonResponse
+    #[Route('/socialnetworksUpload', name: 'socialnetworksUpload', methods: ['POST'])]
+    public function socialnetworksUpload(Request $request): JsonResponse
     {
         $operator = $this->getUser();
         return $this->uploadFiles->uploadFile(
@@ -203,8 +203,8 @@ class SysParametersController extends AbstractController
         );
     }
  
-    #[Route('/socialnetworks_delt/{id}', name: 'socialnetworks-del')]
-    public function socialnetworks_del(Parameter $social, Request $request): JsonResponse
+    #[Route('/socialnetworksDelt/{id}', name: 'socialnetworksDel')]
+    public function socialnetworksDel(Parameter $social, Request $request): JsonResponse
     {
         $response = [];
         $social->setUpdatedAt(new DateTimeImmutable('now'));
@@ -219,8 +219,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
  
-    #[Route('/socialnetworks_actv/{id}', name: 'socialnetworks-act')]
-    public function socialnetworks_act(Parameter $social, Request $request): JsonResponse
+    #[Route('/socialnetworksActv/{id}', name: 'socialnetworksAct')]
+    public function socialnetworksAct(Parameter $social, Request $request): JsonResponse
     {
         $response = [];
         $socialNetwork = new SocialNetwork($social);
@@ -242,8 +242,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
  
-    #[Route('/socialnetworks_toggle/{status}', name:'socialnetworks-toggle')]
-    public function socialnetworks_toggle(string $status, Request $request): JsonResponse
+    #[Route('/socialnetworksToggle/{status}', name:'socialnetworksToggle')]
+    public function socialnetworksToggle(string $status, Request $request): JsonResponse
     {
         $paramsList = [];
         if ($status == "true") {
@@ -279,8 +279,8 @@ class SysParametersController extends AbstractController
      * Contact Categories Management
      */
 
-    #[Route('/rcategories_list', name: 'rcategories-list')]
-    public function rcategories_list(Request $request)
+    #[Route('/rcategoriesList', name: 'rcategoriesList')]
+    public function rcategoriesList(Request $request)
     {
         $paramsList = $this->parameterRepo->findValidRelationCategories();
         $rcategory = new SysRelationCategory();
@@ -288,7 +288,7 @@ class SysParametersController extends AbstractController
  
         $myPreset = uniqid();
         $request->getSession()->set("myPreset", $myPreset);
-        return $this->render('@contact-core/sys-params/rcategories_list.html.twig', [
+        return $this->render('@contactcore/sysParams/rcategoriesList.html.twig', [
             'paramsList' => $paramsList,
             'title' => "Liste des fontions ou catégories des relations",
             'form' => $form->createView(),
@@ -296,8 +296,8 @@ class SysParametersController extends AbstractController
         ]);
     }
  
-    #[Route('/rcategories_form/{id}', name: 'rcategories-form')]
-    public function rcategories_form(Request $request, int $id=null): JsonResponse
+    #[Route('/rcategoriesForm/{id}', name: 'rcategoriesForm')]
+    public function rcategoriesForm(Request $request, int $id=null): JsonResponse
     {
         $parameter = $id ? $this->parameterRepo->find($id) : null;
         $response = "";
@@ -360,8 +360,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
  
-    #[Route('/rcategories_delt/{id}', name: 'rcategories-del')]
-    public function rcategories_del(Parameter $category, Request $request): JsonResponse
+    #[Route('/rcategoriesDelt/{id}', name: 'rcategoriesDel')]
+    public function rcategoriesDel(Parameter $category, Request $request): JsonResponse
     {
         $response = [];
         $category->setUpdatedAt(new DateTimeImmutable('now'));
@@ -376,8 +376,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
   
-    #[Route('/rcategories_actv/{id}', name: 'rcategories-act')]
-    public function rcategories_act(Parameter $category, Request $request): JsonResponse
+    #[Route('/rcategoriesActv/{id}', name: 'rcategoriesAct')]
+    public function rcategoriesAct(Parameter $category, Request $request): JsonResponse
     {
         $response = [];
         $relationCategory = new RelationCategory($category);
@@ -399,8 +399,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('/rcategories_toggle/{status}', name: 'rcategories-toggle')]
-    public function rcategories_toggle(string $status, Request $request): JsonResponse
+    #[Route('/rcategoriesToggle/{status}', name: 'rcategoriesToggle')]
+    public function rcategoriesToggle(string $status, Request $request): JsonResponse
     {
         $paramsList = [];
         if ($status == "true") {
@@ -434,8 +434,8 @@ class SysParametersController extends AbstractController
      * Activities Sectorsd Management
      */
 
-    #[Route('/activities_list', name: 'activities-list')]
-    public function activity_list(Request $request)
+    #[Route('/activitiesList', name: 'activitiesList')]
+    public function activityList(Request $request)
     {
         $paramsList = $this->parameterRepo->findValidActivitiesSectors();
         $acticitySector = new SysActivitySector();
@@ -443,15 +443,15 @@ class SysParametersController extends AbstractController
  
         $myPreset = uniqid();
         $request->getSession()->set("myPreset", $myPreset);
-        return $this->render('@contact-core/sys-params/activities_list.html.twig', [
+        return $this->render('@contactcore/sysParams/activitiesList.html.twig', [
             'paramsList' => $paramsList,
             'title' => "Liste des secteurs d'activités",
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/activities_form/{id}', name: 'activities-form')]
-    public function activities_form(Request $request, int $id=null): JsonResponse
+    #[Route('/activitiesForm/{id}', name: 'activitiesForm')]
+    public function activitiesForm(Request $request, int $id=null): JsonResponse
     {
         $parameter = $id ? $this->parameterRepo->find($id) : null;
         $response = "";
@@ -509,8 +509,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('/activities_delt/{id}', name: 'activities-delt')]
-    public function activities_del(Parameter $sector, Request $request): JsonResponse
+    #[Route('/activitiesDelt/{id}', name: 'activitiesDelt')]
+    public function activitiesDel(Parameter $sector, Request $request): JsonResponse
     {
         $paramsList = [];
         $response =  null;
@@ -526,8 +526,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('/activities_actv/{id}', name: 'activities-actv')]
-    public function activities_act(Parameter $sector, Request $request): JsonResponse
+    #[Route('/activitiesActv/{id}', name: 'activitiesActv')]
+    public function activitiesAct(Parameter $sector, Request $request): JsonResponse
     {
         $paramsList = [];
         $response =  null;
@@ -550,8 +550,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('/activities_upst/{id}', name: 'activities-upst')]
-    public function activities_upst(Parameter $sector, Request $request): JsonResponse
+    #[Route('/activitiesUpst/{id}', name: 'activitiesUpst')]
+    public function activitiesUpst(Parameter $sector, Request $request): JsonResponse
     {
         $paramsList = [];
         $response =  null;
@@ -567,8 +567,8 @@ class SysParametersController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('/activities_toggle/{status}', name: 'activities-toggle')]
-    public function activities_toggle(string $status, Request $request): JsonResponse
+    #[Route('/activitiesToggle/{status}', name: 'activitiesToggle')]
+    public function activitiesToggle(string $status, Request $request): JsonResponse
     {
         $paramsList = [];
         $response =  null;

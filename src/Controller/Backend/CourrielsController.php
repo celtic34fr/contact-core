@@ -29,7 +29,7 @@ class CourrielsController extends AbstractController
         $this->courrielRepository = $entityManager->getRepository(Courriel::class);
     }
 
-    #[Route('/list/{currentPage}', name: 'courriel_list')]
+    #[Route('/list/{currentPage}', name: 'list')]
     /**
      * interface pour afficher les requêtes adressées par les internautes
      * @throws Exception
@@ -108,7 +108,7 @@ class CourrielsController extends AbstractController
             }
             $courriels = $this->courrielRepository->findCourrielsAll($type, $currentPage, $limit);
             $response =
-                $this->render('@contact-core/courriels/index.html.twig', [
+                $this->render('@contactcore/courriels/index.html.twig', [
                     'courriels' => $courriels['datas'] ?? [],
                     'currentPage' => $courriels['page'] ?? 1,
                     'pages' => $courriels['pages'] ?? 0,

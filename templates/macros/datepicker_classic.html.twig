@@ -46,7 +46,7 @@
             {% if disabled %} disabled="disabled" {% endif %}
         >
         <div class="hidden datepicker" id="{{ name }}">
-            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+            {% import "@contactcore/macros/form_classic.html.twig" as forms %}
             {{ forms.hidden(name ~ "_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
                 'custom_name': name ~ "[day]", "class": "date_day",
             }) }}
@@ -114,7 +114,7 @@
     {% set sico = label_ico.sico ?? "" %}
     {% set eico = label_ico.eico ?? "" %}
 
-    {% import "@contact-core/templates/macros/datepicker_resources.html.twig" as fields %}
+    {% import "@contactcore/templates/macros/datepicker_resources.html.twig" as fields %}
     {% if svalue is typeOf('array') %}
         {% set svalue = fields.datetimeArrayToString(svalue, true, false) %}
     {% endif %}
@@ -142,7 +142,7 @@
                 {% if stitle is not empty %} title="{{ stitle }}" data-title="{{ stitle }}" {% endif %}
             >
             <div class="hidden hidden_start datepicker" id="{{ form_start }}">
-                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+                {% import "@contactcore/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(form_start ~ "_day", (svalue is not empty ? svalue|slice(8, 2) : ""), {
                     'custom_name': form_start ~ "[day]", "class": "date_day",
                 }) }}
@@ -166,7 +166,7 @@
                 class="datepicker-input end" {{ edisabled }}
             >
             <div class="hidden hidden_end datepicker" id="{{ form_end }}">
-                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+                {% import "@contactcore/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(form_end ~ "_day", (evalue is not empty ? evalue|slice(8, 2) : ""), {
                     'custom_name': form_end ~ "[day]", "class": "date_day",
                 }) }}

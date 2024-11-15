@@ -7,7 +7,7 @@
 {# classes      : classes CSS à ajouter à celle par défaut #}
 {# btn_style    : classe à appliquer pour formaliser l'affichage des boutons de navigation #}
 {% macro page_navigate(args= {}) %}
-    {% import '@contact-core/macros/form_classic.html.twig' as forms %}
+    {% import '@contactcore/macros/form_classic.html.twig' as forms %}
     {% set class = args.class is defined ? args.class : "" %}
     {% set currentPage = args.currentPage is defined ? args.currentPage : 1 %}
     {% set pages = args.pages is defined ? args.pages : 1 %}

@@ -22,7 +22,7 @@ class CourrielsWidget extends BaseWidget implements TwigAwareInterface, CacheAwa
         $this->name = 'Contact Courriels Widget';
         $this->target = ADDITIONALTARGET::WIDGET_BACK_DASHBOARD_ASIDE_TOP;
         $this->priority = 300;
-        $this->template = '@contact-core/widget/courriels.html.twig';
+        $this->template = '@contactcore/widget/courriels.html.twig';
         $this->zone = RequestZone::FRONTEND;
         $this->cacheDuration = 0;
     }

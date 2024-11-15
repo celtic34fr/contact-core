@@ -68,7 +68,7 @@
             />
         </div>
         <div class="hidden datetimepicker" id="{{ name }}">
-            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+            {% import "@contactcore/macros/form_classic.html.twig" as forms %}
             {{ forms.hidden(name ~ "_date_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
                 'custom_name': name ~ "[date][day]", "class": "date_day",
             }) }}

@@ -54,7 +54,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
-                'uri' => $this->urlGenerator->generate('parameters-info-structure'),
+                'uri' => $this->urlGenerator->generate('parameters-informations'),
                 'extras' => [
                     'icon' => 'fa-building',
                     'group' => 'Contact',
@@ -65,7 +65,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
-                'uri' => $this->urlGenerator->generate('parameters-params-list'),
+                'uri' => $this->urlGenerator->generate('parameters-list'),
                 'extras' => [
                     'icon' => 'fa-building',
                     'group' => 'Contact',
@@ -76,7 +76,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
-                'uri' => $this->urlGenerator->generate('sys-params-rcategories-list'),
+                'uri' => $this->urlGenerator->generate('sysParams-rcategoriesList'),
                 'extras' => [
                     'icon' => 'fa-building',
                     'group' => 'Contact',
@@ -87,7 +87,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
-                'uri' => $this->urlGenerator->generate('sys-params-activities-list'),
+                'uri' => $this->urlGenerator->generate('sysParams-activitiesList'),
                 'extras' => [
                     'icon' => 'fa-building',
                     'group' => 'Contact',
@@ -98,7 +98,7 @@ class AdminMenu implements ExtensionBackendMenuInterface
             'type' => 'smenu',
             'parent' => "Paramètres",
             'item' => [
-                'uri' => $this->urlGenerator->generate('sys-params-socialnetworks-list'),
+                'uri' => $this->urlGenerator->generate('sysParams-socialnetworks-list'),
                 'extras' => [
                     'icon' => 'fa-building',
                     'group' => 'Contact',

@@ -79,8 +79,8 @@ class SendMailer
     public function sendTemplate(CliInfos $destinataire, string $template_name, string $subject, array $context): bool
     {
         $html_body = $this->twig->render($template_name, array_merge($context, ["destinataire" => $destinataire]));
-        $info_company = $this->extConfig->get('celtic34fr-contactcore/entreprise');
-        $from_contact = $info_company['courriel'] ?? $this->extConfig->get('celtic34fr-contactcore/courriel_reponse');
+        $info_company = $this->extConfig->get('celtic34fr-contact-core/entreprise');
+        $from_contact = $info_company['courriel'] ?? $this->extConfig->get('celtic34fr-contact-core/courriel_reponse');
         $email = (new Email())
             ->from(new Address($from_contact))
             ->to(new Address($destinataire->getClient()->getCourriel(), $destinataire->getFullName()))

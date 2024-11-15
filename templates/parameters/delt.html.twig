@@ -1,5 +1,5 @@
-{% extends '@contact-core/layout_backend.html.twig' %}
-{% import '@contact-core/macros/form_classic.html.twig' as forms %}
+{% extends '@contactcore/layout_backend.html.twig' %}
+{% import '@contactcore/macros/form_classic.html.twig' as forms %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -94,7 +94,7 @@
 		}
 
 		function cancel() {
-			location.href = "{{ path('parameters-params-list') }}";
+			location.href = "{{ path('parameters-list') }}";
 		}
 	</script>
 {% endblock %}

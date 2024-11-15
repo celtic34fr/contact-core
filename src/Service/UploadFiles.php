@@ -118,7 +118,7 @@ class UploadFiles
 
                         $item = [];
                         $item['id'] = $pj_id;
-                        $item['view_url'] = $this->router->generate('tools_view_doc', ['id' => $pj_id]);
+                        $item['view_url'] = $this->router->generate('tools_viewDoc', ['id' => $pj_id]);
     
                         switch ($mode) {
                             case 'icon':
@@ -133,7 +133,7 @@ class UploadFiles
                                 $item['preview_url'] = $url;
                                 break;
                             case 'thumbnail':
-                                $item['preview_url'] = $this->router->generate('tools_raw_doc', ['id' => $pj_id]);
+                                $item['preview_url'] = $this->router->generate('tools_rawDoc', ['id' => $pj_id]);
                                 break;
                         }
                         $initial_datas[] = $item;

@@ -58,11 +58,11 @@ class ParametersController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/informations', name: 'info-structure')]
+    #[Route('/informations', name: 'informations')]
     public function index(Request $request): Response
     {
-        if ($this->extConfig->isExtensionInstall("contactcore")) {
-            $entreprise = $this->extConfig->get('celtic34fr-contactcore/entreprise');
+        if ($this->extConfig->isExtensionInstall("contact-core")) {
+            $entreprise = $this->extConfig->get('celtic34fr-contact-core/entreprise');
             if (!$entreprise) {
                 $entreprise  = [
                     'designation' => null,
@@ -74,7 +74,7 @@ class ParametersController extends AbstractController
                     'logoID' => null,
                 ];
             }
-            $ouverture = $this->extConfig->get('celtic34fr-contactcore/ouverture');
+            $ouverture = $this->extConfig->get('celtic34fr-contact-core/ouverture');
             if (!$ouverture) {
                 $ouverture = [
                     'lundi' => '-',
@@ -108,7 +108,7 @@ class ParametersController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //traitement du formulaire
-                $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contactcore.yaml';
+                $configFile = $this->getParameter('kernel.project_dir') . '/config/extensions/celtic34fr-contact-core.yaml';
                 $yaml = Yaml::parse(file_get_contents($configFile));
                 $yaml['entreprise']['designation'] = $entrepriseInfos->getDesignation() ?? "";
                 $yaml['entreprise']['siren'] = $entrepriseInfos->getSiren() ?? "";
@@ -180,12 +180,12 @@ class ParametersController extends AbstractController
             $myPreset = uniqid();
             $request->getSession()->set("myPreset", $myPreset);
             $response =
-                $this->render('@contact-core/parameters/information.html.twig', [
+                $this->render('@contactcore/parameters/information.html.twig', [
                     'form' => $form->createView(),
                     'logoDB' => $logoDB,
                     'logoID' => $entreprise['logoID'] ?? "",
                     'acceptFiles' => ".png,.gif,.jpg,.jpeg,.svg",
-                    'route' => "parameters-upload-logo",
+                    'route' => "parameters-uploadLogo",
                     'myPreset' => $myPreset,
                     'ouverture' => $ouverture,
                     'errors' => $isOK,
@@ -199,7 +199,7 @@ class ParametersController extends AbstractController
     /**
      * méthode AJAX de chargement du logo par drag&Drop
      */
-    #[Route('/uploadLogo', name: 'upload-logo', methods: ['POST'])]
+    #[Route('/uploadLogo', name: 'uploadLogo', methods: ['POST'])]
     public function uploadLogo(Request $request): JsonResponse
     {
         $owner = $this->getUser();
@@ -212,17 +212,17 @@ class ParametersController extends AbstractController
         );
     }
 
-    #[Route('/params_list', name: 'params-list')]
+    #[Route('/list', name: 'list')]
     public function params_list()
     {
         $paramsList = $this->parameterRepo->getNameParametersList();
 
-        return $this->render('@contact-core/parameters/params_list.html.twig', [
+        return $this->render('@contactcore/parameters/params_list.html.twig', [
             'paramsList' => $paramsList,
         ]);
     }
 
-    #[Route('/new_params_list', name: 'params-list-new')]
+    #[Route('/newList', name: 'newList')]
     public function new_params_list(Request $request)
     {
         $paramList = [];
@@ -233,7 +233,7 @@ class ParametersController extends AbstractController
         return $this->forward(self::newEditAction, $args);
     }
 
-    #[Route('/edit_params_list/{id}', name: 'params-list-edt')]
+    #[Route('/edtList/{id}', name: 'edtList')]
     public function edit_params_list(Request $request, Parameter $parameter)
     {
         $mode = "edt";
@@ -318,10 +318,10 @@ class ParametersController extends AbstractController
             $this->entityManager->flush();
             $message =  (($mode == "new") ? "Création " : "Mise à jour ") . "de la liste de paramètre effectuée avec succès";
             $this->addFlash('success', $message);
-            $this->redirectToRoute("parameters-params-list");
+            $this->redirectToRoute("parameters-list");
         }
 
-        return $this->render("@contact-core/parameters/form.html.twig", [
+        return $this->render("@contactcore/parameters/form.html.twig", [
             'cle' => $cle,
             'title' => $title,
             'form' => $form->createView(),
@@ -331,7 +331,7 @@ class ParametersController extends AbstractController
         ]);
     }
 
-    #[Route('/delete_params_list/{id}', name: 'params-list-del')]
+    #[Route('/delList/{id}', name: 'delList')]
     /** suppression de liste de paramètres */
     public function delete_params_list(Request $request, Parameter $parameter)
     {
@@ -349,11 +349,11 @@ class ParametersController extends AbstractController
                 $this->entityManager->remove($parameter);
                 $this->entityManager->flush();
 
-                $this->redirectToRoute("parameter-params-list");
+                $this->redirectToRoute("parameter-list");
             }
         }
 
-        return $this->render("@contact-core/parameters/delt.html.twig", [
+        return $this->render("@contactcore/parameters/delt.html.twig", [
             'title' => $title,
             'parameter' => $parameter,
             'parameterValues' => $parameterValues,

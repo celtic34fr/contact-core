@@ -18,8 +18,8 @@
     {% set datepicker = args.datepicker ?? {} %}
     {% set timepicker = args.timepicker ?? {} %}
 
-    {% import "@contact-core/macros/datepicker_resources.html.twig" as datepickerBlk %}
-    {% import "@contact-core/macros/timepicker_resources.html.twig" as timepickerBlk %}
+    {% import "@contactcore/macros/datepicker_resources.html.twig" as datepickerBlk %}
+    {% import "@contactcore/macros/timepicker_resources.html.twig" as timepickerBlk %}
     {{ datepickerBlk.datepickerJSinit(datepicker) }}
     {{ timepickerBlk.timepickerJSinit(timepicker) }}
     

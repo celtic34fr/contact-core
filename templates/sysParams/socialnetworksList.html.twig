@@ -1,8 +1,8 @@
-{% extends '@contact-core/layout_backend.html.twig' %}
-{% import "@contact-core/macros/generals.html.twig" as generals %}
-{% import '@contact-core/macros/form_type.html.twig' as fields %}
-{% import '@contact-core/macros/form_classic.html.twig' as forms %}
-{% import "@contact-core/macros/upload_files.html.twig" as updFiles %}
+{% extends '@contactcore/layout_backend.html.twig' %}
+{% import "@contactcore/macros/generals.html.twig" as generals %}
+{% import '@contactcore/macros/form_type.html.twig' as fields %}
+{% import '@contactcore/macros/form_classic.html.twig' as forms %}
+{% import "@contactcore/macros/upload_files.html.twig" as updFiles %}
 
 {% set preview = true %}
 {% set iconSide = "BR" %}
@@ -46,7 +46,7 @@
 {% endblock %}
 
 {% block main %}
-	{% set urlForm = path('sys-params-socialnetworks-list') %}
+	{% set urlForm = path('sysParams-socialnetworks-list') %}
 	<div class="container col-12 row">
 		<div class="col-7 list">
 			{{ 
@@ -122,7 +122,7 @@
 			{{ fields.dragNDrop2(form.logoSN, {
 				class: 'col-12 mx-0 px-0 mb-2 sLogo',
 				label: 'Déposez-Glissez le logo', maxFiles: 1,
-				accept: acceptFiles, routeController: 'sys-params-socialnetworks-upload', progressbar: false,
+				accept: acceptFiles, routeController: 'sysParams-socialnetworksUpload', progressbar: false,
 				maxSize: '4096k', removeBtn: true, viewxBtn: true, preview: true, 'initial_datas': logoDB,
 				hidden_name: form.logoID.vars.id
 			}) }}
@@ -145,7 +145,7 @@
 {% block javascripts %}
 	{{ parent() }}
 	{{ updFiles.jsFunc_dropzone({
-		routeController: "parameters-upload-logo", dropArea: form.logoID.vars.id,
+		routeController: "parameters-uploadLogo", dropArea: form.logoID.vars.id,
 		preview: preview, progressbar: false, iconSide: iconSide,
 	}) }}
 	{{ updFiles.jsInit_dropzone({
@@ -190,7 +190,7 @@
 		}
 
 		function editRef(id) {
-			let url = "/bcknd/sys_params/socialnetworks_form/"+id
+			let url = "/bcknd/sys_params/socialnetworksForm/"+id
 			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
 				return response.json()
@@ -206,7 +206,7 @@
 		}
 
 		function deltRef(id) {
-			let url = "/bcknd/sys_params/socialnetworks_delt/"+id
+			let url = "/bcknd/sys_params/socialnetworksDelt/"+id
 			let notif_area = document.querySelector(".admin__notifications")
 			fetch(url, { method: "DELETE", }).then(function(response){
 				return response.json()
@@ -223,7 +223,7 @@
 		}
 
 		function actvRef(id) {
-			let url = "/bcknd/sys_params/socialnetworks_actv/"+id
+			let url = "/bcknd/sys_params/socialnetworksActv/"+id
 			let notif_area = document.querySelector(".admin__notifications")
 			fetch(url, { method: "POST", }).then(function(response){
 				return response.json()
@@ -244,7 +244,7 @@
 			evt.stopPropagation
 			let notif_area = document.querySelector(".admin__notifications")
 
-			let url = "/bcknd/sys_params/socialnetworks_form"
+			let url = "/bcknd/sys_params/socialnetworksForm"
 			let formDatas = new FormData(evt.target)
 			let previewDiv = evt.target.querySelector(".dragdrop .gallery .img_preview")
 			let logoId = previewDiv.querySelector('i').dataset.fileId
@@ -349,7 +349,7 @@
 		document.querySelector("#toggle_status").addEventListener('click', function(event){
 			let notif_area = document.querySelector(".admin__notifications")
 			// true => OFF, false = ON
-			let url = "/bcknd/sys_params/socialnetworks_toggle/"+this.checked
+			let url = "/bcknd/sys_params/socialnetworksToggle/"+this.checked
             fetch(url, { method: "GET", }).then(function (response) {
 				return response.json()
 			}).then(function(reponse){
@@ -373,5 +373,5 @@
 
 	</script>
 
-	{% include "@contact-core/includes/_show_toast.html.twig" %}
+	{% include "@contactcore/includes/_show_toast.html.twig" %}
 {% endblock %}

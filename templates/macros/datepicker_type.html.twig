@@ -12,7 +12,7 @@
 {# - label_ico      : si présent, icône à mettre à la place du label #}
 {# - datesDisabled : tableau ou function pour indiquer les dates que l'on ne pourra choisir #}
 {% macro datepicker(field, label='', args={}) %}
-    {% import "@contact-core/macros/datepicker_resources.html.twig" as dp_res %}
+    {% import "@contactcore/macros/datepicker_resources.html.twig" as dp_res %}
     {% set class = args.class ?? "" %}
     {% set label = label ?? field.vars.label %}
     {% set title = args.title ?? label %}
@@ -52,7 +52,7 @@
             {% if disabled %} disabled="disabled" {% endif %}>
 
         <div class="hidden datepicker" id="{{ field_id }}">
-            {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+            {% import "@contactcore/macros/form_classic.html.twig" as forms %}
             {{ forms.hidden(field_id ~ "_day", (day_date is not empty ? day_date|slice(8, 2) : ""), {
                 'custom_name': field_name ~ "[day]", "class": "date_day",
             }) }}
@@ -83,7 +83,7 @@
 {#      - sico #}
 {#      - eico #}
 {% macro datepickerRange(field_start, field_end, args={}) %}
-    {% import "@contact-core/macros/datepicker_resources.html.twig" as dp_res %}
+    {% import "@contactcore/macros/datepicker_resources.html.twig" as dp_res %}
     {% set class = args.class ?? "" %}
     {% set date_min = args.date_min ?? "" %}
     {% set date_max = args.date_max ?? "" %}
@@ -140,7 +140,7 @@
             >
             
             <div class="hidden hidden_start datepicker" id="{{ field_start_id }}">
-                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+                {% import "@contactcore/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(field_start_id ~ "_day",
                     (field_start_value is not empty ? field_start_value|slice(8, 2) : ""), {
                     'custom_name': field_start_name ~ "[day]", "class": "date_day",
@@ -168,7 +168,7 @@
             >
 
             <div class="hidden hidden_end datepicker" id="{{ field_end_id }}">
-                {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+                {% import "@contactcore/macros/form_classic.html.twig" as forms %}
                 {{ forms.hidden(field_end_id ~ "_day",
                     (field_end_value is not empty ? field_end_value|slice(8, 2) : ""), {
                     'custom_name': field_end_name ~ "[day]", "class": "date_day",

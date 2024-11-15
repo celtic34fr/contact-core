@@ -11,7 +11,7 @@ doctrine:
     naming_strategy: doctrine.orm.naming_strategy.underscore
     auto_mapping: true
     mappings:
-      Contact_Core:
+      ContactCore:
         is_bundle: false
         type: attribute
         dir: '%kernel.project_dir%/vendor/celtic34fr/contact-core/src/Entity'

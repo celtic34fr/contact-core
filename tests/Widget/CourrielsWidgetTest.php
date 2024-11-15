@@ -16,7 +16,7 @@ class CourrielsWidgetTest extends TestCase
         $this->assertEquals(300, $widget->getPriority());
         $this->assertEquals(0, $widget->getCacheDuration());
 
-        $this->assertSame($widget->getTemplate(), '@contact-core/widget/courriels.html.twig');
+        $this->assertSame($widget->getTemplate(), '@contactcore/widget/courriels.html.twig');
         $this->assertEquals(RequestZone::FRONTEND, $widget->getZone());
         $this->assertEquals(ADDITIONALTARGET::WIDGET_BACK_DASHBOARD_ASIDE_TOP, $widget->getTargets());
     }

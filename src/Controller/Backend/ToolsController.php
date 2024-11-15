@@ -17,9 +17,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/tools', name: 'tools_')]
 class ToolsController extends AbstractController
 {
-    const view_doc = __CLASS__ . '::view_doc';
-    const raw_doc = __CLASS__ . '::raw_doc';
-    const print_doc = __CLASS__ . '::print_doc';
+    const viewDoc = __CLASS__ . '::viewDoc';
+    const rawDoc = __CLASS__ . '::rawDoc';
+    const printDoc = __CLASS__ . '::printDoc';
 
     private PieceJointeRepository $pieceJointeRepo;
 
@@ -30,21 +30,21 @@ class ToolsController extends AbstractController
         $this->pieceJointeRepo = $pieceJointeRepo;
     }
 
-    #[Route('/view_doc/{id}', name: 'view_doc')]
-    public function view_pj(PieceJointe $pieceJointe): Response
+    #[Route('/viewDoc/{id}', name: 'viewDoc')]
+    public function viewDoc(PieceJointe $pieceJointe): Response
     {
         $contexte = [
             'mime'    => $pieceJointe->getFileMime(),
             'width'   => '80%',
             'title'   => "Fichier {$pieceJointe->getFileName()}",
-            'route'   => 'tools_view_doc',
+            'route'   => 'tools_viewDoc',
         ];
         $contexte['content'] = $pieceJointe->getFileContentBase64();
-        return $this->render("@contact-core/main/visu_doc.html.twig", $contexte);
+        return $this->render("@contactcore/main/visu_doc.html.twig", $contexte);
     }
 
-    #[Route('/raw_doc/{id}', name: 'raw_doc')]
-    public function raw_doc(PieceJointe $pieceJointe): Response
+    #[Route('/rawDoc/{id}', name: 'rawDoc')]
+    public function rawDoc(PieceJointe $pieceJointe): Response
     {
         $response = new Response();
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $pieceJointe->getFileName());
@@ -58,15 +58,15 @@ class ToolsController extends AbstractController
         return $response;
     }
 
-    #[Route('print_doc/{id}', name: 'print_doc')]
-    public function print_docu(PieceJointe $document): Response
+    #[Route('printDoc/{id}', name: 'printDoc')]
+    public function printDoc(PieceJointe $document): Response
     {
         $context = [
             'mime' => $document->getFileMime(),
             'width' => '50%',
             'content' => $document->getFileContentBase64(),
         ];
-        return $this->render('@contact-core/main/print_doc.html.twig', $context);
+        return $this->render('@contactcore/main/print_doc.html.twig', $context);
     }
 
     #[Route('/inval_doc/{id}', name: 'inval_doc', methods: ['DELETE'])]
@@ -77,14 +77,14 @@ class ToolsController extends AbstractController
         return new JsonResponse(array('type' => 'success', "message" => "Suppression de documents terminée OK"));
     }
 
-    #[Route('/delt_doc/{id}', name: 'delt_doc', methods: ['DELETE'])]
-    public function delt_pj(PieceJointe $pieceJointe): JsonResponse
+    #[Route('/deltDoc/{id}', name: 'deltDoc', methods: ['DELETE'])]
+    public function deltDoc(PieceJointe $pieceJointe): JsonResponse
     {
         $this->pieceJointeRepo->remove($pieceJointe, true);
         return new JsonResponse(array('type' => 'success', "message" => "Suppression de documents terminée OK"));
     }
 
-    #[Route('/upload_doc', name: 'upload_doc', methods: ['POST'])]
+    #[Route('/uploadDoc', name: 'uploadDoc', methods: ['POST'])]
     public function uploadDoc(Request $request)
     {
         $medias = $_FILES;

@@ -1,6 +1,6 @@
-{% extends '@contact-core/layout_backend.html.twig' %}
-{% import '@contact-core/macros/form_type.html.twig' as fields %}
-{% import '@contact-core/macros/generals.html.twig' as generals %}
+{% extends '@contactcore/layout_backend.html.twig' %}
+{% import '@contactcore/macros/form_type.html.twig' as fields %}
+{% import '@contactcore/macros/generals.html.twig' as generals %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -18,9 +18,9 @@
 {% block main %}
 	{% set urlForm %}
 	{% if mode == "new" %}
-		{{ path('parameters-params-list-'~mode) }}
+		{{ path('parameters-list-'~mode) }}
 	{% elseif mode == "edt" %}
-		{{ path('parameters-params-list-'~mode, {'id': id}) }}
+		{{ path('parameters-list-'~mode, {'id': id}) }}
 	{% else %}
 		#
 	{% endif %}
@@ -60,7 +60,7 @@
 	<div class="col-12 row m-0 p-o">
 		{{ fields.submitbtn(form.record, "" , {'class': 'col-4 offset-1 btn btn-success my-3'}) }}
 		{{ generals.btnRedirect('cancel', "Tout annuler", {
-			'class': 'col-4 offset-2 btn btn-bs-warning my-3', 'bclass': 'btn btn-bs-warning', 'route': 'parameters-params-list'
+			'class': 'col-4 offset-2 btn btn-bs-warning my-3', 'bclass': 'btn btn-bs-warning', 'route': 'parameters-list'
 		}) }}
 	</div>
 

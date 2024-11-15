@@ -4,7 +4,7 @@
 {# -> route     : route Symfony pour aller chercher les pages #}
 {# -> préfix    : préfixe d'intentification du bloc de pagination si plusieurs dans la page #}
 {% macro paginate_navbar(args={}) %}
-    {% import "@contact-core/macros/form_classic.html.twig" as forms %}
+    {% import "@contactcore/macros/form_classic.html.twig" as forms %}
     {% set page = args.page ?? 1 %}
     {% set page = page|parseInt %}
     {% if page < 1 %}{% set page = 1 %}{% endif %}

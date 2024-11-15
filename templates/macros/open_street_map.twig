@@ -22,7 +22,7 @@
     {% set libellM = args.libellM ?? '' %}
 
     <div id="{{ field }}" class="map" style="height:{{ height }}"></div>
-    {% include '@contact-core/includes/_map_js.twig' %}
+    {% include '@contactcore/includes/_map_js.twig' %}
     <script type="text/javascript">
         const map = L.map('{{ field }}').setView([{{ lat }}, {{ long }}], {{ zoom }});
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

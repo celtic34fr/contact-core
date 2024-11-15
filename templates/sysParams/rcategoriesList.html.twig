@@ -1,7 +1,7 @@
-{% extends '@contact-core/layout_backend.html.twig' %}
-{% import "@contact-core/macros/generals.html.twig" as generals %}
-{% import '@contact-core/macros/form_type.html.twig' as fields %}
-{% import '@contact-core/macros/form_classic.html.twig' as forms %}
+{% extends '@contactcore/layout_backend.html.twig' %}
+{% import "@contactcore/macros/generals.html.twig" as generals %}
+{% import '@contactcore/macros/form_type.html.twig' as fields %}
+{% import '@contactcore/macros/form_classic.html.twig' as forms %}
 
 {% block shoulder %}
 	{{ "Paramétrages" }}
@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block main %}
-	{% set urlForm = path('sys-params-rcategories-list') %}
+	{% set urlForm = path('sysParams-rcategoriesList') %}
 	<div class="container col-12 row">
 		<div class="col-7 list">
 			{{ forms.switchTextSides('toggle_status', false, {
@@ -106,7 +106,7 @@
 		document.querySelector("#toggle_status").addEventListener('click', function(event){
 			let notif_area = document.querySelector(".admin__notifications")
 			// true => OFF, false = ON
-			let url = "/bcknd/sys_params/rcategories_toggle/"+this.checked
+			let url = "/bcknd/sys_params/rcategoriesToggle/"+this.checked
             fetch(url, { method: "GET", }).then(function (response) {
 				return response.json()
 			}).then(function(reponse){
@@ -137,7 +137,7 @@
 			evt.preventDefault
 			evt.stopPropagation
 
-			let url = "/bcknd/sys_params/rcategories_form"
+			let url = "/bcknd/sys_params/rcategoriesForm"
 			let formDatas = new FormData(evt.target)
             fetch(url, { 
 				method: "POST",
@@ -155,7 +155,7 @@
 		}
 
 		function editRef(id) {
-			let url = "/bcknd/sys_params/rcategories_form/"+id
+			let url = "/bcknd/sys_params/rcategoriesForm/"+id
 			let notif_area = document.querySelector(".admin__notifications")
             fetch(url, { method: "GET", }).then(function (response) {
 				return response.json()
@@ -171,7 +171,7 @@
 		}
 
 		function deltRef(id) {
-			let url = "/bcknd/sys_params/rcategories_delt/"+id
+			let url = "/bcknd/sys_params/rcategoriesDelt/"+id
 			let notif_area = document.querySelector(".admin__notifications")
 			fetch(url, { method: "DELETE", }).then(function(response){
 				return response.json()
@@ -188,7 +188,7 @@
 		}
 
 		function actvRef(id) {
-			let url = "/bcknd/sys_params/rcategories_actv/"+id
+			let url = "/bcknd/sys_params/rcategoriesActv/"+id
 			let notif_area = document.querySelector(".admin__notifications")
 			fetch(url, { method: "POST", }).then(function(response){
 				return response.json()
@@ -281,5 +281,5 @@
 		}
 	</script>
 
-	{% include "@contact-core/includes/_show_toast.html.twig" %}
+	{% include "@contactcore/includes/_show_toast.html.twig" %}
 {% endblock %}

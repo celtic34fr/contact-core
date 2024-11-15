@@ -45,7 +45,7 @@ class CourielsFixtures  extends Fixture implements FixtureGroupInterface, Depend
                         $courriel->setSendAt((new DateTimeImmutable('now'))->modify('-'.strval((int)($days/2)).' days'));
                     }
                     $courriel->setNature(CourrielEnums::Contact->_toString());
-                    $courriel->setTemplateCourriel("@contact-core/courriels/test_courriel.html.twig");
+                    $courriel->setTemplateCourriel("@contactcore/courriels/test_courriel.html.twig");
                     $courriel->setContextCourriel(['client' => $cliInfos, 
                         'courriel' =>  [
                             'created_at' => $courriel->getCreatedAt(),
