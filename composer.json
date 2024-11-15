@@ -14,8 +14,8 @@
     "bolt/core": ">=5.1",
     "twig/twig": "^2.12 | ^3.0",
     "nucleos/dompdf-bundle": "^3.1",
-    "teamtnt/tntsearch": "^3.1",
-    "symfony/console": "^5.4"
+    "symfony/console": "^5.4",
+    "bolt/tnt-search-engine": "^0.2.5"
   },
   "require-dev": {
     "symplify/easy-coding-standard": "^8.3",
