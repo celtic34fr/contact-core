@@ -1,0 +1,29 @@
+{% set background_message = extConfig_get("contact-core/widget/message_background") %}
+{% set color_message = extConfig_get("contact-core/widget/message_color") %}
+{% set background_title = extConfig_get("contact-core/widget/title_background") %}
+{% set color_title = extConfig_get("contact-core/widget/title_color") %}
+{% set mailErrors = mailError() %}
+
+<style>
+    .card-title {
+        background: {{ background_title }};
+        color: {{ color_title }};
+    }
+    .card-message {
+        background: {{ background_message }}
+        color: {{ color_message }};
+    }
+</style>
+{#% set mailErrors = 0 %#}
+<div class="card-header card-title">
+    <i class="far fa-file-alt"></i> &nbsp;Courriels en souffrance
+</div>
+<div class="card-body card-message">
+    <p class="col-12 mx-0 px-0 text-center">
+        {% if mailErrors > 0 %}
+            <a href="{{ 'path()' }}">Des courriels sont à renvoyer ({{ mailErrors }})</a>
+        {% else %}
+            Aucune erreur détectée
+        {% endif %}
+    </p>
+</div>
