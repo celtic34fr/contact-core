@@ -3,11 +3,14 @@
 namespace Celtic34fr\ContactCore;
 
 use Bolt\Extension\BaseExtension;
+use Celtic34fr\ContactCore\Trait\ExecShellTrait;
 use Celtic34fr\ContactCore\Widget\CourrielsWidget;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Extension extends BaseExtension
 {
+    use ExecShellTrait;
+    
     public function getName(): string
     {
         return 'Bolt Celtic34fr Contact Extension';

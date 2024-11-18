@@ -1,6 +1,6 @@
 <?php
 
-namespace Celtic34fr\ContactCore\Traits;
+namespace Celtic34fr\ContactCore\Trait;
 
 use Celtic34fr\ContactCore\Menu\MenuItem;
 use Exception;

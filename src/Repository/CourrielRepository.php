@@ -4,7 +4,7 @@ namespace Celtic34fr\ContactCore\Repository;
 
 use Celtic34fr\ContactCore\Entity\Courriel;
 use Celtic34fr\ContactCore\Enum\StatusCourrielEnums;
-use Celtic34fr\ContactCore\Traits\DbPaginateTrait;
+use Celtic34fr\ContactCore\Trait\DbPaginateTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

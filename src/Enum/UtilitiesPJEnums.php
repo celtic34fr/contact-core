@@ -2,7 +2,7 @@
 
 namespace Celtic34fr\ContactCore\Enum;
 
-use Celtic34fr\ContactCore\Traits\EnumToArray;
+use Celtic34fr\ContactCore\Trait\EnumToArray;
 
 enum UtilitiesPJEnums: string
 {
