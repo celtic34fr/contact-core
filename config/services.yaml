@@ -31,6 +31,4 @@ services:
   Celtic34fr\ContactCore\Twig\Runtime\ContactCoreRuntime: ~
 
   Celtic34fr\ContactCore\Twig\Extension\ContactCoreExtension:
-    arguments:
-      $runtime: '@Celtic34fr\ContactCore\Twig\Runtime\ContactCoreRuntime'
     tags: [ 'twig.extension' ]
