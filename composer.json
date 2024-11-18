@@ -10,20 +10,23 @@
     }
   ],
   "require": {
-    "php": ">=8.0",
-    "bolt/core": ">=5.1",
-    "twig/twig": "^2.12 | ^3.0",
-    "nucleos/dompdf-bundle": "^3.1",
-    "symfony/console": "^5.4",
+    "php": "^8.0",
+    "bolt/core": "^5.1",
+    "twig/twig": "^3.15",
+    "nucleos/dompdf-bundle": "^4.0",
+    "symfony/console": "^5.1",
     "bolt/tnt-search-engine": "^0.2.5"
   },
   "require-dev": {
-    "symplify/easy-coding-standard": "^8.3",
-    "phpunit/phpunit": "^9.6",
-    "symfony/browser-kit": "^6.3",
-    "symfony/css-selector": "^6.3",
-    "symfony/phpunit-bridge": "^6.3"
-  },
+    "phpstan/phpstan": "^0.12.48",
+    "phpstan/phpstan-doctrine": "^0.12.20",
+    "phpstan/phpstan-symfony": "^0.12.8",
+    "phpunit/phpunit": "^9.5",
+    "symfony/browser-kit": "^5.1",
+    "symfony/css-selector": "^5.1",
+    "symfony/phpunit-bridge": "^7.1",
+    "symplify/easy-coding-standard": "^9.4"
+},
   "autoload": {
     "psr-4": {
       "Celtic34fr\\ContactCore\\": "src/"
