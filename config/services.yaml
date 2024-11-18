@@ -28,7 +28,7 @@ services:
     arguments: [ '@Symfony\Component\Routing\Generator\UrlGeneratorInterface' ]
     tags: [ 'bolt.extension_backend_menu' ]
 
-  Celtic34fr\ContactCore\Twig\Runtime\ContactCoreRuntime: ~
-
   Celtic34fr\ContactCore\Twig\Extension\ContactCoreExtension:
-    tags: [ 'twig.extension' ]
+    arguments:
+      $runtime: '@Celtic34fr\ContactCore\Twig\Runtime\ContactCoreRuntime'
+    tags: ['twig.extension']
